@@ -1,0 +1,11 @@
+<h1>All Students In Database</h1>
+
+{% if students %}
+    <ul>
+    {% for student in students %}
+        <li>{{ student.id }} -- {{ student.first_name }} {{student.last_name}} ({{student.email}})</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No students are available.</p>
+{% endif %}
