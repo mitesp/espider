@@ -17,7 +17,8 @@ example, `docker-compose exec web python manage.py createsuperuser` runs `python
 createsuperuser` inside the `web` container.
 
 Finally `pipenv` manages our Python packages. You can install packages with `pipenv install` and
-view current packages with `pipenv graph`.
+view current packages with `pipenv graph`. Note that if you install new packages you should rebuild
+your Docker containers with `docker-compose build`.
 
 # Troubleshooting
 Make sure you don't already have things running on your localhost ports.

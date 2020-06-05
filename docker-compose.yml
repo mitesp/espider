@@ -10,7 +10,7 @@ services:
     environment:
       - DEBUG=True
     volumes:
-      - ./src/:/espider
+      - ./src/:/espider/
   db:
     image: postgres:latest
     environment:
