@@ -1,6 +1,6 @@
 FROM python:3.8
 
-COPY ./src /espider
+COPY . /espider
 WORKDIR /espider
 
 RUN pip install pipenv
