@@ -1,1 +1,4 @@
 .pyc
+src/config/__pycache__/
+src/core/__pycache__/
+src/core/migrations/__pycache__/
