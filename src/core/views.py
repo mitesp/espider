@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.template import loader
 from django.views import generic
 from django.utils import timezone
@@ -8,6 +8,7 @@ from django.utils import timezone
 from .models import Student
 
 from django.contrib.auth import login
+from django.forms.models import model_to_dict
 from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView
 
@@ -102,3 +103,15 @@ class StudentsView(generic.ListView):
         published in the future).
         """
         return Student.objects.all()
+
+class StudentProfileView(generic.UpdateView):
+    model = ESPUser
+    fields = ("pronouns", "phone_number", "city", "state", "country",)
+    template_name = "core/studentprofile.html"
+    success_url = reverse_lazy('core:medliab')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_initial(self):
+        return model_to_dict(self.request.user, fields=self.fields)

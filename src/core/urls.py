@@ -7,7 +7,7 @@ from . import views
 app_name = 'core'
 urlpatterns = [
     path('', views.index, name='index'), 
-    path('form/', views.index, name='studentprofileform'),
+    path('profile/', views.StudentProfileView.as_view(), name='studentprofile'),
     path('medliab/', views.medliab, name='medliab'),
     path('waiver/', views.waiver, name='waiver'),
     path('students/', views.StudentsView.as_view(), name='students')

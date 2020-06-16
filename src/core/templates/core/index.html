@@ -7,7 +7,7 @@
 {% if user.is_authenticated %}
     <h2> Logged in as <strong>{{ user.username }}</strong>.</h2>
     {% if user.is_student %}
-        <h3><a href="{% url 'core:medliab' %}">Register</a></h3>
+        <h3><a href="{% url 'core:studentprofile' %}">Register</a></h3>
     {% endif %}
     {% if user.is_teacher %}
         <h3><a href="{% url 'index' %}">Register</a></h3>
