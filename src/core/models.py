@@ -5,15 +5,27 @@ from django.utils import timezone
 from django.forms import ModelForm
 import uuid
 
-class Student(models.Model):
-    first_name = models.CharField(max_length=200) #TODO figure out unicode support for accents and stuff
-    last_name = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
-    def __str__(self):
-        return str(self.id)
+class ESPUser(AbstractUser):
+    is_student = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
+    # phone_number = models.CharField(max_length=20) #TODO there's a phone number field we can add with pip
+    # pronouns = models.CharField(max_length=40, blank=True)
+    # city = models.CharField(max_length=200)
+    # state = models.CharField(max_length=200)
+    # country = models.CharField(max_length=200)
+
+
+class Student(models.Model):
+    user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True)
+    dob = models.DateField(max_length=8, default="1969-12-31")
+    grad_year = models.IntegerField(default=1970)
+    school = models.CharField(max_length=200, default="")
+
 
 class StudentProfileForm(ModelForm):
     class Meta:
-        model = Student
+        model = ESPUser
         fields = ["first_name", "last_name", "email"]

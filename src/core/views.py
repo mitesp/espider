@@ -7,6 +7,48 @@ from django.utils import timezone
 
 from .models import Student, StudentProfileForm
 
+from django.contrib.auth import login
+from django.shortcuts import redirect
+from django.views.generic import CreateView, TemplateView
+
+from .forms import StudentSignUpForm, TeacherSignUpForm
+from. models import ESPUser
+
+class SignUpView(TemplateView):
+    template_name = 'registration/signup.html'
+
+class StudentSignUpView(CreateView):
+    model = ESPUser
+    form_class = StudentSignUpForm
+    template_name = 'registration/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'student'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('students:quiz_list')
+
+
+class TeacherSignUpView(CreateView):
+    model = ESPUser
+    form_class = TeacherSignUpForm
+    template_name = 'registration/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'teacher'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('teachers:quiz_change_list')
+
+
+#OLD STUFF
+
 def index(request):
     return render(request, "core/index.html")
 
