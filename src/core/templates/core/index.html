@@ -13,6 +13,9 @@
         <h3><a href="{% url 'core:teacherreg' %}">Register a class</a></h3>
     {% endif %}
     <h3><a href="{% url 'logout' %}" >Log Out</a></h3>
+    {% if user.is_superuser %}
+        <h3><a href="{% url 'admin:index' %}">Admin Panel</a></h3>
+    {% endif %}
 {% else %}
     <h2> <a href="{% url 'login' %}" class="btn btn-teacher btn-lg" role="button">Sign In</a> </h2>
 {% endif %}
