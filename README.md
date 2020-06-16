@@ -38,3 +38,13 @@ for more info.
 
 # Troubleshooting
 Make sure you don't already have things running on your localhost ports.
+
+# Useful aliases
+`alias dockup="sudo docker-compose up" #spins up Docker
+alias dockex="sudo docker-compose exec web" #execute things in the web shell
+alias dockman="sudo docker-compose exec web python3 manage.py" #exec
+alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
+alias herokumigrate="heroku run python3 src/manage.py migrate" #migrate in prod
+alias herokumakemig="heroku run python3 src/manage.py makemigrations" #make migrations in prod
+`
+
