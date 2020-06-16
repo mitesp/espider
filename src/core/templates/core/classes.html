@@ -1,0 +1,19 @@
+
+{% if user.is_authenticated  and user.is_teacher %}
+<h1>All Classes In Database</h1>
+
+
+    {% if classes %}
+        <ul>
+        {% for clss in classes %}
+            <li>{{ clss.id }} -- {{ clss.title }} ({{clss.capacity}} student{{clss.capacity|pluralize}})</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No classes are available.</p>
+    {% endif %}
+{% elif user.is_authenticated %}
+    Only teachers are allowed to view this page. 
+{% else %}
+    <h2>Please <a href="{% url 'login' %}" >log in</a> to view this page. </h2>
+{% endif %}

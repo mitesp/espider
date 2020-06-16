@@ -11,6 +11,8 @@
     {% endif %}
     {% if user.is_teacher %}
         <h3><a href="{% url 'core:teacherreg' %}">Register a class</a></h3>
+
+        <h3><a href="{% url 'core:classes' %}">View all classes</a></h3>
     {% endif %}
     <h3><a href="{% url 'logout' %}" >Log Out</a></h3>
     {% if user.is_superuser %}

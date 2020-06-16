@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 
-from .models import Student, ESPUser
+from .models import Student, Teacher, ESPUser
 
 
 class ESPSignUpForm(UserCreationForm):

@@ -5,7 +5,7 @@ from django.template import loader
 from django.views import generic
 from django.utils import timezone
 
-from .models import Student
+from .models import Student, Teacher
 
 from django.contrib.auth import login
 from django.forms.models import model_to_dict
@@ -104,10 +104,24 @@ class TeacherRegistrationView(CreateView):
     fields = '__all__'
     template_name = 'core/teacherreg.html'
 
+    #TODO figure out how to make this atomic, so one db doesn't record unless the other does
     def form_valid(self, form):
-        cls = form.save()
-        TeacherClassRegistration.objects.create(teacher=self.request.user.teacher, cls=cls)
-        return redirect('core:index')
+        userid = self.request.user
+        teacher = Teacher.objects.get(pk=userid)
+        clss = form.save()
+        TeacherClassRegistration.objects.create(teacher=self.request.user.teacher, clss=clss)
+        return redirect('core:classes')
+
+class ClassesView(generic.ListView):
+    template_name = 'core/classes.html'
+    context_object_name = 'classes'
+
+    def get_queryset(self):
+        """
+        Return the last five published questions (not including those set to be
+        published in the future).
+        """
+        return Class.objects.all()
 
 #OLD STUFF
 
@@ -116,12 +130,14 @@ def index(request):
 
 def medliab(request):
     if request.method == "POST":
+        #TODO do something for medliab submission
         return HttpResponseRedirect(reverse('core:waiver'))
     else:
         return render(request, "core/medliab.html")
 
 def waiver(request):
     if request.method == "POST":
+        #TODO do something for waiver submission
         return HttpResponseRedirect(reverse('core:students'))
     else:
         return render(request, "core/waiver.html")
