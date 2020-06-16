@@ -5,13 +5,13 @@ from django.template import loader
 from django.views import generic
 from django.utils import timezone
 
-from .models import Student, StudentProfileForm
+from .models import Student
 
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView
 
-from .forms import StudentSignUpForm, TeacherSignUpForm
+from .forms import StudentSignUpForm, TeacherSignUpForm, OtherAccountSignUpForm
 from. models import ESPUser
 
 class SignUpView(TemplateView):
@@ -29,7 +29,7 @@ class StudentSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('students:quiz_list')
+        return redirect('core:index')
 
 
 class TeacherSignUpView(CreateView):
@@ -44,24 +44,40 @@ class TeacherSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('teachers:quiz_change_list')
+        return redirect('core:index')
 
+class EducatorSignUpView(CreateView):
+    model = ESPUser
+    form_class = OtherAccountSignUpForm
+    template_name = 'registration/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'educator'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('core:index')
+
+class ParentSignUpView(CreateView):
+    model = ESPUser
+    form_class = OtherAccountSignUpForm
+    template_name = 'registration/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'parent'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('core:index')
 
 #OLD STUFF
 
 def index(request):
     return render(request, "core/index.html")
-
-def add_student(request):
-    if request.method == "POST":
-        form = StudentProfileForm(request.POST)
-        if form.is_valid():
-            model_instance = form.save(commit=False)
-            model_instance.save()
-            return HttpResponseRedirect(reverse('core:medliab'))
-    else:
-        form = StudentProfileForm()
-        return render(request, "core/studentprofile.html", {'form': form})
 
 def medliab(request):
     if request.method == "POST":

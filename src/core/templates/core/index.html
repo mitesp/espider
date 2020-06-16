@@ -3,3 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
 
 <h1>Welcome to ESP</h1>
+
+{% if user.is_authenticated %}
+    <h2> Logged in as <strong>{{ user.username }}</strong>. <a href="{% url 'logout' %}" > </h2>
+{% else %}
+    <h2> <a href="{% url 'login' %}" class="btn btn-teacher btn-lg" role="button">Sign In</a> </h2>
+{% endif %}
