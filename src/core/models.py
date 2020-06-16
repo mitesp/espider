@@ -20,7 +20,7 @@ class ESPUser(AbstractUser):
     country = models.CharField(max_length=200, blank=True)
 
 class Student(models.Model):
-    user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True, related_name='student')
     dob = models.DateField(max_length=8, default="1969-12-31")
     grad_year = models.IntegerField(default=1970)
     school = models.CharField(max_length=200, default="")
@@ -42,6 +42,13 @@ class Student(models.Model):
         return self.user.email
 
 class Teacher(models.Model):
-    user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher')
     affiliation = models.CharField(max_length=20) #TODO options?
 
+class Class(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+
+class TeacherClassRegistration(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    cls = models.ForeignKey(Class, on_delete=models.CASCADE)
