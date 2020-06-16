@@ -13,7 +13,7 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView
 
 from .forms import StudentSignUpForm, TeacherSignUpForm, OtherAccountSignUpForm
-from. models import ESPUser
+from. models import Class, ESPUser, TeacherClassRegistration
 
 class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
@@ -115,3 +115,13 @@ class StudentProfileView(generic.UpdateView):
 
     def get_initial(self):
         return model_to_dict(self.request.user, fields=self.fields)
+
+class TeacherRegistrationView(CreateView):
+    model = Class
+    fields = '__all__'
+    template_name = 'core/teacherreg.html'
+
+    def form_valid(self, form):
+        cls = form.save()
+        TeacherClassRegistration.objects.create(teacher=self.request.user.teacher, cls=cls)
+        return redirect('core:index')
