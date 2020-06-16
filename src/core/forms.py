@@ -57,4 +57,7 @@ class StudentClassRegistrationForm(forms.Form):
         widget=forms.CheckboxSelectMultiple, 
         required=False)
     #TODO figure out how to autocheck ones that I'm already registered for
+    #TODO figure out how to delete registrations, to unregister
+    #TODO figure out how to not show full classes
+    
 

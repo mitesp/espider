@@ -147,6 +147,7 @@ def studentreg(request):
     form = StudentClassRegistrationForm(request.POST)
     if request.method == "POST" and form.is_valid():
         #submit student registration (add student to classes)
+        #TODO don't submit registration if registration already exists
         chosen_classes = form.cleaned_data.get('classes')
         student = Student.objects.get(pk=request.user)
         for clssname in chosen_classes:
