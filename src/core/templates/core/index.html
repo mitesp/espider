@@ -12,8 +12,7 @@
     {% if user.is_teacher %}
         <h3><a href="{% url 'index' %}">Register</a></h3>
     {% endif %}
-
-    <h3><a href="{% url 'logout' %}" >logout</a></h3>
+    <h3><a href="{% url 'logout' %}" >Log Out</a></h3>
 {% else %}
     <h2> <a href="{% url 'login' %}" class="btn btn-teacher btn-lg" role="button">Sign In</a> </h2>
 {% endif %}
