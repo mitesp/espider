@@ -4,16 +4,19 @@ from django.db import transaction
 
 from .models import Student, ESPUser
 
+
 class ESPSignUpForm(UserCreationForm):
-    phone_number = forms.CharField(max_length=20, label="Phone Number", required=False) #TODO there's a phone number field we can add with pip
-    pronouns = forms.CharField(max_length=40, required=False)
-    city = forms.CharField(max_length=200, required=False)
-    state = forms.CharField(max_length=200, label="State (Leave blank if outside the US)", required=False)
-    country = forms.CharField(max_length=200, required=False)
 
     class Meta(UserCreationForm.Meta):
         model = ESPUser
-        fields = ("username", "email", "password1", "password2", "first_name", "last_name",)
+        fields = ("username", "email", "password1", "password2", "first_name", "last_name","phone_number", "pronouns", "city", "state", "country")
+
+    @transaction.atomic
+    def save(self, commit=False):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+        return user
 
 class StudentSignUpForm(ESPSignUpForm):
     dob = forms.DateField(label="Date of Birth", required=False)
@@ -25,19 +28,22 @@ class StudentSignUpForm(ESPSignUpForm):
         user = super().save(commit=False)
         user.is_student = True
         user.save()
-        student = Student.objects.create(user=user)
+        student = Student.objects.create(user=user, 
+            dob=self.cleaned_data.get('dob'), 
+            grad_year=self.cleaned_data.get('grad_year'), 
+            school=self.cleaned_data.get('school'))
         return user
 
 
 class TeacherSignUpForm(ESPSignUpForm):
-    affiliation = forms.CharField(max_length=20)
+    affiliation = forms.CharField(max_length=20, required=False)
 
     @transaction.atomic
-    def save(self, commit=True):
+    def save(self):
         user = super().save(commit=False)
         user.is_teacher = True
-        if commit:
-            user.save()
+        user.save()
+        teacher = Teacher.objects.create(user=user, affiliation=self.cleaned_data.get('affiliation'))
         return user
 
 class OtherAccountSignUpForm(ESPSignUpForm):

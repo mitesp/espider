@@ -75,23 +75,6 @@ class ParentSignUpView(CreateView):
         login(self.request, user)
         return redirect('core:index')
 
-#OLD STUFF
-
-def index(request):
-    return render(request, "core/index.html")
-
-def medliab(request):
-    if request.method == "POST":
-        return HttpResponseRedirect(reverse('core:waiver'))
-    else:
-        return render(request, "core/medliab.html")
-
-def waiver(request):
-    if request.method == "POST":
-        return HttpResponseRedirect(reverse('core:students'))
-    else:
-        return render(request, "core/waiver.html")
-
 
 class StudentsView(generic.ListView):
     template_name = 'core/students.html'
@@ -115,3 +98,20 @@ class StudentProfileView(generic.UpdateView):
 
     def get_initial(self):
         return model_to_dict(self.request.user, fields=self.fields)
+
+#OLD STUFF
+
+def index(request):
+    return render(request, "core/index.html")
+
+def medliab(request):
+    if request.method == "POST":
+        return HttpResponseRedirect(reverse('core:waiver'))
+    else:
+        return render(request, "core/medliab.html")
+
+def waiver(request):
+    if request.method == "POST":
+        return HttpResponseRedirect(reverse('core:students'))
+    else:
+        return render(request, "core/waiver.html")
