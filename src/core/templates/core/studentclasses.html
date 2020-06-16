@@ -1,0 +1,19 @@
+
+{% if user.is_authenticated  and user.is_student %}
+<h1>Classes for {{user.username}}</h1>
+
+
+    {% if studentclasses %}
+        <ul>
+        {% for clss in studentclasses %}
+            <li>#{{ clss.id }} -- {{ clss.title }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't registered for any classes yet.</p>
+    {% endif %}
+{% elif user.is_authenticated %}
+    Only student are allowed to view this page. 
+{% else %}
+    <h2>Please <a href="{% url 'login' %}" >log in</a> to view this page. </h2>
+{% endif %}

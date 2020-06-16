@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 
-from .models import Student, Teacher, ESPUser
+from .models import Student, Teacher, ESPUser, Class, StudentClassRegistration
 
 
 class ESPSignUpForm(UserCreationForm):
@@ -48,3 +48,13 @@ class TeacherSignUpForm(ESPSignUpForm):
 
 class OtherAccountSignUpForm(ESPSignUpForm):
     pass
+
+
+class StudentClassRegistrationForm(forms.Form):
+    classes = forms.ModelMultipleChoiceField(
+        queryset=Class.objects.all(),
+        to_field_name="title",
+        widget=forms.CheckboxSelectMultiple, 
+        required=False)
+    #TODO figure out how to autocheck ones that I'm already registered for
+

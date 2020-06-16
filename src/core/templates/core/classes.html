@@ -6,7 +6,7 @@
     {% if classes %}
         <ul>
         {% for clss in classes %}
-            <li>{{ clss.id }} -- {{ clss.title }} ({{clss.capacity}} student{{clss.capacity|pluralize}})</li>
+            <li>{{ clss.id }} -- {{ clss.title }} ({{clss.num_students}} student{{clss.num_students|pluralize}} registered, {{clss.capacity}} student capacity)</li>
         {% endfor %}
         </ul>
     {% else %}

@@ -4,6 +4,7 @@ from django.urls import reverse, reverse_lazy
 from django.template import loader
 from django.views import generic
 from django.utils import timezone
+from django.db import transaction
 
 from .models import Student, Teacher
 
@@ -12,8 +13,8 @@ from django.forms.models import model_to_dict
 from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView
 
-from .forms import StudentSignUpForm, TeacherSignUpForm, OtherAccountSignUpForm
-from. models import Class, ESPUser, TeacherClassRegistration
+from .forms import StudentSignUpForm, TeacherSignUpForm, OtherAccountSignUpForm, StudentClassRegistrationForm
+from. models import Student, Class, ESPUser, StudentClassRegistration, TeacherClassRegistration
 
 class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
@@ -101,15 +102,18 @@ class StudentProfileView(generic.UpdateView):
 
 class TeacherRegistrationView(CreateView):
     model = Class
-    fields = '__all__'
+    fields = ("title", "description", "capacity")
     template_name = 'core/teacherreg.html'
 
     #TODO figure out how to make this atomic, so one db doesn't record unless the other does
     def form_valid(self, form):
         userid = self.request.user
         teacher = Teacher.objects.get(pk=userid)
-        clss = form.save()
+        clss = form.save(commit=False)
+        clss.teacher = teacher
         TeacherClassRegistration.objects.create(teacher=self.request.user.teacher, clss=clss)
+        clss.save()
+        clss.save_m2m() #idk if this is necessary but https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method suggests it is
         return redirect('core:classes')
 
 class ClassesView(generic.ListView):
@@ -122,6 +126,36 @@ class ClassesView(generic.ListView):
         published in the future).
         """
         return Class.objects.all()
+
+class StudentClassesView(generic.ListView):
+    template_name = 'core/studentclasses.html'
+    context_object_name = 'studentclasses'
+
+    def get_queryset(self):
+        """
+        Return the last five published questions (not including those set to be
+        published in the future).
+        """
+        user = self.request.user
+        student = Student.objects.get(pk=user)
+        classids = StudentClassRegistration.objects.filter(student__exact=student).values_list('clss', flat=True)
+        classes = Class.objects.filter(pk__in=classids)
+        return classes
+
+def studentreg(request):
+
+    form = StudentClassRegistrationForm(request.POST)
+    if request.method == "POST" and form.is_valid():
+        #submit student registration (add student to classes)
+        chosen_classes = form.cleaned_data.get('classes')
+        student = Student.objects.get(pk=request.user)
+        for clssname in chosen_classes:
+            clss = Class.objects.filter(title__exact=clssname)[0]
+            reg = StudentClassRegistration.objects.create(student=student, clss=clss)
+        return redirect('core:studentclasses')
+    else:
+        return render(request, "core/studentreg.html", {'form': form})
+
 
 #OLD STUFF
 
@@ -138,6 +172,6 @@ def medliab(request):
 def waiver(request):
     if request.method == "POST":
         #TODO do something for waiver submission
-        return HttpResponseRedirect(reverse('core:students'))
+        return HttpResponseRedirect(reverse('core:studentreg'))
     else:
         return render(request, "core/waiver.html")
