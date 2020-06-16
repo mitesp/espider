@@ -3,7 +3,7 @@
 {% if students %}
     <ul>
     {% for student in students %}
-        <li>{{ student.id }} -- {{ student.first_name }} {{student.last_name}} ({{student.email}})</li>
+        <li>{{ student.user.id }} -- {{ student.user.first_name }} {{student.user.last_name}} ({{student.user.email}})</li>
     {% endfor %}
     </ul>
 {% else %}
