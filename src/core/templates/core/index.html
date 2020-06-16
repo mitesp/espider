@@ -7,10 +7,10 @@
 {% if user.is_authenticated %}
     <h2> Logged in as <strong>{{ user.username }}</strong>.</h2>
     {% if user.is_student %}
-        <h3><a href="{% url 'core:studentprofile' %}">Register</a></h3>
+        <h3><a href="{% url 'core:studentprofile' %}">Register for classes</a></h3>
     {% endif %}
     {% if user.is_teacher %}
-        <h3><a href="{% url 'index' %}">Register</a></h3>
+        <h3><a href="{% url 'core:index' %}">Register a class</a></h3>
     {% endif %}
     <h3><a href="{% url 'logout' %}" >Log Out</a></h3>
 {% else %}
