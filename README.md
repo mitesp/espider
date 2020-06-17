@@ -39,6 +39,8 @@ for more info.
 # Troubleshooting
 Make sure you don't already have things running on your localhost ports.
 
+If you need to rebuild the databases from scratch, run `sudo docker-compose down` and then `sudo docker-compose up --build`, delete all the migrations, and re-make and build them. 
+
 # Useful aliases
     alias dockup="sudo docker-compose up" #spins up Docker
     alias dockex="sudo docker-compose exec web" #execute things in the web shell
