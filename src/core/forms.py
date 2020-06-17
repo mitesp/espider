@@ -52,12 +52,21 @@ class OtherAccountSignUpForm(ESPSignUpForm):
 
 class StudentClassRegistrationForm(forms.Form):
     classes = forms.ModelMultipleChoiceField(
-        queryset=Class.objects.all(),
-        to_field_name="title",
+        queryset=Class.objects.none(),
         widget=forms.CheckboxSelectMultiple, 
         required=False)
-    #TODO figure out how to autocheck ones that I'm already registered for
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user') # throws an error if user is not present
+        super(StudentClassRegistrationForm, self).__init__(*args, **kwargs)
+        
+        student = Student.objects.get(pk=user)
+        enrolled_classes = StudentClassRegistration.objects.filter(student__exact=student).values_list('clss', flat=True)
+        non_enrolled_classes = Class.objects.exclude(id__in=enrolled_classes)
+
+        self.fields['classes'].queryset = non_enrolled_classes
+
     #TODO figure out how to delete registrations, to unregister
     #TODO figure out how to not show full classes
-    
+
 

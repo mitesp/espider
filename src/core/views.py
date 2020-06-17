@@ -5,6 +5,7 @@ from django.template import loader
 from django.views import generic
 from django.utils import timezone
 from django.db import transaction
+from django.db.utils import IntegrityError
 
 from .models import Student, Teacher
 
@@ -144,10 +145,9 @@ class StudentClassesView(generic.ListView):
 
 def studentreg(request):
 
-    form = StudentClassRegistrationForm(request.POST)
+    form = StudentClassRegistrationForm(request.POST, user=request.user)
     if request.method == "POST" and form.is_valid():
         #submit student registration (add student to classes)
-        #TODO don't submit registration if registration already exists
         chosen_classes = form.cleaned_data.get('classes')
         student = Student.objects.get(pk=request.user)
         for clssname in chosen_classes:
