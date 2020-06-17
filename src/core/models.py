@@ -19,6 +19,9 @@ class ESPUser(AbstractUser):
     state = models.CharField(max_length=200, blank=True)
     country = models.CharField(max_length=200, blank=True)
 
+    def __str__(self):
+        return "{} {} ({})".format(self.first_name, self.last_name, self.username)
+
 class Student(models.Model):
     user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True, related_name='student')
     dob = models.DateField(max_length=8, default="1969-12-31", blank=True)
@@ -31,6 +34,10 @@ class Student(models.Model):
         return self.user.id
 
     @property
+    def username(self):
+        return self.user.username
+
+    @property
     def first_name(self):
         return self.user.first_name
 
@@ -41,6 +48,9 @@ class Student(models.Model):
     @property
     def email(self):
         return self.user.email
+
+    def __str__(self):
+        return str(self.user)
 
 class Teacher(models.Model):
     user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher')
@@ -51,6 +61,10 @@ class Teacher(models.Model):
         return self.user.id
 
     @property
+    def username(self):
+        return self.user.username
+
+    @property
     def first_name(self):
         return self.user.first_name
 
@@ -62,10 +76,22 @@ class Teacher(models.Model):
     def email(self):
         return self.user.email
 
+    def __str__(self):
+        return str(self.user)
+
+class Program(models.Model):
+    name = models.CharField(max_length=200) #TODO maybe this should be a constant set to choose from?
+    edition = models.CharField(max_length=200) #this is season + year
+    #TODO add timeslots?
+
+    def __str__(self):
+        return self.name + " " + self.edition
+
 class Class(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     capacity = models.IntegerField()
+    program = models.ForeignKey(Program, on_delete=models.CASCADE)
 
     @property
     def num_students(self):
@@ -83,6 +109,9 @@ class TeacherClassRegistration(models.Model):
     class Meta:
         unique_together = (("teacher", "clss"),)
 
+    def __str__(self):
+        return str(self.teacher.username) + "/" + str(self.clss)
+
 
 class StudentClassRegistration(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -91,3 +120,6 @@ class StudentClassRegistration(models.Model):
     #ensures a student can't register for the same class twice
     class Meta:
         unique_together = (("student", "clss"),)
+
+    def __str__(self):
+        return str(self.student.username) + "/" + str(self.clss)
