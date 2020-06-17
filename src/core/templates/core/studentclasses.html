@@ -1,6 +1,6 @@
 
 {% if user.is_authenticated and user.is_student %}
-<h1>Classes for {{user.username}} {{form.classes|length}} </h1>
+<h1>Classes for {{user.username}} </h1>
 
     {% if form.classes|length > 0 %}
         <form method="post" novalidate>
@@ -9,6 +9,7 @@
             {{ form.as_p }}
             <button type="submit" class="btn btn-success">Unregister from classes</button>
         </form>
+        <h2><a href="{% url 'core:studentreg' %}" >Add more classes.</a> </h2>
     {% else %}
         <h2>You have not registered for any classes. Please <a href="{% url 'core:studentprofile' %}" >register here</a>. </h2>
     {% endif %}

@@ -21,9 +21,9 @@ class ESPUser(AbstractUser):
 
 class Student(models.Model):
     user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True, related_name='student')
-    dob = models.DateField(max_length=8, default="1969-12-31")
-    grad_year = models.IntegerField(default=1970)
-    school = models.CharField(max_length=200, default="")
+    dob = models.DateField(max_length=8, default="1969-12-31", blank=True)
+    grad_year = models.IntegerField(default=1970, blank=True)
+    school = models.CharField(max_length=200, default="", blank=True)
     #TODO add emergency info maybe?
 
     @property
