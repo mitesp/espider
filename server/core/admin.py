@@ -12,7 +12,7 @@ class TeacherInline(admin.TabularInline):
 @admin.register(ESPUser)
 class ESPUserAdmin(admin.ModelAdmin):
     fields = (
-        "username", "email", "first_name", "last_name", "phone_number", "pronouns", "city", "state", "country"
+        "username", "email", "first_name", "last_name", "phone_number", "pronouns", "city", "state", "country", "is_student", "is_teacher"
     )
     list_display = ("username", "email", "first_name", "last_name", "is_student", "is_teacher")
     list_filter = ("is_student", "is_teacher")
