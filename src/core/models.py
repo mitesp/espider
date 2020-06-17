@@ -80,7 +80,15 @@ class TeacherClassRegistration(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     clss = models.ForeignKey(Class, on_delete=models.CASCADE)
 
+    #ensures a teacher can't register the same class twice
+    class Meta:
+        unique_together = (("teacher", "clss"),)
+
 
 class StudentClassRegistration(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     clss = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    #ensures a student can't register for the same class twice
+    class Meta:
+        unique_together = (("student", "clss"),)
