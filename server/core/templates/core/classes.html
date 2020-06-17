@@ -5,15 +5,15 @@
 
     {% if classes %}
         <ul>
-        {% for clss in classes %}
-            <li>{{ clss.id }} -- {{ clss.title }} ({{clss.num_students}} student{{clss.num_students|pluralize}} registered, {{clss.capacity}} capacity)</li>
+        {% for clazz in classes %}
+            <li>{{ clazz.id }} -- {{ clazz.title }} ({{clazz.num_students}} student{{clazz.num_students|pluralize}} registered, {{clazz.capacity}} capacity)</li>
         {% endfor %}
         </ul>
     {% else %}
         <p>No classes are available.</p>
     {% endif %}
 {% elif user.is_authenticated %}
-    Only teachers are allowed to view this page. 
+    Only teachers are allowed to view this page.
 {% else %}
     <h2>Please <a href="{% url 'login' %}" >log in</a> to view this page. </h2>
 {% endif %}
