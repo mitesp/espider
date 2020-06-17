@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
+from django.db.models import Count, F, Subquery 
 
 from .models import Student, Teacher, ESPUser, Class, StudentClassRegistration
 
@@ -67,9 +68,17 @@ class StudentClassRegistrationForm(forms.Form):
         classes = StudentClassRegistration.objects.filter(student__exact=student).values_list('clss', flat=True)
         enrolled_classes = Class.objects.filter(id__in=classes)
         non_enrolled_classes = Class.objects.exclude(id__in=classes)
+        
+        counts = StudentClassRegistration.objects.all().values('clss').annotate(num_students=Count('student'))
+        #TODO improve this so it uses query stuff, idk how
+        #TODO fix the edge case of a 0 person capacity class with 0 people enrolled
+        for c in counts:
+            clss = Class.objects.get(pk=c['clss'])
+            num_students = c['num_students']
+            if num_students >= clss.capacity:
+                non_enrolled_classes = non_enrolled_classes.exclude(pk=clss.id)
+
 
         self.fields['classes'].queryset = enrolled_classes if delete else non_enrolled_classes
-
-    #TODO figure out how to not show full classes
 
 
