@@ -110,11 +110,8 @@ class TeacherRegistrationView(CreateView):
     def form_valid(self, form):
         userid = self.request.user
         teacher = Teacher.objects.get(pk=userid)
-        clss = form.save(commit=False)
-        clss.teacher = teacher
+        clss = form.save()
         TeacherClassRegistration.objects.create(teacher=self.request.user.teacher, clss=clss)
-        clss.save()
-        clss.save_m2m() #idk if this is necessary but https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method suggests it is
         return redirect('core:classes')
 
 class ClassesView(generic.ListView):
