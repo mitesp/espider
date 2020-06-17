@@ -128,24 +128,11 @@ class ClassesView(generic.ListView):
         """
         return Class.objects.all()
 
-class StudentClassesView(generic.ListView):
-    template_name = 'core/studentclasses.html'
-    context_object_name = 'studentclasses'
 
-    def get_queryset(self):
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
-        """
-        user = self.request.user
-        student = Student.objects.get(pk=user)
-        classids = StudentClassRegistration.objects.filter(student__exact=student).values_list('clss', flat=True)
-        classes = Class.objects.filter(pk__in=classids)
-        return classes
 
 def studentreg(request):
 
-    form = StudentClassRegistrationForm(request.POST, user=request.user)
+    form = StudentClassRegistrationForm(request.POST, user=request.user, delete=False)
     if request.method == "POST" and form.is_valid():
         #submit student registration (add student to classes)
         chosen_classes = form.cleaned_data.get('classes')
@@ -158,7 +145,20 @@ def studentreg(request):
         return render(request, "core/studentreg.html", {'form': form})
 
 
-#OLD STUFF
+def studentclasses(request):
+
+    form = StudentClassRegistrationForm(request.POST, user=request.user, delete=True)
+    if request.method == "POST" and form.is_valid():
+        #submit student registration (add student to classes)
+        chosen_classes = form.cleaned_data.get('classes')
+        student = Student.objects.get(pk=request.user)
+        for clssname in chosen_classes:
+            clss = Class.objects.filter(title__exact=clssname)[0]
+            reg = StudentClassRegistration.objects.filter(student__exact=student).filter(clss__exact=clss).delete()
+        return redirect('core:studentclasses')
+    else:
+        return render(request, "core/studentclasses.html", {'form': form})
+
 
 def index(request):
     return render(request, "core/index.html")
@@ -176,3 +176,20 @@ def waiver(request):
         return HttpResponseRedirect(reverse('core:studentreg'))
     else:
         return render(request, "core/waiver.html")
+
+# NO LONGER USED
+
+# class StudentClassesView(generic.ListView):
+#     template_name = 'core/studentclasses.html'
+#     context_object_name = 'studentclasses'
+
+#     def get_queryset(self):
+#         """
+#         Return the last five published questions (not including those set to be
+#         published in the future).
+#         """
+#         user = self.request.user
+#         student = Student.objects.get(pk=user)
+#         classids = StudentClassRegistration.objects.filter(student__exact=student).values_list('clss', flat=True)
+#         classes = Class.objects.filter(pk__in=classids)
+#         return classes

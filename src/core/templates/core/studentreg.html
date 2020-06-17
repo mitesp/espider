@@ -2,13 +2,16 @@
 {% if user.is_authenticated and user.is_student %}
 <h1>Register for Classes</h1>
 
-
-    <form method="post" novalidate>
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Sign up for classes</button>
-    </form>
+    {% if form.classes|length > 0 %}
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Sign up for classes</button>
+        </form>
+    {% else %}
+        <h2>There are no new classes to register. Please check back later. </h2>
+    {% endif %}
 
 
 {% elif user.is_authenticated %}

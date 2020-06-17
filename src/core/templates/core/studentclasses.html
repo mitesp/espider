@@ -1,17 +1,19 @@
 
-{% if user.is_authenticated  and user.is_student %}
-<h1>Classes for {{user.username}}</h1>
+{% if user.is_authenticated and user.is_student %}
+<h1>Classes for {{user.username}} {{form.classes|length}} </h1>
 
-
-    {% if studentclasses %}
-        <ul>
-        {% for clss in studentclasses %}
-            <li>#{{ clss.id }} -- {{ clss.title }}</li>
-        {% endfor %}
-        </ul>
+    {% if form.classes|length > 0 %}
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Unregister from classes</button>
+        </form>
     {% else %}
-        <p>You haven't registered for any classes yet.</p>
+        <h2>You have not registered for any classes. Please <a href="{% url 'core:studentprofile' %}" >register here</a>. </h2>
     {% endif %}
+
+
 {% elif user.is_authenticated %}
     Only students are allowed to view this page. 
 {% else %}
