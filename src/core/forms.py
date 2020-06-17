@@ -71,6 +71,8 @@ class StudentClassRegistrationForm(forms.Form):
         
         counts = StudentClassRegistration.objects.all().values('clss').annotate(num_students=Count('student'))
         #TODO improve this so it uses query stuff, idk how
+        #can traverse the foreign key relationship backwards, might be useful
+        #source: https://docs.djangoproject.com/en/3.0/topics/db/aggregation/ cheat sheet examples
         for c in counts:
             clss = Class.objects.get(pk=c['clss'])
             num_students = c['num_students']
