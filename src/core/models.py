@@ -66,7 +66,6 @@ class Class(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     capacity = models.IntegerField()
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     @property
     def num_students(self):
