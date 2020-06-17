@@ -15,7 +15,7 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView
 
 from .forms import StudentSignUpForm, TeacherSignUpForm, OtherAccountSignUpForm, StudentClassRegistrationForm
-from. models import Student, Class, ESPUser, StudentClassRegistration, TeacherClassRegistration
+from. models import Student, Class, ESPUser, StudentClassRegistration, TeacherClassRegistration, Program
 
 class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
@@ -110,6 +110,8 @@ class TeacherRegistrationView(CreateView):
     def form_valid(self, form):
         userid = self.request.user
         teacher = Teacher.objects.get(pk=userid)
+        # TODO: actually handle program association
+        form.instance.program, _ = Program.objects.get_or_create(name="HSSP", edition="1957")
         clss = form.save()
         TeacherClassRegistration.objects.create(teacher=self.request.user.teacher, clss=clss)
         return redirect('core:classes')
