@@ -69,7 +69,7 @@ class Class(models.Model):
 
     @property
     def num_students(self):
-        return len(StudentClassRegistration.objects.filter(clss__id=self.id))
+        return StudentClassRegistration.objects.filter(clss__id=self.id).count()
 
     def __str__(self):
         return self.title
