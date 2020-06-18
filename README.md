@@ -15,7 +15,7 @@
 
 (Miscellaneous)
 
-7. Run `pipenv run pre-commit run --all-files` to set up `pre-commit` (see Comitting & Pushing
+7. Run `pipenv run pre-commit install` to set up `pre-commit` (see Comitting & Pushing
    Changes)
 
 # Making Changes
@@ -32,8 +32,8 @@ container.
 in the web container).
 
 # Comitting & Pushing Changes
-The first time you clone the repository, you'll need to run `pipenv run pre-commit run --all-files`
-(you should only need to run this once ever). [`pre-commit`](https://pre-commit.com/) uses [git
+The first time you clone the repository, you'll need to run `pipenv run pre-commit install` (you
+should only need to run this once ever). [`pre-commit`](https://pre-commit.com/) uses [git
 hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to make sure our code is
 [fresh](https://stackoverflow.com/questions/8503559/what-is-linting) and
 [clean](https://ocw.mit.edu/ans7870/6/6.005/s16/classes/04-code-review/).
