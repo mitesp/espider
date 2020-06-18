@@ -1,6 +1,7 @@
-from core.models import Class, Program, TeacherClassRegistration
 from django.shortcuts import redirect
 from django.views.generic import CreateView
+
+from ..models import Class, Program, TeacherClassRegistration
 
 
 class TeacherRegistrationView(CreateView):

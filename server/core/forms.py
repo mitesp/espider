@@ -7,7 +7,7 @@ from .models import Class, ESPUser, Student, StudentClassRegistration, Teacher
 
 
 class ESPSignUpForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = ESPUser
         fields = (
             "username",
@@ -24,10 +24,8 @@ class ESPSignUpForm(UserCreationForm):
         )
 
     @transaction.atomic
-    def save(self, commit=False):
-        user = super().save(commit=False)
-        if commit:
-            user.save()
+    def save(self, commit=True):
+        user = super().save(commit=commit)
         return user
 
 
@@ -60,12 +58,6 @@ class TeacherSignUpForm(ESPSignUpForm):
         user.save()
         Teacher.objects.create(user=user, affiliation=self.cleaned_data.get("affiliation"))
         return user
-
-
-class OtherAccountSignUpForm(ESPSignUpForm):
-    @transaction.atomic
-    def save(self):
-        return super().save(commit=True)
 
 
 class StudentClassRegistrationForm(forms.Form):

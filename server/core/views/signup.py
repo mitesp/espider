@@ -1,69 +1,40 @@
-from core.forms import OtherAccountSignUpForm, StudentSignUpForm, TeacherSignUpForm
-from core.models import ESPUser
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView
 
+from ..forms import ESPSignUpForm, StudentSignUpForm, TeacherSignUpForm
 
-class SignUpView(TemplateView):
+
+class SignUpPageView(TemplateView):
     template_name = "registration/signup.html"
 
 
-class StudentSignUpView(CreateView):
-    model = ESPUser
+class SignUpAndLogInView(CreateView):
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect("core:index")
+
+
+class StudentSignUpView(SignUpAndLogInView):
     form_class = StudentSignUpForm
     template_name = "registration/signup_form.html"
-
-    def get_context_data(self, **kwargs):
-        kwargs["user_type"] = "student"
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("core:index")
+    extra_context = {"user_type": "student"}
 
 
-class TeacherSignUpView(CreateView):
-    model = ESPUser
+class TeacherSignUpView(SignUpAndLogInView):
     form_class = TeacherSignUpForm
     template_name = "registration/signup_form.html"
-
-    def get_context_data(self, **kwargs):
-        kwargs["user_type"] = "teacher"
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("core:index")
+    extra_context = {"user_type": "teacher"}
 
 
-class EducatorSignUpView(CreateView):
-    model = ESPUser
-    form_class = OtherAccountSignUpForm
+class EducatorSignUpView(SignUpAndLogInView):
+    form_class = ESPSignUpForm
     template_name = "registration/signup_form.html"
-
-    def get_context_data(self, **kwargs):
-        kwargs["user_type"] = "educator"
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("core:index")
+    extra_context = {"user_type": "educator"}
 
 
-class ParentSignUpView(CreateView):
-    model = ESPUser
-    form_class = OtherAccountSignUpForm
+class ParentSignUpView(SignUpAndLogInView):
+    form_class = ESPSignUpForm
     template_name = "registration/signup_form.html"
-
-    def get_context_data(self, **kwargs):
-        kwargs["user_type"] = "parent"
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("core:index")
+    extra_context = {"user_type": "parent"}

@@ -26,14 +26,7 @@ class ESPUserAdmin(admin.ModelAdmin):
         "is_student",
         "is_teacher",
     )
-    list_display = (
-        "username",
-        "email",
-        "first_name",
-        "last_name",
-        "is_student",
-        "is_teacher",
-    )
+    list_display = ("username", "email", "first_name", "last_name", "is_student", "is_teacher")
     list_filter = ("is_student", "is_teacher")
     search_fields = ("username", "email")
     inlines = [StudentInline, TeacherInline]

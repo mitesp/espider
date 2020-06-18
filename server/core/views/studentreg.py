@@ -1,20 +1,15 @@
-from core.forms import StudentClassRegistrationForm
-from core.models import Class, ESPUser, Student, StudentClassRegistration
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
+from ..forms import StudentClassRegistrationForm
+from ..models import Class, ESPUser, Student, StudentClassRegistration
+
 
 class StudentProfileView(UpdateView):
     model = ESPUser
-    fields = (
-        "pronouns",
-        "phone_number",
-        "city",
-        "state",
-        "country",
-    )
+    fields = ("pronouns", "phone_number", "city", "state", "country")
     template_name = "core/studentprofile.html"
     success_url = reverse_lazy("core:medliab")
 
@@ -26,7 +21,6 @@ class StudentProfileView(UpdateView):
 
 
 def studentreg(request):
-
     form = StudentClassRegistrationForm(request.POST, user=request.user, delete=False)
     if request.method == "POST" and form.is_valid():
         # submit student registration (add student to classes)
@@ -41,7 +35,6 @@ def studentreg(request):
 
 
 def studentclasses(request):
-
     form = StudentClassRegistrationForm(request.POST, user=request.user, delete=True)
     if request.method == "POST" and form.is_valid():
         # submit student registration (add student to classes)

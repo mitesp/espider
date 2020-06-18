@@ -7,12 +7,8 @@ from django.db import models
 class ESPUser(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-    phone_number = models.CharField(
-        max_length=20, blank=True
-    )  # TODO there's a phone number field we can add with pip
-    pronouns = models.CharField(
-        max_length=40, blank=True
-    )  # TODO replace this with set options or something
+    phone_number = models.CharField(max_length=20, blank=True)  # TODO: use django-phonenumber-field
+    pronouns = models.CharField(max_length=40, blank=True)  # TODO: use models.TextChoices
     city = models.CharField(max_length=200, blank=True)
     state = models.CharField(max_length=200, blank=True)
     country = models.CharField(max_length=200, blank=True)
@@ -30,6 +26,7 @@ class Student(models.Model):
     school = models.CharField(max_length=200, default="", blank=True)
     # TODO add emergency info maybe?
 
+    # TODO: this is kinda ugly, we should find a better way to organize this information
     @property
     def id(self):
         return self.user.id

@@ -1,5 +1,6 @@
-from core.models import Class, ESPUser
 from rest_framework import serializers
+
+from .models import Class, ESPUser
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

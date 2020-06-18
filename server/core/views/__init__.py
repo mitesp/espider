@@ -11,17 +11,13 @@ from .teacherreg import *  # noqa
 class StudentsView(ListView):
     template_name = "core/students.html"
     context_object_name = "students"
-
-    def get_queryset(self):
-        return Student.objects.all()
+    model = Student
 
 
 class ClassesView(ListView):
     template_name = "core/classes.html"
     context_object_name = "classes"
-
-    def get_queryset(self):
-        return Class.objects.all()
+    model = Class
 
 
 def index(request):
