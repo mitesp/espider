@@ -2,13 +2,17 @@ from django.db import models
 
 from .users import *
 
+
 class Program(models.Model):
-    name = models.CharField(max_length=200) #TODO maybe this should be a constant set to choose from?
-    edition = models.CharField(max_length=200) #this is season + year
-    #TODO add timeslots?
+    name = models.CharField(
+        max_length=200
+    )  # TODO maybe this should be a constant set to choose from?
+    edition = models.CharField(max_length=200)  # this is season + year
+    # TODO add timeslots?
 
     def __str__(self):
         return self.name + " " + self.edition
+
 
 class Class(models.Model):
     title = models.CharField(max_length=200)
@@ -28,7 +32,7 @@ class TeacherClassRegistration(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
 
-    #ensures a teacher can't register the same class twice
+    # ensures a teacher can't register the same class twice
     class Meta:
         unique_together = (("teacher", "clazz"),)
 
@@ -40,7 +44,7 @@ class StudentClassRegistration(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
 
-    #ensures a student can't register for the same class twice
+    # ensures a student can't register for the same class twice
     class Meta:
         unique_together = (("student", "clazz"),)
 

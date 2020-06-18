@@ -1,12 +1,16 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-#TODO remove the blank options from these (keeping them so createsuperuser still works/easier to create dummy accounts)
+# TODO remove the blank options from these (keeping them so createsuperuser still works/easier to create dummy accounts)
 class ESPUser(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-    phone_number = models.CharField(max_length=20, blank=True) #TODO there's a phone number field we can add with pip
-    pronouns = models.CharField(max_length=40, blank=True) #TODO replace this with set options or something
+    phone_number = models.CharField(
+        max_length=20, blank=True
+    )  # TODO there's a phone number field we can add with pip
+    pronouns = models.CharField(
+        max_length=40, blank=True
+    )  # TODO replace this with set options or something
     city = models.CharField(max_length=200, blank=True)
     state = models.CharField(max_length=200, blank=True)
     country = models.CharField(max_length=200, blank=True)
@@ -14,12 +18,15 @@ class ESPUser(AbstractUser):
     def __str__(self):
         return "{} {} ({})".format(self.first_name, self.last_name, self.username)
 
+
 class Student(models.Model):
-    user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True, related_name='student')
+    user = models.OneToOneField(
+        ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="student"
+    )
     dob = models.DateField(max_length=8, default="1969-12-31", blank=True)
     grad_year = models.IntegerField(default=1970, blank=True)
     school = models.CharField(max_length=200, default="", blank=True)
-    #TODO add emergency info maybe?
+    # TODO add emergency info maybe?
 
     @property
     def id(self):
@@ -44,9 +51,12 @@ class Student(models.Model):
     def __str__(self):
         return str(self.user)
 
+
 class Teacher(models.Model):
-    user = models.OneToOneField(ESPUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher')
-    affiliation = models.CharField(max_length=20, blank=True) #TODO options?
+    user = models.OneToOneField(
+        ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="teacher"
+    )
+    affiliation = models.CharField(max_length=20, blank=True)  # TODO options?
 
     @property
     def id(self):
