@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from .models import Class, ESPUser, Program, Student, Teacher
+from .models import (
+    Class,
+    ESPUser,
+    Program,
+    Student,
+    StudentClassRegistration,
+    Teacher,
+    TeacherClassRegistration,
+)
 
 
 class StudentInline(admin.TabularInline):
@@ -36,3 +44,6 @@ admin.site.register(Class)
 admin.site.register(Student)
 admin.site.register(Teacher)
 admin.site.register(Program)
+
+admin.site.register(TeacherClassRegistration)
+admin.site.register(StudentClassRegistration)
