@@ -48,7 +48,7 @@ class TeacherSignUpForm(ESPSignUpForm):
         return user
 
 class OtherAccountSignUpForm(ESPSignUpForm):
-    
+
     @transaction.atomic
     def save(self):
         return super().save(commit=True)
