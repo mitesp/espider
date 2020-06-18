@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from core import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register('users', views.UserViewSet)
+router.register('classes', views.ClassViewSet)
 
 urlpatterns = [
     path('', include('core.urls')),
@@ -27,4 +32,6 @@ urlpatterns = [
     path('accounts/signup/parent/', views.ParentSignUpView.as_view(), name='parent_signup'),
     path('accounts/signup/educator/', views.EducatorSignUpView.as_view(), name='educator_signup'),
     path('accounts/profile/', views.index),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
