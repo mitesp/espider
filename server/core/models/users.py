@@ -14,7 +14,7 @@ class ESPUser(AbstractUser):
     country = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return "{} {} ({})".format(self.first_name, self.last_name, self.username)
+        return "{} ({})".format(self.username, self.id)
 
 
 class Student(models.Model):
