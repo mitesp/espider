@@ -19,6 +19,9 @@ class ClassesView(ListView):
     context_object_name = "classes"
     model = Class
 
+    def get_queryset(self):
+        return Class.objects.filter(program__name=self.kwargs["program"])
+
 
 def index(request):
     return render(request, "core/index.html")

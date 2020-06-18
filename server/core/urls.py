@@ -26,7 +26,7 @@ urlpatterns = [
     path("waiver/", views.waiver, name="waiver"),
     path("students/", views.StudentsView.as_view(), name="students"),
     path("teacherreg/", views.TeacherRegistrationView.as_view(), name="teacherreg"),
-    path("classes/", views.ClassesView.as_view(), name="classes"),
+    path("<program>/classes/", views.ClassesView.as_view(), name="classes"),
     path("studentclasses/", views.studentclasses, name="studentclasses"),
     path("studentreg/", views.studentreg, name="studentreg"),
 ]
