@@ -13,6 +13,11 @@
    come back, the database's data will still be there).
 6. To start the containers up again, run `sudo docker-compose up`.
 
+(Miscellaneous)
+
+7. Run `pipenv run pre-commit run --all-files` to set up `pre-commit` (see Comitting & Pushing
+   Changes)
+
 # Making Changes
 Go ahead and edit code with your [favorite](https://code.visualstudio.com/)
 [text](https://www.sublimetext.com/) [editor](https://www.vim.org/) /
@@ -98,6 +103,8 @@ things up (honestly that's what *most* of the website really does anyway).
 [**Postgres**](https://www.postgresql.org/) is a database system. It's really good at handling data
 -- searching, updating, deleting, almost anything you want. Django has a [fancy built-in
 way](https://www.fullstackpython.com/django-orm.html) to talk to Postgres.
+* There is a way to [talk to Postgres directly](http://postgresguide.com/utilities/psql.html), but
+  hopefully you'll never need it since Django covers most use cases.
 
 [**Docker**](https://www.docker.com/) and [**Docker Compose**](https://docs.docker.com/compose/) are
 **container managers**. We use them for **cleanly setting up local development**.
