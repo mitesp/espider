@@ -11,8 +11,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class ClassSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Class
-<<<<<<< HEAD
-        fields = ['title', 'description']
-=======
         fields = ['title', 'description', 'num_students', 'capacity']
->>>>>>> Add sample REST API endpoints
