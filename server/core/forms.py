@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
-from django.db.models import Count, F, Subquery
+from django.db.models import Count
 
 from .models import Student, Teacher, ESPUser, Class, StudentClassRegistration
 
@@ -41,7 +41,7 @@ class StudentSignUpForm(ESPSignUpForm):
         user = super().save(commit=False)
         user.is_student = True
         user.save()
-        student = Student.objects.create(
+        Student.objects.create(
             user=user,
             dob=self.cleaned_data.get("dob"),
             grad_year=self.cleaned_data.get("grad_year"),
@@ -58,9 +58,7 @@ class TeacherSignUpForm(ESPSignUpForm):
         user = super().save(commit=False)
         user.is_teacher = True
         user.save()
-        teacher = Teacher.objects.create(
-            user=user, affiliation=self.cleaned_data.get("affiliation")
-        )
+        Teacher.objects.create(user=user, affiliation=self.cleaned_data.get("affiliation"))
         return user
 
 

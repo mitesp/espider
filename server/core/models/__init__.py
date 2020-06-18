@@ -1,6 +1,7 @@
 from django.db import models
 
-from .users import *
+from .users import *  # noqa
+from .users import Student, Teacher
 
 
 class Program(models.Model):

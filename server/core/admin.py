@@ -5,8 +5,6 @@ from .models import (
     ESPUser,
     Student,
     Teacher,
-    TeacherClassRegistration,
-    StudentClassRegistration,
     Program,
 )
 

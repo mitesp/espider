@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 
-from .signup import *
-from .studentreg import *
-from .teacherreg import *
-from .api import *
+from .signup import *  # noqa
+from .studentreg import *  # noqa
+from .teacherreg import *  # noqa
+from .api import *  # noqa
+from ..models import Student, Class
 
 
 class StudentsView(ListView):

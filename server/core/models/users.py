@@ -1,7 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# TODO remove the blank options from these (keeping them so createsuperuser still works/easier to create dummy accounts)
+
+# TODO remove the blank options from these (keeping them so createsuperuser still works/easier to
+# create dummy accounts)
 class ESPUser(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)

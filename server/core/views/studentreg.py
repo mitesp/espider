@@ -35,7 +35,7 @@ def studentreg(request):
         student = Student.objects.get(pk=request.user)
         for clazzname in chosen_classes:
             clazz = Class.objects.filter(title__exact=clazzname)[0]
-            reg = StudentClassRegistration.objects.create(student=student, clazz=clazz)
+            StudentClassRegistration.objects.create(student=student, clazz=clazz)
         return redirect("core:studentclasses")
     else:
         return render(request, "core/studentreg.html", {"form": form})
@@ -50,11 +50,9 @@ def studentclasses(request):
         student = Student.objects.get(pk=request.user)
         for clazzname in chosen_classes:
             clazz = Class.objects.filter(title__exact=clazzname)[0]
-            reg = (
-                StudentClassRegistration.objects.filter(student__exact=student)
-                .filter(clazz__exact=clazz)
-                .delete()
-            )
+            StudentClassRegistration.objects.filter(student__exact=student).filter(
+                clazz__exact=clazz
+            ).delete()
         return redirect("core:studentclasses")
     else:
         return render(request, "core/studentclasses.html", {"form": form})
