@@ -20,7 +20,7 @@
 
     <h3><a href="{% url 'logout' %}" >Log Out</a></h3>
 
-    
+
     {% if user.is_superuser %}
         <h3><a href="{% url 'admin:index' %}">Admin Panel</a></h3>
     {% endif %}

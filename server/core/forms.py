@@ -84,5 +84,3 @@ class StudentClassRegistrationForm(forms.Form):
 
 
         self.fields['classes'].queryset = enrolled_classes if delete else non_enrolled_classes
-
-

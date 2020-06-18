@@ -16,7 +16,7 @@
 
 
 {% elif user.is_authenticated %}
-    Only students are allowed to view this page. 
+    Only students are allowed to view this page.
 {% else %}
     <h2>Please <a href="{% url 'login' %}" >log in</a> to view this page. </h2>
 {% endif %}

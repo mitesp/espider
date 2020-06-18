@@ -48,5 +48,3 @@ If you need to rebuild the databases from scratch, run `sudo docker-compose down
     alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
     alias herokumigrate="heroku run python3 server/manage.py migrate" #migrate in prod
     alias herokumakemig="heroku run python3 server/manage.py makemigrations" #make migrations in prod
-
-

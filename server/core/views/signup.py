@@ -69,5 +69,3 @@ class ParentSignUpView(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('core:index')
-
-
