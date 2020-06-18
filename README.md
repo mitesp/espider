@@ -45,8 +45,8 @@ sure you know what changes you're adding.
 rules](https://chris.beams.io/posts/git-commit/#seven-rules) we roughly follow.
 
 **Fixing lint errors**: When you commit, `pre-commit` will check for lint. If found, it'll
-automatically fix the files, which you should then check for correctness and re add to the
-commit.\*\*\*
+automatically fix the files or describe the problem. You should check over the changes or fix the
+issues then re-add the files and commit.\*\*\*
 
 **Pushing**: Please `git pull --rebase` (no merge commits allowed!).\*\*\*\*
 
