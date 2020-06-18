@@ -4,6 +4,7 @@ from django.views.generic import ListView
 from .signup import *
 from .studentreg import *
 from .teacherreg import *
+from .api import *
 
 class StudentsView(ListView):
     template_name = 'core/students.html'
