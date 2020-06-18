@@ -25,13 +25,6 @@ router.register("classes", views.ClassViewSet)
 urlpatterns = [
     path("", include("core.urls")),
     path("admin/", admin.site.urls),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/signup/", views.SignUpPageView.as_view(), name="signup"),
-    path("accounts/signup/student/", views.StudentSignUpView.as_view(), name="student_signup",),
-    path("accounts/signup/teacher/", views.TeacherSignUpView.as_view(), name="teacher_signup",),
-    path("accounts/signup/parent/", views.ParentSignUpView.as_view(), name="parent_signup",),
-    path("accounts/signup/educator/", views.EducatorSignUpView.as_view(), name="educator_signup",),
-    path("accounts/profile/", views.index),
     path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
