@@ -18,7 +18,7 @@ class Program(models.Model):
 class Class(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    capacity = models.IntegerField()
+    capacity = models.PositiveIntegerField()
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
 
     @property
