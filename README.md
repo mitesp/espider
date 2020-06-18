@@ -35,11 +35,16 @@ hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to make sure ou
 
 **Before committing and pushing**: it's good practice to run `git status` and `git diff` to make
 sure you know what changes you're adding.
+
 **Committing**: Use concise but descriptive commit messages and bodies. Here are [7
-rules](https://chris.beams.io/posts/git-commit/#seven-rules) we roughly follow.  **Fixing lint
-errors**: When you commit, `pre-commit` will check for lint. If found, it'll automatically fix the
-files, which you should then check for correctness and re add to the commit.\*\*\*
+rules](https://chris.beams.io/posts/git-commit/#seven-rules) we roughly follow.
+
+**Fixing lint errors**: When you commit, `pre-commit` will check for lint. If found, it'll
+automatically fix the files, which you should then check for correctness and re add to the
+commit.\*\*\*
+
 **Pushing**: Please `git pull --rebase` (no merge commits allowed!).\*\*\*\*
+
 **Resolving conflicts**: If you run into conflicts, try fixing, readding the files, and calling `git
 rebase --continue`. If that doesn't work, consider aborting, squashing, then rebasing. If you're
 super worried about screwing up git, ask someone else for help!
@@ -144,6 +149,7 @@ Make sure you don't already have things running on your localhost ports.
 # Useful tidbits
 \* If you get tired of typing `sudo` in front of  `docker-compose`, [you can do
 that](https://docs.docker.com/engine/install/linux-postinstall/).
+
 \*\* If you just generally feel too lazy to type things, we encourage using
 [aliases](https://tldp.org/LDP/abs/html/aliases.html).
 Here are Mayukha's favorite aliases:
@@ -153,9 +159,9 @@ Here are Mayukha's favorite aliases:
     alias dockman="sudo docker-compose exec web python3 manage.py" #exec
     alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
     alias herokumigrate="heroku run python3 server/manage.py migrate" #migrate in prod
-    alias herokumakemig="heroku run python3 server/manage.py makemigrations" #make migrations in
-prod
+    alias herokumakemig="heroku run python3 server/manage.py makemigrations" #make migrations in prod
 
  \*\*\* Our lint setup is in `.pre-commit-config.yaml`. Hopefully you won't need to touch it, but if
 you do, `pipenv run  pre-commit run -a` will run the linter.
+
  \*\*\*\* You can set this to be the default by running `git config pull.rebase true`.
