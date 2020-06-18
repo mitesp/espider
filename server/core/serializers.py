@@ -1,4 +1,4 @@
-from core.models import ESPUser, Class
+from core.models import Class, ESPUser
 from rest_framework import serializers
 
 

@@ -1,6 +1,6 @@
-from core.models import ESPUser, Class
+from core.models import Class, ESPUser
+from core.serializers import ClassSerializer, UserSerializer
 from rest_framework import viewsets
-from core.serializers import UserSerializer, ClassSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):

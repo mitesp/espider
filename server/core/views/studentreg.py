@@ -1,10 +1,9 @@
+from core.forms import StudentClassRegistrationForm
+from core.models import Class, ESPUser, Student, StudentClassRegistration
+from django.forms.models import model_to_dict
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-
-from core.forms import StudentClassRegistrationForm
-from core.models import ESPUser, Student, Class, StudentClassRegistration
 from django.views.generic import UpdateView
-from django.forms.models import model_to_dict
 
 
 class StudentProfileView(UpdateView):

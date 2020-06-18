@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.db.models import Count
 
-from .models import Student, Teacher, ESPUser, Class, StudentClassRegistration
+from .models import Class, ESPUser, Student, StudentClassRegistration, Teacher
 
 
 class ESPSignUpForm(UserCreationForm):

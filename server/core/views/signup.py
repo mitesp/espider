@@ -1,10 +1,8 @@
+from core.forms import OtherAccountSignUpForm, StudentSignUpForm, TeacherSignUpForm
+from core.models import ESPUser
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView
-
-
-from core.forms import StudentSignUpForm, TeacherSignUpForm, OtherAccountSignUpForm
-from core.models import ESPUser
 
 
 class SignUpView(TemplateView):

@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from .models import (
-    Class,
-    ESPUser,
-    Student,
-    Teacher,
-    Program,
-)
+from .models import Class, ESPUser, Program, Student, Teacher
 
 
 class StudentInline(admin.TabularInline):
