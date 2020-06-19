@@ -24,7 +24,6 @@ class Student(models.Model):
     dob = models.DateField(max_length=8, default="1969-12-31", blank=True)
     grad_year = models.IntegerField(default=1970, blank=True)
     school = models.CharField(max_length=200, default="", blank=True)
-    # TODO add emergency info maybe?
 
     # TODO: this is kinda ugly, we should find a better way to organize this information
     @property
