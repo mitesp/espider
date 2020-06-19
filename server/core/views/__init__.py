@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic import ListView
 
 from ..models import Class, Program, Student, StudentRegistration
@@ -31,6 +31,11 @@ class ClassesView(ListView):
 
 
 def index(request):
+    if request.user.is_authenticated and not request.user.is_superuser:
+        if request.user.is_student and not request.user.is_teacher:
+            return redirect("core:studentdashboard")
+        elif not request.user.is_student and request.user.is_teacher:
+            return redirect("core:studentdashboard")
     programs = Program.objects.all()
     # TODO set up permissions so that only "active" programs are seen
     context = {"programs": programs}
@@ -38,7 +43,19 @@ def index(request):
 
 
 def studentdashboard(request):
+    if not request.user.is_authenticated or not request.user.is_student:
+        return redirect("core:index")
     programs = Program.objects.all()
     # TODO set up permissions so that only "active" programs are seen
     context = {"programs": programs}
+
     return render(request, "core/studentdashboard.html", context)
+
+
+def teacherdashboard(request):
+    if not request.user.is_authenticated or not request.user.is_teacher:
+        return redirect("core:index")
+    programs = Program.objects.all()
+    # TODO set up permissions so that only "active" programs are seen
+    context = {"programs": programs}
+    return render(request, "core/teacherdashboard.html", context)

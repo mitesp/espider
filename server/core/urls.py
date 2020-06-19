@@ -7,6 +7,7 @@ urlpatterns = [
     # general pages
     path("", views.index, name="index"),
     path("studentdashboard", views.studentdashboard, name="studentdashboard"),
+    path("teacherdashboard", views.teacherdashboard, name="teacherdashboard"),
     # accounts pages
     path(
         "accounts/",
