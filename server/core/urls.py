@@ -21,12 +21,29 @@ urlpatterns = [
             ]
         ),
     ),
-    path("profile/", views.StudentProfileView.as_view(), name="studentprofile"),
-    path("medliab/", views.medliab, name="medliab"),
-    path("waiver/", views.waiver, name="waiver"),
-    path("students/", views.StudentsView.as_view(), name="students"),
-    path("teacherreg/", views.TeacherRegistrationView.as_view(), name="teacherreg"),
-    path("<program>/classes/", views.ClassesView.as_view(), name="classes"),
-    path("studentclasses/", views.studentclasses, name="studentclasses"),
-    path("studentreg/", views.studentreg, name="studentreg"),
+    # student registration
+    path(
+        "<program>/<edition>/studentprofile/",
+        views.StudentProfileView.as_view(),
+        name="studentprofile",
+    ),
+    path("<program>/<edition>/medliab/", views.medliab, name="medliab"),
+    path("<program>/<edition>/emergency_info/", views.emergency_info, name="emergency_info"),
+    path("<program>/<edition>/waiver/", views.waiver, name="waiver"),
+    path("<program>/<edition>/studentreg/", views.studentreg, name="studentreg"),
+    path("<program>/<edition>/studentclasses/", views.studentclasses, name="studentclasses"),
+    # teacher registration
+    path(
+        "<program>/<edition>/teacherprofile/",
+        views.TeacherProfileView.as_view(),
+        name="teacherprofile",
+    ),
+    path(
+        "<program>/<edition>/teacherreg/",
+        views.TeacherRegistrationView.as_view(),
+        name="teacherreg",
+    ),
+    # admin view pages
+    path("<program>/<edition>/students/", views.StudentsView.as_view(), name="students"),
+    path("<program>/<edition>/classes/", views.ClassesView.as_view(), name="classes"),
 ]

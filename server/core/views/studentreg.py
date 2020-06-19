@@ -1,17 +1,23 @@
 from django.forms.models import model_to_dict
-from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.generic import UpdateView
 
 from ..forms import StudentClassRegistrationForm
-from ..models import Class, ESPUser, Student, StudentClassRegistration
+from ..models import Class, ESPUser, Program, StudentClassRegistration, StudentRegistration
+
+
+# helper function
+def get_program_and_studentreg(name, edition, student):
+    program = get_object_or_404(Program, name=name, edition=edition)
+    studentreg = StudentRegistration.objects.get(student=student, program=program)
+    return program, studentreg
 
 
 class StudentProfileView(UpdateView):
     model = ESPUser
     fields = ("pronouns", "phone_number", "city", "state", "country")
-    template_name = "core/studentprofile.html"
-    success_url = reverse_lazy("core:medliab")
+    template_name = "core/profile.html"
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -19,48 +25,114 @@ class StudentProfileView(UpdateView):
     def get_initial(self):
         return model_to_dict(self.request.user, fields=self.fields)
 
+    def get_success_url(self):
+        kwargs = {"program": self.kwargs["program"], "edition": self.kwargs["edition"]}
+        return reverse("core:emergency_info", kwargs=kwargs)
 
-def studentreg(request):
-    form = StudentClassRegistrationForm(request.POST, user=request.user, delete=False)
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        program, studentreg = get_program_and_studentreg(
+            self.kwargs["program"], self.kwargs["edition"], self.request.user.student
+        )
+        studentreg.update_profile_check = True
+        studentreg.save()
+        return ret
+
+
+def studentreg(request, *args, **kwargs):
+    program, studentreg = get_program_and_studentreg(
+        kwargs["program"], kwargs["edition"], request.user.student
+    )
+
+    form = StudentClassRegistrationForm(
+        request.POST, studentreg=studentreg, delete=False, program=program
+    )
     if request.method == "POST" and form.is_valid():
         # submit student registration (add student to classes)
         chosen_classes = form.cleaned_data.get("classes")
-        student = Student.objects.get(pk=request.user)
         for clazzname in chosen_classes:
             clazz = Class.objects.filter(title__exact=clazzname)[0]
-            StudentClassRegistration.objects.create(student=student, clazz=clazz)
-        return redirect("core:studentclasses")
+            StudentClassRegistration.objects.create(student=studentreg, clazz=clazz)
+        return redirect("core:studentclasses", program=kwargs["program"], edition=kwargs["edition"])
     else:
-        return render(request, "core/studentreg.html", {"form": form})
+        context = {"form": form, "program": program}
+        return render(request, "core/studentreg.html", context)
 
 
-def studentclasses(request):
-    form = StudentClassRegistrationForm(request.POST, user=request.user, delete=True)
+def studentclasses(request, *args, **kwargs):
+    program, studentreg = get_program_and_studentreg(
+        kwargs["program"], kwargs["edition"], request.user.student
+    )
+
+    form = StudentClassRegistrationForm(
+        request.POST, studentreg=studentreg, delete=True, program=program
+    )
     if request.method == "POST" and form.is_valid():
-        # submit student registration (add student to classes)
+        # submit update to student registration (remove student from classes)
         chosen_classes = form.cleaned_data.get("classes")
-        student = Student.objects.get(pk=request.user)
+
         for clazzname in chosen_classes:
             clazz = Class.objects.filter(title__exact=clazzname)[0]
-            StudentClassRegistration.objects.filter(student__exact=student).filter(
-                clazz__exact=clazz
-            ).delete()
-        return redirect("core:studentclasses")
+            StudentClassRegistration.objects.get(student=studentreg, clazz=clazz).delete()
+        return redirect("core:studentclasses", program=kwargs["program"], edition=kwargs["edition"])
+
     else:
-        return render(request, "core/studentclasses.html", {"form": form})
+        context = {"form": form, "program": program}
+        return render(request, "core/studentclasses.html", context)
 
 
-def medliab(request):
+# dummy forms
+
+
+def emergency_info(request, *args, **kwargs):
+    program, studentreg = get_program_and_studentreg(
+        kwargs["program"], kwargs["edition"], request.user.student
+    )
+    next_page = redirect("core:medliab", program=kwargs["program"], edition=kwargs["edition"])
+
     if request.method == "POST":
-        # TODO do something for medliab submission
-        return redirect("core:waiver")
+        studentreg.emergency_info_check = True
+        studentreg.save()
+
+        return next_page
     else:
-        return render(request, "core/medliab.html")
+        if studentreg.emergency_info_check:  # already filled out
+            return next_page
+        context = {"program": program}
+        return render(request, "core/emergency_info.html", context)
 
 
-def waiver(request):
+def medliab(request, *args, **kwargs):
+    program, studentreg = get_program_and_studentreg(
+        kwargs["program"], kwargs["edition"], request.user.student
+    )
+    next_page = redirect("core:waiver", program=kwargs["program"], edition=kwargs["edition"])
+
     if request.method == "POST":
-        # TODO do something for waiver submission
-        return redirect("core:studentreg")
+        studentreg.medliab_check = True
+        studentreg.save()
+
+        return next_page
     else:
-        return render(request, "core/waiver.html")
+        if studentreg.medliab_check:  # already filled out
+            return next_page
+        context = {"program": program}
+        return render(request, "core/medliab.html", context)
+
+
+def waiver(request, *args, **kwargs):
+    program, studentreg = get_program_and_studentreg(
+        kwargs["program"], kwargs["edition"], request.user.student
+    )
+    next_page = redirect("core:studentreg", program=kwargs["program"], edition=kwargs["edition"])
+
+    if request.method == "POST":
+        studentreg.liability_check = True
+        studentreg.save()
+
+        return next_page
+    else:
+        if studentreg.medliab_check:  # already filled out
+            return next_page
+        context = {"program": program}
+        return render(request, "core/waiver.html", context)

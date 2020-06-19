@@ -7,14 +7,18 @@
 {% if user.is_authenticated %}
     <h2> Logged in as <strong>{{ user.username }}</strong>.</h2>
     {% if user.is_student %}
-        <h3><a href="{% url 'core:studentprofile' %}">Register for classes</a></h3>
+        {% for program in programs %}
+            <h3><a href="{% url 'core:studentprofile' program.name program.edition %}">Register as a student for {{ program }}</a></h3>
+        {% endfor %}
     {% endif %}
 
 
     {% if user.is_teacher %}
-        <h3><a href="{% url 'core:teacherreg' %}">Register a class</a></h3>
+        {% for program in programs %}
+            <h3><a href="{% url 'core:teacherprofile' program.name program.edition %}">Register to teach for {{ program }}</a></h3>
 
-        <h3><a href="{% url 'core:classes' %}">View all classes</a></h3>
+            <h3><a href="{% url 'core:classes' program.name program.edition %}">View all classes for {{ program }}</a></h3>
+        {% endfor %}
     {% endif %}
 
 

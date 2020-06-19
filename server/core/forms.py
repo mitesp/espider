@@ -69,17 +69,21 @@ class StudentClassRegistrationForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop("user")  # throws an error if user is not present
+        studentreg = kwargs.pop("studentreg")  # throws an error if user is not present
         delete = kwargs.pop("delete")
+        program = kwargs.pop("program")
 
         super(StudentClassRegistrationForm, self).__init__(*args, **kwargs)
 
-        student = Student.objects.get(pk=user)
-        classes = StudentClassRegistration.objects.filter(student__exact=student).values_list(
+        classes = StudentClassRegistration.objects.filter(student__exact=studentreg).values_list(
             "clazz", flat=True
         )
-        enrolled_classes = Class.objects.filter(id__in=classes)
-        non_enrolled_classes = Class.objects.exclude(id__in=classes).exclude(capacity__lte=0)
+        enrolled_classes = Class.objects.filter(id__in=classes).filter(program__exact=program)
+        non_enrolled_classes = (
+            Class.objects.exclude(id__in=classes)
+            .filter(program__exact=program)
+            .exclude(capacity__lte=0)
+        )
 
         counts = (
             StudentClassRegistration.objects.all()
