@@ -35,3 +35,10 @@ def index(request):
     # TODO set up permissions so that only "active" programs are seen
     context = {"programs": programs}
     return render(request, "core/index.html", context)
+
+
+def studentdashboard(request):
+    programs = Program.objects.all()
+    # TODO set up permissions so that only "active" programs are seen
+    context = {"programs": programs}
+    return render(request, "core/studentdashboard.html", context)

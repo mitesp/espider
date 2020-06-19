@@ -7,9 +7,7 @@
 {% if user.is_authenticated %}
     <h2> Logged in as <strong>{{ user.username }}</strong>.</h2>
     {% if user.is_student %}
-        {% for program in programs %}
-            <h3><a href="{% url 'core:studentprofile' program.name program.edition %}">Register as a student for {{ program }}</a></h3>
-        {% endfor %}
+        <h3><a href="{% url 'core:studentdashboard' %}">Go to Student Dashboard</a></h3>
     {% endif %}
 
 

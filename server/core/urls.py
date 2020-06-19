@@ -4,7 +4,10 @@ from . import views
 
 app_name = "core"
 urlpatterns = [
+    # general pages
     path("", views.index, name="index"),
+    path("studentdashboard", views.studentdashboard, name="studentdashboard"),
+    # accounts pages
     path(
         "accounts/",
         include(

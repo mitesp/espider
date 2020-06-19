@@ -1,0 +1,18 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
+
+
+
+{% if user.is_authenticated and user.is_student %}
+    <h1> <strong>Student Dashboard for {{ user.username }}</strong> </h1>
+    {% for program in programs %}
+        <h3>{{ program }}: <a href="{% url 'core:studentprofile' program.name program.edition %}">Register</a></h3>
+    {% endfor %}
+
+
+    <h3><a href="{% url 'core:logout' %}" >Log Out</a></h3>
+
+{% else %}
+    <h2> <a href="{% url 'core:login' %}" class="btn btn-teacher btn-lg" role="button">Sign In</a> </h2>
+{% endif %}
