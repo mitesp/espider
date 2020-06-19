@@ -6,8 +6,10 @@ from .models import (
     Program,
     Student,
     StudentClassRegistration,
+    StudentRegistration,
     Teacher,
     TeacherClassRegistration,
+    TeacherRegistration,
 )
 
 
@@ -38,6 +40,25 @@ class ESPUserAdmin(admin.ModelAdmin):
     list_filter = ("is_student", "is_teacher")
     search_fields = ("username", "email")
     inlines = [StudentInline, TeacherInline]
+
+
+@admin.register(StudentRegistration)
+class StudentRegistrationAdmin(admin.ModelAdmin):
+    list_display = (
+        "student",
+        "program",
+        "update_profile_check",
+        "emergency_info_check",
+        "medliab_check",
+        "liability_check",
+    )
+    search_fields = ("student", "program")
+
+
+@admin.register(TeacherRegistration)
+class TeacherRegistrationAdmin(admin.ModelAdmin):
+    list_display = ("teacher", "program", "update_profile_check")
+    search_fields = ("teacher", "program")
 
 
 admin.site.register(Class)
