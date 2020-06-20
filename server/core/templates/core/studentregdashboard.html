@@ -1,0 +1,40 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
+
+<h1> {{user.username}}: Dashboard for {{ program.name }} {{ program.edition }} </h1>
+
+<div class="regstatus">
+  <h2> Registration Status </h2>
+
+  <h3><a href="{% url 'core:studentprofile' program.name program.edition %}">Update Profile</a>: {{ studentreg.update_profile_check|yesno:"Done, Not Done" }}</h3>
+
+  <h3><a href="{% url 'core:emergency_info' program.name program.edition %}">Emergency Info</a>: {{ studentreg.emergency_info_check|yesno:"Done, Not Done" }}</h3>
+
+  {% if studentreg.medliab_check %}
+    <h3>Medical Waiver: Done</h3>
+  {% else %}
+    <h3><a href="{% url 'core:medliab' program.name program.edition %}">Medical Waiver</a>: Not Done</h3>
+  {% endif %}
+
+  {% if studentreg.liability_check %}
+    <h3>Liability Waiver: Done</h3>
+  {% else %}
+    <h3><a href="{% url 'core:waiver' program.name program.edition %}">Liability Waiver</a>: Not Done</h3>
+  {% endif %}
+
+</div>
+<div class="column">
+  <h2> Registered Classes </h2>
+
+  {% if classes|length > 0 %}
+    {% for c in classes %}
+      <h3> {{c.title}} </h3>
+    {% endfor %}
+  {% else %}
+    <h3> No classes. </h3>
+  {% endif %}
+
+  <h3><a href="{% url 'core:studentclassreg' program.name program.edition %}" ><i>Add More Classes</i></a>
+
+</div>

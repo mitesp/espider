@@ -41,6 +41,10 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
+    def classes(self):
+        ids = StudentClassRegistration.objects.filter(student=self).values_list("clazz", flat=True)
+        return Class.objects.filter(id__in=ids)
+
 
 class TeacherRegistration(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)

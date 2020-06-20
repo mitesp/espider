@@ -42,7 +42,7 @@ class StudentProfileView(LoginRequiredMixin, UpdateView):
 
 
 @login_required
-def studentreg(request, *args, **kwargs):
+def studentclassreg(request, *args, **kwargs):
     program, studentreg = get_program_and_studentreg(
         kwargs["program"], kwargs["edition"], request.user.student
     )
@@ -59,7 +59,17 @@ def studentreg(request, *args, **kwargs):
         return redirect("core:studentclasses", program=kwargs["program"], edition=kwargs["edition"])
     else:
         context = {"form": form, "program": program}
-        return render(request, "core/studentreg.html", context)
+        return render(request, "core/studentclassreg.html", context)
+
+
+@login_required
+def studentregdashboard(request, *args, **kwargs):
+    program, studentreg = get_program_and_studentreg(
+        kwargs["program"], kwargs["edition"], request.user.student
+    )
+
+    context = {"program": program, "studentreg": studentreg, "classes": studentreg.classes()}
+    return render(request, "core/studentregdashboard.html", context)
 
 
 @login_required
@@ -131,7 +141,9 @@ def waiver(request, *args, **kwargs):
     program, studentreg = get_program_and_studentreg(
         kwargs["program"], kwargs["edition"], request.user.student
     )
-    next_page = redirect("core:studentreg", program=kwargs["program"], edition=kwargs["edition"])
+    next_page = redirect(
+        "core:studentclassreg", program=kwargs["program"], edition=kwargs["edition"]
+    )
 
     if request.method == "POST":
         studentreg.liability_check = True

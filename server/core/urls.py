@@ -31,10 +31,11 @@ urlpatterns = [
         views.StudentProfileView.as_view(),
         name="studentprofile",
     ),
-    path("<program>/<edition>/medliab/", views.medliab, name="medliab"),
     path("<program>/<edition>/emergency_info/", views.emergency_info, name="emergency_info"),
+    path("<program>/<edition>/medliab/", views.medliab, name="medliab"),
     path("<program>/<edition>/waiver/", views.waiver, name="waiver"),
-    path("<program>/<edition>/studentreg/", views.studentreg, name="studentreg"),
+    path("<program>/<edition>/studentclassreg/", views.studentclassreg, name="studentclassreg"),
+    path("<program>/<edition>/studentreg/", views.studentregdashboard, name="studentregdashboard"),
     path("<program>/<edition>/studentclasses/", views.studentclasses, name="studentclasses"),
     # teacher registration
     path(
