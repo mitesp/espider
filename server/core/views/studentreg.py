@@ -19,7 +19,7 @@ def get_program_and_studentreg(name, edition, student):
 class StudentProfileView(LoginRequiredMixin, UpdateView):
     model = ESPUser
     fields = ("pronouns", "phone_number", "city", "state", "country")
-    template_name = "core/profile.html"
+    template_name = "core/studentreg/studentprofile.html"
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -61,7 +61,7 @@ def studentclassreg(request, *args, **kwargs):
         )
     else:
         context = {"form": form, "program": program}
-        return render(request, "core/studentclassreg.html", context)
+        return render(request, "core/studentreg/studentclassreg.html", context)
 
 
 @login_required
@@ -71,7 +71,7 @@ def studentregdashboard(request, *args, **kwargs):
     )
 
     context = {"program": program, "studentreg": studentreg, "classes": studentreg.classes()}
-    return render(request, "core/studentregdashboard.html", context)
+    return render(request, "core/studentreg/studentregdashboard.html", context)
 
 
 @login_required
@@ -96,7 +96,7 @@ def studentclasses(request, *args, **kwargs):
 
     else:
         context = {"form": form, "program": program}
-        return render(request, "core/studentclasses.html", context)
+        return render(request, "core/studentreg/studentclasses.html", context)
 
 
 # dummy forms
@@ -118,7 +118,7 @@ def emergency_info(request, *args, **kwargs):
         if studentreg.emergency_info_check:  # already filled out
             return next_page
         context = {"program": program}
-        return render(request, "core/emergency_info.html", context)
+        return render(request, "core/studentreg/emergency_info.html", context)
 
 
 @login_required
@@ -137,7 +137,7 @@ def medliab(request, *args, **kwargs):
         if studentreg.medliab_check:  # already filled out
             return next_page
         context = {"program": program}
-        return render(request, "core/medliab.html", context)
+        return render(request, "core/studentreg/medliab.html", context)
 
 
 @login_required
@@ -158,4 +158,4 @@ def waiver(request, *args, **kwargs):
         if studentreg.medliab_check:  # already filled out
             return next_page
         context = {"program": program}
-        return render(request, "core/waiver.html", context)
+        return render(request, "core/studentreg/waiver.html", context)

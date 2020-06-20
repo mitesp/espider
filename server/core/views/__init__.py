@@ -11,7 +11,7 @@ from .teacherreg import *  # noqa
 
 
 class StudentsView(LoginRequiredMixin, ListView):
-    template_name = "core/students.html"
+    template_name = "core/adminlists/students.html"
     context_object_name = "students"
     model = Student
 
@@ -22,7 +22,7 @@ class StudentsView(LoginRequiredMixin, ListView):
 
 
 class ClassesView(LoginRequiredMixin, ListView):
-    template_name = "core/classes.html"
+    template_name = "core/adminlists/classes.html"
     context_object_name = "classes"
     model = Class
 
@@ -36,7 +36,7 @@ def index(request):
     programs = Program.objects.all()
     # TODO set up permissions so that only "active" programs are seen
     context = {"programs": programs}
-    return render(request, "core/index.html", context)
+    return render(request, "core/general/index.html", context)
 
 
 @login_required
@@ -47,7 +47,7 @@ def studentdashboard(request):
     # TODO set up permissions so that only "active" programs are seen
     context = {"programs": programs}
 
-    return render(request, "core/studentdashboard.html", context)
+    return render(request, "core/general/studentdashboard.html", context)
 
 
 @login_required
@@ -57,4 +57,4 @@ def teacherdashboard(request):
     programs = Program.objects.all()
     # TODO set up permissions so that only "active" programs are seen
     context = {"programs": programs}
-    return render(request, "core/teacherdashboard.html", context)
+    return render(request, "core/general/teacherdashboard.html", context)
