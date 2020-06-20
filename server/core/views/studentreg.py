@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -14,7 +16,7 @@ def get_program_and_studentreg(name, edition, student):
     return program, studentreg
 
 
-class StudentProfileView(UpdateView):
+class StudentProfileView(LoginRequiredMixin, UpdateView):
     model = ESPUser
     fields = ("pronouns", "phone_number", "city", "state", "country")
     template_name = "core/profile.html"
@@ -39,6 +41,7 @@ class StudentProfileView(UpdateView):
         return ret
 
 
+@login_required
 def studentreg(request, *args, **kwargs):
     program, studentreg = get_program_and_studentreg(
         kwargs["program"], kwargs["edition"], request.user.student
@@ -59,6 +62,7 @@ def studentreg(request, *args, **kwargs):
         return render(request, "core/studentreg.html", context)
 
 
+@login_required
 def studentclasses(request, *args, **kwargs):
     program, studentreg = get_program_and_studentreg(
         kwargs["program"], kwargs["edition"], request.user.student
@@ -84,6 +88,7 @@ def studentclasses(request, *args, **kwargs):
 # dummy forms
 
 
+@login_required
 def emergency_info(request, *args, **kwargs):
     program, studentreg = get_program_and_studentreg(
         kwargs["program"], kwargs["edition"], request.user.student
@@ -102,6 +107,7 @@ def emergency_info(request, *args, **kwargs):
         return render(request, "core/emergency_info.html", context)
 
 
+@login_required
 def medliab(request, *args, **kwargs):
     program, studentreg = get_program_and_studentreg(
         kwargs["program"], kwargs["edition"], request.user.student
@@ -120,6 +126,7 @@ def medliab(request, *args, **kwargs):
         return render(request, "core/medliab.html", context)
 
 
+@login_required
 def waiver(request, *args, **kwargs):
     program, studentreg = get_program_and_studentreg(
         kwargs["program"], kwargs["edition"], request.user.student

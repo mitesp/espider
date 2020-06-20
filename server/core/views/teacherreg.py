@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, redirect
@@ -7,7 +8,7 @@ from django.views.generic import CreateView, UpdateView
 from ..models import Class, ESPUser, Program, TeacherClassRegistration, TeacherRegistration
 
 
-class TeacherProfileView(UpdateView):
+class TeacherProfileView(LoginRequiredMixin, UpdateView):
     model = ESPUser
     fields = ("pronouns", "phone_number", "city", "state", "country")
     template_name = "core/profile.html"
@@ -37,7 +38,7 @@ class TeacherProfileView(UpdateView):
         return ret
 
 
-class TeacherRegistrationView(CreateView):
+class TeacherRegistrationView(LoginRequiredMixin, CreateView):
     model = Class
     fields = ("title", "description", "capacity")
     template_name = "core/teacherreg.html"
