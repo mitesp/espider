@@ -13,6 +13,8 @@
         <h2>There are no classes to register. Please check back later. </h2>
     {% endif %}
 
+<h2><a href="{% url 'core:studentregdashboard' program.name program.edition %}" >Back to Dashboard</a> </h2>
+
 
 {% elif user.is_authenticated %}
     Only students are allowed to view this page.

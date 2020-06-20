@@ -56,7 +56,9 @@ def studentclassreg(request, *args, **kwargs):
         for clazzname in chosen_classes:
             clazz = Class.objects.filter(title__exact=clazzname)[0]
             StudentClassRegistration.objects.create(student=studentreg, clazz=clazz)
-        return redirect("core:studentclasses", program=kwargs["program"], edition=kwargs["edition"])
+        return redirect(
+            "core:studentregdashboard", program=kwargs["program"], edition=kwargs["edition"]
+        )
     else:
         context = {"form": form, "program": program}
         return render(request, "core/studentclassreg.html", context)
@@ -88,7 +90,9 @@ def studentclasses(request, *args, **kwargs):
         for clazzname in chosen_classes:
             clazz = Class.objects.filter(title__exact=clazzname)[0]
             StudentClassRegistration.objects.get(student=studentreg, clazz=clazz).delete()
-        return redirect("core:studentclasses", program=kwargs["program"], edition=kwargs["edition"])
+        return redirect(
+            "core:studentregdashboard", program=kwargs["program"], edition=kwargs["edition"]
+        )
 
     else:
         context = {"form": form, "program": program}
@@ -142,7 +146,7 @@ def waiver(request, *args, **kwargs):
         kwargs["program"], kwargs["edition"], request.user.student
     )
     next_page = redirect(
-        "core:studentclassreg", program=kwargs["program"], edition=kwargs["edition"]
+        "core:studentregdashboard", program=kwargs["program"], edition=kwargs["edition"]
     )
 
     if request.method == "POST":

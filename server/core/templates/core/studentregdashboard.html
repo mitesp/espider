@@ -35,6 +35,8 @@
     <h3> No classes. </h3>
   {% endif %}
 
+  <h3><a href="{% url 'core:studentclasses' program.name program.edition %}" ><i>Remove Classes</i></a>
+
   <h3><a href="{% url 'core:studentclassreg' program.name program.edition %}" ><i>Add More Classes</i></a>
 
 </div>
