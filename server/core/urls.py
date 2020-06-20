@@ -21,7 +21,7 @@ urlpatterns = [
                 path(
                     "signup/educator/", views.EducatorSignUpView.as_view(), name="educator_signup",
                 ),
-                path("profile/", views.index),
+                path("profile/", views.index),  # TODO make this redirect to the home page somehow
             ]
         ),
     ),

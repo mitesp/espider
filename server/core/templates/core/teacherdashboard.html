@@ -6,11 +6,11 @@
     <h1> <strong>Teacher Dashboard for {{ user.username }}</strong> </h1>
 
     {% for program in programs %}
-        <h3>{{ program }}: <a href="{% url 'core:teacherprofile' program.name program.edition %}">Register to teach</a>   <a href="{% url 'core:classes' program.name program.edition %}">View all classes</a> </h3>
+        <h2>{{ program }}: <a href="{% url 'core:teacherprofile' program.name program.edition %}">Register to teach</a>   <a href="{% url 'core:classes' program.name program.edition %}">View all classes</a> </h2>
     {% endfor %}
 
 
-    <h3><a href="{% url 'core:logout' %}" >Log Out</a></h3>
+    <h2><a href="{% url 'core:logout' %}" >Log Out</a></h2>
 
 
 {% else %}
