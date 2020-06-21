@@ -1,7 +1,7 @@
 import React from "react";
 import "react-bulma-components/dist/react-bulma-components.min.css";
 
-import programs, { canonicalizeProgramName } from "./info/programs";
+import programs, { canonicalizeProgramName } from "../info/programs";
 
 class Nav extends React.Component {
   constructor(props) {

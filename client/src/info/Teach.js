@@ -1,5 +1,5 @@
 import React from "react";
 
-export default () => {
+export default function () {
   return <div>TEACH</div>;
-};
+}
