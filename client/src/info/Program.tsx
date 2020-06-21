@@ -1,7 +1,7 @@
 import React from "react";
 import "react-bulma-components/dist/react-bulma-components.min.css";
 
-export function canonicalizeProgramName(program) {
+export function canonicalizeProgramName(program: string) {
   return program === "hssp"
     ? program.toUpperCase()
     : program.charAt(0).toUpperCase() + program.slice(1);
@@ -10,7 +10,7 @@ export function canonicalizeProgramName(program) {
 export const programList = ["splash", "spark", "hssp", "cascade", "firestorm"];
 
 //TODO: we could write this stuff in md format or something and generate it
-export default function (props) {
+export default function (props: { program: string }) {
   const program = <b>{canonicalizeProgramName(props.program)}</b>;
   return (
     <div className="container pt-3" style={{}}>

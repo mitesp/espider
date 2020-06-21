@@ -3,8 +3,13 @@ import "react-bulma-components/dist/react-bulma-components.min.css";
 
 import { canonicalizeProgramName, programList } from "../info/Program";
 
-class Nav extends React.Component {
-  constructor(props) {
+type Props = {};
+type State = {
+  mobileOpen: boolean;
+};
+
+class Nav extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       mobileOpen: false,
