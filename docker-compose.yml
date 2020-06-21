@@ -1,9 +1,8 @@
 version: "3"
 services:
-  web:
-    build: .
+  server:
+    build: ./server
     command: python manage.py runserver 0.0.0.0:8000
-    working_dir: /espider/server/
     ports:
       - "8000:8000"
     depends_on:
@@ -11,7 +10,15 @@ services:
     environment:
       - DEBUG=True
     volumes:
-      - .:/espider/
+      - ./server:/server
+  client:
+    stdin_open: true # https://github.com/facebook/create-react-app/issues/8688
+    build: ./client
+    command: yarn start
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/client
   db:
     image: postgres:latest
     environment:

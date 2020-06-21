@@ -6,7 +6,8 @@
 2. Clone this repository: `git clone https://github.com/mitesp/espider.git`
 3. Inside the project directory, run `sudo docker-compose up` to spin up
    [containers](https://www.docker.com/resources/what-container).<sup>[1](#footnote-sudo)</sup>
-4. Voila! The website should now be running locally at [localhost:8000](http://localhost:8000/).
+4. Voila! The frontend should now be running at [localhost:3000](http://localhost:3000/), and the
+   backend should be running at [localhost:8000](http://localhost:8000/).
 
 (Stopping and Restarting)
 
@@ -27,11 +28,12 @@ Go ahead and edit code with your [favorite](https://code.visualstudio.com/)
 
 Some useful commands:
 
-- `docker-compose exec web`<sup>[2](#footnote-alias)</sup> runs commands inside the web container, so `docker-compose exec web python manage.py createsuperuser` runs `python manage.py createsuperuser` inside the `web`
-  container.
+- `docker-compose exec server`<sup>[2](#footnote-alias)</sup> runs commands inside the server
+  container, so `docker-compose exec server python manage.py createsuperuser` runs `python manage.py
+  createsuperuser` inside the `server` container.
 - `docker-compose build` rebuilds the containers from scratch (e.g. your database is borked and you
   want a new one, or you want to [`pipenv install` a new library](https://pipenv.pypa.io/en/latest/)
-  in the web container).
+  in the server container).
 
 # Comitting & Pushing Changes
 
@@ -174,8 +176,8 @@ that](https://docs.docker.com/engine/install/linux-postinstall/).
 Here are Mayukha's favorite aliases:
 
     alias dockup="sudo docker-compose up" #spins up Docker
-    alias dockex="sudo docker-compose exec web" #execute things in the web shell
-    alias dockman="sudo docker-compose exec web python3 manage.py" #exec
+    alias dockex="sudo docker-compose exec server" #execute things in the server shell
+    alias dockman="sudo docker-compose exec server python3 manage.py" #exec
     alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
     alias herokumigrate="heroku run python3 server/manage.py migrate" #migrate in prod
     alias herokumakemig="heroku run python3 server/manage.py makemigrations" #make migrations in prod
