@@ -20,6 +20,7 @@ export default function (props: { program: string }) {
           <img
             className="level-item"
             src="https://qph.fs.quoracdn.net/main-qimg-338d75dbb172519677a52c5d7db1192d"
+            alt="school of fish"
           />{" "}
         </div>
         <div className="column">

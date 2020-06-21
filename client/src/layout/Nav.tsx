@@ -1,5 +1,6 @@
 import React from "react";
 import "react-bulma-components/dist/react-bulma-components.min.css";
+import "./Nav.css";
 
 import { canonicalizeProgramName, programList } from "../info/Program";
 
@@ -29,9 +30,11 @@ class Nav extends React.Component<Props, State> {
             MIT ESP
           </a>
 
-          <a
-            role="button"
-            className={`navbar-burger burger ${mobileOpen ? "is-active" : ""}`}
+          <button
+            type="button"
+            className={`button-reset navbar-burger burger ${
+              mobileOpen ? "is-active" : ""
+            }`}
             aria-label="menu"
             aria-expanded="false"
             data-target="navbar"
@@ -40,7 +43,7 @@ class Nav extends React.Component<Props, State> {
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
-          </a>
+          </button>
         </div>
 
         <div
@@ -59,7 +62,9 @@ class Nav extends React.Component<Props, State> {
             </a>
 
             <div className="navbar-item has-dropdown is-hoverable">
-              <a className="navbar-link">Programs</a>
+              <a className="navbar-link" href="/programs">
+                Programs
+              </a>
 
               <div className="navbar-dropdown">
                 {programList.map((program) => (
@@ -71,10 +76,12 @@ class Nav extends React.Component<Props, State> {
             </div>
             <div className="navbar-item">
               <div className="buttons">
-                <a className="button is-primary">
+                <a className="button is-primary" href="/signup">
                   <strong>Sign up</strong>
                 </a>
-                <a className="button is-light">Log in</a>
+                <button type="button" className="button is-light">
+                  Log in
+                </button>
               </div>
             </div>
           </div>

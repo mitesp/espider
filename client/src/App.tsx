@@ -1,6 +1,6 @@
 // @ts-nocheck TODO: fix
 import React from "react";
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 
 import "react-bulma-components/dist/react-bulma-components.min.css";
 
