@@ -45,9 +45,13 @@ class Nav extends React.Component {
           {/* <div className="navbar-start"></div> */}
 
           <div className="navbar-end">
-            <a className="navbar-item">Learn</a>
+            <a className="navbar-item" href="/learn">
+              Learn
+            </a>
 
-            <a className="navbar-item">Teach</a>
+            <a className="navbar-item" href="/teach">
+              Teach
+            </a>
 
             <div className="navbar-item has-dropdown is-hoverable">
               <a className="navbar-link">Programs</a>
