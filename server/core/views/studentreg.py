@@ -115,8 +115,6 @@ def emergency_info(request, *args, **kwargs):
 
         return next_page
     else:
-        if studentreg.emergency_info_check:  # already filled out
-            return next_page
         context = {"program": program}
         return render(request, "core/studentreg/emergency_info.html", context)
 
@@ -155,7 +153,7 @@ def waiver(request, *args, **kwargs):
 
         return next_page
     else:
-        if studentreg.medliab_check:  # already filled out
+        if studentreg.liability_check:  # already filled out
             return next_page
         context = {"program": program}
         return render(request, "core/studentreg/waiver.html", context)
