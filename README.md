@@ -70,7 +70,7 @@ If you'd like to have this power, you'll need to:
 3. Install the Heroku CLI and run `heroku login` in the git repo.
 4. Connect the your code to heroku with `heroku git:remote -a espider`. This will create a git
    remote named `heroku`.
-5. Deploy with `git push heroku master`.
+5. Deploy with `git subtree push --prefix server heroku master`.
 
 Useful tools:
 
@@ -78,8 +78,8 @@ Useful tools:
 - Run commands inside web container: `heroku run <command>`
 - Reset the database: `heroku pg:reset`
 - SSH into the web container: `heroku ps:exec`
-
-Notes: Heroku has a different working directory than Docker, so you'll need `python server/manage.py` instead of `python manage.py`.
+- Force push to `heroku` with ``git push heroku `git subtree split --prefix server master`:master
+  --force``
 
 # Dev Guide (a.k.a. Help! What's going on?)
 
@@ -179,8 +179,8 @@ Here are Mayukha's favorite aliases:
     alias dockex="sudo docker-compose exec server" #execute things in the server shell
     alias dockman="sudo docker-compose exec server python3 manage.py" #exec
     alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
-    alias herokumigrate="heroku run python3 server/manage.py migrate" #migrate in prod
-    alias herokumakemig="heroku run python3 server/manage.py makemigrations" #make migrations in prod
+    alias herokumigrate="heroku run python3 manage.py migrate" #migrate in prod
+    alias herokumakemig="heroku run python3 manage.py makemigrations" #make migrations in prod
 
 <a name="footnote-lint">3</a>: Our lint setup is in `.pre-commit-config.yaml`. Hopefully you won't need to touch it, but if
 you do, `pipenv run pre-commit run -a` will run the linter.
