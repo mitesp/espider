@@ -58,6 +58,10 @@ class TeacherRegistration(models.Model):
     def __str__(self):
         return str(self.teacher.username) + "/" + str(self.program)
 
+    def classes(self):
+        ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
+        return Class.objects.filter(id__in=ids)
+
 
 class TeacherClassRegistration(models.Model):
     teacher = models.ForeignKey(TeacherRegistration, on_delete=models.CASCADE)

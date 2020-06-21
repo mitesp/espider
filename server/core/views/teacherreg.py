@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.forms.models import model_to_dict
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import CreateView, UpdateView
 
@@ -22,7 +23,7 @@ class TeacherProfileView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         kwargs = {"program": self.kwargs["program"], "edition": self.kwargs["edition"]}
-        return reverse("core:teacherreg", kwargs=kwargs)
+        return reverse("core:teacherregdashboard", kwargs=kwargs)
 
     def form_valid(self, form):
         program = get_object_or_404(
@@ -41,7 +42,7 @@ class TeacherProfileView(LoginRequiredMixin, UpdateView):
 class TeacherRegistrationView(LoginRequiredMixin, CreateView):
     model = Class
     fields = ("title", "description", "capacity")
-    template_name = "core/teacherreg.html"
+    template_name = "core/teacherreg/teacherclassreg.html"
 
     @transaction.atomic
     def form_valid(self, form):
@@ -55,5 +56,16 @@ class TeacherRegistrationView(LoginRequiredMixin, CreateView):
         )
         TeacherClassRegistration.objects.create(teacher=teacherreg, clazz=clazz)
         return redirect(
-            "core:classes", program=self.kwargs["program"], edition=self.kwargs["edition"]
+            "core:teacherregdashboard",
+            program=self.kwargs["program"],
+            edition=self.kwargs["edition"],
         )
+
+
+@login_required
+def teacherregdashboard(request, *args, **kwargs):
+    program = get_object_or_404(Program, name=kwargs["program"], edition=kwargs["edition"])
+    teacherreg = TeacherRegistration.objects.get(teacher=request.user.teacher, program=program)
+
+    context = {"program": program, "teacherreg": teacherreg, "classes": teacherreg.classes()}
+    return render(request, "core/teacherreg/teacherregdashboard.html", context)

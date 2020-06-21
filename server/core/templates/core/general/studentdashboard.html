@@ -8,7 +8,7 @@
     <h1> <strong>Student Dashboard for {{ user.username }}</strong> </h1>
 
     {% for program in programs %}
-        <h2>{{ program }}: <a href="{% url 'core:studentprofile' program.name program.edition %}">Register</a></h2>
+        <h3>{{ program }}: <a href="{% url 'core:studentprofile' program.name program.edition %}">Register</a></h3>
     {% endfor %}
 
 

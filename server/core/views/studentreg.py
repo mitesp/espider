@@ -19,7 +19,7 @@ def get_program_and_studentreg(name, edition, student):
 class StudentProfileView(LoginRequiredMixin, UpdateView):
     model = ESPUser
     fields = ("pronouns", "phone_number", "city", "state", "country")
-    template_name = "core/studentreg/studentprofile.html"
+    template_name = "core/profile.html"
 
     def get_object(self, queryset=None):
         return self.request.user

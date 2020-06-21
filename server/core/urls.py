@@ -44,10 +44,11 @@ urlpatterns = [
         name="teacherprofile",
     ),
     path(
-        "<program>/<edition>/teacherreg/",
+        "<program>/<edition>/teacherclassreg/",
         views.TeacherRegistrationView.as_view(),
-        name="teacherreg",
+        name="teacherclassreg",
     ),
+    path("<program>/<edition>/teacherreg/", views.teacherregdashboard, name="teacherregdashboard"),
     # admin view pages
     path("<program>/<edition>/students/", views.StudentsView.as_view(), name="students"),
     path("<program>/<edition>/classes/", views.ClassesView.as_view(), name="classes"),
