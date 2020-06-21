@@ -12,7 +12,7 @@ import Dashboard from "./Dashboard";
 import Program from "./info/Program";
 import Teach from "./info/Teach";
 import Learn from "./info/Learn";
-import programs from "./info/programs";
+import { programList } from "./info/Program";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
           <Dashboard path="dashboard" />
           <Teach path="teach" />
           <Learn path="learn" />
-          {programs.map((program) => (
+          {programList.map((program) => (
             <Program key={program} path={program} program={program} />
           ))}
         </Router>

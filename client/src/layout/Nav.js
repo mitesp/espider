@@ -1,7 +1,7 @@
 import React from "react";
 import "react-bulma-components/dist/react-bulma-components.min.css";
 
-import programs, { canonicalizeProgramName } from "../info/programs";
+import { canonicalizeProgramName, programList } from "../info/Program";
 
 class Nav extends React.Component {
   constructor(props) {
@@ -57,7 +57,7 @@ class Nav extends React.Component {
               <a className="navbar-link">Programs</a>
 
               <div className="navbar-dropdown">
-                {programs.map((program) => (
+                {programList.map((program) => (
                   <a className="navbar-item" key={program} href={`/${program}`}>
                     {canonicalizeProgramName(program)}
                   </a>
