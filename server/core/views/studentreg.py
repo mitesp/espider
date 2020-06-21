@@ -12,7 +12,7 @@ from ..models import Class, ESPUser, Program, StudentClassRegistration, StudentR
 # helper function
 def get_program_and_studentreg(name, edition, student):
     program = get_object_or_404(Program, name=name, edition=edition)
-    studentreg = StudentRegistration.objects.get(student=student, program=program)
+    studentreg, _ = StudentRegistration.objects.get_or_create(student=student, program=program)
     return program, studentreg
 
 
