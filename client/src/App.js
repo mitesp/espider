@@ -1,11 +1,14 @@
 import React from "react";
-import { render } from "react-dom";
 import { Router, Link } from "@reach/router";
 // import { Button } from "react-bulma-components";
 
 import "react-bulma-components/dist/react-bulma-components.min.css";
 
-import Nav from "./Nav.js";
+import Nav from "./Nav";
+import Program from "./info/Program";
+import Teach from "./info/Teach";
+import Learn from "./info/Learn";
+import programs from "./info/programs";
 
 let Home = () => (
   // TODO: why doesn't this bulma class work?
@@ -51,6 +54,11 @@ function App() {
         <Router>
           <Home path="/" />
           <Dash path="dashboard" />
+          <Teach path="teach" />
+          <Learn path="learn" />
+          {programs.map((program) => (
+            <Program key={program} path={program} program={program} />
+          ))}
         </Router>
       </main>
       <footer className="footer">
