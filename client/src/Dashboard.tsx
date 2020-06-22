@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function () {
-  return;
+  return <div>DASHBOARD</div>;
 }
