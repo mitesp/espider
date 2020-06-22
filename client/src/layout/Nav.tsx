@@ -83,9 +83,9 @@ class Nav extends React.Component<Props, State> {
                 <a className="button is-primary" href="/signup">
                   <strong>Sign up</strong>
                 </a>
-                <button type="button" className="button is-light">
-                  Log in
-                </button>
+                <a className="button is-light" href="/login">
+                  Log In
+                </a>
               </div>
             </div>
           </div>
