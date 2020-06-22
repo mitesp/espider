@@ -21,9 +21,9 @@ export default function () {
             the opportunity to go more in-depth.
             <br /> <br />
             Moreover, we believe that teaching should be fun for you, as well as the students taking
-            your classes. Our motto is “teach anything, learn anything, do anything”, and we hope
-            our programs allow you to teach the subjects (academic or non-academic) that you’re
-            passionate about. Learn more about what we aim to achieve with our programs here.
+            your classes. Our motto is <a href="/aboutus">“teach anything, learn anything, do
+            anything”</a>, and we hope our programs allow you to teach the subjects (academic or
+            non-academic) that you’re passionate about.
             <br /> <br />
             Teaching is also easier than you think! We can help you with advice, resources and
             helpful hints. You can teach a lecture class about programming algorithms, an

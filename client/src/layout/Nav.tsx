@@ -53,6 +53,10 @@ class Nav extends React.Component<Props, State> {
           {/* <div className="navbar-start"></div> */}
 
           <div className="navbar-end">
+            <a className="navbar-item" href="/aboutus">
+              About Us
+            </a>
+
             <a className="navbar-item" href="/learn">
               Learn
             </a>

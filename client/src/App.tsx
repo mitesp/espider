@@ -13,6 +13,7 @@ import Dashboard from "./Dashboard";
 import Program from "./info/Program";
 import Teach from "./info/Teach";
 import Learn from "./info/Learn";
+import AboutUs from "./info/AboutUs";
 import { programList } from "./info/Program";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Router>
           <Home path="/" />
           <Dashboard path="dashboard" />
+          <AboutUs path="aboutus" />
           <Teach path="teach" />
           <Learn path="learn" />
           {programList.map((program) => (
