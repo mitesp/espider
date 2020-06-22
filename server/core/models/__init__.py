@@ -46,6 +46,18 @@ class StudentRegistration(models.Model):
         return Class.objects.filter(id__in=ids)
 
 
+class StudentClassRegistration(models.Model):
+    student = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
+    clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    # ensures a student can't register for the same class twice
+    class Meta:
+        unique_together = (("student", "clazz"),)
+
+    def __str__(self):
+        return str(self.student.student.username) + "/" + str(self.clazz)
+
+
 class TeacherRegistration(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
@@ -73,15 +85,3 @@ class TeacherClassRegistration(models.Model):
 
     def __str__(self):
         return str(self.teacher.teacher.username) + "/" + str(self.clazz)
-
-
-class StudentClassRegistration(models.Model):
-    student = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
-    clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
-
-    # ensures a student can't register for the same class twice
-    class Meta:
-        unique_together = (("student", "clazz"),)
-
-    def __str__(self):
-        return str(self.student.student.username) + "/" + str(self.clazz)
