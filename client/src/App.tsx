@@ -8,6 +8,7 @@ import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
 
 import LoginPage from './signup/LoginPage';
+import SignupPage from './signup/SignupPage';
 
 import Home from "./Home";
 import Dashboard from "./Dashboard";
@@ -69,6 +70,7 @@ class App extends Component<{}, UserState> {
             <Teach path="teach" />
             <Learn path="learn" />
             <LoginPage path="login" setState={this.login} logged_in={this.state.logged_in} username={this.state.username} />
+            <SignupPage path="signup" setState={this.login} logged_in={this.state.logged_in} username={this.state.username} />
             {programList.map((program) => (
               <Program key={program} path={program} program={program} />
             ))}

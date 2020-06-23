@@ -1,21 +1,22 @@
 import React from 'react';
 
 
-interface LoginProps {
+interface SignupProps {
   setState: Function;
 }
 
-interface LoginState {
+interface SignupState {
   username: string;
   password: string;
+
 }
 
-function isValidField(prop: string, obj: LoginState): prop is keyof LoginState {
+function isValidField(prop: string, obj: SignupState): prop is keyof SignupState {
   return prop in obj;
 }
 
-class LoginForm extends React.Component<LoginProps,LoginState> {
-  constructor(props: LoginProps) {
+class SignupForm extends React.Component<SignupProps,SignupState> {
+  constructor(props: SignupProps) {
     super(props);
     this.state = {
       username: '',
@@ -26,7 +27,7 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
   handle_change = (e: React.FormEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
-    this.setState((prevstate: LoginState) => {
+    this.setState((prevstate: SignupState) => {
       const newState = { ...prevstate };
       if (isValidField(name, prevstate)) {
         newState[name] = value;
@@ -35,9 +36,9 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
     });
   };
 
-  handle_login = (e: React.FormEvent<HTMLFormElement>, data: LoginState) => {
+  handle_signup = (e: React.FormEvent<HTMLFormElement>, data: SignupState) => {
     e.preventDefault();
-    fetch('http://localhost:8000/token-auth/', {
+    fetch('http://localhost:8000/users/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -49,15 +50,15 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
         localStorage.setItem('token', json.token);
         this.props.setState({
           logged_in: true,
-          username: json.user.username
+          username: json.username
         });
       });
   };
 
   render() {
     return (
-      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handle_login(e, this.state)}>
-        <h2>Log In</h2>
+      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handle_signup(e, this.state)}>
+        <h2>Sign Up</h2>
         <label htmlFor="username">Username</label>
         <input
           type="text"
@@ -78,4 +79,4 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
   }
 }
 
-export default LoginForm;
+export default SignupForm;
