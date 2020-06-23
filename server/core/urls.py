@@ -1,6 +1,12 @@
 from django.urls import include, path
+from rest_framework import routers
 
 from . import views
+
+router = routers.DefaultRouter()
+router.register("users", views.ESPUserViewSet)
+router.register("classes", views.ClassViewSet)
+
 
 app_name = "core"
 urlpatterns = [
@@ -52,4 +58,8 @@ urlpatterns = [
     # admin view pages
     path("<program>/<edition>/students/", views.StudentsView.as_view(), name="students"),
     path("<program>/<edition>/classes/", views.ClassesView.as_view(), name="classes"),
+    # api paths
+    path("current_user/", views.current_user),
+    path("users/", views.UserList.as_view()),
+    path("api/", include(router.urls)),
 ]

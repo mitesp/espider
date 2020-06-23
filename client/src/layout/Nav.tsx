@@ -4,7 +4,9 @@ import "./Nav.css";
 
 import { canonicalizeProgramName, programList } from "../info/Program";
 
-type Props = {};
+type Props = {
+  logged_in: boolean;
+};
 type State = {
   mobileOpen: boolean;
 };
