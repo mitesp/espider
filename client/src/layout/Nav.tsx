@@ -6,7 +6,10 @@ import { canonicalizeProgramName, programList } from "../info/Program";
 
 type Props = {
   logged_in: boolean;
+  username: string;
+  logout: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
+
 type State = {
   mobileOpen: boolean;
 };
@@ -22,6 +25,30 @@ class Nav extends React.Component<Props, State> {
   toggleMobileMenu = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
+
+  loggedOutView = () => {
+    return (
+      <div className="buttons">
+        <a className="button is-primary" href="/signup">
+          <strong>Sign up</strong>
+        </a>
+        <a className="button is-light" href="/login">
+          Log In
+        </a>
+      </div>
+    );
+  }
+
+  loggedInView = () => {
+    return (
+      <div className="buttons">
+        <h1> {this.props.username} </h1>
+        <button className="button is-light" onClick={this.props.logout}>
+          Log Out
+        </button>
+      </div>
+    );
+  }
 
   render() {
     const { mobileOpen } = this.state;
@@ -81,14 +108,7 @@ class Nav extends React.Component<Props, State> {
               </div>
             </div>
             <div className="navbar-item">
-              <div className="buttons">
-                <a className="button is-primary" href="/signup">
-                  <strong>Sign up</strong>
-                </a>
-                <a className="button is-light" href="/login">
-                  Log In
-                </a>
-              </div>
+              {this.props.logged_in ? this.loggedInView() : this.loggedOutView()}
             </div>
           </div>
         </div>

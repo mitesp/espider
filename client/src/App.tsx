@@ -33,14 +33,34 @@ class App extends Component<{}, UserState> {
     };
   }
 
-  login = (e: React.FormEvent<HTMLFormElement>, data: UserState) => {
-    this.setState(data);
+  componentDidMount() {
+    if (this.state.logged_in) {
+      fetch('http://localhost:8000/current_user/', {
+        headers: {
+          Authorization: `JWT ${localStorage.getItem('token')}`
+        }
+      })
+        .then(res => res.json())
+        .then(json => {
+          this.setState({ username: json.username });
+        });
+    }
   }
+
+  login = (data: UserState) => {
+    this.setState(data);
+    this.componentDidMount();
+  }
+
+  logout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    localStorage.removeItem('token');
+    this.setState({ logged_in: false, username: '' });
+  };
 
   render() {
     return (
       <React.Fragment>
-        <Nav />
+        <Nav logged_in={this.state.logged_in} username={this.state.username} logout = {this.logout}/>
         <main>
           <Router>
             <Home path="/" />
@@ -48,7 +68,7 @@ class App extends Component<{}, UserState> {
             <AboutUs path="aboutus" />
             <Teach path="teach" />
             <Learn path="learn" />
-            <LoginPage path="login" setState={this.login} logged_in={() => this.state.logged_in} username={() => this.state.username} />
+            <LoginPage path="login" setState={this.login} logged_in={this.state.logged_in} username={this.state.username} />
             {programList.map((program) => (
               <Program key={program} path={program} program={program} />
             ))}

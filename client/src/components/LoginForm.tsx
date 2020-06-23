@@ -37,7 +37,6 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
 
   handle_login = (e: React.FormEvent<HTMLFormElement>, data: LoginState) => {
     e.preventDefault();
-    console.log(JSON.stringify(data));
     fetch('http://localhost:8000/token-auth/', {
       method: 'POST',
       headers: {
@@ -48,7 +47,6 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
       .then(res => res.json())
       .then(json => {
         localStorage.setItem('token', json.token);
-        console.log("retrieved token")
         this.props.setState({
           logged_in: true,
           username: json.user.username
