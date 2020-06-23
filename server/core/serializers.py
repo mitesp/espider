@@ -1,4 +1,4 @@
-from core.models import Class, ESPUser
+from core.models import Class, ESPUser, Program
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 
@@ -6,7 +6,13 @@ from rest_framework_jwt.settings import api_settings
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ESPUser
-        fields = ("username",)
+        fields = ("username", "is_student")
+
+
+class ProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Program
+        fields = ("name", "edition")
 
 
 class UserSerializerWithToken(serializers.ModelSerializer):

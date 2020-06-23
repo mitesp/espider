@@ -11,7 +11,8 @@ import LoginPage from './signup/LoginPage';
 import SignupPage from './signup/SignupPage';
 
 import Home from "./Home";
-import Dashboard from "./Dashboard";
+import Dashboard from "./Dashboard"; //empty placeholder
+import StudentDashboard from "./StudentDashboard";
 
 import Program from "./info/Program";
 import Teach from "./info/Teach";
@@ -65,7 +66,8 @@ class App extends Component<{}, UserState> {
         <main>
           <Router>
             <Home path="/" />
-            <Dashboard path="dashboard" />
+            <StudentDashboard path="studentdashboard" logged_in={this.state.logged_in} username={this.state.username} />
+            <Dashboard path="teacherdashboard" />
             <AboutUs path="aboutus" />
             <Teach path="teach" />
             <Learn path="learn" />

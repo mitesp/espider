@@ -1,7 +1,8 @@
-from core.models import Class, ESPUser
+from core.models import Class, ESPUser, Program
 from core.serializers import (
     ClassSerializer,
     ESPUserSerializer,
+    ProgramSerializer,
     UserSerializer,
     UserSerializerWithToken,
 )
@@ -53,3 +54,12 @@ class ClassViewSet(viewsets.ModelViewSet):
 
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
+
+
+class ProgramViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer

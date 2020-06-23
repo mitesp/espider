@@ -6,7 +6,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register("users", views.ESPUserViewSet)
 router.register("classes", views.ClassViewSet)
-
+router.register("programs", views.ProgramViewSet)
 
 app_name = "core"
 urlpatterns = [
