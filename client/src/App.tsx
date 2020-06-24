@@ -2,8 +2,6 @@
 import React, { Component } from "react";
 import { Router } from "@reach/router";
 
-import "react-bulma-components/dist/react-bulma-components.min.css";
-
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
 
@@ -17,6 +15,7 @@ import TeacherDashboard from "./TeacherDashboard";
 import Program from "./info/Program";
 import Teach from "./info/Teach";
 import Learn from "./info/Learn";
+import Nextup from "./info/Nextup";
 import AboutUs from "./info/AboutUs";
 import { programList } from "./info/Program";
 
@@ -45,8 +44,8 @@ class App extends Component<{}, UserState> {
           Authorization: `JWT ${localStorage.getItem("token")}`,
         },
       })
-        .then(res => res.json())
-        .then(json => {
+        .then((res) => res.json())
+        .then((json) => {
           this.setState({
             username: json.username,
             is_student: json.is_student,
@@ -69,7 +68,11 @@ class App extends Component<{}, UserState> {
   render() {
     return (
       <React.Fragment>
-        <Nav logged_in={this.state.logged_in} username={this.state.username} logout={this.logout} />
+        <Nav
+          logged_in={this.state.logged_in}
+          username={this.state.username}
+          logout={this.logout}
+        />
         <main>
           <Router>
             <Home path="/" />
@@ -88,6 +91,7 @@ class App extends Component<{}, UserState> {
             <AboutUs path="aboutus" />
             <Teach path="teach" />
             <Learn path="learn" />
+            <Nextup path="next" />
             <LoginPage
               path="login"
               setState={this.login}
@@ -100,7 +104,7 @@ class App extends Component<{}, UserState> {
               logged_in={this.state.logged_in}
               username={this.state.username}
             />
-            {programList.map(program => (
+            {programList.map((program) => (
               <Program key={program} path={program} program={program} />
             ))}
           </Router>
