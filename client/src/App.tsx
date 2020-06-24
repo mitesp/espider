@@ -1,6 +1,7 @@
-// @ts-nocheck TODO: fix
+// @ts-nocheck TODO: fix\
 import React, { Component } from "react";
 import { Router } from "@reach/router";
+import "./App.sass";
 
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
@@ -55,8 +56,8 @@ class App extends Component<{}, State> {
           Authorization: `JWT ${localStorage.getItem("token")}`,
         },
       })
-        .then(res => res.json())
-        .then(json => {
+        .then((res) => res.json())
+        .then((json) => {
           this.setState({
             username: json.username,
             isStudent: json.is_student,
@@ -79,7 +80,11 @@ class App extends Component<{}, State> {
   render() {
     return (
       <React.Fragment>
-        <Nav loggedIn={this.state.loggedIn} username={this.state.username} logout={this.logout} />
+        <Nav
+          loggedIn={this.state.loggedIn}
+          username={this.state.username}
+          logout={this.logout}
+        />
         <main>
           <Router>
             <Home path="/" />
@@ -111,7 +116,7 @@ class App extends Component<{}, State> {
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
-            {programList.map(program => (
+            {programList.map((program) => (
               <Program key={program} path={program} program={program} />
             ))}
             <NotFound default />
