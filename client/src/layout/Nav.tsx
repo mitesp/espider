@@ -37,7 +37,7 @@ class Nav extends React.Component<Props, State> {
         </a>
       </div>
     );
-  }
+  };
 
   loggedInView = () => {
     return (
@@ -48,7 +48,7 @@ class Nav extends React.Component<Props, State> {
         </button>
       </div>
     );
-  }
+  };
 
   render() {
     const { mobileOpen } = this.state;
@@ -61,9 +61,7 @@ class Nav extends React.Component<Props, State> {
 
           <button
             type="button"
-            className={`button-reset navbar-burger burger ${
-              mobileOpen ? "is-active" : ""
-            }`}
+            className={`button-reset navbar-burger burger ${mobileOpen ? "is-active" : ""}`}
             aria-label="menu"
             aria-expanded="false"
             data-target="navbar"
@@ -75,10 +73,7 @@ class Nav extends React.Component<Props, State> {
           </button>
         </div>
 
-        <div
-          id="navbar"
-          className={`navbar-menu ${mobileOpen ? "is-active" : ""}`}
-        >
+        <div id="navbar" className={`navbar-menu ${mobileOpen ? "is-active" : ""}`}>
           {/* <div className="navbar-start"></div> */}
 
           <div className="navbar-end">
@@ -100,7 +95,7 @@ class Nav extends React.Component<Props, State> {
               </a>
 
               <div className="navbar-dropdown">
-                {programList.map((program) => (
+                {programList.map(program => (
                   <a className="navbar-item" key={program} href={`/${program}`}>
                     {canonicalizeProgramName(program)}
                   </a>

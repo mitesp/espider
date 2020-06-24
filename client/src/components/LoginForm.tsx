@@ -1,6 +1,5 @@
 import React from "react";
 
-
 interface LoginProps {
   setState: Function;
 }
@@ -14,12 +13,12 @@ function isValidField(prop: string, obj: LoginState): prop is keyof LoginState {
   return prop in obj;
 }
 
-class LoginForm extends React.Component<LoginProps,LoginState> {
+class LoginForm extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
     };
   }
 
@@ -40,16 +39,16 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
     fetch("http://localhost:8000/token-auth/", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then(res => res.json())
       .then(json => {
         localStorage.setItem("token", json.token);
         this.props.setState({
           logged_in: true,
-          username: json.user.username
+          username: json.user.username,
         });
       });
   };

@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React from "react";
 
 interface SignupProps {
   setState: Function;
@@ -8,19 +7,18 @@ interface SignupProps {
 interface SignupState {
   username: string;
   password: string;
-
 }
 
 function isValidField(prop: string, obj: SignupState): prop is keyof SignupState {
   return prop in obj;
 }
 
-class SignupForm extends React.Component<SignupProps,SignupState> {
+class SignupForm extends React.Component<SignupProps, SignupState> {
   constructor(props: SignupProps) {
     super(props);
     this.state = {
-      username: '',
-      password: ''
+      username: "",
+      password: "",
     };
   }
 
@@ -38,19 +36,19 @@ class SignupForm extends React.Component<SignupProps,SignupState> {
 
   handle_signup = (e: React.FormEvent<HTMLFormElement>, data: SignupState) => {
     e.preventDefault();
-    fetch('http://localhost:8000/users/', {
-      method: 'POST',
+    fetch("http://localhost:8000/users/", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then(res => res.json())
       .then(json => {
-        localStorage.setItem('token', json.token);
+        localStorage.setItem("token", json.token);
         this.props.setState({
           logged_in: true,
-          username: json.username
+          username: json.username,
         });
       });
   };

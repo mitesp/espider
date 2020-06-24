@@ -22,8 +22,8 @@ export default function () {
             <br /> <br />
             ESP is a student group at MIT composed of undergraduate and graduate students. Members
             of ESP work to organize and run our many programs, supported by our teachers and
-            volunteers. If you’re interested in getting involved behind-the-scenes, we invite you
-            to come to our weekly meetings and worksessions. More information is available here.
+            volunteers. If you’re interested in getting involved behind-the-scenes, we invite you to
+            come to our weekly meetings and worksessions. More information is available here.
             <br /> <br />
             Through an extensive offering of academic and non-academic classes, ESP is dedicated to
             providing a unique, affordable educational experience for motivated middle school and
@@ -33,19 +33,19 @@ export default function () {
             Our students are given the chance to learn from passionate and knowledgeable teachers;
             our teachers can gain experience developing their own curricula with access to students
             with the strongest desire to learn. The result is a unique, dynamic curriculum and an
-            atmosphere of unparalleled energy. We are the largest student-run program of our kind
-            in the United States.
+            atmosphere of unparalleled energy. We are the largest student-run program of our kind in
+            the United States.
             <br /> <br />
             Our programs are guided by three main ideas:
             <br />
             <ol>
               <li>Learning and teaching should be fun!</li>
               <li>Participants should have as much choice as possible.</li>
-              <li>Accessibility and equal access to educational opportunities for students is
-                  important.</li>
+              <li>
+                Accessibility and equal access to educational opportunities for students is
+                important.
+              </li>
             </ol>
-
-
           </div>
           <div className="column">
             <b> Our Educational Mission </b> <br />
@@ -63,10 +63,10 @@ export default function () {
             high school students. ESP is a great activity for teens in the Boston area. ESP classes
             are developed and taught by MIT students, alumni, and faculty, and members of the
             community. Our students are given the chance to learn from passionate and knowledgeable
-            teachers; our teachers can gain experience developing their own curricula with access
-            to students with the strongest desire to learn. The result is a unique, dynamic
-            curriculum and an atmosphere of unparalleled energy. We are the largest student-run
-            program of our kind in the United States.
+            teachers; our teachers can gain experience developing their own curricula with access to
+            students with the strongest desire to learn. The result is a unique, dynamic curriculum
+            and an atmosphere of unparalleled energy. We are the largest student-run program of our
+            kind in the United States.
             <br /> <br />
             ESP invites students from all walks of life for classes varying from completely fun and
             non-academic (Duct Tape Design, Bottle Rockets) to the most advanced and challenging
@@ -78,8 +78,8 @@ export default function () {
             Teach Anything. Learn Anything. Do Anything. Really. No other student group puts on
             programs involving a thousand high school students. Being part of ESP is being part of
             one of the most unique organizations anywhere, an organization that is always filled
-            with energy and new ideas — and isn’t afraid of trying those new ideas out. Coming to
-            an ESP program means being a part of the cutting edge of education.
+            with energy and new ideas — and isn’t afraid of trying those new ideas out. Coming to an
+            ESP program means being a part of the cutting edge of education.
             <br /> <br />
             It is an astonishing thing to be a part of any ESP program as it happens, and it always
             feels wonderful when all the pieces fall into place. ESP invites all members of the MIT
