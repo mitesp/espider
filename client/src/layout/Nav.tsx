@@ -1,5 +1,4 @@
 import React from "react";
-import "react-bulma-components/dist/react-bulma-components.min.css";
 import "./Nav.css";
 
 import { canonicalizeProgramName, programList } from "../info/Program";
@@ -53,57 +52,78 @@ class Nav extends React.Component<Props, State> {
   render() {
     const { mobileOpen } = this.state;
     return (
-      <nav className="navbar" role="navigation" aria-label="main navigation">
-        <div className="navbar-brand">
-          <a className="navbar-item" href="/">
-            MIT ESP
-          </a>
+      <nav
+        className="navbar has-background-success-light"
+        role="navigation"
+        aria-label="main navigation"
+      >
+        <div className="container">
+          <div className="navbar-brand">
+            <a className="navbar-item has-text-weight-bold" href="/">
+              MIT ESP
+            </a>
 
-          <button
-            type="button"
-            className={`button-reset navbar-burger burger ${mobileOpen ? "is-active" : ""}`}
-            aria-label="menu"
-            aria-expanded="false"
-            data-target="navbar"
-            onClick={this.toggleMobileMenu}
+            <button
+              type="button"
+              className={`button-reset navbar-burger burger ${
+                mobileOpen ? "is-active" : ""
+              }`}
+              aria-label="menu"
+              aria-expanded="false"
+              data-target="navbar"
+              onClick={this.toggleMobileMenu}
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div
+            id="navbar"
+            className={`navbar-menu ${mobileOpen ? "is-active" : ""}`}
           >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </button>
-        </div>
+            {/* <div className="navbar-start"></div> */}
 
-        <div id="navbar" className={`navbar-menu ${mobileOpen ? "is-active" : ""}`}>
-          {/* <div className="navbar-start"></div> */}
-
-          <div className="navbar-end">
-            <a className="navbar-item" href="/aboutus">
-              About Us
-            </a>
-
-            <a className="navbar-item" href="/learn">
-              Learn
-            </a>
-
-            <a className="navbar-item" href="/teach">
-              Teach
-            </a>
-
-            <div className="navbar-item has-dropdown is-hoverable">
-              <a className="navbar-link" href="/programs">
-                Programs
+            <div className="navbar-end">
+              <a className="navbar-item has-text-weight-bold" href="/learn">
+                Learn
               </a>
 
-              <div className="navbar-dropdown">
-                {programList.map(program => (
-                  <a className="navbar-item" key={program} href={`/${program}`}>
-                    {canonicalizeProgramName(program)}
-                  </a>
-                ))}
+              <a className="navbar-item has-text-weight-bold" href="/teach">
+                Teach
+              </a>
+
+              <div className="navbar-item has-dropdown is-hoverable">
+                <a
+                  className="navbar-link has-text-weight-bold"
+                  href="/programs"
+                >
+                  Programs
+                </a>
+
+                <div className="navbar-dropdown">
+                  {programList.map((program) => (
+                    <a
+                      className="navbar-item"
+                      key={program}
+                      href={`/${program}`}
+                    >
+                      {canonicalizeProgramName(program)}
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="navbar-item">
-              {this.props.logged_in ? this.loggedInView() : this.loggedOutView()}
+
+              <a className="navbar-item has-text-weight-bold" href="/aboutus">
+                About Us
+              </a>
+
+              <div className="navbar-item">
+                {this.props.logged_in
+                  ? this.loggedInView()
+                  : this.loggedOutView()}
+              </div>
             </div>
           </div>
         </div>
