@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SignupForm from "../components/SignupForm";
+import SignupForm from "./SignupForm";
 import { UserState } from "../App";
 
 type SignupProps = {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "./LoginForm";
 import { UserState } from "../App";
 
 interface LoginProps {

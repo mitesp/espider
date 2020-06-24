@@ -9,9 +9,9 @@ import Footer from "./layout/Footer";
 import LoginPage from "./signup/LoginPage";
 import SignupPage from "./signup/SignupPage";
 
-import Home from "./Home";
-import StudentDashboard from "./StudentDashboard";
-import TeacherDashboard from "./TeacherDashboard";
+import Home from "./info/Home";
+import StudentDashboard from "./dashboard/StudentDashboard";
+import TeacherDashboard from "./dashboard/TeacherDashboard";
 
 import Program from "./info/Program";
 import Teach from "./info/Teach";
