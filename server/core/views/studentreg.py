@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views.generic import UpdateView
 
 from ..forms import StudentClassRegistrationForm
-from ..models import Class, ESPUser, Program, StudentClassRegistration, StudentRegistration
+from ..models import Class, Program, StudentClassRegistration, StudentProfile, StudentRegistration
 
 
 # helper function
@@ -17,7 +17,7 @@ def get_program_and_studentreg(name, edition, student):
 
 
 class StudentProfileView(LoginRequiredMixin, UpdateView):
-    model = ESPUser
+    model = StudentProfile
     fields = ("pronouns", "phone_number", "city", "state", "country")
     template_name = "core/profile.html"
 
@@ -25,7 +25,7 @@ class StudentProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def get_initial(self):
-        return model_to_dict(self.request.user, fields=self.fields)
+        return model_to_dict(self.request.user.student_profile, fields=self.fields)
 
     def get_success_url(self):
         kwargs = {"program": self.kwargs["program"], "edition": self.kwargs["edition"]}
@@ -34,7 +34,7 @@ class StudentProfileView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
         program, studentreg = get_program_and_studentreg(
-            self.kwargs["program"], self.kwargs["edition"], self.request.user.student
+            self.kwargs["program"], self.kwargs["edition"], self.request.user
         )
         studentreg.update_profile_check = True
         studentreg.save()

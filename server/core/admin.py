@@ -4,21 +4,21 @@ from .models import (
     Class,
     ESPUser,
     Program,
-    Student,
     StudentClassRegistration,
+    StudentProfile,
     StudentRegistration,
-    Teacher,
     TeacherClassRegistration,
+    TeacherProfile,
     TeacherRegistration,
 )
 
 
-class StudentInline(admin.TabularInline):
-    model = Student
+class StudentInline(admin.StackedInline):
+    model = StudentProfile
 
 
-class TeacherInline(admin.TabularInline):
-    model = Teacher
+class TeacherInline(admin.StackedInline):
+    model = TeacherProfile
 
 
 @admin.register(ESPUser)
@@ -28,16 +28,8 @@ class ESPUserAdmin(admin.ModelAdmin):
         "email",
         "first_name",
         "last_name",
-        "phone_number",
-        "pronouns",
-        "city",
-        "state",
-        "country",
-        "is_student",
-        "is_teacher",
     )
     list_display = ("username", "email", "first_name", "last_name", "is_student", "is_teacher")
-    list_filter = ("is_student", "is_teacher")
     search_fields = ("username", "email")
     inlines = [StudentInline, TeacherInline]
 
@@ -62,8 +54,8 @@ class TeacherRegistrationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Class)
-admin.site.register(Student)
-admin.site.register(Teacher)
+admin.site.register(StudentProfile)
+admin.site.register(TeacherProfile)
 admin.site.register(Program)
 
 admin.site.register(TeacherClassRegistration)

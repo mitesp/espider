@@ -1,7 +1,7 @@
 from django.db import models
 
 from .users import *  # noqa
-from .users import Student, Teacher
+from .users import ESPUser
 
 
 class Program(models.Model):
@@ -27,8 +27,9 @@ class Class(models.Model):
         return self.title
 
 
+# TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     update_profile_check = models.BooleanField(default=False)
     emergency_info_check = models.BooleanField(default=False)
@@ -59,7 +60,7 @@ class StudentClassRegistration(models.Model):
 
 
 class TeacherRegistration(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     update_profile_check = models.BooleanField(default=False)
     # TODO add shirt size

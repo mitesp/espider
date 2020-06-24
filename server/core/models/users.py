@@ -2,79 +2,55 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-# TODO remove the blank options from these (keeping them so createsuperuser still works/easier to
-# create dummy accounts)
 class ESPUser(AbstractUser):
-    is_student = models.BooleanField(default=False)
-    is_teacher = models.BooleanField(default=False)
-    phone_number = models.CharField(max_length=20, blank=True)  # TODO: use django-phonenumber-field
-    pronouns = models.CharField(max_length=40, blank=True)  # TODO: use models.TextChoices
-    city = models.CharField(max_length=200, blank=True)
-    state = models.CharField(max_length=200, blank=True)
-    country = models.CharField(max_length=200, blank=True)
+    # inherits username, first_name, last_name, email, is_staff, is_superuser, etc.
+
+    @property
+    def is_student(self):
+        return hasattr(self, "student_profile")
+
+    @property
+    def is_teacher(self):
+        return hasattr(self, "teacher_profile")
+
+    @property
+    def profile(self):
+        if self.is_student:
+            return self.student_profile
+        elif self.is_teacher:
+            return self.teacher_profile
 
     def __str__(self):
         return "{} ({})".format(self.username, self.id)
 
 
-class Student(models.Model):
-    user = models.OneToOneField(
-        ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="student"
-    )
-    dob = models.DateField(max_length=8, default="1969-12-31", blank=True)
-    grad_year = models.IntegerField(default=1970, blank=True)
-    school = models.CharField(max_length=200, default="", blank=True)
+# TODO: for all profiles choose real lengths and figure out what shouldn't be blank/null
+class Profile(models.Model):
+    phone_number = models.CharField(max_length=20, blank=True)  # TODO: use django-phonenumber-field
+    pronouns = models.CharField(max_length=40, blank=True)  # TODO: use models.TextChoices
+    city = models.CharField(max_length=20, blank=True)
+    state = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length=20, blank=True)
 
-    # TODO: this is kinda ugly, we should find a better way to organize this information
-    @property
-    def id(self):
-        return self.user.id
-
-    @property
-    def username(self):
-        return self.user.username
-
-    @property
-    def first_name(self):
-        return self.user.first_name
-
-    @property
-    def last_name(self):
-        return self.user.last_name
-
-    @property
-    def email(self):
-        return self.user.email
+    class Meta:
+        abstract = True
 
     def __str__(self):
         return str(self.user)
 
 
-class Teacher(models.Model):
+class StudentProfile(Profile):
     user = models.OneToOneField(
-        ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="teacher"
+        ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="student_profile"
+    )
+    # TODO: remove defaults (they just make form submission easier)
+    date_of_birth = models.DateField(max_length=8, default="1969-12-31", blank=True, null=True)
+    grad_year = models.IntegerField(default=1970, blank=True, null=True)
+    school = models.CharField(max_length=200, blank=True)
+
+
+class TeacherProfile(Profile):
+    user = models.OneToOneField(
+        ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="teacher_profile"
     )
     affiliation = models.CharField(max_length=20, blank=True)  # TODO options?
-
-    @property
-    def id(self):
-        return self.user.id
-
-    @property
-    def username(self):
-        return self.user.username
-
-    @property
-    def first_name(self):
-        return self.user.first_name
-
-    @property
-    def last_name(self):
-        return self.user.last_name
-
-    @property
-    def email(self):
-        return self.user.email
-
-    def __str__(self):
-        return str(self.user)
