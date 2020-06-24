@@ -29,14 +29,12 @@ class TeacherDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log(this.props.isTeacher);
     if (this.props.loggedIn) {
       this.get_programs();
     }
   }
 
   generate_program_list(results: Array<JSONProgram>) {
-    console.log(results);
     const programs = Array<Program>(results.length);
     let counter = 0;
     results.forEach(function (r) {
