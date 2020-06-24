@@ -9,7 +9,10 @@ interface SignupState {
   password: string;
 }
 
-function isValidField(prop: string, obj: SignupState): prop is keyof SignupState {
+function isValidField(
+  prop: string,
+  obj: SignupState
+): prop is keyof SignupState {
   return prop in obj;
 }
 
@@ -43,8 +46,8 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
       },
       body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .then(json => {
+      .then((res) => res.json())
+      .then((json) => {
         localStorage.setItem("token", json.token);
         this.props.setState({
           logged_in: true,
@@ -55,23 +58,67 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
 
   render() {
     return (
-      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handle_signup(e, this.state)}>
-        <h2>Sign Up</h2>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          name="username"
-          value={this.state.username}
-          onChange={this.handle_change}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          value={this.state.password}
-          onChange={this.handle_change}
-        />
-        <input type="submit" />
+      <form
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
+          this.handle_signup(e, this.state)
+        }
+      >
+        {/* Validation elements are concurrently commented out */}
+        <div className="field">
+          <label className="label" htmlFor="username">
+            Username
+          </label>
+          <div className="control has-icons-left has-icons-right">
+            <input
+              // is-success is-danger
+              className="input"
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Username"
+              value={this.state.username}
+              onChange={this.handle_change}
+            />
+            <span className="icon is-small is-left">
+              <i className="fas fa-user"></i>
+            </span>
+            {/* <span className="icon is-small is-right">
+              <i className="fas fa-check"></i>
+            </span> */}
+          </div>
+          {/* <p className="help is-success">This username is available</p> */}
+        </div>
+
+        <div className="field">
+          <label className="label" htmlFor="password">
+            Password
+          </label>
+          <div className="control has-icons-left has-icons-right">
+            <input
+              className="input"
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.handle_change}
+            />
+            {/* <span className="icon is-small is-left">
+              <i className="fas fa-envelope"></i>
+            </span> */}
+            {/* <span className="icon is-small is-right">
+              <i className="fas fa-exclamation-triangle"></i>
+            </span> */}
+          </div>
+          {/* <p className="help is-danger">This  is invalid</p> */}
+        </div>
+        <div className="field">
+          <div className="control">
+            <button className="button is-link" type="submit">
+              Submit
+            </button>
+          </div>
+        </div>
       </form>
     );
   }

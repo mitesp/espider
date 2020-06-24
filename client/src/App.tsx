@@ -19,6 +19,15 @@ import Nextup from "./info/Nextup";
 import AboutUs from "./info/AboutUs";
 import { programList } from "./info/Program";
 
+const NotFound = () => (
+  <section className="pt-5 pb-5 container has-text-centered">
+    <p>Invalid URL. Sorry, nothing here!</p>
+    <p>
+      Return to the <a href="/">homepage</a>.
+    </p>
+  </section>
+);
+
 type UserState = {
   loggedIn: boolean;
   username: string;
@@ -105,6 +114,7 @@ class App extends Component<{}, State> {
             {programList.map(program => (
               <Program key={program} path={program} program={program} />
             ))}
+            <NotFound default />
           </Router>
         </main>
         <Footer />
