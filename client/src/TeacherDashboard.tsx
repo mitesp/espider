@@ -11,9 +11,9 @@ type Program = {
 };
 
 type Props = {
-  logged_in: boolean;
+  loggedIn: boolean;
+  isTeacher: boolean;
   username: string;
-  is_teacher: boolean;
 };
 
 type State = {
@@ -29,8 +29,8 @@ class TeacherDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log(this.props.is_teacher);
-    if (this.props.logged_in) {
+    console.log(this.props.isTeacher);
+    if (this.props.loggedIn) {
       this.get_programs();
     }
   }
@@ -50,14 +50,14 @@ class TeacherDashboard extends Component<Props, State> {
   }
 
   get_programs() {
-    if (this.props.logged_in) {
+    if (this.props.loggedIn) {
       fetch("http://localhost:8000/api/programs/", {
         headers: {
           Authorization: `JWT ${localStorage.getItem("token")}`,
         },
       })
-        .then(res => res.json())
-        .then(json => {
+        .then((res) => res.json())
+        .then((json) => {
           this.setState({ programs: this.generate_program_list(json.results) });
         });
     }
@@ -96,7 +96,11 @@ class TeacherDashboard extends Component<Props, State> {
   }
 
   render() {
-    return <div>{this.props.is_teacher ? this.teacher_dashboard() : this.not_teacher()}</div>;
+    return (
+      <div>
+        {this.props.isTeacher ? this.teacher_dashboard() : this.not_teacher()}
+      </div>
+    );
   }
 }
 

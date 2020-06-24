@@ -4,7 +4,7 @@ import "./Nav.css";
 import { canonicalizeProgramName, programList } from "../info/Program";
 
 type Props = {
-  logged_in: boolean;
+  loggedIn: boolean;
   username: string;
   logout: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
@@ -118,12 +118,9 @@ class Nav extends React.Component<Props, State> {
               <a className="navbar-item has-text-weight-bold" href="/aboutus">
                 About Us
               </a>
-
-              <div className="navbar-item">
-                {this.props.logged_in
-                  ? this.loggedInView()
-                  : this.loggedOutView()}
-              </div>
+            </div>
+            <div className="navbar-item">
+              {this.props.loggedIn ? this.loggedInView() : this.loggedOutView()}
             </div>
           </div>
         </div>

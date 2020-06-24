@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import SignupForm from "../components/SignupForm";
 import { UserState } from "../App";
 
-interface SignupProps {
+type SignupProps = {
   setState: (data: UserState) => void;
-  logged_in: boolean;
+  loggedIn: boolean;
   username: string;
-}
+};
 
 class SignupPage extends Component<SignupProps, any> {
   setBothStates = (data: UserState) => {
@@ -14,17 +14,17 @@ class SignupPage extends Component<SignupProps, any> {
     this.props.setState(data);
   };
 
-  handle_signup = (e: React.FormEvent<HTMLFormElement>, data: UserState) => {
+  handleSignup = (e: React.FormEvent<HTMLFormElement>, data: UserState) => {
     this.props.setState(data);
   };
 
   render() {
     return (
       <div>
-        {this.props.logged_in ? (
+        {this.props.loggedIn ? (
           <h3> Hi, {this.props.username}! </h3>
         ) : (
-          <SignupForm setState={this.handle_signup} />
+          <SignupForm setState={this.handleSignup} />
         )}
       </div>
       //TODO figure out how to get this to automatically change when logged in

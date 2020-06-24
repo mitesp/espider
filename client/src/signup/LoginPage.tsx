@@ -4,7 +4,7 @@ import { UserState } from "../App";
 
 interface LoginProps {
   setState: (data: UserState) => void;
-  logged_in: boolean;
+  loggedIn: boolean;
   username: string;
 }
 
@@ -21,7 +21,7 @@ class LoginPage extends Component<LoginProps, any> {
   render() {
     return (
       <div>
-        {this.props.logged_in ? (
+        {this.props.loggedIn ? (
           <h3> Hi, {this.props.username}! </h3>
         ) : (
           <LoginForm setState={this.handle_login} />

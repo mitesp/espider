@@ -19,26 +19,28 @@ import Nextup from "./info/Nextup";
 import AboutUs from "./info/AboutUs";
 import { programList } from "./info/Program";
 
-interface UserState {
-  logged_in: boolean;
+type UserState = {
+  loggedIn: boolean;
   username: string;
-  is_student: boolean;
-  is_teacher: boolean;
-}
+  isStudent: boolean;
+  isTeacher: boolean;
+};
 
-class App extends Component<{}, UserState> {
+type State = UserState;
+
+class App extends Component<{}, State> {
   constructor(props) {
     super(props);
     this.state = {
-      logged_in: localStorage.getItem("token") ? true : false,
+      loggedIn: localStorage.getItem("token") ? true : false,
       username: "",
-      is_student: false,
-      is_teacher: false,
+      isStudent: false,
+      isTeacher: false,
     };
   }
 
   componentDidMount() {
-    if (this.state.logged_in) {
+    if (this.state.loggedIn) {
       fetch("http://localhost:8000/current_user/", {
         headers: {
           Authorization: `JWT ${localStorage.getItem("token")}`,
@@ -48,8 +50,8 @@ class App extends Component<{}, UserState> {
         .then((json) => {
           this.setState({
             username: json.username,
-            is_student: json.is_student,
-            is_teacher: json.is_teacher,
+            isStudent: json.is_student,
+            isTeacher: json.is_teacher,
           });
         });
     }
@@ -62,14 +64,14 @@ class App extends Component<{}, UserState> {
 
   logout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     localStorage.removeItem("token");
-    this.setState({ logged_in: false, username: "" });
+    this.setState({ loggedIn: false, username: "" });
   };
 
   render() {
     return (
       <React.Fragment>
         <Nav
-          logged_in={this.state.logged_in}
+          loggedIn={this.state.loggedIn}
           username={this.state.username}
           logout={this.logout}
         />
@@ -78,15 +80,15 @@ class App extends Component<{}, UserState> {
             <Home path="/" />
             <StudentDashboard
               path="studentdashboard"
-              logged_in={this.state.logged_in}
+              loggedIn={this.state.loggedIn}
               username={this.state.username}
-              is_student={this.state.is_student}
+              isStudent={this.state.isStudent}
             />
             <TeacherDashboard
               path="teacherdashboard"
-              logged_in={this.state.logged_in}
+              loggedIn={this.state.loggedIn}
               username={this.state.username}
-              is_teacher={this.state.is_teacher}
+              isTeacher={this.state.isTeacher}
             />
             <AboutUs path="aboutus" />
             <Teach path="teach" />
@@ -95,13 +97,13 @@ class App extends Component<{}, UserState> {
             <LoginPage
               path="login"
               setState={this.login}
-              logged_in={this.state.logged_in}
+              loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
             <SignupPage
               path="signup"
               setState={this.login}
-              logged_in={this.state.logged_in}
+              loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
             {programList.map((program) => (
