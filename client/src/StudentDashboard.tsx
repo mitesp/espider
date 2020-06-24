@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 type JSONProgram = {
   name: string;
@@ -39,9 +39,9 @@ class StudentDashboard extends Component<Props, State> {
 
   get_is_student= async() => {
     if (this.props.logged_in) {
-      const response = await fetch('http://localhost:8000/current_user/', {
+      const response = await fetch("http://localhost:8000/current_user/", {
         headers: {
-          Authorization: `JWT ${localStorage.getItem('token')}`
+          Authorization: `JWT ${localStorage.getItem("token")}`
         }
       })
       const json = await response.json()
@@ -64,9 +64,9 @@ class StudentDashboard extends Component<Props, State> {
 
   get_programs() {
     if (this.props.logged_in) {
-      fetch('http://localhost:8000/api/programs/', {
+      fetch("http://localhost:8000/api/programs/", {
         headers: {
-          Authorization: `JWT ${localStorage.getItem('token')}`
+          Authorization: `JWT ${localStorage.getItem("token")}`
         }
       })
         .then(res => res.json())

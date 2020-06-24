@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 
 interface LoginProps {
@@ -18,8 +18,8 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
   constructor(props: LoginProps) {
     super(props);
     this.state = {
-      username: '',
-      password: ''
+      username: "",
+      password: ""
     };
   }
 
@@ -37,16 +37,16 @@ class LoginForm extends React.Component<LoginProps,LoginState> {
 
   handle_login = (e: React.FormEvent<HTMLFormElement>, data: LoginState) => {
     e.preventDefault();
-    fetch('http://localhost:8000/token-auth/', {
-      method: 'POST',
+    fetch("http://localhost:8000/token-auth/", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
     })
       .then(res => res.json())
       .then(json => {
-        localStorage.setItem('token', json.token);
+        localStorage.setItem("token", json.token);
         this.props.setState({
           logged_in: true,
           username: json.user.username

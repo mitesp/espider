@@ -1,5 +1,5 @@
 // @ts-nocheck TODO: fix
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Router } from "@reach/router";
 
 import "react-bulma-components/dist/react-bulma-components.min.css";
@@ -7,8 +7,8 @@ import "react-bulma-components/dist/react-bulma-components.min.css";
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
 
-import LoginPage from './signup/LoginPage';
-import SignupPage from './signup/SignupPage';
+import LoginPage from "./signup/LoginPage";
+import SignupPage from "./signup/SignupPage";
 
 import Home from "./Home";
 import Dashboard from "./Dashboard"; //empty placeholder
@@ -30,16 +30,16 @@ class App extends Component<{}, UserState> {
   constructor(props) {
     super(props);
     this.state = {
-      logged_in: localStorage.getItem('token') ? true : false,
-      username: ''
+      logged_in: localStorage.getItem("token") ? true : false,
+      username: ""
     };
   }
 
   componentDidMount() {
     if (this.state.logged_in) {
-      fetch('http://localhost:8000/current_user/', {
+      fetch("http://localhost:8000/current_user/", {
         headers: {
-          Authorization: `JWT ${localStorage.getItem('token')}`
+          Authorization: `JWT ${localStorage.getItem("token")}`
         }
       })
         .then(res => res.json())
@@ -55,8 +55,8 @@ class App extends Component<{}, UserState> {
   }
 
   logout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    localStorage.removeItem('token');
-    this.setState({ logged_in: false, username: '' });
+    localStorage.removeItem("token");
+    this.setState({ logged_in: false, username: "" });
   };
 
   render() {
