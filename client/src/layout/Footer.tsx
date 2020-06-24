@@ -15,15 +15,12 @@ export default function () {
             </p>
             <br />
             <p>
-              We host educational events for local middle and high school
-              students and for the MIT community. Our mission is to spread the
-              joy of learning and teaching, and to help people share their
-              knowledge, passions, and hobbies with others.
+              We host educational events for local middle and high school students and for the MIT
+              community. Our mission is to spread the joy of learning and teaching, and to help
+              people share their knowledge, passions, and hobbies with others.
             </p>
             <br />
-            <p className="has-text-weight-bold">
-              Learn anything, teach anything, do anything!
-            </p>
+            <p className="has-text-weight-bold">Learn anything, teach anything, do anything!</p>
           </div>
           <div className="column is-1"></div>
           <div className="column" style={{ lineHeight: "2rem" }}>
@@ -60,9 +57,7 @@ export default function () {
                 <small className="pl-2 has-text-grey-dark">9–10</small>
               </li>
             </ul>
-            <h2 className="is-size-6 pt-0 has-text-weight-bold">
-              Programs for MIT
-            </h2>
+            <h2 className="is-size-6 pt-0 has-text-weight-bold">Programs for MIT</h2>
             <ul>
               <li>
                 <a className="has-text-link-dark" href="/firehose">
@@ -138,14 +133,10 @@ export default function () {
             espider-dev@mit.edu
           </a>
           . The source code is licensed{" "}
-          <a
-            className="has-text-link-dark"
-            href="http://opensource.org/licenses/mit-license.php"
-          >
+          <a className="has-text-link-dark" href="http://opensource.org/licenses/mit-license.php">
             MIT
           </a>
-          . The website content is licensed{" "}
-          {/* TODO: What is this, actually? */}
+          . The website content is licensed {/* TODO: What is this, actually? */}
           <a
             className="has-text-link-dark"
             href="http://creativecommons.org/licenses/by-nc-sa/4.0/"

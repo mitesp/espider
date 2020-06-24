@@ -65,9 +65,7 @@ class Nav extends React.Component<Props, State> {
 
             <button
               type="button"
-              className={`button-reset navbar-burger burger ${
-                mobileOpen ? "is-active" : ""
-              }`}
+              className={`button-reset navbar-burger burger ${mobileOpen ? "is-active" : ""}`}
               aria-label="menu"
               aria-expanded="false"
               data-target="navbar"
@@ -79,10 +77,7 @@ class Nav extends React.Component<Props, State> {
             </button>
           </div>
 
-          <div
-            id="navbar"
-            className={`navbar-menu ${mobileOpen ? "is-active" : ""}`}
-          >
+          <div id="navbar" className={`navbar-menu ${mobileOpen ? "is-active" : ""}`}>
             {/* <div className="navbar-start"></div> */}
 
             <div className="navbar-end">
@@ -95,20 +90,13 @@ class Nav extends React.Component<Props, State> {
               </a>
 
               <div className="navbar-item has-dropdown is-hoverable">
-                <a
-                  className="navbar-link has-text-weight-bold"
-                  href="/programs"
-                >
+                <a className="navbar-link has-text-weight-bold" href="/programs">
                   Programs
                 </a>
 
                 <div className="navbar-dropdown">
-                  {programList.map((program) => (
-                    <a
-                      className="navbar-item"
-                      key={program}
-                      href={`/${program}`}
-                    >
+                  {programList.map(program => (
+                    <a className="navbar-item" key={program} href={`/${program}`}>
                       {canonicalizeProgramName(program)}
                     </a>
                   ))}

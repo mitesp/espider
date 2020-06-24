@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 
 export default function () {
@@ -7,12 +8,8 @@ export default function () {
         <div className="has-text-centered pb-5">
           <h1 className="title mb-2">Join us!</h1>
           <p className="has-text-weight-bold">
-            🕷️{" "}
-            <a href="https://github.com/mitesp/espider">
-              https://github.com/mitesp/espider
-            </a>{" "}
-            🕷️ <a href="mailto:espider-dev@mit.edu">espider-dev@mit.edu</a> 🕷️
-            #teamwebdev (discord) 🕷️
+            🕷️ <a href="https://github.com/mitesp/espider">https://github.com/mitesp/espider</a>🕷️
+            <a href="mailto:espider-dev@mit.edu">espider-dev@mit.edu</a> 🕷️ #teamwebdev (discord) 🕷️
           </p>
         </div>
         <div className="columns ">
@@ -25,9 +22,7 @@ export default function () {
                 General coding skills
                 <ul>
                   <li>Git good at git</li>
-                  <li>
-                    Learn Python AND Java(Type)Script / React / HTML / CSS
-                  </li>
+                  <li>Learn Python AND Java(Type)Script / React / HTML / CSS</li>
                   <li>Write code in a team with feedback</li>
                   <li>Make everyone's coding lives easier (devops)</li>
                   <li>Manage servers and infrastructure</li>

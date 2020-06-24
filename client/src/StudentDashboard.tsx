@@ -54,8 +54,8 @@ class StudentDashboard extends Component<Props, State> {
           Authorization: `JWT ${localStorage.getItem("token")}`,
         },
       })
-        .then((res) => res.json())
-        .then((json) => {
+        .then(res => res.json())
+        .then(json => {
           this.setState({ programs: this.generate_program_list(json.results) });
         });
     }
@@ -94,11 +94,7 @@ class StudentDashboard extends Component<Props, State> {
   }
 
   render() {
-    return (
-      <div>
-        {this.props.isStudent ? this.student_dashboard() : this.not_student()}
-      </div>
-    );
+    return <div>{this.props.isStudent ? this.student_dashboard() : this.not_student()}</div>;
   }
 }
 
