@@ -43,9 +43,8 @@ class StudentProfile(Profile):
     user = models.OneToOneField(
         ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="student_profile"
     )
-    # TODO: remove defaults (they just make form submission easier)
-    date_of_birth = models.DateField(max_length=8, default="1969-12-31", blank=True, null=True)
-    grad_year = models.IntegerField(default=1970, blank=True, null=True)
+    date_of_birth = models.DateField(max_length=8, blank=True, null=True)
+    grad_year = models.IntegerField(blank=True, null=True)
     school = models.CharField(max_length=200, blank=True)
 
 
