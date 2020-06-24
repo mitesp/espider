@@ -11,8 +11,8 @@ import LoginPage from "./signup/LoginPage";
 import SignupPage from "./signup/SignupPage";
 
 import Home from "./Home";
-import Dashboard from "./Dashboard"; //empty placeholder
 import StudentDashboard from "./StudentDashboard";
+import TeacherDashboard from "./TeacherDashboard";
 
 import Program from "./info/Program";
 import Teach from "./info/Teach";
@@ -23,6 +23,8 @@ import { programList } from "./info/Program";
 interface UserState {
   logged_in: boolean;
   username: string;
+  is_student: boolean;
+  is_teacher: boolean;
 }
 
 class App extends Component<{}, UserState> {
@@ -31,7 +33,9 @@ class App extends Component<{}, UserState> {
     super(props);
     this.state = {
       logged_in: localStorage.getItem("token") ? true : false,
-      username: ""
+      username: "",
+      is_student: false,
+      is_teacher: false
     };
   }
 
@@ -44,7 +48,11 @@ class App extends Component<{}, UserState> {
       })
         .then(res => res.json())
         .then(json => {
-          this.setState({ username: json.username });
+          this.setState({
+            username: json.username,
+            is_student: json.is_student,
+            is_teacher: json.is_teacher
+             });
         });
     }
   }
@@ -66,8 +74,10 @@ class App extends Component<{}, UserState> {
         <main>
           <Router>
             <Home path="/" />
-            <StudentDashboard path="studentdashboard" logged_in={this.state.logged_in} username={this.state.username} />
-            <Dashboard path="teacherdashboard" />
+            <StudentDashboard path="studentdashboard" logged_in={this.state.logged_in} username={this.state.username}
+              is_student={this.state.is_student} />
+            <TeacherDashboard path="teacherdashboard" logged_in={this.state.logged_in} username={this.state.username}
+              is_teacher={this.state.is_teacher} />
             <AboutUs path="aboutus" />
             <Teach path="teach" />
             <Learn path="learn" />

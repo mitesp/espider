@@ -13,14 +13,14 @@ type Program = {
 type Props = {
   logged_in: boolean;
   username: string;
-  is_student: boolean;
+  is_teacher: boolean;
 }
 
 type State = {
   programs: Program[];
 }
 
-class StudentDashboard extends Component<Props, State> {
+class TeacherDashboard extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
@@ -30,6 +30,7 @@ class StudentDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
+    console.log(this.props.is_teacher);
     if (this.props.logged_in) {
       this.get_programs();
     }
@@ -63,10 +64,10 @@ class StudentDashboard extends Component<Props, State> {
   }
 
 
-  student_dashboard() {
+  teacher_dashboard() {
     return (
       <div>
-        <h1> <b>Student Dashboard for {this.props.username}</b> </h1>
+        <h1> <b>Teacher Dashboard for {this.props.username}</b> </h1>
         <br />
         <h2> <b>Active Programs</b> </h2>
 
@@ -82,19 +83,19 @@ class StudentDashboard extends Component<Props, State> {
     );
   }
 
-  not_student() {
+  not_teacher() {
     return <div>DASHBOARD</div>;
   }
 
   render() {
     return (
       <div>
-          {this.props.is_student
-            ? this.student_dashboard()
-            : this.not_student()}
+          {this.props.is_teacher
+            ? this.teacher_dashboard()
+            : this.not_teacher()}
       </div>
     );
   }
 }
 
-export default StudentDashboard;
+export default TeacherDashboard;
