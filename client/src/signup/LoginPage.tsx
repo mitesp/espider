@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import LoginForm from "../components/LoginForm";
 import { UserState } from "../App";
-import "react-bulma-components/dist/react-bulma-components.min.css";
 
 interface LoginProps {
   setState: (data: UserState) => void;
