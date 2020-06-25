@@ -1,12 +1,12 @@
 import React from "react";
 
-const generateLink = (href, text) => (
+const generateLink = (href: string, text: string) => (
   <a className="has-text-link-dark" href={href}>
     {text}
   </a>
 );
 
-const generateLinksList = (linksInfo) => (
+const generateLinksList = (linksInfo: string[][]) => (
   <ul>
     {linksInfo.map((x) => (
       <li>{generateLink(x[0], x[1])}</li>
