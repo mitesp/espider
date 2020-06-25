@@ -58,29 +58,28 @@ class StudentDashboard extends Component<Props, State> {
 
   studentDashboard() {
     return (
-      <div>
-        <h1>
-          <b>Student Dashboard for {this.props.username}</b>
-        </h1>
-        <br />
-        <h2>
-          <b>Active Programs</b>
-        </h2>
-
-        {this.state.programs.map((p, index) => {
-          return (
-            <h3 key={p.name}>
-              {p.name}: <a href={p.url}>Register</a>
-            </h3>
-          );
-        })}
-
-        <br />
-        <h2>
-          <b>Previous Programs</b>
-        </h2>
-        <h3> None </h3>
-      </div>
+      <section className="pt-5 pb-5">
+        <div className="container content">
+          <div className="columns">
+            <div className="column is-6 is-offset-3">
+              <h1 className="has-text-centered is-size-2">
+                Student Dashboard for {this.props.username}
+              </h1>
+              <h2 className="has-text-centered is-size-3">Active Programs</h2>
+              {this.state.programs.map((p, index) => {
+                return (
+                  <h3 className="is-size-5" key={p.name}>
+                    {p.name}: <a href={p.url}>Register</a>
+                  </h3>
+                );
+              })}
+              <br />
+              <h2 className="has-text-centered is-size-3">Previous Programs</h2>
+              <h3 className="is-size-5"> None </h3>
+            </div>
+          </div>
+        </div>
+      </section>
     );
   }
 

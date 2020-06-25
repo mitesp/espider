@@ -62,5 +62,5 @@ class ProgramViewSet(viewsets.ModelViewSet):
     API endpoint that allows groups to be viewed or edited.
     """
 
-    queryset = Program.objects.all()
+    queryset = Program.objects.all().order_by("edition", "name")
     serializer_class = ProgramSerializer
