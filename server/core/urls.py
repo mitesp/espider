@@ -1,4 +1,5 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.generic import TemplateView
 from rest_framework import routers
 from rest_framework_simplejwt import views as jwt_views
 
@@ -11,7 +12,7 @@ router.register("programs", views.ProgramViewSet)
 app_name = "core"
 urlpatterns = [
     # general pages
-    path("", views.index, name="index"),
+    path("index", views.index, name="index"),
     path("studentdashboard", views.studentdashboard, name="studentdashboard"),
     path("teacherdashboard", views.teacherdashboard, name="teacherdashboard"),
     # accounts pages
@@ -64,4 +65,5 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
+    re_path(".*", TemplateView.as_view(template_name="index.html"), name="react"),
 ]

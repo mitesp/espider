@@ -1,6 +1,7 @@
 FROM python:3.8
 
-COPY . /server
+COPY ./server /server
+COPY Pipfile* /server/
 WORKDIR /server
 
 RUN pip install pipenv

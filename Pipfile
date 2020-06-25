@@ -7,6 +7,15 @@ verify_ssl = true
 pre-commit = "*"
 
 [packages]
+django = "*"
+django-heroku = "*"
+gunicorn = "*"
+django-rest-framework = "*"
+markdown = "*"
+django-filter = "*"
+djangorestframework-jwt = "*"
+django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.8"
