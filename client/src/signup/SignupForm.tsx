@@ -1,4 +1,5 @@
 import React from "react";
+import axiosInstance from "../axiosAPI";
 
 interface SignupProps {
   setState: Function;
@@ -9,10 +10,7 @@ interface SignupState {
   password: string;
 }
 
-function isValidField(
-  prop: string,
-  obj: SignupState
-): prop is keyof SignupState {
+function isValidField(prop: string, obj: SignupState): prop is keyof SignupState {
   return prop in obj;
 }
 
@@ -25,7 +23,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
     };
   }
 
-  handle_change = (e: React.FormEvent<HTMLInputElement>) => {
+  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
     this.setState((prevstate: SignupState) => {
@@ -37,32 +35,19 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
     });
   };
 
-  handle_signup = (e: React.FormEvent<HTMLFormElement>, data: SignupState) => {
+  handleSignup = (e: React.FormEvent<HTMLFormElement>, data: SignupState) => {
     e.preventDefault();
-    fetch("http://localhost:8000/users/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        localStorage.setItem("token", json.token);
-        this.props.setState({
-          logged_in: true,
-          username: json.username,
-        });
-      });
+    axiosInstance.post("/users/", JSON.stringify(data)).then(result => {
+      axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
+      localStorage.setItem("token", result.data.tokens.access);
+      localStorage.setItem("refresh", result.data.tokens.refresh);
+      this.props.setState({ logged_in: true });
+    });
   };
 
   render() {
     return (
-      <form
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-          this.handle_signup(e, this.state)
-        }
-      >
+      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSignup(e, this.state)}>
         {/* Validation elements are concurrently commented out */}
         <div className="field">
           <label className="label" htmlFor="username">
@@ -77,7 +62,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
               type="text"
               placeholder="Username"
               value={this.state.username}
-              onChange={this.handle_change}
+              onChange={this.handleChange}
             />
             <span className="icon is-small is-left">
               <i className="fas fa-user"></i>
@@ -101,7 +86,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
               type="password"
               placeholder="Password"
               value={this.state.password}
-              onChange={this.handle_change}
+              onChange={this.handleChange}
             />
             {/* <span className="icon is-small is-left">
               <i className="fas fa-envelope"></i>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axiosInstance from "./axiosAPI";
 
 type JSONProgram = {
   name: string;
@@ -49,15 +50,9 @@ class TeacherDashboard extends Component<Props, State> {
 
   get_programs() {
     if (this.props.loggedIn) {
-      fetch("http://localhost:8000/api/programs/", {
-        headers: {
-          Authorization: `JWT ${localStorage.getItem("token")}`,
-        },
-      })
-        .then(res => res.json())
-        .then(json => {
-          this.setState({ programs: this.generate_program_list(json.results) });
-        });
+      axiosInstance.get("/programs/").then(res => {
+        this.setState({ programs: this.generate_program_list(res.data.results) });
+      });
     }
   }
 

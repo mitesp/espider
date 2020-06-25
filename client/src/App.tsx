@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { Router } from "@reach/router";
 import "./App.sass";
 
+import axiosInstance from "./axiosAPI";
+
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
 
@@ -51,19 +53,13 @@ class App extends Component<{}, State> {
 
   componentDidMount() {
     if (this.state.loggedIn) {
-      fetch("http://localhost:8000/current_user/", {
-        headers: {
-          Authorization: `JWT ${localStorage.getItem("token")}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          this.setState({
-            username: json.username,
-            isStudent: json.is_student,
-            isTeacher: json.is_teacher,
-          });
+      axiosInstance.get("/current_user/").then(result => {
+        this.setState({
+          username: result.data.username,
+          isStudent: result.data.is_student,
+          isTeacher: result.data.is_teacher,
         });
+      });
     }
   }
 
@@ -74,6 +70,9 @@ class App extends Component<{}, State> {
 
   logout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     localStorage.removeItem("token");
+    localStorage.setItem("token", "");
+    localStorage.removeItem("refresh");
+    delete axiosInstance.defaults.headers.common["Authorization"];
     this.setState({ loggedIn: false, username: "" });
   };
 

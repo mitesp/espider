@@ -14,6 +14,7 @@ markdown = "*"
 django-filter = "*"
 djangorestframework-jwt = "*"
 django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.8"

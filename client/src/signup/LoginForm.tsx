@@ -1,4 +1,5 @@
 import React from "react";
+import axiosInstance from "../axiosAPI";
 
 interface LoginProps {
   setState: Function;
@@ -22,7 +23,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     };
   }
 
-  handle_change = (e: React.FormEvent<HTMLInputElement>) => {
+  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
     this.setState((prevstate: LoginState) => {
@@ -34,42 +35,38 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     });
   };
 
-  handle_login = (e: React.FormEvent<HTMLFormElement>, data: LoginState) => {
+  handleLogin = (e: React.FormEvent<HTMLFormElement>, data: LoginState) => {
     e.preventDefault();
-    fetch("http://localhost:8000/token-auth/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then(res => res.json())
-      .then(json => {
-        localStorage.setItem("token", json.token);
-        this.props.setState({
-          logged_in: true,
-          username: json.user.username,
-        });
+    axiosInstance
+      .post("/token/", {
+        username: this.state.username,
+        password: this.state.password,
+      })
+      .then(result => {
+        axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
+        localStorage.setItem("token", result.data.access);
+        localStorage.setItem("refresh", result.data.refresh);
+        this.props.setState({ logged_in: true });
       });
   };
 
   render() {
     return (
-      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handle_login(e, this.state)}>
+      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleLogin(e, this.state)}>
         <h2>Log In</h2>
         <label htmlFor="username">Username</label>
         <input
           type="text"
           name="username"
           value={this.state.username}
-          onChange={this.handle_change}
+          onChange={this.handleChange}
         />
         <label htmlFor="password">Password</label>
         <input
           type="password"
           name="password"
           value={this.state.password}
-          onChange={this.handle_change}
+          onChange={this.handleChange}
         />
         <input type="submit" />
       </form>
