@@ -40,9 +40,8 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
 
   handleSignup = (e: React.FormEvent<HTMLFormElement>, data: SignupState) => {
     e.preventDefault();
-    axiosInstance.post("/users/", JSON.stringify(data)).then((result) => {
-      axiosInstance.defaults.headers["Authorization"] =
-        "JWT " + result.data.tokens.access;
+    axiosInstance.post("/add_user/", JSON.stringify(data)).then((result) => {
+      axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
       localStorage.setItem("token", result.data.tokens.access);
       localStorage.setItem("refresh", result.data.tokens.refresh);
       this.props.setState({ loggedIn: true });

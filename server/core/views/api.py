@@ -1,7 +1,6 @@
-from core.models import Class, ESPUser, Program
+from core.models import Class, Program
 from core.serializers import (
     ClassSerializer,
-    ESPUserSerializer,
     ProgramSerializer,
     UserSerializer,
     UserSerializerWithToken,
@@ -22,10 +21,9 @@ def current_user(request):
     return Response(serializer.data)
 
 
-class UserList(APIView):
+class CreateUser(APIView):
     """
-    Create a new user. It's called 'UserList' because normally we'd have a get
-    method here too, for retrieving a list of all User objects.
+    Create a new user.
     """
 
     permission_classes = (permissions.AllowAny,)
@@ -39,18 +37,9 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ESPUserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-
-    queryset = ESPUser.objects.all().order_by("-date_joined")
-    serializer_class = ESPUserSerializer
-
-
 class ClassViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows classes to be viewed or edited.
     """
 
     queryset = Class.objects.all()
@@ -59,7 +48,7 @@ class ClassViewSet(viewsets.ModelViewSet):
 
 class ProgramViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows programs to be viewed or edited.
     """
 
     queryset = Program.objects.all().order_by("edition", "name")

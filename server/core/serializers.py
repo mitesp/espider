@@ -9,12 +9,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("username", "is_student", "is_teacher")
 
 
-class ProgramSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Program
-        fields = ("name", "edition")
-
-
 class UserSerializerWithToken(serializers.ModelSerializer):
 
     tokens = serializers.SerializerMethodField()
@@ -40,13 +34,13 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
 
-class ESPUserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ESPUser
-        fields = ["username", "email", "is_student"]
-
-
 class ClassSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Class
         fields = ["title", "description", "num_students", "capacity"]
+
+
+class ProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Program
+        fields = ("name", "edition")

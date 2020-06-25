@@ -60,9 +60,9 @@ urlpatterns = [
     path("<program>/<edition>/students/", views.StudentsView.as_view(), name="students"),
     path("<program>/<edition>/classes/", views.ClassesView.as_view(), name="classes"),
     # api paths
-    path("api/current_user/", views.current_user),
-    path("api/users/", views.UserList.as_view()),
     path("api/", include(router.urls)),
+    path("api/current_user/", views.current_user),
+    path("api/add_user/", views.CreateUser.as_view()),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
     re_path(".*", TemplateView.as_view(template_name="index.html"), name="react"),
