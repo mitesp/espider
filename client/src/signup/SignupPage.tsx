@@ -9,11 +9,6 @@ type SignupProps = {
 };
 
 class SignupPage extends Component<SignupProps, any> {
-  setBothStates = (data: UserState) => {
-    this.setState(data);
-    this.props.setState(data);
-  };
-
   handleSignup = (e: React.FormEvent<HTMLFormElement>, data: UserState) => {
     this.props.setState(data);
   };

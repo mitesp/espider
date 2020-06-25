@@ -48,6 +48,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
   render() {
     return (
       <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSignup(e, this.state)}>
+        <h1 className="has-text-centered is-size-2"> Sign Up </h1>
         {/* Validation elements are concurrently commented out */}
         <div className="field">
           <label className="label" htmlFor="username">

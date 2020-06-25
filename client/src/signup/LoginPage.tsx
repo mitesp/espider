@@ -9,24 +9,25 @@ interface LoginProps {
 }
 
 class LoginPage extends Component<LoginProps, any> {
-  setBothStates = (data: UserState) => {
-    this.setState(data);
-    this.props.setState(data);
-  };
-
   handleLogin = (e: React.FormEvent<HTMLFormElement>, data: UserState) => {
     this.props.setState(data);
   };
 
   render() {
     return (
-      <div>
-        {this.props.loggedIn ? (
-          <h3> Hi, {this.props.username}! </h3>
-        ) : (
-          <LoginForm setState={this.handleLogin} />
-        )}
-      </div>
+      <section className="pt-5 pb-5">
+        <div className="container content">
+          <div className="columns">
+            <div className="column is-6 is-offset-3">
+              {this.props.loggedIn ? (
+                <h3> Hi, {this.props.username}! </h3>
+              ) : (
+                <LoginForm setState={this.handleLogin} />
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
       //TODO figure out how to get this to automatically change when logged in
     );
   }
