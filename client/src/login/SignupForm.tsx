@@ -10,10 +10,7 @@ interface SignupState {
   password: string;
 }
 
-function isValidField(
-  prop: string,
-  obj: SignupState
-): prop is keyof SignupState {
+function isValidField(prop: string, obj: SignupState): prop is keyof SignupState {
   return prop in obj;
 }
 
@@ -40,7 +37,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
 
   handleSignup = (e: React.FormEvent<HTMLFormElement>, data: SignupState) => {
     e.preventDefault();
-    axiosInstance.post("/add_user/", JSON.stringify(data)).then((result) => {
+    axiosInstance.post("/add_user/", JSON.stringify(data)).then(result => {
       axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
       localStorage.setItem("token", result.data.tokens.access);
       localStorage.setItem("refresh", result.data.tokens.refresh);
@@ -51,11 +48,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
 
   render() {
     return (
-      <form
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-          this.handleSignup(e, this.state)
-        }
-      >
+      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSignup(e, this.state)}>
         <h1 className="has-text-centered is-size-3">Sign Up</h1>
         {/* Validation elements are concurrently commented out */}
         <div className="field">
