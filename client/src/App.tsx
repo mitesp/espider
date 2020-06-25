@@ -8,8 +8,8 @@ import axiosInstance from "./axiosAPI";
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
 
-import LoginPage from "./signup/LoginPage";
-import SignupPage from "./signup/SignupPage";
+import LoginPage from "./login/LoginPage";
+import SignupPage from "./login/SignupPage";
 
 import Home from "./info/Home";
 import StudentDashboard from "./dashboard/StudentDashboard";
@@ -53,7 +53,7 @@ class App extends Component<{}, State> {
 
   componentDidMount() {
     if (this.state.loggedIn) {
-      axiosInstance.get("/current_user/").then(result => {
+      axiosInstance.get("/current_user/").then((result) => {
         this.setState({
           username: result.data.username,
           isStudent: result.data.is_student,
@@ -78,7 +78,11 @@ class App extends Component<{}, State> {
   render() {
     return (
       <React.Fragment>
-        <Nav loggedIn={this.state.loggedIn} username={this.state.username} logout={this.logout} />
+        <Nav
+          loggedIn={this.state.loggedIn}
+          username={this.state.username}
+          logout={this.logout}
+        />
         <main>
           <Router>
             <Home path="/" />
@@ -110,7 +114,7 @@ class App extends Component<{}, State> {
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
-            {programList.map(program => (
+            {programList.map((program) => (
               <Program key={program} path={program} program={program} />
             ))}
             <NotFound default />

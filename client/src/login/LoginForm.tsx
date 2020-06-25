@@ -42,8 +42,9 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
         username: this.state.username,
         password: this.state.password,
       })
-      .then(result => {
-        axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
+      .then((result) => {
+        axiosInstance.defaults.headers["Authorization"] =
+          "JWT " + result.data.access;
         localStorage.setItem("token", result.data.access);
         localStorage.setItem("refresh", result.data.refresh);
         this.props.setState({ loggedIn: true });
@@ -52,16 +53,18 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
 
   render() {
     return (
-      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleLogin(e, this.state)}>
-        <h1 className="has-text-centered is-size-2">Log In </h1>
-        {/* Validation elements are concurrently commented out */}
+      <form
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
+          this.handleLogin(e, this.state)
+        }
+      >
+        <h1 className="has-text-centered is-size-3">Log in</h1>
         <div className="field">
           <label className="label" htmlFor="username">
             Username
           </label>
-          <div className="control has-icons-left has-icons-right">
+          <div className="control">
             <input
-              // is-success is-danger
               className="input"
               id="username"
               name="username"
@@ -70,21 +73,14 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
               value={this.state.username}
               onChange={this.handleChange}
             />
-            <span className="icon is-small is-left">
-              <i className="fas fa-user"></i>
-            </span>
-            {/* <span className="icon is-small is-right">
-              <i className="fas fa-check"></i>
-            </span> */}
           </div>
-          {/* <p className="help is-success">This username is available</p> */}
         </div>
 
         <div className="field">
           <label className="label" htmlFor="password">
             Password
           </label>
-          <div className="control has-icons-left has-icons-right">
+          <div className="control">
             <input
               className="input"
               id="password"
@@ -94,14 +90,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
               value={this.state.password}
               onChange={this.handleChange}
             />
-            {/* <span className="icon is-small is-left">
-              <i className="fas fa-envelope"></i>
-            </span> */}
-            {/* <span className="icon is-small is-right">
-              <i className="fas fa-exclamation-triangle"></i>
-            </span> */}
           </div>
-          {/* <p className="help is-danger">This  is invalid</p> */}
         </div>
         <div className="field">
           <div className="control">
