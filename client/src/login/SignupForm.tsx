@@ -45,6 +45,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
       localStorage.setItem("token", result.data.tokens.access);
       localStorage.setItem("refresh", result.data.tokens.refresh);
       this.props.setState({ loggedIn: true });
+      window.location.reload(false); // refresh page on submit
     });
   };
 

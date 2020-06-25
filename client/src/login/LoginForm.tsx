@@ -48,6 +48,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
         localStorage.setItem("token", result.data.access);
         localStorage.setItem("refresh", result.data.refresh);
         this.props.setState({ loggedIn: true });
+        window.location.reload(false); // refresh page on submit
       });
   };
 
