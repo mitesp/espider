@@ -14,7 +14,7 @@ class LoginPage extends Component<LoginProps, any> {
     this.props.setState(data);
   };
 
-  handle_login = (e: React.FormEvent<HTMLFormElement>, data: UserState) => {
+  handleLogin = (e: React.FormEvent<HTMLFormElement>, data: UserState) => {
     this.props.setState(data);
   };
 
@@ -24,7 +24,7 @@ class LoginPage extends Component<LoginProps, any> {
         {this.props.loggedIn ? (
           <h3> Hi, {this.props.username}! </h3>
         ) : (
-          <LoginForm setState={this.handle_login} />
+          <LoginForm setState={this.handleLogin} />
         )}
       </div>
       //TODO figure out how to get this to automatically change when logged in

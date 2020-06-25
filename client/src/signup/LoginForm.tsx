@@ -46,7 +46,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
         axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
         localStorage.setItem("token", result.data.access);
         localStorage.setItem("refresh", result.data.refresh);
-        this.props.setState({ logged_in: true });
+        this.props.setState({ loggedIn: true });
       });
   };
 

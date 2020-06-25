@@ -41,7 +41,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
       axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
       localStorage.setItem("token", result.data.tokens.access);
       localStorage.setItem("refresh", result.data.tokens.refresh);
-      this.props.setState({ logged_in: true });
+      this.props.setState({ loggedIn: true });
     });
   };
 

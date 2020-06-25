@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axiosInstance from "./axiosAPI";
+import axiosInstance from "../axiosAPI";
 
 type JSONProgram = {
   name: string;
@@ -31,11 +31,11 @@ class TeacherDashboard extends Component<Props, State> {
 
   componentDidMount() {
     if (this.props.loggedIn) {
-      this.get_programs();
+      this.getPrograms();
     }
   }
 
-  generate_program_list(results: Array<JSONProgram>) {
+  generateProgramList(results: Array<JSONProgram>) {
     const programs = Array<Program>(results.length);
     let counter = 0;
     results.forEach(function (r) {
@@ -48,15 +48,15 @@ class TeacherDashboard extends Component<Props, State> {
     return programs;
   }
 
-  get_programs() {
+  getPrograms() {
     if (this.props.loggedIn) {
       axiosInstance.get("/programs/").then(res => {
-        this.setState({ programs: this.generate_program_list(res.data.results) });
+        this.setState({ programs: this.generateProgramList(res.data.results) });
       });
     }
   }
 
-  teacher_dashboard() {
+  teacherDashboard() {
     return (
       <div>
         <h1>
@@ -84,12 +84,12 @@ class TeacherDashboard extends Component<Props, State> {
     );
   }
 
-  not_teacher() {
+  notTeacher() {
     return <div>DASHBOARD</div>;
   }
 
   render() {
-    return <div>{this.props.isTeacher ? this.teacher_dashboard() : this.not_teacher()}</div>;
+    return <div>{this.props.isTeacher ? this.teacherDashboard() : this.notTeacher()}</div>;
   }
 }
 

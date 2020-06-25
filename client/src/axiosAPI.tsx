@@ -24,10 +24,10 @@ axiosInstance.interceptors.response.use(
       error.response.statusText === "Unauthorized" &&
       localStorage.hasOwnProperty("refresh")
     ) {
-      const refresh_token = localStorage.getItem("refresh");
+      const refreshToken = localStorage.getItem("refresh");
 
       return axiosInstance
-        .post("/token/refresh/", { refresh: refresh_token })
+        .post("/token/refresh/", { refresh: refreshToken })
         .then(response => {
           localStorage.setItem("token", response.data.access);
           localStorage.setItem("refresh", response.data.refresh);

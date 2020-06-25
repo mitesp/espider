@@ -70,7 +70,6 @@ class App extends Component<{}, State> {
 
   logout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     localStorage.removeItem("token");
-    localStorage.setItem("token", "");
     localStorage.removeItem("refresh");
     delete axiosInstance.defaults.headers.common["Authorization"];
     this.setState({ loggedIn: false, username: "" });
@@ -79,11 +78,7 @@ class App extends Component<{}, State> {
   render() {
     return (
       <React.Fragment>
-        <Nav
-          loggedIn={this.state.loggedIn}
-          username={this.state.username}
-          logout={this.logout}
-        />
+        <Nav loggedIn={this.state.loggedIn} username={this.state.username} logout={this.logout} />
         <main>
           <Router>
             <Home path="/" />
@@ -115,7 +110,7 @@ class App extends Component<{}, State> {
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
-            {programList.map((program) => (
+            {programList.map(program => (
               <Program key={program} path={program} program={program} />
             ))}
             <NotFound default />
