@@ -79,7 +79,7 @@ class App extends Component<{}, State> {
     return (
       <React.Fragment>
         <Nav loggedIn={this.state.loggedIn} username={this.state.username} logout={this.logout} />
-        <main className="pt-5 pb-5">
+        <main className="px-3 py-5">
           <Router>
             <Home path="/" />
             <StudentDashboard
