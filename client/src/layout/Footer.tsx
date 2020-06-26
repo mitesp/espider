@@ -8,7 +8,7 @@ const generateLink = (href: string, text: string) => (
 
 const generateLinksList = (linksInfo: string[][]) => (
   <ul>
-    {linksInfo.map((x) => (
+    {linksInfo.map(x => (
       <li>{generateLink(x[0], x[1])}</li>
     ))}
   </ul>
@@ -54,38 +54,31 @@ export default function () {
             </p>
             <br />
             <p>
-              We host educational events for local middle and high school
-              students and for the MIT community. Our mission is to spread the
-              joy of learning and teaching, and to help people share their
-              knowledge, passions, and hobbies with others.
+              We host educational events for local middle and high school students and for the MIT
+              community. Our mission is to spread the joy of learning and teaching, and to help
+              people share their knowledge, passions, and hobbies with others.
             </p>
             <br />
-            <p className="has-text-weight-bold">
-              Learn anything, teach anything, do anything!
-            </p>
+            <p className="has-text-weight-bold">Learn anything, teach anything, do anything!</p>
           </div>
           <div className="column is-1"></div>
           <div className="column" style={{ lineHeight: "2rem" }}>
             <h2 className="is-size-6 pt-0 has-text-weight-bold">Programs</h2>
             <ul>
-              {programs.map((x) => (
-                <li>
+              {programs.map((x, i) => (
+                <li key={i}>
                   {generateLink(x[0], x[1])}
                   <small className="pl-2 has-text-grey-dark">{x[2]}</small>
                 </li>
               ))}
             </ul>
-            <h2 className="is-size-6 pt-0 has-text-weight-bold">
-              Programs for MIT
-            </h2>
+            <h2 className="is-size-6 pt-0 has-text-weight-bold">Programs for MIT</h2>
             {generateLinksList(mitPrograms)}
           </div>
           <div className="column" style={{ lineHeight: "2rem" }}>
             <h2 className="is-size-6 has-text-weight-bold">About Us</h2>
             {generateLinksList(about)}
-            <h2 className="is-size-6 has-text-weight-bold">
-              Get Involved
-            </h2>{" "}
+            <h2 className="is-size-6 has-text-weight-bold">Get Involved</h2>{" "}
             {generateLinksList(involved)}
           </div>
         </div>
@@ -96,14 +89,10 @@ export default function () {
             espider-dev@mit.edu
           </a>
           . The source code is licensed{" "}
-          <a
-            className="has-text-link-dark"
-            href="http://opensource.org/licenses/mit-license.php"
-          >
+          <a className="has-text-link-dark" href="http://opensource.org/licenses/mit-license.php">
             MIT
           </a>
-          . The website content is licensed{" "}
-          {/* TODO: What is this, actually? */}
+          . The website content is licensed {/* TODO: What is this, actually? */}
           <a
             className="has-text-link-dark"
             href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
