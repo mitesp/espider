@@ -9,7 +9,7 @@ import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
 
 import LoginPage from "./login/LoginPage";
-import SignupPage from "./login/SignupPage";
+import SignupPage from "./signup/SignupPage";
 
 import Home from "./info/Home";
 import Dashboard from "./dashboard/Dashboard";
