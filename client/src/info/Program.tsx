@@ -12,7 +12,7 @@ export const programList = ["splash", "spark", "hssp", "cascade", "firestorm"];
 export default function (props: { program: string }) {
   const program = canonicalizeProgramName(props.program);
   return (
-    <div className="container pt-3" style={{}}>
+    <div className="container content">
       <h1 className="is-size-1 has-text-weight-bold">{program}</h1>
       <div className="columns">
         <div className="column">

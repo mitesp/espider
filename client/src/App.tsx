@@ -53,7 +53,7 @@ class App extends Component<{}, State> {
 
   componentDidMount() {
     if (this.state.loggedIn) {
-      axiosInstance.get("/current_user/").then((result) => {
+      axiosInstance.get("/current_user/").then(result => {
         this.setState({
           username: result.data.username,
           isStudent: result.data.is_student,
@@ -78,12 +78,8 @@ class App extends Component<{}, State> {
   render() {
     return (
       <React.Fragment>
-        <Nav
-          loggedIn={this.state.loggedIn}
-          username={this.state.username}
-          logout={this.logout}
-        />
-        <main>
+        <Nav loggedIn={this.state.loggedIn} username={this.state.username} logout={this.logout} />
+        <main className="pt-5 pb-5">
           <Router>
             <Home path="/" />
             <StudentDashboard
@@ -114,7 +110,7 @@ class App extends Component<{}, State> {
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
-            {programList.map((program) => (
+            {programList.map(program => (
               <Program key={program} path={program} program={program} />
             ))}
             <NotFound default />
