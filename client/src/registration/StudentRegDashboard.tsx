@@ -130,18 +130,16 @@ class StudentRegDashboard extends Component<Props, State> {
   render() {
     //TODO block view if studentreg isn't open (or something)
     return (
-      <section className="pt-5 pb-5">
-        <div className="container content">
-          <h1 className="has-text-centered is-size-2">
-            {this.props.program} {this.props.edition} Dashboard for {this.props.username}
-          </h1>
-          <div className="columns">
-            {this.regStatus()}
-            {this.tasks()}
-            {this.classStatus()}
-          </div>
+      <div className="container">
+        <h1 className="has-text-centered is-size-2">
+          {this.props.program} {this.props.edition} Dashboard for {this.props.username}
+        </h1>
+        <div className="columns">
+          {this.regStatus()}
+          {this.tasks()}
+          {this.classStatus()}
         </div>
-      </section>
+      </div>
     );
   }
 }
