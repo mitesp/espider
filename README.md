@@ -17,12 +17,7 @@
 
 (Miscellaneous)
 
-(This section sets up our linters (see Committing & Pushing Changes). It's a bit messy because we
-need to install some libraries.)
-7. Inside `client/`, run `yarn install`.
-8. Run `pipenv install --dev` (this may fail to install some packages, but it should still install
-   the one we care about.)
-9. Run `pipenv run pre-commit install` to set up `pre-commit`.
+7. Install linters (see Committing & Pushing Changes).
 
 # Making Changes
 
@@ -39,13 +34,21 @@ Some useful commands:
   want a new one, or you want to [`pipenv install` a new library](https://pipenv.pypa.io/en/latest/)
   in the server container).
 
-# Comitting & Pushing Changes
+# Committing & Pushing Changes
 
-The first time you clone the repository, you'll need to run `pipenv run pre-commit install` (you
-should only need to run this once ever). [`pre-commit`](https://pre-commit.com/) uses [git
+## Setting up Linters
+*Unfortunately, this is a bit messy right now because it involves installing a few libraries.*
+1. Install [`yarn`](https://yarnpkg.com/getting-started/install) and
+   [`pipenv`](https://pipenv.pypa.io/en/latest/install/#installing-pipenv).
+2. Run `pipenv install --dev` (might fail, but should still install what we want).
+3. Inside `client/` run `yarn install`.
+4. Back in the project directory, run `pipenv run pre-commit install` to set up `pre-commit`.
+
+[`pre-commit`](https://pre-commit.com/) uses [git
 hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to make sure our code is
 [fresh](https://stackoverflow.com/questions/8503559/what-is-linting) and
-[clean](https://web.mit.edu/6.031/www/sp20/classes/04-code-review/).
+[clean](https://web.mit.edu/6.031/www/sp20/classes/04-code-review/). This means whenever you make a
+commit, `pre-commit` will clean up your code first so you only commit clean code.
 
 **Before committing and pushing**: it's good practice to run `git status` and `git diff` to make
 sure you know what changes you're adding.
