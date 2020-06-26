@@ -42,9 +42,8 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
         username: this.state.username,
         password: this.state.password,
       })
-      .then((result) => {
-        axiosInstance.defaults.headers["Authorization"] =
-          "JWT " + result.data.access;
+      .then(result => {
+        axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
         localStorage.setItem("token", result.data.access);
         localStorage.setItem("refresh", result.data.refresh);
         this.props.setState({ loggedIn: true });
@@ -54,11 +53,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
 
   render() {
     return (
-      <form
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-          this.handleLogin(e, this.state)
-        }
-      >
+      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleLogin(e, this.state)}>
         <h1 className="has-text-centered is-size-3">Log in</h1>
         <div className="field">
           <label className="label" htmlFor="username">

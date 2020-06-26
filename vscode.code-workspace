@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 100,
+    "html.format.wrapAttributes": "auto",
+    "html.format.wrapLineLength": 0,
+    "prettier.arrowParens": "avoid",
+    "prettier.printWidth": 100,
+    "eslint.format.enable": true
+  },
+  "typescript.tsserver.watchOptions": {},
+  "eslint.codeAction.showDocumentation": {}
+}
