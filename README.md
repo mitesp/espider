@@ -17,7 +17,9 @@
 
 (Miscellaneous)
 
-7. Run `pipenv run pre-commit install` to set up `pre-commit` (see Comitting & Pushing
+7. Run `pipenv install --dev` (This should be fixed: it may fail to install some packages, but it
+   should still install the one we care about.)
+8. Run `pipenv run pre-commit install` to set up `pre-commit` (see Comitting & Pushing
    Changes)
 
 # Making Changes
@@ -70,7 +72,7 @@ If you'd like to have this power, you'll need to:
 3. Install the Heroku CLI and run `heroku login` in the git repo.
 4. Connect the your code to heroku with `heroku git:remote -a espider`. This will create a git
    remote named `heroku`.
-5. Deploy with `git subtree push --prefix server heroku master`.
+5. Deploy with `git push heroku master`.
 
 Useful tools:
 
@@ -78,8 +80,7 @@ Useful tools:
 - Run commands inside web container: `heroku run <command>`
 - Reset the database: `heroku pg:reset`
 - SSH into the web container: `heroku ps:exec`
-- Force push to `heroku` with ``git push heroku `git subtree split --prefix server master`:master
-  --force``
+- Force push to `heroku` with `git push master --force`
 
 # Dev Guide (a.k.a. Help! What's going on?)
 
@@ -179,8 +180,8 @@ Here are Mayukha's favorite aliases:
     alias dockex="sudo docker-compose exec server" #execute things in the server shell
     alias dockman="sudo docker-compose exec server python3 manage.py" #exec
     alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
-    alias herokumigrate="heroku run python3 manage.py migrate" #migrate in prod
-    alias herokumakemig="heroku run python3 manage.py makemigrations" #make migrations in prod
+    alias herokumigrate="heroku run python3 server/manage.py migrate" #migrate in prod
+    alias herokumakemig="heroku run python3 server/manage.py makemigrations" #make migrations in prod
 
 <a name="footnote-lint">3</a>: Our lint setup is in `.pre-commit-config.yaml`. Hopefully you won't need to touch it, but if
 you do, `pipenv run pre-commit run -a` will run the linter.
