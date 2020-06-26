@@ -14,6 +14,8 @@ import SignupPage from "./login/SignupPage";
 import Home from "./info/Home";
 import Dashboard from "./dashboard/Dashboard";
 
+import RegDashboard from "./registration/RegDashboard";
+
 import Program from "./info/Program";
 import Teach from "./info/Teach";
 import Learn from "./info/Learn";
@@ -72,7 +74,7 @@ class App extends Component<{}, State> {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh");
     delete axiosInstance.defaults.headers.common["Authorization"];
-    this.setState({ loggedIn: false, username: "" });
+    this.setState({ loggedIn: false, username: "", isStudent: false, isTeacher: false });
   };
 
   render() {
@@ -106,6 +108,13 @@ class App extends Component<{}, State> {
               onLogin={this.login}
               loggedIn={this.state.loggedIn}
               username={this.state.username}
+            />
+            <RegDashboard
+              path="/:program/:edition/dashboard"
+              loggedIn={this.state.loggedIn}
+              username={this.state.username}
+              isStudent={this.state.isStudent}
+              isTeacher={this.state.isTeacher}
             />
             {programList.map(program => (
               <Program key={program} path={program} program={program} />

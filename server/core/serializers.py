@@ -1,4 +1,4 @@
-from core.models import Class, ESPUser, Program
+from core.models import Class, ESPUser, Program, StudentRegistration
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -44,3 +44,11 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ("name", "edition")
+
+
+class StudentRegSerializer(serializers.ModelSerializer):
+    # student_reg_open = serializers.CharField(source='program.student_reg_open')
+
+    class Meta:
+        model = StudentRegistration
+        fields = "__all__"  # ("student_reg_open",)

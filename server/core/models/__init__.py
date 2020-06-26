@@ -7,6 +7,8 @@ from .users import ESPUser
 class Program(models.Model):
     name = models.CharField(max_length=200)  # TODO maybe this should be a constant set
     edition = models.CharField(max_length=200)  # this is (season +) year
+    student_reg_open = models.BooleanField(default=False)
+    teacher_reg_open = models.BooleanField(default=False)
     # TODO add timeslots?
 
     def __str__(self):
@@ -29,12 +31,27 @@ class Class(models.Model):
 
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
+    class RegStatusOptions(models.TextChoices):
+        CLASS_PREFERENCES = ("PREF",)
+        FROZEN_PREFERENCES = ("FROZ",)
+        CHANGE_CLASSES = ("CH",)
+        PRE_PROGRAM = ("PRE",)
+        DAY_OF = ("DAY",)
+        POST_PROGRAM = "POST"
+
     student = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
+
+    # student reg status
+    reg_status = models.CharField(
+        max_length=4, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES
+    )
+
     update_profile_check = models.BooleanField(default=False)
     emergency_info_check = models.BooleanField(default=False)
     liability_check = models.BooleanField(default=False)
     medliab_check = models.BooleanField(default=False)
+    availability_check = models.BooleanField(default=False)
 
     class Meta:
         unique_together = (("student", "program"),)
