@@ -17,10 +17,12 @@
 
 (Miscellaneous)
 
-7. Run `pipenv install --dev` (This should be fixed: it may fail to install some packages, but it
-   should still install the one we care about.)
-8. Run `pipenv run pre-commit install` to set up `pre-commit` (see Comitting & Pushing
-   Changes)
+(This section sets up our linters (see Committing & Pushing Changes). It's a bit messy because we
+need to install some libraries.)
+7. Inside `client/`, run `yarn install`.
+8. Run `pipenv install --dev` (this may fail to install some packages, but it should still install
+   the one we care about.)
+9. Run `pipenv run pre-commit install` to set up `pre-commit`.
 
 # Making Changes
 
