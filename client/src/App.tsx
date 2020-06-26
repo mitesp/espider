@@ -12,8 +12,7 @@ import LoginPage from "./login/LoginPage";
 import SignupPage from "./login/SignupPage";
 
 import Home from "./info/Home";
-import StudentDashboard from "./dashboard/StudentDashboard";
-import TeacherDashboard from "./dashboard/TeacherDashboard";
+import Dashboard from "./dashboard/Dashboard";
 
 import Program from "./info/Program";
 import Teach from "./info/Teach";
@@ -82,16 +81,11 @@ class App extends Component<{}, State> {
         <main className="px-3 py-5">
           <Router>
             <Home path="/" />
-            <StudentDashboard
-              path="studentdashboard"
+            <Dashboard
+              path="dashboard"
               loggedIn={this.state.loggedIn}
               username={this.state.username}
               isStudent={this.state.isStudent}
-            />
-            <TeacherDashboard
-              path="teacherdashboard"
-              loggedIn={this.state.loggedIn}
-              username={this.state.username}
               isTeacher={this.state.isTeacher}
             />
             <AboutUs path="aboutus" />

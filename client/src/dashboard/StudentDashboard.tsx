@@ -12,8 +12,6 @@ type Program = {
 };
 
 type Props = {
-  loggedIn: boolean;
-  isStudent: boolean;
   username: string;
 };
 
@@ -21,7 +19,7 @@ type State = {
   programs: Program[];
 };
 
-class StudentDashboard extends Component<Props, State> {
+export default class StudentDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -30,9 +28,7 @@ class StudentDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.loggedIn) {
-      this.getPrograms();
-    }
+    this.getPrograms();
   }
 
   generateProgramList(results: Array<JSONProgram>) {
@@ -49,45 +45,31 @@ class StudentDashboard extends Component<Props, State> {
   }
 
   getPrograms() {
-    if (this.props.loggedIn) {
-      axiosInstance.get("/programs/").then(res => {
-        this.setState({ programs: this.generateProgramList(res.data.results) });
-      });
-    }
+    axiosInstance.get("/programs/").then(res => {
+      this.setState({ programs: this.generateProgramList(res.data.results) });
+    });
   }
 
-  studentDashboard() {
+  render() {
     return (
-      <div className="container">
-        <div className="columns">
-          <div className="column is-6 is-offset-3">
-            <h1 className="has-text-centered is-size-2">
-              Student Dashboard for {this.props.username}
-            </h1>
-            <h2 className="has-text-centered is-size-3">Active Programs</h2>
-            {this.state.programs.map((p, index) => {
-              return (
-                <h3 className="is-size-5" key={p.name}>
-                  {p.name}: <a href={p.url}>Register</a>
-                </h3>
-              );
-            })}
-            <br />
-            <h2 className="has-text-centered is-size-3">Previous Programs</h2>
-            <h3 className="is-size-5"> None </h3>
-          </div>
+      <div className="columns">
+        <div className="column is-6 is-offset-3">
+          <h1 className="has-text-centered is-size-2">
+            Student Dashboard for {this.props.username}
+          </h1>
+          <h2 className="has-text-centered is-size-3">Active Programs</h2>
+          {this.state.programs.map((p, index) => {
+            return (
+              <h3 className="is-size-5" key={p.name}>
+                {p.name}: <a href={p.url}>Register</a>
+              </h3>
+            );
+          })}
+          <br />
+          <h2 className="has-text-centered is-size-3">Previous Programs</h2>
+          <h3 className="is-size-5"> None </h3>
         </div>
       </div>
     );
   }
-
-  notStudent() {
-    return <div>DASHBOARD</div>;
-  }
-
-  render() {
-    return <div>{this.props.isStudent ? this.studentDashboard() : this.notStudent()}</div>;
-  }
 }
-
-export default StudentDashboard;
