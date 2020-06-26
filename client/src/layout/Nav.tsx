@@ -6,7 +6,7 @@ import { canonicalizeProgramName, programList } from "../info/Program";
 type Props = {
   loggedIn: boolean;
   username: string;
-  logout: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  logout: () => void;
 };
 
 type State = {
@@ -40,11 +40,29 @@ class Nav extends React.Component<Props, State> {
 
   loggedInView = () => {
     return (
-      <div className="buttons">
-        <h1> {this.props.username} </h1>
-        <button className="button is-light" onClick={this.props.logout}>
-          Log Out
-        </button>
+      <div className="navbar-item has-dropdown is-hoverable">
+        <a className="navbar-link has-text-weight-bold" href="/dashboard">
+          {this.props.username}
+        </a>
+
+        <div className="navbar-dropdown is-right">
+          <a className="navbar-item" href="/dashboard">
+            <span className="icon pr-3">
+              <i className="fas fa-home"></i>
+            </span>
+            Dashboard
+          </a>
+          <a className="navbar-item" href="/profile">
+            <span className="icon pr-3">
+              <i className="fas fa-user"></i>
+            </span>
+            Profile
+          </a>
+          <hr className="navbar-divider"></hr>
+          <a className="navbar-item" href="/logout" onClick={this.props.logout}>
+            Log Out
+          </a>
+        </div>
       </div>
     );
   };

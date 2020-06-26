@@ -1,14 +1,14 @@
 import React from "react";
 import axiosInstance from "../axiosAPI";
 
-interface LoginProps {
-  setState: Function;
-}
+type LoginProps = {
+  onLogin: Function;
+};
 
-interface LoginState {
+type LoginState = {
   username: string;
   password: string;
-}
+};
 
 function isValidField(prop: string, obj: LoginState): prop is keyof LoginState {
   return prop in obj;
@@ -46,7 +46,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
         axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
         localStorage.setItem("token", result.data.access);
         localStorage.setItem("refresh", result.data.refresh);
-        this.props.setState({ loggedIn: true });
+        this.props.onLogin({ loggedIn: true });
         window.location.reload(false); // refresh page on submit
       });
   };

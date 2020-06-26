@@ -64,10 +64,11 @@ class App extends Component<{}, State> {
 
   login = (data: UserState) => {
     this.setState(data);
+    //TODO: manually calling component did mount?
     this.componentDidMount();
   };
 
-  logout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh");
     delete axiosInstance.defaults.headers.common["Authorization"];
@@ -81,6 +82,8 @@ class App extends Component<{}, State> {
         <main className="px-3 py-5">
           <Router>
             <Home path="/" />
+            {/* TODO: This is terrible, actually do it correctly, without the onClick on the log out link. */}
+            <Home path="/logout" />
             <Dashboard
               path="dashboard"
               loggedIn={this.state.loggedIn}
@@ -94,13 +97,13 @@ class App extends Component<{}, State> {
             <Nextup path="next" />
             <LoginPage
               path="login"
-              setState={this.login}
+              onLogin={this.login}
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
             <SignupPage
               path="signup"
-              setState={this.login}
+              onLogin={this.login}
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />

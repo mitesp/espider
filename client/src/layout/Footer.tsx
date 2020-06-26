@@ -8,8 +8,8 @@ const generateLink = (href: string, text: string) => (
 
 const generateLinksList = (linksInfo: string[][]) => (
   <ul>
-    {linksInfo.map(x => (
-      <li>{generateLink(x[0], x[1])}</li>
+    {linksInfo.map((x, i) => (
+      <li key={i}>{generateLink(x[0], x[1])}</li>
     ))}
   </ul>
 );
