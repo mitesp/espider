@@ -21,5 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("token-auth/", obtain_jwt_token),
-    path("django/", include("core.urls")),
+    path("", include("core.urls")),
 ]
