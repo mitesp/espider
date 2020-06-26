@@ -4,4 +4,3 @@ COPY . /client
 WORKDIR /client
 
 RUN yarn install
-RUN yarn build
