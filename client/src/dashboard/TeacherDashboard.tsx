@@ -52,7 +52,7 @@ export default class TeacherDashboard extends Component<Props, State> {
 
   render() {
     return (
-      <div className="container content">
+      <div className="container">
         <h1 className="has-text-centered is-size-2">Teacher Dashboard for {this.props.username}</h1>
         <div className="columns">
           <div className="column is-6 is-offset-3">

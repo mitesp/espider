@@ -19,24 +19,24 @@ type Props = {
 };
 
 type State = {
-  availability_check: boolean;
-  emergency_info_check: boolean;
-  liability_check: boolean;
-  medliab_check: boolean;
-  update_profile_check: boolean;
-  reg_status: string;
+  availabilityCheck: boolean;
+  emergencyInfoCheck: boolean;
+  liabilityCheck: boolean;
+  medliabCheck: boolean;
+  updateProfileCheck: boolean;
+  regStatus: string;
 };
 
 class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      availability_check: false,
-      emergency_info_check: false,
-      liability_check: false,
-      medliab_check: false,
-      update_profile_check: false,
-      reg_status: "",
+      availabilityCheck: false,
+      emergencyInfoCheck: false,
+      liabilityCheck: false,
+      medliabCheck: false,
+      updateProfileCheck: false,
+      regStatus: "",
     };
   }
 
@@ -44,10 +44,6 @@ class StudentRegDashboard extends Component<Props, State> {
     if (this.props.loggedIn) {
       this.getStudentReg();
     }
-  }
-
-  digestStudentReg() {
-    return {};
   }
 
   getStudentReg() {
@@ -61,30 +57,38 @@ class StudentRegDashboard extends Component<Props, State> {
         })
         .then(res => {
           this.setState({
-            availability_check: res.data.availability_check,
-            emergency_info_check: res.data.emergency_info_check,
-            liability_check: res.data.liability_check,
-            medliab_check: res.data.medliab_check,
-            update_profile_check: res.data.update_profile_check,
-            reg_status: res.data.reg_status,
+            availabilityCheck: res.data.availability_check,
+            emergencyInfoCheck: res.data.emergency_info_check,
+            liabilityCheck: res.data.liability_check,
+            medliabCheck: res.data.medliab_check,
+            updateProfileCheck: res.data.update_profile_check,
+            regStatus: res.data.reg_status,
           });
         });
     }
   }
 
-  text(text: String) {
+  text(text: string) {
     return <h3 className="is-size-5">{text}</h3>;
+  }
+
+  link(text1: string, text2: string, link: string) {
+    return (
+      <h3 className="is-size-5">
+        <a href={link}>{text1}</a>: {text2}
+      </h3>
+    );
   }
 
   regStatus() {
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
-        {this.state.update_profile_check && this.text("Update Profile: Done")}
-        {this.state.emergency_info_check && this.text("Emergency Info: Done")}
-        {this.state.medliab_check && this.text("Medical Form: Done")}
-        {this.state.liability_check && this.text("Liability Waiver: Done")}
-        {this.state.availability_check && this.text("Availability: Done")}
+        {this.state.updateProfileCheck && this.link("Update Profile", "Done", "updateprofile")}
+        {this.state.emergencyInfoCheck && this.link("Emergency Info", "Done", "emergencyinfo")}
+        {this.state.medliabCheck && this.text("Medical Form: Done")}
+        {this.state.liabilityCheck && this.text("Liability Waiver: Done")}
+        {this.state.availabilityCheck && this.link("Availability", "Done", "availability")}
       </div>
     );
   }
@@ -93,26 +97,41 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="column is-4 has-background-primary">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
-        {!this.state.update_profile_check && this.text("Update Profile: Not Done")}
-        {!this.state.emergency_info_check && this.text("Emergency Info: Not Done")}
-        {!this.state.medliab_check && this.text("Medical Form: Not Done")}
-        {!this.state.liability_check && this.text("Liability Waiver: Not Done")}
-        {!this.state.availability_check && this.text("Availability: Not Done")}
+        {!this.state.updateProfileCheck && this.link("Update Profile", "Not Done", "updateprofile")}
+        {!this.state.emergencyInfoCheck && this.link("Emergency Info", "Not Done", "emergencyinfo")}
+        {!this.state.medliabCheck && this.link("Medical Form", "Not Done", "medliab")}
+        {!this.state.liabilityCheck && this.link("Liability Waiver", "Not Done", "waiver")}
+        {!this.state.availabilityCheck && this.link("Availability", "Done", "availability")}
       </div>
     );
   }
 
   classPrefs() {
-    return this.text("Add classes here");
+    switch (this.state.regStatus) {
+      case "PREF":
+        return this.text("Change class preferences here");
+      case "FROZ":
+        return this.text("View class preferences here");
+      case "CH":
+        return this.text("Change classes here");
+      case "PRE":
+        return this.text("View classes here");
+      case "DAYOF":
+        return this.text("View dayof link here");
+      case "POST":
+        return this.text("View classes here");
+      default:
+        return this.text("");
+    }
   }
 
   classStatus() {
     const canAddClasses =
-      this.state.update_profile_check &&
-      this.state.emergency_info_check &&
-      this.state.medliab_check &&
-      this.state.liability_check &&
-      this.state.availability_check;
+      this.state.updateProfileCheck &&
+      this.state.emergencyInfoCheck &&
+      this.state.medliabCheck &&
+      this.state.liabilityCheck &&
+      this.state.availabilityCheck;
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Class Status</h2>
