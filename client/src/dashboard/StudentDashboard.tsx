@@ -4,11 +4,13 @@ import axiosInstance from "../axiosAPI";
 type JSONProgram = {
   name: string;
   edition: string;
+  registered?: boolean;
 };
 
 type Program = {
   name: string;
   url: string;
+  registered?: boolean;
 };
 
 type Props = {
@@ -30,8 +32,7 @@ export default class StudentDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getPrograms();
-    this.getPreviousPrograms();
+    this.getStudentDashboard();
   }
 
   generateProgramList(results: Array<JSONProgram>) {
@@ -40,22 +41,21 @@ export default class StudentDashboard extends Component<Props, State> {
     results.forEach(function (r) {
       const name = r.name + " " + r.edition;
       const url = r.name + "/" + r.edition + "/dashboard";
-      let p: Program = { name: name, url: url };
+      const registered = r.registered;
+      let p: Program = { name: name, url: url, registered: registered };
       programs[counter] = p;
       counter++;
     });
     return programs;
   }
 
-  getPrograms() {
-    axiosInstance.get("/studentprograms/").then(res => {
-      this.setState({ programs: this.generateProgramList(res.data.results) });
-    });
-  }
-
-  getPreviousPrograms() {
-    axiosInstance.get("/studentprevprograms/").then(res => {
-      this.setState({ previousPrograms: this.generateProgramList(res.data.results) });
+  getStudentDashboard() {
+    axiosInstance.get("/studentdashboard/").then(res => {
+      console.log(res.data);
+      this.setState({
+        programs: this.generateProgramList(res.data.current),
+        previousPrograms: this.generateProgramList(res.data.previous),
+      });
     });
   }
 
@@ -69,7 +69,7 @@ export default class StudentDashboard extends Component<Props, State> {
             {this.state.programs.map((p, index) => {
               return (
                 <h3 className="is-size-5" key={p.name}>
-                  {p.name}: <a href={p.url}>Register</a>
+                  {p.name}: <a href={p.url}>{!p.registered ? "Register!!" : "Go to Dashboard"}</a>
                 </h3>
               );
             })}

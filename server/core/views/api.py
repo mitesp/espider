@@ -45,18 +45,6 @@ class CreateUser(APIView):
 # Dashboard API calls
 
 
-class StudentProgramViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows programs with open studentreg to be viewed.
-    Permissions: authenticated+student
-    TODO add grade range checks
-    """
-
-    permission_classes = (custom_permissions.StudentPermission,)
-    queryset = Program.objects.all().filter(student_reg_open=True).order_by("edition", "name")
-    serializer_class = ProgramSerializer
-
-
 class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows programs with open teacherreg to be viewed.
@@ -68,28 +56,28 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProgramSerializer
 
 
-class StudentPreviousProgramViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows programs that a student has previously registered for
-        to be viewed.
-    Permissions: authenticated+student
-    """
+@api_view(["GET"])
+@permission_classes([custom_permissions.StudentPermission])
+def getstudentdashboard(request):
+    user = request.user
 
-    permission_classes = (custom_permissions.StudentPermission,)
-    serializer_class = ProgramSerializer
+    studentregs = StudentRegistration.objects.filter(student=user)
 
-    def get_queryset(self):
-        user = self.request.user
-        studentregs = StudentRegistration.objects.filter(student=user).values_list(
-            "program", flat=True
-        )
-        return Program.objects.filter(id__in=studentregs, student_reg_open=False)
+    previous_program_ids = studentregs.filter(reg_status="POST").values_list("program", flat=True)
+    previous_programs = Program.objects.filter(id__in=previous_program_ids, student_reg_open=False)
+    previous_json = [{"name": p.name, "edition": p.edition} for p in previous_programs]
 
+    open_programs = Program.objects.all().filter(student_reg_open=True)
+    # TODO add grade checks
 
-@api_view("GET")
-@permission_classes([custom_permissions.StudentPermission])  # TODO add grade range checks
-def studentdashboard(request):
-    pass
+    current_studentregs = studentregs.exclude(reg_status="POST")
+    current_programs = Program.objects.filter(id__in=current_studentregs, student_reg_open=False)
+    current_json = [
+        {"name": p.name, "edition": p.edition, "registered": False} for p in open_programs
+    ] + [{"name": p.name, "edition": p.edition, "registered": True} for p in current_programs]
+    current_json.sort(key=lambda p: (p["name"] + " " + p["edition"]))  # TODO edit to be better
+
+    return Response({"previous": previous_json, "current": current_json})
 
 
 # TODO implement overall student dashboard call to be like:
@@ -117,5 +105,6 @@ def current_studentreg(request):
     edition = request.GET["edition"]
     prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
     user = request.user
-    studentreg = StudentRegistration.objects.get_or_create(program=prog, student=user)
+    studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
+    # TODO figure out how to change the default regstatus based on the program's status
     return Response(StudentRegSerializer(studentreg).data)

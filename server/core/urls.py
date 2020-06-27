@@ -6,10 +6,6 @@ from rest_framework_simplejwt import views as jwt_views
 from . import views
 
 router = routers.DefaultRouter()
-router.register("studentprograms", views.StudentProgramViewSet)
-router.register(
-    "studentprevprograms", views.StudentPreviousProgramViewSet, basename="StudentPreviousProgram"
-)
 router.register("teacherprograms", views.TeacherProgramViewSet)
 
 app_name = "core"
@@ -66,6 +62,7 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("api/current_user/", views.current_user),
     path("api/current_studentreg/", views.current_studentreg),
+    path("api/studentdashboard/", views.getstudentdashboard),
     path("api/add_user/", views.CreateUser.as_view()),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
