@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
+// TODO(mvadari): similar comments to student dashboard
 type JSONProgram = {
   name: string;
   edition: string;

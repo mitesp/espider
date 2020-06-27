@@ -14,7 +14,8 @@ type State = {
   liabilityCheck: boolean;
   medliabCheck: boolean;
   updateProfileCheck: boolean;
-  regStatus: string;
+  regStatus: string; // TODO(mvadari): we probably want an enum here -- ideally connected to the
+  // backend
 };
 
 class StudentRegDashboard extends Component<Props, State> {
@@ -32,6 +33,8 @@ class StudentRegDashboard extends Component<Props, State> {
 
   componentDidMount() {
     if (this.props.loggedIn) {
+      // TODO(mvadari): do we need this check here? shouldn't this route be
+      // protected by login?
       this.getStudentReg();
     }
   }

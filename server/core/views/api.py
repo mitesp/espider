@@ -52,15 +52,20 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     """
 
     permission_classes = (custom_permissions.TeacherPermission,)
+    # TODO(mvadari): let's move this to a get_active_programs() in a Program Manager
     queryset = Program.objects.all().filter(teacher_reg_open=True).order_by("edition", "name")
     serializer_class = ProgramSerializer
 
 
+# TODO(mvadari): this function name should be snake-typed
 @api_view(["GET"])
 @permission_classes([custom_permissions.StudentPermission])
 def getstudentdashboard(request):
     user = request.user
 
+    # TODO(mvadari): this should all probably get moved into a class method in some model
+    # TODO(mvadari): the status checks should use the choices object you defined (instead of
+    # strings)
     studentregs = StudentRegistration.objects.filter(student=user)
 
     previous_program_ids = studentregs.filter(reg_status="POST").values_list("program", flat=True)

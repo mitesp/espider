@@ -41,6 +41,7 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 
 class StudentRegSerializer(serializers.ModelSerializer):
+    # TODO(mvadari): is there a reason this code is commented out? should is be deleted?
     # student_reg_open = serializers.CharField(source='program.student_reg_open')
 
     class Meta:
