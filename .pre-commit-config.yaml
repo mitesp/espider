@@ -32,6 +32,18 @@ repos:
         files: \.[jt]sx?$
         types: [file]
         args: ["--fix", "--max-warnings=0"]
+        additional_dependencies:
+          - eslint
+          - eslint-config-react-app
+          - babel-eslint
+          - eslint-plugin-import
+          - eslint-plugin-flowtype
+          - eslint-plugin-jsx-a11y
+          - eslint-plugin-react
+          - eslint-plugin-react-hooks
+          - typescript
+          - "@typescript-eslint/parser"
+          - "@typescript-eslint/eslint-plugin"
   - repo: https://github.com/prettier/prettier
     rev: 2.0.5
     hooks:

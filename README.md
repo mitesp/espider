@@ -21,6 +21,9 @@
 
 # Making Changes
 
+Before making changes always `git pull --rebase` to make sure you have the most updated version of
+the code.
+
 Go ahead and edit code with your [favorite](https://code.visualstudio.com/)
 [text](https://www.sublimetext.com/) [editor](https://www.vim.org/) /
 [IDE](https://www.jetbrains.com/pycharm/). All changes should update automatically!
@@ -37,18 +40,18 @@ Some useful commands:
 # Committing & Pushing Changes
 
 ## Setting up Linters
-*Unfortunately, this is a bit messy right now because it involves installing a few libraries.*
-1. Install [`yarn`](https://yarnpkg.com/getting-started/install) and
-   [`pipenv`](https://pipenv.pypa.io/en/latest/install/#installing-pipenv).
-2. Run `pipenv install --dev` (might fail, but should still install what we want).
-3. Inside `client/` run `yarn install`.
-4. Back in the project directory, run `pipenv run pre-commit install` to set up `pre-commit`.
 
-[`pre-commit`](https://pre-commit.com/) uses [git
-hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to make sure our code is
+Linters help us make sure our code is
 [fresh](https://stackoverflow.com/questions/8503559/what-is-linting) and
-[clean](https://web.mit.edu/6.031/www/sp20/classes/04-code-review/). This means whenever you make a
-commit, `pre-commit` will clean up your code first so you only commit clean code.
+[clean](https://web.mit.edu/6.031/www/sp20/classes/04-code-review/). We use a library called
+[`pre-commit`](https://pre-commit.com/), which uses [git
+hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to run our linters any time you
+make a commit.
+
+0. Make sure you're in the project root directory.
+1. Install [`pipenv`](https://pipenv.pypa.io/en/latest/install/#installing-pipenv).
+2. Install `pre-commit` with `pipenv install pre-commit --dev`.
+3. Run `pipenv run pre-commit install` to set up the git hook.
 
 **Before committing and pushing**: it's good practice to run `git status` and `git diff` to make
 sure you know what changes you're adding.
@@ -128,9 +131,10 @@ way](https://www.fullstackpython.com/django-orm.html) to talk to Postgres.
   singular laptop).
 - Docker and Docker Compose help your computer emulate this by setting up **containers** -- little
   (mostly) isolated environments.
-- Running `docker-compose up` for the first time sets up the containers. When stopped, those same
-  containers go to sleep (but they're still there on your computer). The next `docker-compose up`
-  will just wake them up. If you want to rebuild the containers from scratch, run `docker-compose build`.
+- Running `docker-compose up` for the first time sets up the containers (creates containers, puts
+  our code inside them, installs libraries). When stopped, those same containers go to sleep (but
+  they're still there on your computer). The next `docker-compose up` will just wake them up. If you
+  want to rebuild the containers from scratch, run `docker-compose build`.
 - They also figure out all the library installation/networking for us!
 - Hopefully you won't need to touch the config ever (`Dockerfile` and `docker-compose.yaml`) --
   after being set up one they should just work!
