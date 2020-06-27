@@ -62,8 +62,6 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
 def get_student_dashboard(request):
     user = request.user
 
-    # TODO(mvadari): this should all probably get moved into a class method in some model
-
     previous_programs = Program.get_previous_student_programs(user)
     previous_json = [{"name": str(p), "url": p.url} for p in previous_programs]
 
