@@ -52,6 +52,7 @@ class StudentRegistration(models.Model):
     liability_check = models.BooleanField(default=False)
     medliab_check = models.BooleanField(default=False)
     availability_check = models.BooleanField(default=False)
+    payment_check = models.BooleanField(default=False)
 
     class Meta:
         unique_together = (("student", "program"),)

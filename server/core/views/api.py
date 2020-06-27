@@ -86,6 +86,21 @@ class StudentPreviousProgramViewSet(viewsets.ReadOnlyModelViewSet):
         return Program.objects.filter(id__in=studentregs, student_reg_open=False)
 
 
+@api_view("GET")
+@permission_classes([custom_permissions.StudentPermission])  # TODO add grade range checks
+def studentdashboard(request):
+    pass
+
+
+# TODO implement overall student dashboard call to be like:
+# {
+#   current: [
+#     {name: HSSP, edition: 1957, registered: True},
+#     {name: HSSP, edition: 1958, registered: False}
+#   ],
+#   previous: []
+# }
+
 # Reg Dashboard API calls
 
 
@@ -94,13 +109,13 @@ class StudentPreviousProgramViewSet(viewsets.ReadOnlyModelViewSet):
 def current_studentreg(request):
     """
     Determine the current studentreg object by the user and the program/edition
-    Permissions: authenticated+student, student is in the correct grade range
+    Permissions: authenticated+student, student is in the correct grade range,
+        program open for registration, program not in Pre-Program/after
     """
 
     program = request.GET["program"]
     edition = request.GET["edition"]
     prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
     user = request.user
-    # print(request.data)
     studentreg = StudentRegistration.objects.get_or_create(program=prog, student=user)
     return Response(StudentRegSerializer(studentreg).data)
