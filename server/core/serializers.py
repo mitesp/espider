@@ -1,4 +1,4 @@
-from core.models import Class, ESPUser, Program, StudentRegistration
+from core.models import ESPUser, Program, StudentRegistration
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -32,12 +32,6 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         model = ESPUser
         fields = ("tokens", "username", "password")
         extra_kwargs = {"password": {"write_only": True}}
-
-
-class ClassSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Class
-        fields = ["title", "description", "num_students", "capacity"]
 
 
 class ProgramSerializer(serializers.ModelSerializer):

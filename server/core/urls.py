@@ -6,7 +6,6 @@ from rest_framework_simplejwt import views as jwt_views
 from . import views
 
 router = routers.DefaultRouter()
-router.register("classes", views.ClassViewSet)
 router.register("studentprograms", views.StudentProgramViewSet)
 router.register(
     "studentprevprograms", views.StudentPreviousProgramViewSet, basename="StudentPreviousProgram"

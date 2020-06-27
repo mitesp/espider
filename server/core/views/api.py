@@ -1,7 +1,6 @@
 import core.permissions as custom_permissions
-from core.models import Class, Program, StudentRegistration
+from core.models import Program, StudentRegistration
 from core.serializers import (
-    ClassSerializer,
     ProgramSerializer,
     StudentRegSerializer,
     UserSerializer,
@@ -12,11 +11,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+# Login API calls
+
 
 @api_view(["GET"])
 def current_user(request):
     """
     Determine the current user by their token, and return their data
+    Permissions: authenticated (automatic)
     """
 
     serializer = UserSerializer(request.user)
@@ -26,6 +28,7 @@ def current_user(request):
 class CreateUser(APIView):
     """
     Create a new user.
+    Permissions: any (don't have permissions before user is created)
     """
 
     permission_classes = (permissions.AllowAny,)
@@ -39,34 +42,39 @@ class CreateUser(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ClassViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows classes to be viewed or edited.
-    """
-
-    queryset = Class.objects.all()
-    serializer_class = ClassSerializer
+# Dashboard API calls
 
 
 class StudentProgramViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    API endpoint that allows programs to be viewed or edited.
+    API endpoint that allows programs with open studentreg to be viewed.
+    Permissions: authenticated+student
+    TODO add grade range checks
     """
 
+    permission_classes = (custom_permissions.StudentPermission,)
     queryset = Program.objects.all().filter(student_reg_open=True).order_by("edition", "name")
     serializer_class = ProgramSerializer
 
 
 class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    API endpoint that allows programs to be viewed or edited.
+    API endpoint that allows programs with open teacherreg to be viewed.
+    Permissions: authenticated+teacher
     """
 
+    permission_classes = (custom_permissions.TeacherPermission,)
     queryset = Program.objects.all().filter(teacher_reg_open=True).order_by("edition", "name")
     serializer_class = ProgramSerializer
 
 
 class StudentPreviousProgramViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint that allows programs that a student has previously registered for
+        to be viewed.
+    Permissions: authenticated+student
+    """
+
     permission_classes = (custom_permissions.StudentPermission,)
     serializer_class = ProgramSerializer
 
@@ -78,11 +86,15 @@ class StudentPreviousProgramViewSet(viewsets.ReadOnlyModelViewSet):
         return Program.objects.filter(id__in=studentregs, student_reg_open=False)
 
 
+# Reg Dashboard API calls
+
+
 @api_view(["GET"])
 @permission_classes([custom_permissions.StudentPermission])
 def current_studentreg(request):
     """
-    Determine the current user by their token, and return their data
+    Determine the current studentreg object by the user and the program/edition
+    Permissions: authenticated+student, student is in the correct grade range
     """
 
     program = request.GET["program"]
@@ -90,5 +102,5 @@ def current_studentreg(request):
     prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
     user = request.user
     # print(request.data)
-    studentreg = StudentRegistration.objects.get(program=prog, student=user)
+    studentreg = StudentRegistration.objects.get_or_create(program=prog, student=user)
     return Response(StudentRegSerializer(studentreg).data)
