@@ -71,11 +71,14 @@ def get_student_dashboard(request):
     previous_programs = Program.objects.filter(id__in=previous_program_ids, student_reg_open=False)
     previous_json = [{"name": p.name, "edition": p.edition} for p in previous_programs]
 
-    open_programs = Program.objects.all().filter(student_reg_open=True)
+    current_studentregs = studentregs.exclude(reg_status="POST").values_list("program", flat=True)
+    current_programs = Program.objects.filter(id__in=current_studentregs)
+
+    open_programs = (
+        Program.objects.all().filter(student_reg_open=True).exclude(id__in=current_programs)
+    )
     # TODO add grade checks
 
-    current_studentregs = studentregs.exclude(reg_status="POST")
-    current_programs = Program.objects.filter(id__in=current_studentregs, student_reg_open=False)
     current_json = [
         {"name": p.name, "edition": p.edition, "registered": False} for p in open_programs
     ] + [{"name": p.name, "edition": p.edition, "registered": True} for p in current_programs]
