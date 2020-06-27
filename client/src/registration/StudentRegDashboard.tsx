@@ -1,16 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
-type JSONProgram = {
-  name: string;
-  edition: string;
-};
-
-type Program = {
-  name: string;
-  url: string;
-};
-
 type Props = {
   loggedIn: boolean;
   username: string;
