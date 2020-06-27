@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
+// TODO(mvadari): is there a reason registered is optional? is there a better way to organize these
+// two program objects? could we just make a get_url() function to process a program?
 type JSONProgram = {
   name: string;
   edition: string;
@@ -37,7 +39,7 @@ export default class StudentDashboard extends Component<Props, State> {
 
   generateProgramList(results: Array<JSONProgram>) {
     const programs = Array<Program>(results.length);
-    let counter = 0;
+    let counter = 0; // TODO(mvadari): I think a for loop is more readable than a forEach?
     results.forEach(function (r) {
       const name = r.name + " " + r.edition;
       const url = r.name + "/" + r.edition + "/dashboard";
@@ -51,7 +53,7 @@ export default class StudentDashboard extends Component<Props, State> {
 
   getStudentDashboard() {
     axiosInstance.get("/studentdashboard/").then(res => {
-      console.log(res.data);
+      console.log(res.data); // TODO(mvadari): remove?
       this.setState({
         programs: this.generateProgramList(res.data.current),
         previousPrograms: this.generateProgramList(res.data.previous),
@@ -66,6 +68,8 @@ export default class StudentDashboard extends Component<Props, State> {
         <div className="columns">
           <div className="column is-6 is-offset-3">
             <h2 className="has-text-centered is-size-3">Active Programs</h2>
+            {/* TODO(mvadari): let's use a more descriptive name for p. also I think index can be
+            omitted */}
             {this.state.programs.map((p, index) => {
               return (
                 <h3 className="is-size-5" key={p.name}>

@@ -14,7 +14,8 @@ type State = {
   liabilityCheck: boolean;
   medliabCheck: boolean;
   updateProfileCheck: boolean;
-  regStatus: string;
+  regStatus: string; // TODO(mvadari): we probably want an enum here -- ideally connected to the
+  // backend
 };
 
 class StudentRegDashboard extends Component<Props, State> {
@@ -32,6 +33,8 @@ class StudentRegDashboard extends Component<Props, State> {
 
   componentDidMount() {
     if (this.props.loggedIn) {
+      // TODO(mvadari): do we need this check here? shouldn't this route be
+      // protected by login?
       this.getStudentReg();
     }
   }
@@ -58,6 +61,7 @@ class StudentRegDashboard extends Component<Props, State> {
     }
   }
 
+  // TODO(mvadari): maybe these should be helper functions? not instance methods
   text(text: string) {
     return <h3 className="is-size-5">{text}</h3>;
   }
@@ -70,6 +74,7 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
+  // TODO (mvadari): again, hoping there's a better way to do this than short-circuiting?
   regStatus() {
     return (
       <div className="column is-4">
@@ -96,6 +101,7 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
+  // TODO(mvadari): again it'd be nice if we can bind this enum to the backend
   classPrefs() {
     switch (this.state.regStatus) {
       case "PREF":
