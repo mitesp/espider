@@ -1,5 +1,5 @@
 import core.permissions as custom_permissions
-from core.models import Program, StudentRegistration
+from core.models import Program, StudentRegistration, TeacherRegistration
 from core.serializers import (
     ProgramSerializer,
     StudentRegSerializer,
@@ -79,8 +79,7 @@ def get_student_dashboard(request):
 
     return Response({"previous": previous_json, "current": current_json})
 
-
-# Reg Dashboard API calls
+# Registration API calls
 
 
 @api_view(["GET"])
@@ -99,3 +98,129 @@ def current_studentreg(request):
     studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
     # TODO figure out how to change the default regstatus based on the program's status
     return Response(StudentRegSerializer(studentreg).data)
+
+
+class Profile(APIView):
+    """
+    Create a new user.
+    Permissions: any (don't have permissions before user is created)
+    """
+
+    permission_classes = (custom_permissions.StudentOrTeacherPermission,)
+
+    def get(self, request, format=None):
+        user = request.user
+        profile = user.profile
+        data = {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "phone_number": profile.phone_number,
+            "pronouns": profile.pronouns,
+            "city": profile.city,
+            "state": profile.state,
+            "country": profile.country,
+        }
+        if user.is_student:
+            profile = user.student_profile
+            data["date_of_birth"] = profile.date_of_birth
+            data["grad_year"] = profile.grad_year
+            data["school"] = profile.school
+
+        if user.is_teacher:
+            profile = user.teacher_profile
+            data["affiliation"] = profile.affiliation
+
+        return Response(data)
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        user.first_name = data["first_name"]
+        user.last_name = data["last_name"]
+        user.email = data["email"]
+        user.save()
+
+        if user.is_student:
+            self.update_student(user, data)
+
+        if user.is_teacher:
+            self.update_teacher(user, data)
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})
+
+    def update_student(self, user, data):
+        profile = user.student_profile
+        profile.phone_number = data["phone_number"]
+        profile.pronouns = data["pronouns"]
+        profile.city = data["city"]
+        profile.state = data["state"]
+        profile.country = data["country"]
+        profile.date_of_birth = data["date_of_birth"]
+        profile.grad_year = data["grad_year"]
+        profile.school = data["school"]
+        profile.save()
+
+        if "update_profile" in data and data["update_profile"]:
+            assert "program" in data
+            assert "edition" in data
+
+            program = Program.objects.get(name=data["program"], edition=data["edition"])
+            studentreg = StudentRegistration.objects.get(student=user, program=program)
+            studentreg.update_profile_check = True
+            studentreg.save()
+
+    def update_teacher(self, user, data):
+        profile = user.teacher_profile
+        profile.phone_number = data["phone_number"]
+        profile.pronouns = data["pronouns"]
+        profile.city = data["city"]
+        profile.state = data["state"]
+        profile.affiliation = data["affiliation"]
+        profile.save()
+
+        if "update_profile" in data and data["update_profile"]:
+            assert "program" in data
+            assert "edition" in data
+            program = Program.objects.get(name=data["program"], edition=data["edition"])
+            teacherreg = TeacherRegistration.objects.get(teacher=user, program=program)
+            teacherreg.update_profile_check = True
+            teacherreg.save()
+
+
+class EmergencyInfo(APIView):
+    """
+    Create a new user.
+    Permissions: any (don't have permissions before user is created)
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    def get(self, request, format=None):
+        # user = request.user
+        # params = request.GET
+
+        # program = Program.objects.get(name=params["program"], edition=params["edition"])
+        # studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # return current emergency info
+        # maybe populate this with parent info (or have that be an option)
+
+        return Response({})
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # submit emergency info
+
+        studentreg.emergency_info_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})

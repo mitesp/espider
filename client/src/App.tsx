@@ -15,6 +15,8 @@ import Home from "./info/Home";
 import Dashboard from "./dashboard/Dashboard";
 
 import RegDashboard from "./registration/RegDashboard";
+import UpdateProfileForm from "./registration/UpdateProfileForm";
+import EmergencyInfoForm from "./registration/EmergencyInfoForm";
 
 import Program from "./info/Program";
 import Teach from "./info/Teach";
@@ -109,12 +111,22 @@ class App extends Component<{}, State> {
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
+
             <RegDashboard
               path="/:program/:edition/dashboard"
               loggedIn={this.state.loggedIn}
               username={this.state.username}
               isStudent={this.state.isStudent}
               isTeacher={this.state.isTeacher}
+            />
+            <UpdateProfileForm
+              path="/:program/:edition/updateprofile"
+              isStudent={this.state.isStudent}
+              isTeacher={this.state.isTeacher}
+            />
+            <EmergencyInfoForm
+              path="/:program/:edition/emergencyinfo"
+              isStudent={this.state.isStudent}
             />
             {programList.map(program => (
               <Program key={program} path={program} program={program} />
