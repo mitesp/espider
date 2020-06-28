@@ -39,15 +39,14 @@ export default class StudentDashboard extends Component<Props, State> {
 
   generateProgramList(results: Array<JSONProgram>) {
     const programs = Array<Program>(results.length);
-    let counter = 0; // TODO(mvadari): I think a for loop is more readable than a forEach?
-    results.forEach(function (r) {
+    for (let i = 0; i < results.length; i++) {
+      const r = results[i];
       const name = r.name + " " + r.edition;
       const url = r.name + "/" + r.edition + "/dashboard";
       const registered = r.registered;
       let p: Program = { name: name, url: url, registered: registered };
-      programs[counter] = p;
-      counter++;
-    });
+      programs[i] = p;
+    }
     return programs;
   }
 

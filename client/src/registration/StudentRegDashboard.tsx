@@ -18,6 +18,20 @@ type State = {
   // backend
 };
 
+// helper functions
+
+function text(text: string) {
+  return <h3 className="is-size-5">{text}</h3>;
+}
+
+function link(text1: string, text2: string, link: string) {
+  return (
+    <h3 className="is-size-5">
+      <a href={link}>{text1}</a>: {text2}
+    </h3>
+  );
+}
+
 class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -32,11 +46,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.loggedIn) {
-      // TODO(mvadari): do we need this check here? shouldn't this route be
-      // protected by login?
-      this.getStudentReg();
-    }
+    this.getStudentReg();
   }
 
   getStudentReg() {

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
-// TODO(mvadari): similar comments to student dashboard
 type JSONProgram = {
   name: string;
   edition: string;
@@ -34,14 +33,13 @@ export default class TeacherDashboard extends Component<Props, State> {
 
   generateProgramList(results: Array<JSONProgram>) {
     const programs = Array<Program>(results.length);
-    let counter = 0;
-    results.forEach(function (r) {
+    for (let i = 0; i < results.length; i++) {
+      const r = results[i];
       const name = r.name + " " + r.edition;
-      const url = r.name + "_" + r.edition;
+      const url = r.name + "/" + r.edition + "/dashboard";
       let p: Program = { name: name, url: url };
-      programs[counter] = p;
-      counter++;
-    });
+      programs[i] = p;
+    }
     return programs;
   }
 
