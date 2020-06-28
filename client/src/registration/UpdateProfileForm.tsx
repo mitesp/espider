@@ -24,6 +24,14 @@ type State = {
   affiliation: string;
 };
 
+const PronounOptions: string[] = [
+  "He/Him/His",
+  "She/Her/Hers",
+  "They/Them/Theirs",
+  "Other",
+  "Prefer Not to Say",
+];
+
 function isValidField(prop: string, obj: State): prop is keyof State {
   return prop in obj;
 }
@@ -70,7 +78,7 @@ class UpdateProfileForm extends React.Component<Props, State> {
     });
   }
 
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+  handleChange = (e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLSelectElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value as string;
     this.setState((prevstate: State) => {
@@ -144,6 +152,48 @@ class UpdateProfileForm extends React.Component<Props, State> {
     );
   }
 
+  labeledSelect(
+    label: string,
+    name: string,
+    value: string,
+    options: string[],
+    icon?: string,
+    help?: string
+  ) {
+    let className = "control";
+    if (icon) {
+      className += " has-icons-left";
+    }
+    return (
+      <div className="field">
+        <label className="label" htmlFor={name}>
+          {label}
+        </label>
+        <div className={className}>
+          <div className="select is-normal is-expanded">
+            <select
+              id={name}
+              name={name}
+              value={value}
+              placeholder={label}
+              onChange={this.handleChange}
+            >
+              {PronounOptions.map(pronoun => {
+                return <option value={pronoun}>{pronoun}</option>;
+              })}
+            </select>
+          </div>
+          {icon && (
+            <span className="icon is-left">
+              <i className={"fas fa-" + icon}></i>
+            </span>
+          )}
+          {help && <p className="help"> {help} </p>}
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="container">
@@ -183,12 +233,13 @@ class UpdateProfileForm extends React.Component<Props, State> {
                 </div>
               </div>
 
-              {this.labeledInput(
+              {this.labeledSelect(
                 "Pronouns",
                 "pronouns",
                 this.state.pronouns,
-                "text",
-                "transgender-alt"
+                PronounOptions,
+                "transgender-alt",
+                "We require this information for the purposes of helping our staff use the most respectful language when addressing you."
               )}
 
               {this.labeledInput("E-mail", "email", this.state.email, "email", "envelope")}
