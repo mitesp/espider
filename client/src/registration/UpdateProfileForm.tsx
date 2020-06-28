@@ -116,7 +116,15 @@ class UpdateProfileForm extends React.Component<Props, State> {
       });
   };
 
-  customInput(label: string, name: string, value: string, type: string, icon?: string) {
+  customInput(
+    label: string,
+    name: string,
+    value: string,
+    type: string,
+    icon?: string,
+    help?: string,
+    disabled?: boolean
+  ) {
     let className = "control";
     if (icon) {
       className += " has-icons-left";
@@ -131,6 +139,7 @@ class UpdateProfileForm extends React.Component<Props, State> {
           placeholder={label}
           value={value}
           onChange={this.handleChange}
+          disabled={disabled === true}
         />
         {icon && (
           <span className="icon is-small is-left">
@@ -141,13 +150,21 @@ class UpdateProfileForm extends React.Component<Props, State> {
     );
   }
 
-  labeledInput(label: string, name: string, value: string, type: string, icon?: string) {
+  labeledInput(
+    label: string,
+    name: string,
+    value: string,
+    type: string,
+    icon?: string,
+    help?: string,
+    disabled?: boolean
+  ) {
     return (
       <div className="field">
         <label className="label" htmlFor={name}>
           {label}
         </label>
-        {this.customInput(label, name, value, type, icon)}
+        {this.customInput(label, name, value, type, icon, help, disabled)}
       </div>
     );
   }
@@ -239,7 +256,7 @@ class UpdateProfileForm extends React.Component<Props, State> {
                 this.state.pronouns,
                 PronounOptions,
                 "transgender-alt",
-                "We require this information for the purposes of helping our staff use the most respectful language when addressing you."
+                "We ask for this information for the purposes of helping our staff use the most respectful language when addressing you."
               )}
 
               {this.labeledInput("E-mail", "email", this.state.email, "email", "envelope")}
@@ -260,16 +277,20 @@ class UpdateProfileForm extends React.Component<Props, State> {
                   "Date of Birth",
                   "dateOfBirth",
                   this.state.dateOfBirth,
-                  "text",
-                  "birthday-cake"
+                  "date",
+                  "birthday-cake",
+                  undefined,
+                  true
                 )}
               {this.props.isStudent &&
                 this.labeledInput(
                   "High School Graduation Year",
                   "gradYear",
                   this.state.gradYear,
-                  "text",
-                  "graduation-cap"
+                  "number",
+                  "graduation-cap",
+                  undefined,
+                  true
                 )}
               {this.props.isStudent &&
                 this.labeledInput(
