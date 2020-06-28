@@ -37,10 +37,10 @@ export default class StudentDashboard extends Component<Props, State> {
     this.getStudentDashboard();
   }
 
-  generateProgramList(results: Array<JSONProgram>) {
-    const programs = Array<Program>(results.length);
-    for (let i = 0; i < results.length; i++) {
-      const r = results[i];
+  generateProgramList(jsonPrograms: Array<JSONProgram>) {
+    const programs = Array<Program>(jsonPrograms.length);
+    for (let i = 0; i < jsonPrograms.length; i++) {
+      const r = jsonPrograms[i];
       const name = r.name + " " + r.edition;
       const url = r.name + "/" + r.edition + "/dashboard";
       const registered = r.registered;
