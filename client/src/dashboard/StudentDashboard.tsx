@@ -39,21 +39,19 @@ export default class StudentDashboard extends Component<Props, State> {
 
   generateProgramList(results: Array<JSONProgram>) {
     const programs = Array<Program>(results.length);
-    let counter = 0; // TODO(mvadari): I think a for loop is more readable than a forEach?
-    results.forEach(function (r) {
+    for (let i = 0; i < results.length; i++) {
+      const r = results[i];
       const name = r.name + " " + r.edition;
       const url = r.name + "/" + r.edition + "/dashboard";
       const registered = r.registered;
       let p: Program = { name: name, url: url, registered: registered };
-      programs[counter] = p;
-      counter++;
-    });
+      programs[i] = p;
+    }
     return programs;
   }
 
   getStudentDashboard() {
     axiosInstance.get("/studentdashboard/").then(res => {
-      console.log(res.data); // TODO(mvadari): remove?
       this.setState({
         programs: this.generateProgramList(res.data.current),
         previousPrograms: this.generateProgramList(res.data.previous),
@@ -68,21 +66,20 @@ export default class StudentDashboard extends Component<Props, State> {
         <div className="columns">
           <div className="column is-6 is-offset-3">
             <h2 className="has-text-centered is-size-3">Active Programs</h2>
-            {/* TODO(mvadari): let's use a more descriptive name for p. also I think index can be
-            omitted */}
-            {this.state.programs.map((p, index) => {
+            {this.state.programs.map(program => {
               return (
-                <h3 className="is-size-5" key={p.name}>
-                  {p.name}: <a href={p.url}>{!p.registered ? "Register!!" : "Go to Dashboard"}</a>
+                <h3 className="is-size-5" key={program.name}>
+                  {program.name}:{" "}
+                  <a href={program.url}>{!program.registered ? "Register!!" : "Go to Dashboard"}</a>
                 </h3>
               );
             })}
             <br />
             <h2 className="has-text-centered is-size-3">Previous Programs</h2>
-            {this.state.previousPrograms.map((p, index) => {
+            {this.state.previousPrograms.map(program => {
               return (
-                <h3 className="is-size-5" key={p.name}>
-                  {p.name}: <a href={p.url}>View</a>
+                <h3 className="is-size-5" key={program.name}>
+                  {program.name}: <a href={program.url}>View</a>
                 </h3>
               );
             })}

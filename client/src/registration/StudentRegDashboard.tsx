@@ -18,6 +18,20 @@ type State = {
   // backend
 };
 
+// helper functions
+
+function text(text: string) {
+  return <h3 className="is-size-5">{text}</h3>;
+}
+
+function link(text1: string, text2: string, link: string) {
+  return (
+    <h3 className="is-size-5">
+      <a href={link}>{text1}</a>: {text2}
+    </h3>
+  );
+}
+
 class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -32,11 +46,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.loggedIn) {
-      // TODO(mvadari): do we need this check here? shouldn't this route be
-      // protected by login?
-      this.getStudentReg();
-    }
+    this.getStudentReg();
   }
 
   getStudentReg() {
@@ -61,29 +71,16 @@ class StudentRegDashboard extends Component<Props, State> {
     }
   }
 
-  // TODO(mvadari): maybe these should be helper functions? not instance methods
-  text(text: string) {
-    return <h3 className="is-size-5">{text}</h3>;
-  }
-
-  link(text1: string, text2: string, link: string) {
-    return (
-      <h3 className="is-size-5">
-        <a href={link}>{text1}</a>: {text2}
-      </h3>
-    );
-  }
-
   // TODO (mvadari): again, hoping there's a better way to do this than short-circuiting?
   regStatus() {
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
-        {this.state.updateProfileCheck && this.link("Update Profile", "Done", "updateprofile")}
-        {this.state.emergencyInfoCheck && this.link("Emergency Info", "Done", "emergencyinfo")}
-        {this.state.medliabCheck && this.text("Medical Form: Done")}
-        {this.state.liabilityCheck && this.text("Liability Waiver: Done")}
-        {this.state.availabilityCheck && this.link("Availability", "Done", "availability")}
+        {this.state.updateProfileCheck && link("Update Profile", "Done", "updateprofile")}
+        {this.state.emergencyInfoCheck && link("Emergency Info", "Done", "emergencyinfo")}
+        {this.state.medliabCheck && text("Medical Form: Done")}
+        {this.state.liabilityCheck && text("Liability Waiver: Done")}
+        {this.state.availabilityCheck && link("Availability", "Done", "availability")}
       </div>
     );
   }
@@ -92,11 +89,11 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="column is-4 has-background-primary">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
-        {!this.state.updateProfileCheck && this.link("Update Profile", "Not Done", "updateprofile")}
-        {!this.state.emergencyInfoCheck && this.link("Emergency Info", "Not Done", "emergencyinfo")}
-        {!this.state.medliabCheck && this.link("Medical Form", "Not Done", "medliab")}
-        {!this.state.liabilityCheck && this.link("Liability Waiver", "Not Done", "waiver")}
-        {!this.state.availabilityCheck && this.link("Availability", "Done", "availability")}
+        {!this.state.updateProfileCheck && link("Update Profile", "Not Done", "updateprofile")}
+        {!this.state.emergencyInfoCheck && link("Emergency Info", "Not Done", "emergencyinfo")}
+        {!this.state.medliabCheck && link("Medical Form", "Not Done", "medliab")}
+        {!this.state.liabilityCheck && link("Liability Waiver", "Not Done", "waiver")}
+        {!this.state.availabilityCheck && link("Availability", "Done", "availability")}
       </div>
     );
   }
@@ -105,19 +102,19 @@ class StudentRegDashboard extends Component<Props, State> {
   classPrefs() {
     switch (this.state.regStatus) {
       case "PREF":
-        return this.text("Change class preferences here");
+        return text("Change class preferences here");
       case "FROZ":
-        return this.text("View class preferences here");
+        return text("View class preferences here");
       case "CH":
-        return this.text("Change classes here");
+        return text("Change classes here");
       case "PRE":
-        return this.text("View classes here");
+        return text("View classes here");
       case "DAYOF":
-        return this.text("View dayof link here");
+        return text("View dayof link here");
       case "POST":
-        return this.text("View classes here");
+        return text("View classes here");
       default:
-        return this.text("");
+        return text("");
     }
   }
 

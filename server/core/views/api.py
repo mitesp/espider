@@ -57,10 +57,9 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProgramSerializer
 
 
-# TODO(mvadari): this function name should be snake-typed
 @api_view(["GET"])
 @permission_classes([custom_permissions.StudentPermission])
-def getstudentdashboard(request):
+def get_student_dashboard(request):
     user = request.user
 
     # TODO(mvadari): this should all probably get moved into a class method in some model
@@ -84,15 +83,6 @@ def getstudentdashboard(request):
 
     return Response({"previous": previous_json, "current": current_json})
 
-
-# TODO implement overall student dashboard call to be like:
-# {
-#   current: [
-#     {name: HSSP, edition: 1957, registered: True},
-#     {name: HSSP, edition: 1958, registered: False}
-#   ],
-#   previous: []
-# }
 
 # Reg Dashboard API calls
 

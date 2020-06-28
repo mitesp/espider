@@ -31,14 +31,13 @@ class Class(models.Model):
 
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
-    # TODO(mvadari): let's make this strings more explicit rather than abbreviated
     class RegStatusOptions(models.TextChoices):
         CLASS_PREFERENCES = ("PREF",)
         FROZEN_PREFERENCES = ("FROZ",)
         CHANGE_CLASSES = ("CH",)
         PRE_PROGRAM = ("PRE",)
         DAY_OF = ("DAY",)
-        POST_PROGRAM = "POST"  # TODO(mvadari): is there a reason this is different than others?
+        POST_PROGRAM = ("POST",)
 
     student = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
@@ -63,26 +62,28 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
-    # TODO(mvadari): if this isn't an @property, let's name it get_classes()
-    def classes(self):
+    def get_classes(self):
         ids = StudentClassRegistration.objects.filter(student=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
 
 class StudentClassRegistration(models.Model):
-    # TODO(mvadari): if we're linking to the student registration object, let's name it something
-    # else. I think the self.student.student in the __str__ is a bit confusing.
-    student = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
+    studentreg = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
     clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
 
-    # TODO(mvadari): I think we'll be fine without this comment below (or we should also have it in
-    # other places.
-    # ensures a student can't register for the same class twice
     class Meta:
-        unique_together = (("student", "clazz"),)
+        unique_together = (("studentreg", "clazz"),)
+
+    @property
+    def student(self):
+        return self.studentreg.student
+
+    @property
+    def program(self):
+        return self.studentreg.program
 
     def __str__(self):
-        return str(self.student.student.username) + "/" + str(self.clazz)
+        return str(self.student.username) + "/" + str(self.clazz)
 
 
 class TeacherRegistration(models.Model):
@@ -98,21 +99,25 @@ class TeacherRegistration(models.Model):
     def __str__(self):
         return str(self.teacher.username) + "/" + str(self.program)
 
-    # TODO(mvadari): same comment as for StudentRegistration
-    def classes(self):
+    def get_classes(self):
         ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
 
 class TeacherClassRegistration(models.Model):
-    # TODO(mvadari): same comment as above
-    teacher = models.ForeignKey(TeacherRegistration, on_delete=models.CASCADE)
+    teacherreg = models.ForeignKey(TeacherRegistration, on_delete=models.CASCADE)
     clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
 
-    # TODO(mvadari): same comment as above
-    # ensures a teacher can't register the same class twice
     class Meta:
-        unique_together = (("teacher", "clazz"),)
+        unique_together = (("teacherreg", "clazz"),)
+
+    @property
+    def student(self):
+        return self.teacherreg.student
+
+    @property
+    def program(self):
+        return self.teacherreg.program
 
     def __str__(self):
-        return str(self.teacher.teacher.username) + "/" + str(self.clazz)
+        return str(self.teacher.username) + "/" + str(self.clazz)
