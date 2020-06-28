@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { RegStatusOptions } from "./types";
 
 type Props = {
   loggedIn: boolean;
@@ -20,14 +21,22 @@ type State = {
 
 // helper functions
 
-function text(text: string) {
+function textInSection(text: string) {
   return <h3 className="is-size-5">{text}</h3>;
 }
 
-function link(text1: string, text2: string, link: string) {
+function taskNoLink(taskName: string, taskCompleted: boolean) {
   return (
     <h3 className="is-size-5">
-      <a href={link}>{text1}</a>: {text2}
+      {taskName}: {taskCompleted ? "Done" : "Not Done"}
+    </h3>
+  );
+}
+
+function taskWithLink(taskName: string, taskCompleted: boolean, link: string) {
+  return (
+    <h3 className="is-size-5">
+      <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
     </h3>
   );
 }
@@ -71,37 +80,17 @@ class StudentRegDashboard extends Component<Props, State> {
     }
   }
 
-  textInSection(text: string) {
-    return <h3 className="is-size-5">{text}</h3>;
-  }
-
-  taskNoLink(taskName: string, taskCompleted: boolean) {
-    return (
-      <h3 className="is-size-5">
-        {taskName}: {taskCompleted ? "Done" : "Not Done"}
-      </h3>
-    );
-  }
-
-  taskWithLink(taskName: string, taskCompleted: boolean, link: string) {
-    return (
-      <h3 className="is-size-5">
-        <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
-      </h3>
-    );
-  }
-
   renderRegStatus() {
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
         {this.state.updateProfileCheck &&
-          this.taskWithLink("Update Profile", true, "updateprofile")}
+          taskWithLink("Update Profile", true, "updateprofile")}
         {this.state.emergencyInfoCheck &&
-          this.taskWithLink("Emergency Info", true, "emergencyinfo")}
-        {this.state.medliabCheck && this.taskNoLink("Medical Form", true)}
-        {this.state.liabilityCheck && this.taskNoLink("Liability Waiver", true)}
-        {this.state.availabilityCheck && this.taskWithLink("Availability", true, "availability")}
+          taskWithLink("Emergency Info", true, "emergencyinfo")}
+        {this.state.medliabCheck && taskNoLink("Medical Form", true)}
+        {this.state.liabilityCheck && taskNoLink("Liability Waiver", true)}
+        {this.state.availabilityCheck && taskWithLink("Availability", true, "availability")}
       </div>
     );
   }
@@ -111,32 +100,32 @@ class StudentRegDashboard extends Component<Props, State> {
       <div className="column is-4 has-background-success-light">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
         {!this.state.updateProfileCheck &&
-          this.taskWithLink("Update Profile", false, "updateprofile")}
+          taskWithLink("Update Profile", false, "updateprofile")}
         {!this.state.emergencyInfoCheck &&
-          this.taskWithLink("Emergency Info", false, "emergencyinfo")}
-        {!this.state.medliabCheck && this.taskWithLink("Medical Form", false, "medliab")}
-        {!this.state.liabilityCheck && this.taskWithLink("Liability Waiver", false, "waiver")}
-        {!this.state.availabilityCheck && this.taskWithLink("Availability", false, "availability")}
+          taskWithLink("Emergency Info", false, "emergencyinfo")}
+        {!this.state.medliabCheck && taskWithLink("Medical Form", false, "medliab")}
+        {!this.state.liabilityCheck && taskWithLink("Liability Waiver", false, "waiver")}
+        {!this.state.availabilityCheck && taskWithLink("Availability", false, "availability")}
       </div>
     );
   }
 
   renderClassPrefs() {
     switch (this.state.regStatus) {
-      case "PREF":
-        return this.textInSection("Change class preferences here");
-      case "FROZ":
-        return this.textInSection("View class preferences here");
-      case "CH":
-        return this.textInSection("Change classes here");
-      case "PRE":
-        return this.textInSection("View classes here");
-      case "DAYOF":
-        return this.textInSection("View dayof link here");
-      case "POST":
-        return this.textInSection("View classes here");
+      case RegStatusOptions.ClassPreferences:
+        return textInSection("Change class preferences here");
+      case RegStatusOptions.FrozenPreferences:
+        return textInSection("View class preferences here");
+      case RegStatusOptions.ChangeClasses:
+        return textInSection("Change classes here");
+      case RegStatusOptions.PreProgram:
+        return textInSection("View classes here");
+      case RegStatusOptions.DayOf:
+        return textInSection("View dayof link here");
+      case RegStatusOptions.PostProgram:
+        return textInSection("View classes here");
       default:
-        return this.textInSection("");
+        return textInSection("Something broke :("); // error message
     }
   }
 
