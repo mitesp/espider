@@ -158,8 +158,6 @@ class Profile(APIView):
         profile.city = data["city"]
         profile.state = data["state"]
         profile.country = data["country"]
-        profile.date_of_birth = data["date_of_birth"]
-        profile.grad_year = data["grad_year"]
         profile.school = data["school"]
         profile.save()
 

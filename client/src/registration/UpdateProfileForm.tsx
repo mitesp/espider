@@ -102,8 +102,6 @@ class UpdateProfileForm extends React.Component<Props, State> {
         city: this.state.city,
         state: this.state.state,
         country: this.state.country,
-        date_of_birth: this.state.dateOfBirth,
-        grad_year: this.state.gradYear,
         school: this.state.school,
         affiliation: this.state.affiliation,
         update_profile: true,
