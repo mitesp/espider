@@ -14,6 +14,38 @@ class Program(models.Model):
     def __str__(self):
         return self.name + " " + self.edition
 
+    @property
+    def url(self):
+        return self.name + "/" + self.edition  # TODO handle multi-word editions/seasons
+
+    @staticmethod
+    def get_open_student_programs():
+        return Program.objects.all().filter(student_reg_open=True)
+
+    @staticmethod
+    def get_previous_student_programs(user):
+        """
+        Get programs for which a student has a studentreg object and the program is over
+        """
+        studentregs = StudentRegistration.objects.filter(student=user)
+
+        previous_program_ids = studentregs.filter(
+            reg_status=RegStatusOptions.POST_PROGRAM
+        ).values_list("program", flat=True)
+        previous_programs = Program.objects.filter(
+            id__in=previous_program_ids, student_reg_open=False
+        )
+        return previous_programs
+
+    @staticmethod
+    def get_current_student_programs(user):
+        studentregs = StudentRegistration.objects.filter(student=user)
+        current_studentregs = studentregs.exclude(
+            reg_status=RegStatusOptions.POST_PROGRAM
+        ).values_list("program", flat=True)
+        current_programs = Program.objects.filter(id__in=current_studentregs)
+        return current_programs
+
 
 class Class(models.Model):
     title = models.CharField(max_length=200)
@@ -29,16 +61,17 @@ class Class(models.Model):
         return self.title
 
 
+class RegStatusOptions(models.TextChoices):
+    CLASS_PREFERENCES = ("PREF",)
+    FROZEN_PREFERENCES = ("FROZ",)
+    CHANGE_CLASSES = ("CH",)
+    PRE_PROGRAM = ("PRE",)
+    DAY_OF = ("DAY",)
+    POST_PROGRAM = ("POST",)
+
+
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
-    class RegStatusOptions(models.TextChoices):
-        CLASS_PREFERENCES = ("PREF",)
-        FROZEN_PREFERENCES = ("FROZ",)
-        CHANGE_CLASSES = ("CH",)
-        PRE_PROGRAM = ("PRE",)
-        DAY_OF = ("DAY",)
-        POST_PROGRAM = ("POST",)
-
     student = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
 

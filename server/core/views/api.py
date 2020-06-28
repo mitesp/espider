@@ -63,26 +63,21 @@ def get_student_dashboard(request):
     user = request.user
 
     # TODO(mvadari): this should all probably get moved into a class method in some model
-    # TODO(mvadari): the status checks should use the choices object you defined (instead of
-    # strings)
-    studentregs = StudentRegistration.objects.filter(student=user)
 
-    previous_program_ids = studentregs.filter(reg_status="POST").values_list("program", flat=True)
-    previous_programs = Program.objects.filter(id__in=previous_program_ids, student_reg_open=False)
+    previous_programs = Program.get_previous_student_programs(user)
     previous_json = [{"name": p.name, "edition": p.edition} for p in previous_programs]
 
-    current_studentregs = studentregs.exclude(reg_status="POST").values_list("program", flat=True)
-    current_programs = Program.objects.filter(id__in=current_studentregs)
+    current_programs = Program.get_current_student_programs(user)
 
-    open_programs = (
-        Program.objects.all().filter(student_reg_open=True).exclude(id__in=current_programs)
-    )
+    open_programs = Program.get_open_student_programs().exclude(id__in=current_programs)
     # TODO add grade checks
 
-    current_json = [
-        {"name": p.name, "edition": p.edition, "registered": False} for p in open_programs
-    ] + [{"name": p.name, "edition": p.edition, "registered": True} for p in current_programs]
-    current_json.sort(key=lambda p: (p["name"] + " " + p["edition"]))  # TODO edit to be better
+    current_json = [{"name": str(p), "url": p.url, "registered": False} for p in open_programs] + [
+        {"name": str(p), "url": p.url, "registered": True} for p in current_programs
+    ]
+    current_json.sort(key=lambda p: p["name"])  # TODO edit to be better
+
+    # TODO clean up API so we don't need weird conditionals in the UI
 
     return Response({"previous": previous_json, "current": current_json})
 
