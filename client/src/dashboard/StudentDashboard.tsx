@@ -2,13 +2,6 @@ import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
 // TODO(mvadari): is there a reason registered is optional? is there a better way to organize these
-// two program objects? could we just make a get_url() function to process a program?
-type JSONProgram = {
-  name: string;
-  edition: string;
-  registered?: boolean;
-};
-
 type Program = {
   name: string;
   url: string;
@@ -37,24 +30,11 @@ export default class StudentDashboard extends Component<Props, State> {
     this.getStudentDashboard();
   }
 
-  generateProgramList(jsonPrograms: Array<JSONProgram>) {
-    const programs = Array<Program>(jsonPrograms.length);
-    for (let i = 0; i < jsonPrograms.length; i++) {
-      const r = jsonPrograms[i];
-      const name = r.name + " " + r.edition;
-      const url = r.name + "/" + r.edition + "/dashboard";
-      const registered = r.registered;
-      let p: Program = { name: name, url: url, registered: registered };
-      programs[i] = p;
-    }
-    return programs;
-  }
-
   getStudentDashboard() {
     axiosInstance.get("/studentdashboard/").then(res => {
       this.setState({
-        programs: this.generateProgramList(res.data.current),
-        previousPrograms: this.generateProgramList(res.data.previous),
+        programs: res.data.current,
+        previousPrograms: res.data.previous,
       });
     });
   }
