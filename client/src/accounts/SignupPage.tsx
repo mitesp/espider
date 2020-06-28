@@ -22,7 +22,7 @@ class SignupPage extends Component<Props, State> {
   }
 
   getButtonClass(signupType: SignupType) {
-    return this.state.selectedSignupType === signupType ? "button is-active" : "button";
+    return `button ${this.state.selectedSignupType === signupType ? "is-active" : ""}`;
   }
 
   handleClick(signupType: SignupType) {
