@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
-// TODO(mvadari): is there a reason registered is optional? is there a better way to organize these
+// TODO refactor API so registered doesn't need to be optional
 type Program = {
   name: string;
   url: string;

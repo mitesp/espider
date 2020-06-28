@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { RegStatusOptions } from "./types";
+import { RegStatusOption } from "./types";
 
 type Props = {
   loggedIn: boolean;
@@ -15,8 +15,7 @@ type State = {
   liabilityCheck: boolean;
   medliabCheck: boolean;
   updateProfileCheck: boolean;
-  regStatus: string; // TODO(mvadari): we probably want an enum here -- ideally connected to the
-  // backend
+  regStatus: RegStatusOption;
 };
 
 // helper functions
@@ -50,7 +49,7 @@ class StudentRegDashboard extends Component<Props, State> {
       liabilityCheck: false,
       medliabCheck: false,
       updateProfileCheck: false,
-      regStatus: "",
+      regStatus: RegStatusOption.Empty, // idk if this is the best solution
     };
   }
 
@@ -84,10 +83,8 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
-        {this.state.updateProfileCheck &&
-          taskWithLink("Update Profile", true, "updateprofile")}
-        {this.state.emergencyInfoCheck &&
-          taskWithLink("Emergency Info", true, "emergencyinfo")}
+        {this.state.updateProfileCheck && taskWithLink("Update Profile", true, "updateprofile")}
+        {this.state.emergencyInfoCheck && taskWithLink("Emergency Info", true, "emergencyinfo")}
         {this.state.medliabCheck && taskNoLink("Medical Form", true)}
         {this.state.liabilityCheck && taskNoLink("Liability Waiver", true)}
         {this.state.availabilityCheck && taskWithLink("Availability", true, "availability")}
@@ -99,10 +96,8 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="column is-4 has-background-success-light">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
-        {!this.state.updateProfileCheck &&
-          taskWithLink("Update Profile", false, "updateprofile")}
-        {!this.state.emergencyInfoCheck &&
-          taskWithLink("Emergency Info", false, "emergencyinfo")}
+        {!this.state.updateProfileCheck && taskWithLink("Update Profile", false, "updateprofile")}
+        {!this.state.emergencyInfoCheck && taskWithLink("Emergency Info", false, "emergencyinfo")}
         {!this.state.medliabCheck && taskWithLink("Medical Form", false, "medliab")}
         {!this.state.liabilityCheck && taskWithLink("Liability Waiver", false, "waiver")}
         {!this.state.availabilityCheck && taskWithLink("Availability", false, "availability")}
@@ -112,17 +107,17 @@ class StudentRegDashboard extends Component<Props, State> {
 
   renderClassPrefs() {
     switch (this.state.regStatus) {
-      case RegStatusOptions.ClassPreferences:
+      case RegStatusOption.ClassPreferences:
         return textInSection("Change class preferences here");
-      case RegStatusOptions.FrozenPreferences:
+      case RegStatusOption.FrozenPreferences:
         return textInSection("View class preferences here");
-      case RegStatusOptions.ChangeClasses:
+      case RegStatusOption.ChangeClasses:
         return textInSection("Change classes here");
-      case RegStatusOptions.PreProgram:
+      case RegStatusOption.PreProgram:
         return textInSection("View classes here");
-      case RegStatusOptions.DayOf:
+      case RegStatusOption.DayOf:
         return textInSection("View dayof link here");
-      case RegStatusOptions.PostProgram:
+      case RegStatusOption.PostProgram:
         return textInSection("View classes here");
       default:
         return textInSection("Something broke :("); // error message

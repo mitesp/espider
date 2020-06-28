@@ -19,10 +19,6 @@ export default class RegDashboard extends Component<Props, {}> {
     if (loggedIn) {
       return (
         <div className="container">
-          {
-            // TODO(mvadari): is this the proper way to do conditional things? I feel like
-            // short-circuiting is pretty unintuitive/hard to read
-          }
           {isStudent && (
             <StudentRegDashboard
               loggedIn={loggedIn}
