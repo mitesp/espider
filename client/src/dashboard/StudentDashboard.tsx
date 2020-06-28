@@ -51,7 +51,6 @@ export default class StudentDashboard extends Component<Props, State> {
 
   getStudentDashboard() {
     axiosInstance.get("/studentdashboard/").then(res => {
-      console.log(res.data);
       this.setState({
         programs: this.generateProgramList(res.data.current),
         previousPrograms: this.generateProgramList(res.data.previous),
@@ -66,19 +65,20 @@ export default class StudentDashboard extends Component<Props, State> {
         <div className="columns">
           <div className="column is-6 is-offset-3">
             <h2 className="has-text-centered is-size-3">Active Programs</h2>
-            {this.state.programs.map((p, index) => {
+            {this.state.programs.map((program, index) => {
               return (
-                <h3 className="is-size-5" key={p.name}>
-                  {p.name}: <a href={p.url}>{!p.registered ? "Register!!" : "Go to Dashboard"}</a>
+                <h3 className="is-size-5" key={index}>
+                  {program.name}:{" "}
+                  <a href={program.url}>{program.registered ? "Go to Dashboard" : "Register!!"}</a>
                 </h3>
               );
             })}
             <br />
             <h2 className="has-text-centered is-size-3">Previous Programs</h2>
-            {this.state.previousPrograms.map((p, index) => {
+            {this.state.previousPrograms.map((program, index) => {
               return (
-                <h3 className="is-size-5" key={p.name}>
-                  {p.name}: <a href={p.url}>View</a>
+                <h3 className="is-size-5" key={index}>
+                  {program.name}: <a href={program.url}>View</a>
                 </h3>
               );
             })}

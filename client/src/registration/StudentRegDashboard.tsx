@@ -58,64 +58,76 @@ class StudentRegDashboard extends Component<Props, State> {
     }
   }
 
-  text(text: string) {
+  textInSection(text: string) {
     return <h3 className="is-size-5">{text}</h3>;
   }
 
-  link(text1: string, text2: string, link: string) {
+  taskNoLink(taskName: string, taskCompleted: boolean) {
     return (
       <h3 className="is-size-5">
-        <a href={link}>{text1}</a>: {text2}
+        {taskName}: {taskCompleted ? "Done" : "Not Done"}
       </h3>
     );
   }
 
-  regStatus() {
+  taskWithLink(taskName: string, taskCompleted: boolean, link: string) {
+    return (
+      <h3 className="is-size-5">
+        <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
+      </h3>
+    );
+  }
+
+  renderRegStatus() {
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
-        {this.state.updateProfileCheck && this.link("Update Profile", "Done", "updateprofile")}
-        {this.state.emergencyInfoCheck && this.link("Emergency Info", "Done", "emergencyinfo")}
-        {this.state.medliabCheck && this.text("Medical Form: Done")}
-        {this.state.liabilityCheck && this.text("Liability Waiver: Done")}
-        {this.state.availabilityCheck && this.link("Availability", "Done", "availability")}
+        {this.state.updateProfileCheck &&
+          this.taskWithLink("Update Profile", true, "updateprofile")}
+        {this.state.emergencyInfoCheck &&
+          this.taskWithLink("Emergency Info", true, "emergencyinfo")}
+        {this.state.medliabCheck && this.taskNoLink("Medical Form", true)}
+        {this.state.liabilityCheck && this.taskNoLink("Liability Waiver", true)}
+        {this.state.availabilityCheck && this.taskWithLink("Availability", true, "availability")}
       </div>
     );
   }
 
-  tasks() {
+  renderTasks() {
     return (
       <div className="column is-4 has-background-success-light">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
-        {!this.state.updateProfileCheck && this.link("Update Profile", "Not Done", "updateprofile")}
-        {!this.state.emergencyInfoCheck && this.link("Emergency Info", "Not Done", "emergencyinfo")}
-        {!this.state.medliabCheck && this.link("Medical Form", "Not Done", "medliab")}
-        {!this.state.liabilityCheck && this.link("Liability Waiver", "Not Done", "waiver")}
-        {!this.state.availabilityCheck && this.link("Availability", "Done", "availability")}
+        {!this.state.updateProfileCheck &&
+          this.taskWithLink("Update Profile", false, "updateprofile")}
+        {!this.state.emergencyInfoCheck &&
+          this.taskWithLink("Emergency Info", false, "emergencyinfo")}
+        {!this.state.medliabCheck && this.taskWithLink("Medical Form", false, "medliab")}
+        {!this.state.liabilityCheck && this.taskWithLink("Liability Waiver", false, "waiver")}
+        {!this.state.availabilityCheck && this.taskWithLink("Availability", false, "availability")}
       </div>
     );
   }
 
-  classPrefs() {
+  renderClassPrefs() {
     switch (this.state.regStatus) {
       case "PREF":
-        return this.text("Change class preferences here");
+        return this.textInSection("Change class preferences here");
       case "FROZ":
-        return this.text("View class preferences here");
+        return this.textInSection("View class preferences here");
       case "CH":
-        return this.text("Change classes here");
+        return this.textInSection("Change classes here");
       case "PRE":
-        return this.text("View classes here");
+        return this.textInSection("View classes here");
       case "DAYOF":
-        return this.text("View dayof link here");
+        return this.textInSection("View dayof link here");
       case "POST":
-        return this.text("View classes here");
+        return this.textInSection("View classes here");
       default:
-        return this.text("");
+        return this.textInSection("");
     }
   }
 
-  classStatus() {
+  renderClassStatus() {
     const canAddClasses =
       this.state.updateProfileCheck &&
       this.state.emergencyInfoCheck &&
@@ -126,7 +138,7 @@ class StudentRegDashboard extends Component<Props, State> {
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Class Status</h2>
         {canAddClasses ? (
-          this.classPrefs()
+          this.renderClassPrefs()
         ) : (
           <h3 className="is-size-5 has-text-centered has-text-danger">
             You need to finish all the tasks assigned to you before you can add classes.
@@ -144,9 +156,9 @@ class StudentRegDashboard extends Component<Props, State> {
           {this.props.program} {this.props.edition} Dashboard for {this.props.username}
         </h1>
         <div className="columns">
-          {this.regStatus()}
-          {this.tasks()}
-          {this.classStatus()}
+          {this.renderRegStatus()}
+          {this.renderTasks()}
+          {this.renderClassStatus()}
         </div>
       </div>
     );

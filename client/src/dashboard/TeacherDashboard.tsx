@@ -57,10 +57,10 @@ export default class TeacherDashboard extends Component<Props, State> {
         <div className="columns">
           <div className="column is-6 is-offset-3">
             <h2 className="has-text-centered is-size-3">Active Programs</h2>
-            {this.state.programs.map((p, index) => {
+            {this.state.programs.map((program, index) => {
               return (
-                <h3 className="is-size-5" key={p.name}>
-                  {p.name}: <a href={p.url}>Register</a>
+                <h3 className="is-size-5" key={index}>
+                  {program.name}: <a href={program.url}>Register</a>
                 </h3>
               );
             })}
