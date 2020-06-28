@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { RegStatusOptions } from "./types";
 
 type Props = {
   loggedIn: boolean;
@@ -101,20 +102,20 @@ class StudentRegDashboard extends Component<Props, State> {
   // TODO(mvadari): again it'd be nice if we can bind this enum to the backend
   classPrefs() {
     switch (this.state.regStatus) {
-      case "PREF":
+      case RegStatusOptions.ClassPreferences:
         return text("Change class preferences here");
-      case "FROZ":
+      case RegStatusOptions.FrozenPreferences:
         return text("View class preferences here");
-      case "CH":
+      case RegStatusOptions.ChangeClasses:
         return text("Change classes here");
-      case "PRE":
+      case RegStatusOptions.PreProgram:
         return text("View classes here");
-      case "DAYOF":
+      case RegStatusOptions.DayOf:
         return text("View dayof link here");
-      case "POST":
+      case RegStatusOptions.PostProgram:
         return text("View classes here");
       default:
-        return text("");
+        return text("Something broke :("); // error message
     }
   }
 

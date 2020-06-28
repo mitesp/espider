@@ -62,12 +62,12 @@ class Class(models.Model):
 
 
 class RegStatusOptions(models.TextChoices):
-    CLASS_PREFERENCES = ("PREF",)
-    FROZEN_PREFERENCES = ("FROZ",)
-    CHANGE_CLASSES = ("CH",)
-    PRE_PROGRAM = ("PRE",)
-    DAY_OF = ("DAY",)
-    POST_PROGRAM = ("POST",)
+    CLASS_PREFERENCES = ("CLASS_PREFERENCES",)
+    FROZEN_PREFERENCES = ("FROZEN_PREFERENCES",)
+    CHANGE_CLASSES = ("CHANGE_CLASSES",)
+    PRE_PROGRAM = ("PRE_PROGRAM",)
+    DAY_OF = ("DAY_OF",)
+    POST_PROGRAM = ("POST_PROGRAM",)
 
 
 # TODO: Validate that the fk users have correct type before creation
@@ -77,7 +77,7 @@ class StudentRegistration(models.Model):
 
     # student reg status
     reg_status = models.CharField(
-        max_length=4, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES
+        max_length=20, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES
     )
 
     # TODO(mvadari): hmm "updated" might be a better than "check"? (e.g. profile_updated)
