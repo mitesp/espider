@@ -67,7 +67,10 @@ urlpatterns = [
     path("api/current_studentreg/", views.current_studentreg),
     path("api/profile/", views.Profile.as_view()),
     path("api/emergency_info/", views.EmergencyInfo.as_view()),
-    # auth API calls
+    path("api/medliab/", views.MedicalLiability.as_view()),
+    path("api/waiver/", views.LiabilityWaiver.as_view()),
+    path("api/availability/", views.Availability.as_view()),
+    # auth API
     path("api/add_user/", views.CreateUser.as_view()),
     path("api/current_user/", views.current_user),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),

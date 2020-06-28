@@ -224,3 +224,75 @@ class EmergencyInfo(APIView):
 
         # TODO add correction checks
         return Response({"message": "Success!"})
+
+
+class MedicalLiability(APIView):
+    """
+    Create a new user.
+    Permissions: any (don't have permissions before user is created)
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # TODO maybe add other permissions to this so you can't accidentally do this?
+
+        studentreg.medliab_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})
+
+
+class LiabilityWaiver(APIView):
+    """
+    Create a new user.
+    Permissions: any (don't have permissions before user is created)
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # TODO maybe add other permissions to this so you can't accidentally do this?
+
+        studentreg.liability_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})
+
+
+class Availability(APIView):
+    """
+    Create a new user.
+    Permissions: any (don't have permissions before user is created)
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    # TODO incorporate teacher stuff here too
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        studentreg.availability_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})

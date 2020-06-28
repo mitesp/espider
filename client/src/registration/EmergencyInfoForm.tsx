@@ -16,7 +16,7 @@ function isValidField(prop: string, obj: State): prop is keyof State {
   return prop in obj;
 }
 
-class UpdateProfileForm extends React.Component<Props, State> {
+class EmergencyInfoForm extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -130,4 +130,4 @@ class UpdateProfileForm extends React.Component<Props, State> {
   }
 }
 
-export default UpdateProfileForm;
+export default EmergencyInfoForm;

@@ -17,6 +17,7 @@ import Dashboard from "./dashboard/Dashboard";
 import RegDashboard from "./registration/RegDashboard";
 import UpdateProfileForm from "./registration/UpdateProfileForm";
 import EmergencyInfoForm from "./registration/EmergencyInfoForm";
+import DummyForm from "./registration/DummyForm";
 
 import Program from "./info/Program";
 import Teach from "./info/Teach";
@@ -127,6 +128,24 @@ class App extends Component<{}, State> {
             <EmergencyInfoForm
               path="/:program/:edition/emergencyinfo"
               isStudent={this.state.isStudent}
+            />
+            <DummyForm
+              path="/:program/:edition/medliab"
+              isStudent={this.state.isStudent}
+              url="medliab"
+              formName="Medical Liabilility Form"
+            />
+            <DummyForm
+              path="/:program/:edition/waiver"
+              isStudent={this.state.isStudent}
+              url="waiver"
+              formName="Liability Waiver Form"
+            />
+            <DummyForm
+              path="/:program/:edition/availability"
+              isStudent={this.state.isStudent}
+              url="availability"
+              formName="Program Availability"
             />
             {programList.map(program => (
               <Program key={program} path={program} program={program} />
