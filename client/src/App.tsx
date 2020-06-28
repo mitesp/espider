@@ -8,8 +8,8 @@ import axiosInstance from "./axiosAPI";
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
 
-import LoginPage from "./login/LoginPage";
-import SignupPage from "./login/SignupPage";
+import LoginPage from "./accounts/LoginPage";
+import SignupPage from "./accounts/SignupPage";
 
 import Home from "./info/Home";
 import Dashboard from "./dashboard/Dashboard";
