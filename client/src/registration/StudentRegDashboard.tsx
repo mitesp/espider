@@ -20,6 +20,7 @@ type State = {
 
 // helper functions
 
+
 function renderTextInSection(text: string) {
   return <h3 className="is-size-5">{text}</h3>;
 }

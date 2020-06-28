@@ -61,13 +61,17 @@ urlpatterns = [
     # api paths
     # TODO: these paths are kinda messy -- we should read about API design and clean this up.
     path("api/", include(router.urls)),
-    path("api/current_user/", views.current_user),
+    # Dashboard
+    path("api/studentdashboard/", views.get_student_dashboard),
+    #studentreg
     path("api/current_studentreg/", views.current_studentreg),
     path("api/profile/", views.Profile.as_view()),
     path("api/emergency_info/", views.EmergencyInfo.as_view()),
-    path("api/studentdashboard/", views.get_student_dashboard),
+    # auth API calls
     path("api/add_user/", views.CreateUser.as_view()),
+    path("api/current_user/", views.current_user),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
+    # for heroku
     re_path(".*", TemplateView.as_view(template_name="index.html"), name="react"),
 ]
