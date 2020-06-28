@@ -87,7 +87,7 @@ class StudentRegDashboard extends Component<Props, State> {
 
   tasks() {
     return (
-      <div className="column is-4 has-background-primary">
+      <div className="column is-4 has-background-success-light">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
         {!this.state.updateProfileCheck && link("Update Profile", "Not Done", "updateprofile")}
         {!this.state.emergencyInfoCheck && link("Emergency Info", "Not Done", "emergencyinfo")}
