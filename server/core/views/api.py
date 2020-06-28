@@ -57,7 +57,6 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProgramSerializer
 
 
-# TODO(mvadari): this function name should be snake-typed
 @api_view(["GET"])
 @permission_classes([custom_permissions.StudentPermission])
 def get_student_dashboard(request):
