@@ -65,7 +65,7 @@ def get_student_dashboard(request):
     # TODO(mvadari): this should all probably get moved into a class method in some model
 
     previous_programs = Program.get_previous_student_programs(user)
-    previous_json = [{"name": p.name, "edition": p.edition} for p in previous_programs]
+    previous_json = [{"name": str(p), "url": p.url} for p in previous_programs]
 
     current_programs = Program.get_current_student_programs(user)
 
