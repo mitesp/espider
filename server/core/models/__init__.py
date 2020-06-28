@@ -72,7 +72,6 @@ class RegStatusOptions(models.TextChoices):
 
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
-    # TODO(mvadari): let's make this strings more explicit rather than abbreviated
     class RegStatusOptions(models.TextChoices):
         CLASS_PREFERENCES = ("PREF",)
         FROZEN_PREFERENCES = ("FROZ",)

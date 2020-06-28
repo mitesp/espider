@@ -193,8 +193,8 @@ class UpdateProfileForm extends React.Component<Props, State> {
               placeholder={label}
               onChange={this.handleChange}
             >
-              {PronounOptions.map(pronoun => {
-                return <option value={pronoun}>{pronoun}</option>;
+              {PronounOptions.map((pronoun, index) => {
+                return <option key={index} value={pronoun}>{pronoun}</option>;
               })}
             </select>
           </div>
