@@ -10,24 +10,24 @@ type Props = {
 };
 
 type State = {
-  signupType: SignupType;
+  selectedSignupType: SignupType;
 };
 
 class SignupPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      signupType: SignupType.Student,
+      selectedSignupType: SignupType.Student,
     };
   }
 
   getButtonClass(signupType: SignupType) {
-    return this.state.signupType === signupType ? "button is-active" : "button";
+    return this.state.selectedSignupType === signupType ? "button is-active" : "button";
   }
 
   handleClick(signupType: SignupType) {
-    if (signupType !== this.state.signupType) {
-      this.setState({ signupType: signupType });
+    if (signupType !== this.state.selectedSignupType) {
+      this.setState({ selectedSignupType: signupType });
     }
   }
 
