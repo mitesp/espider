@@ -145,8 +145,8 @@ class TeacherClassRegistration(models.Model):
         unique_together = (("teacherreg", "clazz"),)
 
     @property
-    def student(self):
-        return self.teacherreg.student
+    def teacher(self):
+        return self.teacherreg.teacher
 
     @property
     def program(self):

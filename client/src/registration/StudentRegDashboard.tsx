@@ -20,11 +20,11 @@ type State = {
 
 // helper functions
 
-function textInSection(text: string) {
+function renderTextInSection(text: string) {
   return <h3 className="is-size-5">{text}</h3>;
 }
 
-function taskNoLink(taskName: string, taskCompleted: boolean) {
+function renderTaskNoLink(taskName: string, taskCompleted: boolean) {
   return (
     <h3 className="is-size-5">
       {taskName}: {taskCompleted ? "Done" : "Not Done"}
@@ -32,7 +32,7 @@ function taskNoLink(taskName: string, taskCompleted: boolean) {
   );
 }
 
-function taskWithLink(taskName: string, taskCompleted: boolean, link: string) {
+function renderTaskLink(taskName: string, taskCompleted: boolean, link: string) {
   return (
     <h3 className="is-size-5">
       <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
@@ -83,11 +83,11 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
-        {this.state.updateProfileCheck && taskWithLink("Update Profile", true, "updateprofile")}
-        {this.state.emergencyInfoCheck && taskWithLink("Emergency Info", true, "emergencyinfo")}
-        {this.state.medliabCheck && taskNoLink("Medical Form", true)}
-        {this.state.liabilityCheck && taskNoLink("Liability Waiver", true)}
-        {this.state.availabilityCheck && taskWithLink("Availability", true, "availability")}
+        {this.state.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
+        {this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
+        {this.state.medliabCheck && renderTaskNoLink("Medical Form", true)}
+        {this.state.liabilityCheck && renderTaskNoLink("Liability Waiver", true)}
+        {this.state.availabilityCheck && renderTaskLink("Availability", true, "availability")}
       </div>
     );
   }
@@ -96,11 +96,11 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="column is-4 has-background-success-light">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
-        {!this.state.updateProfileCheck && taskWithLink("Update Profile", false, "updateprofile")}
-        {!this.state.emergencyInfoCheck && taskWithLink("Emergency Info", false, "emergencyinfo")}
-        {!this.state.medliabCheck && taskWithLink("Medical Form", false, "medliab")}
-        {!this.state.liabilityCheck && taskWithLink("Liability Waiver", false, "waiver")}
-        {!this.state.availabilityCheck && taskWithLink("Availability", false, "availability")}
+        {!this.state.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
+        {!this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
+        {!this.state.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
+        {!this.state.liabilityCheck && renderTaskLink("Liability Waiver", false, "waiver")}
+        {!this.state.availabilityCheck && renderTaskLink("Availability", false, "availability")}
       </div>
     );
   }
@@ -108,19 +108,19 @@ class StudentRegDashboard extends Component<Props, State> {
   renderClassPrefs() {
     switch (this.state.regStatus) {
       case RegStatusOption.ClassPreferences:
-        return textInSection("Change class preferences here");
+        return renderTextInSection("Change class preferences here");
       case RegStatusOption.FrozenPreferences:
-        return textInSection("View class preferences here");
+        return renderTextInSection("View class preferences here");
       case RegStatusOption.ChangeClasses:
-        return textInSection("Change classes here");
+        return renderTextInSection("Change classes here");
       case RegStatusOption.PreProgram:
-        return textInSection("View classes here");
+        return renderTextInSection("View classes here");
       case RegStatusOption.DayOf:
-        return textInSection("View dayof link here");
+        return renderTextInSection("View dayof link here");
       case RegStatusOption.PostProgram:
-        return textInSection("View classes here");
+        return renderTextInSection("View classes here");
       default:
-        return textInSection("Something broke :("); // error message
+        return renderTextInSection("Something broke :("); // error message
     }
   }
 
