@@ -107,7 +107,7 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="container">
         <h1 className="has-text-centered is-size-2">
-          {this.props.program} {this.props.edition} Dashboard for {this.props.username}
+          {this.props.program} {this.props.edition}: Change Classes
         </h1>
         <br />
         <div className="columns">
