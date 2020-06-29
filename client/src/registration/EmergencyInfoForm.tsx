@@ -66,42 +66,6 @@ class EmergencyInfoForm extends Component<Props, State> {
       });
   };
 
-  customInput(label: string, name: string, value: string, type: string, icon?: string) {
-    let className = "control";
-    if (icon) {
-      className += " has-icons-left";
-    }
-    return (
-      <div className={className}>
-        <input
-          className="input"
-          id={name}
-          name={name}
-          type={type}
-          placeholder={label}
-          value={value}
-          onChange={this.handleChange}
-        />
-        {icon && (
-          <span className="icon is-small is-left">
-            <i className={"fas fa-" + icon}></i>
-          </span>
-        )}
-      </div>
-    );
-  }
-
-  labeledInput(label: string, name: string, value: string, type: string, icon?: string) {
-    return (
-      <div className="field">
-        <label className="label" htmlFor={name}>
-          {label}
-        </label>
-        {this.customInput(label, name, value, type, icon)}
-      </div>
-    );
-  }
-
   render() {
     return (
       <div className="container">
