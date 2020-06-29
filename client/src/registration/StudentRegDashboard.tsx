@@ -22,8 +22,19 @@ type State = {
 
 // helper functions
 
-function renderTextInSection(text: string, centered = false) {
-  return <h3 className={"is-size-5" + (centered ? " has has-text-centered" : "")}>{text}</h3>;
+//mostly used for placeholders
+function renderTextInSection(displayedText: string, centered = false) {
+  return (
+    <h3 className={"is-size-5" + (centered ? " has has-text-centered" : "")}>{displayedText}</h3>
+  );
+}
+
+function renderLinkedText(displayedText: string, url: string) {
+  return (
+    <h3 className="is-size-5 has-text-centered">
+      <a href={url}>{displayedText}</a>
+    </h3>
+  );
 }
 
 function renderTaskNoLink(taskName: string, taskCompleted: boolean) {
@@ -129,7 +140,7 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div>
         {renderTextInSection("View class preferences here")}
-        {editsAllowed && renderTextInSection("Edit class preferences here")}
+        {editsAllowed && renderTextInSection("Edit class preferences")}
       </div>
     );
   }
@@ -154,8 +165,7 @@ class StudentRegDashboard extends Component<Props, State> {
             })}
           </tbody>
         </table>
-        <br />
-        {editsAllowed && renderTextInSection("Edit class schedule here", true)}
+        {editsAllowed && renderLinkedText("Edit class schedule", "changeclasses")}
       </div>
     );
   }

@@ -19,6 +19,7 @@ import DummyForm from "./registration/DummyForm";
 import EmergencyInfoForm from "./registration/EmergencyInfoForm";
 import RegDashboard from "./registration/RegDashboard";
 import UpdateProfileForm from "./registration/UpdateProfileForm";
+import ChangeClassesDashboard from "./registration/ChangeClassesDashboard";
 
 import AboutUs from "./info/AboutUs";
 import Learn from "./info/Learn";
@@ -149,6 +150,11 @@ class App extends Component<{}, State> {
               isStudent={this.state.isStudent}
               url="availability"
               formName="Program Availability"
+            />
+            <ChangeClassesDashboard
+              path="/:program/:edition/changeclasses"
+              loggedIn={this.state.loggedIn}
+              username={this.state.username}
             />
             {programList.map(program => (
               <Program key={program} path={program} program={program} />
