@@ -60,34 +60,27 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   renderClassSchedule() {
-    // tables might not be very accessible
-    return (
-      <div className="table-container">
-        <table className="table is-fullwidth is-striped is-hoverable">
-          <thead>
-            <th>Time</th>
-            <th>Class</th>
-          </thead>
-          <tbody>
-            {this.state.classes.map((clazz, index) => {
-              return (
-                <tr>
-                  <th>{this.state.timeslots[index]}</th>
-                  <td>{clazz}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-
-  renderClassStatus() {
     return (
       <div className="column is-6">
         <h2 className="has-text-centered is-size-3">Classes</h2>
-        {this.renderClassSchedule()}
+        <div className="table-container">
+          <table className="table is-fullwidth is-striped is-hoverable">
+            <thead>
+              <th>Time</th>
+              <th>Class</th>
+            </thead>
+            <tbody>
+              {this.state.classes.map((clazz, index) => {
+                return (
+                  <tr>
+                    <th>{this.state.timeslots[index]}</th>
+                    <td>{clazz}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
@@ -111,7 +104,7 @@ class StudentRegDashboard extends Component<Props, State> {
         </h1>
         <br />
         <div className="columns">
-          {this.renderClassStatus()}
+          {this.renderClassSchedule()}
           {this.renderClassCatalog()}
         </div>
         {renderLinkedText("Back to Dashboard", "dashboard")}
