@@ -16,6 +16,8 @@ type State = {
   medliabCheck: boolean;
   updateProfileCheck: boolean;
   regStatus: RegStatusOption;
+  timeslots: string[];
+  classes: string[];
 };
 
 // helper functions
@@ -51,33 +53,50 @@ class StudentRegDashboard extends Component<Props, State> {
       medliabCheck: false,
       updateProfileCheck: false,
       regStatus: RegStatusOption.Empty, // idk if this is the best solution
+      timeslots: [],
+      classes: [],
     };
   }
 
   componentDidMount() {
     this.getStudentReg();
+    this.getStudentClasses();
   }
 
   getStudentReg() {
-    if (this.props.loggedIn) {
-      axiosInstance
-        .get("/current_studentreg/", {
-          params: {
-            program: this.props.program,
-            edition: this.props.edition,
-          },
-        })
-        .then(res => {
-          this.setState({
-            availabilityCheck: res.data.availability_check,
-            emergencyInfoCheck: res.data.emergency_info_check,
-            liabilityCheck: res.data.liability_check,
-            medliabCheck: res.data.medliab_check,
-            updateProfileCheck: res.data.update_profile_check,
-            regStatus: res.data.reg_status,
-          });
+    axiosInstance
+      .get("/current_studentreg/", {
+        params: {
+          program: this.props.program,
+          edition: this.props.edition,
+        },
+      })
+      .then(res => {
+        this.setState({
+          availabilityCheck: res.data.availability_check,
+          emergencyInfoCheck: res.data.emergency_info_check,
+          liabilityCheck: res.data.liability_check,
+          medliabCheck: res.data.medliab_check,
+          updateProfileCheck: res.data.update_profile_check,
+          regStatus: res.data.reg_status,
         });
-    }
+      });
+  }
+
+  getStudentClasses() {
+    axiosInstance
+      .get("/studentclasses/", {
+        params: {
+          program: this.props.program,
+          edition: this.props.edition,
+        },
+      })
+      .then(res => {
+        this.setState({
+          timeslots: res.data.timeslots,
+          classes: res.data.classes,
+        });
+      });
   }
 
   renderRegStatus() {

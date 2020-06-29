@@ -60,6 +60,7 @@ urlpatterns = [
     path("<program>/<edition>/classes/", views.ClassesView.as_view(), name="classes"),
     # api paths
     # TODO: these paths are kinda messy -- we should read about API design and clean this up.
+    path("api/studentclasses/", views.StudentClasses.as_view()),
     path("api/", include(router.urls)),
     # Dashboard
     path("api/studentdashboard/", views.get_student_dashboard),
