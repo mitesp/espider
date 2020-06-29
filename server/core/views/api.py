@@ -96,8 +96,8 @@ def current_studentreg(request):
         program open for registration, program not in Pre-Program/after
     """
 
-    program = request.GET["program"]
-    edition = request.GET["edition"]
+    program = request.GET.get("program")
+    edition = request.GET.get("edition")
     prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
     user = request.user
     studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
@@ -145,27 +145,24 @@ class Profile(APIView):
         return Response({"message": "Success!"})
 
     def update_profile(user, data):
-        user.first_name = data["first_name"]
-        user.last_name = data["last_name"]
-        user.email = data["email"]
+        user.first_name = data.get("first_name")
+        user.last_name = data.get("last_name")
+        user.email = data.get("email")
         user.save()
 
         if user.is_student:
-            profile = user.student_profile
-            profile.phone_number = data["phone_number"]
-            profile.pronouns = data["pronouns"]
-            profile.city = data["city"]
-            profile.state = data["state"]
-            profile.country = data["country"]
-            profile.school = data["school"]
+            profile = user.profile
+            profile.phone_number = data.get("phone_number")
+            profile.pronouns = data.get("pronouns")
+            profile.city = data.get("city")
+            profile.state = data.get("state")
+            profile.country = data.get("country")
+            profile.school = data.get("school")
             profile.save()
 
     def update_profile_check(user, data):
         if "update_profile" in data and data["update_profile"]:
-            assert "program" in data
-            assert "edition" in data
-
-            program = Program.objects.get(name=data["program"], edition=data["edition"])
+            program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
             studentreg = StudentRegistration.objects.get(student=user, program=program)
             studentreg.update_profile_check = True
             studentreg.save()
@@ -196,7 +193,7 @@ class EmergencyInfo(APIView):
         user = request.user
         data = request.data
 
-        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
         # submit emergency info
@@ -221,7 +218,7 @@ class MedicalLiability(APIView):
         user = request.user
         data = request.data
 
-        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
         # TODO maybe add other permissions to this so you can't accidentally do this?
@@ -246,7 +243,7 @@ class LiabilityWaiver(APIView):
         user = request.user
         data = request.data
 
-        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
         # TODO maybe add other permissions to this so you can't accidentally do this?
@@ -273,7 +270,7 @@ class Availability(APIView):
         user = request.user
         data = request.data
 
-        program = Program.objects.get(name=data["program"], edition=data["edition"])
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
         studentreg.availability_check = True
