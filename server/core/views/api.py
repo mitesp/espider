@@ -300,7 +300,7 @@ class StudentClasses(APIView):
     ret = {
         "classes": [
             "How to beat your dad at chess, MIT style",
-            "The Many Transformations of Transition Metals",
+            "From Neurons to Thoughts: An Introduction to the Human Mind and Brain",
             None,
         ],
         "timeslots": ["Sat 10-11", "Sat 11-12", "Sat 12-1"],

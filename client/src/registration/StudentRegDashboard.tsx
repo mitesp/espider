@@ -22,8 +22,8 @@ type State = {
 
 // helper functions
 
-function renderTextInSection(text: string) {
-  return <h3 className="is-size-5">{text}</h3>;
+function renderTextInSection(text: string, centered = false) {
+  return <h3 className={"is-size-5" + (centered ? " has has-text-centered" : "")}>{text}</h3>;
 }
 
 function renderTaskNoLink(taskName: string, taskCompleted: boolean) {
@@ -101,7 +101,7 @@ class StudentRegDashboard extends Component<Props, State> {
 
   renderRegStatus() {
     return (
-      <div className="column is-4">
+      <div className="column is-3">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
         {this.state.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
         {this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
@@ -114,7 +114,7 @@ class StudentRegDashboard extends Component<Props, State> {
 
   renderTasks() {
     return (
-      <div className="column is-4 has-background-success-light">
+      <div className="column is-3 has-background-success-light">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
         {!this.state.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
         {!this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
@@ -135,9 +135,10 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   renderClassSchedule(editsAllowed: boolean) {
+    // tables might not be very accessible
     return (
-      <div>
-        <table className="table is-fullwidth is-striped">
+      <div className="table-container">
+        <table className="table is-fullwidth is-striped is-hoverable">
           <thead>
             <th>Time</th>
             <th>Class</th>
@@ -146,7 +147,7 @@ class StudentRegDashboard extends Component<Props, State> {
             {this.state.classes.map((clazz, index) => {
               return (
                 <tr>
-                  <td>{this.state.timeslots[index]}</td>
+                  <th>{this.state.timeslots[index]}</th>
                   <td>{clazz}</td>
                 </tr>
               );
@@ -154,7 +155,7 @@ class StudentRegDashboard extends Component<Props, State> {
           </tbody>
         </table>
         <br />
-        {editsAllowed && renderTextInSection("Edit class schedule here")}
+        {editsAllowed && renderTextInSection("Edit class schedule here", true)}
       </div>
     );
   }
@@ -195,8 +196,8 @@ class StudentRegDashboard extends Component<Props, State> {
       this.state.liabilityCheck &&
       this.state.availabilityCheck;
     return (
-      <div className="column is-4">
-        <h2 className="has-text-centered is-size-3">Class Status</h2>
+      <div className="column">
+        <h2 className="has-text-centered is-size-3">Classes</h2>
         {canAddClasses ? (
           this.renderClassView()
         ) : (
