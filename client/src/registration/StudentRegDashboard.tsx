@@ -106,20 +106,47 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
-  renderClassPrefs() {
+  renderClassPrefs(editsAllowed: boolean) {
+    return (
+      <div>
+        {renderTextInSection("View class preferences here")}
+        {editsAllowed && renderTextInSection("Edit class preferences here")}
+      </div>
+    );
+  }
+
+  renderClassSchedule(editsAllowed: boolean) {
+    return (
+      <div>
+        {renderTextInSection("View class schedule here")}
+        {editsAllowed && renderTextInSection("Edit class schedule here")}
+      </div>
+    );
+  }
+
+  renderDayOfClassSchedule() {
+    return (
+      <div>
+        {renderTextInSection("View day-of link here")}
+        {renderTextInSection("View class schedule here")}
+      </div>
+    );
+  }
+
+  renderClassView() {
     switch (this.state.regStatus) {
       case RegStatusOption.ClassPreferences:
-        return renderTextInSection("Change class preferences here");
+        return this.renderClassPrefs(true);
       case RegStatusOption.FrozenPreferences:
-        return renderTextInSection("View class preferences here");
+        return this.renderClassPrefs(false);
       case RegStatusOption.ChangeClasses:
-        return renderTextInSection("Change classes here");
+        return this.renderClassSchedule(true);
       case RegStatusOption.PreProgram:
-        return renderTextInSection("View classes here");
+        return this.renderClassSchedule(false);
       case RegStatusOption.DayOf:
-        return renderTextInSection("View dayof link here");
+        return this.renderDayOfClassSchedule();
       case RegStatusOption.PostProgram:
-        return renderTextInSection("View classes here");
+        return this.renderClassSchedule(false);
       default:
         return renderTextInSection("Something broke :("); // error message
     }
@@ -136,7 +163,7 @@ class StudentRegDashboard extends Component<Props, State> {
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Class Status</h2>
         {canAddClasses ? (
-          this.renderClassPrefs()
+          this.renderClassView()
         ) : (
           <h3 className="is-size-5 has-text-centered has-text-danger">
             You need to finish all the tasks assigned to you before you can add classes.
