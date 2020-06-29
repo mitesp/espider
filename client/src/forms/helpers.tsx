@@ -2,7 +2,7 @@ import React from "react";
 
 // TODO consider replacing onChange with onBlur
 
-function customInput(
+function renderCustomInput(
   onChange: (e: React.FormEvent<HTMLInputElement>) => any,
   label: string,
   name: string,
@@ -38,7 +38,7 @@ function customInput(
   );
 }
 
-function labeledInput(
+function renderLabeledInput(
   onChange: (e: React.FormEvent<HTMLInputElement>) => any,
   label: string,
   name: string,
@@ -53,12 +53,12 @@ function labeledInput(
       <label className="label" htmlFor={name}>
         {label}
       </label>
-      {customInput(onChange, label, name, value, type, icon, help, disabled)}
+      {renderCustomInput(onChange, label, name, value, type, icon, help, disabled)}
     </div>
   );
 }
 
-function labeledSelect(
+function renderLabeledSelect(
   onChange: (e: React.FormEvent<HTMLSelectElement>) => any,
   label: string,
   name: string,
@@ -106,4 +106,4 @@ function labeledSelect(
   );
 }
 
-export { customInput, labeledInput, labeledSelect };
+export { renderCustomInput, renderLabeledInput, renderLabeledSelect };

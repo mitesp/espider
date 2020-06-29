@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { labeledInput } from "../forms/helpers";
+import { renderLabeledInput } from "../forms/helpers";
 
 type LoginProps = {
   onLogin: Function;
@@ -56,7 +56,7 @@ class LoginForm extends Component<LoginProps, LoginState> {
     return (
       <form onSubmit={this.handleLogin}>
         <h1 className="has-text-centered is-size-3">Log in</h1>
-        {labeledInput(
+        {renderLabeledInput(
           this.handleChange,
           "Username",
           "username",
@@ -65,7 +65,7 @@ class LoginForm extends Component<LoginProps, LoginState> {
           "user"
         )}
 
-        {labeledInput(
+        {renderLabeledInput(
           this.handleChange,
           "Password",
           "password",

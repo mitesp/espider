@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
-import { PronounOptions } from "../forms/constants";
-import { customInput, labeledInput, labeledSelect } from "../forms/helpers";
+import { PronounOptions } from "../constants";
+import { renderCustomInput, renderLabeledInput, renderLabeledSelect } from "../forms/helpers";
 
 type Props = {
   edition: string;
@@ -114,12 +114,12 @@ class UpdateProfileForm extends Component<Props, State> {
           <div className="column is-6 is-offset-3">
             <h1 className="has-text-centered is-size-3">Update Profile</h1>
             <form onSubmit={this.handleSubmit}>
-              <label className="label">Name</label>
+              <label className="label">Student Name</label>
               <div className="field is-horizontal">
                 <div className="field-body">
                   <div className="field">
                     <div className="control is-expanded">
-                      {customInput(
+                      {renderCustomInput(
                         this.handleChange,
                         "First Name",
                         "firstName",
@@ -131,7 +131,7 @@ class UpdateProfileForm extends Component<Props, State> {
                   </div>
                   <div className="field">
                     <div className="control is-expanded">
-                      {customInput(
+                      {renderCustomInput(
                         this.handleChange,
                         "Last Name",
                         "lastName",
@@ -144,7 +144,7 @@ class UpdateProfileForm extends Component<Props, State> {
                 </div>
               </div>
 
-              {labeledSelect(
+              {renderLabeledSelect(
                 this.handleChange,
                 "Pronouns",
                 "pronouns",
@@ -154,7 +154,7 @@ class UpdateProfileForm extends Component<Props, State> {
                 "We ask for this information for the purposes of helping our staff use the most respectful language when addressing you."
               )}
 
-              {labeledInput(
+              {renderLabeledInput(
                 this.handleChange,
                 "E-mail",
                 "email",
@@ -162,7 +162,7 @@ class UpdateProfileForm extends Component<Props, State> {
                 "email",
                 "envelope"
               )}
-              {labeledInput(
+              {renderLabeledInput(
                 this.handleChange,
                 "Phone Number",
                 "phoneNumber",
@@ -171,8 +171,15 @@ class UpdateProfileForm extends Component<Props, State> {
                 "phone"
               )}
 
-              {labeledInput(this.handleChange, "City", "city", this.state.city, "text", "city")}
-              {labeledInput(
+              {renderLabeledInput(
+                this.handleChange,
+                "City",
+                "city",
+                this.state.city,
+                "text",
+                "city"
+              )}
+              {renderLabeledInput(
                 this.handleChange,
                 "State",
                 "state",
@@ -180,7 +187,7 @@ class UpdateProfileForm extends Component<Props, State> {
                 "text",
                 "compass"
               )}
-              {labeledInput(
+              {renderLabeledInput(
                 this.handleChange,
                 "Country",
                 "country",
@@ -189,47 +196,34 @@ class UpdateProfileForm extends Component<Props, State> {
                 "globe"
               )}
 
-              {this.props.isStudent &&
-                labeledInput(
-                  this.handleChange,
-                  "Date of Birth",
-                  "dateOfBirth",
-                  this.state.dateOfBirth,
-                  "date",
-                  "birthday-cake",
-                  undefined,
-                  true
-                )}
-              {this.props.isStudent &&
-                labeledInput(
-                  this.handleChange,
-                  "High School Graduation Year",
-                  "gradYear",
-                  this.state.gradYear,
-                  "number",
-                  "graduation-cap",
-                  undefined,
-                  true
-                )}
-              {this.props.isStudent &&
-                labeledInput(
-                  this.handleChange,
-                  "Current School",
-                  "school",
-                  this.state.school,
-                  "text",
-                  "chalkboard-teacher"
-                )}
-
-              {this.props.isTeacher &&
-                labeledInput(
-                  this.handleChange,
-                  "MIT Affiliation",
-                  "affiliation",
-                  this.state.affiliation,
-                  "text",
-                  "university"
-                )}
+              {renderLabeledInput(
+                this.handleChange,
+                "Date of Birth",
+                "dateOfBirth",
+                this.state.dateOfBirth,
+                "date",
+                "birthday-cake",
+                undefined,
+                true
+              )}
+              {renderLabeledInput(
+                this.handleChange,
+                "High School Graduation Year",
+                "gradYear",
+                this.state.gradYear,
+                "number",
+                "graduation-cap",
+                undefined,
+                true
+              )}
+              {renderLabeledInput(
+                this.handleChange,
+                "Current School",
+                "school",
+                this.state.school,
+                "text",
+                "chalkboard-teacher"
+              )}
 
               <div className="field">
                 <div className="control">

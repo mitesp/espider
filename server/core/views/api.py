@@ -1,11 +1,13 @@
 import core.permissions as custom_permissions
-from core.models import Program, StudentRegistration, TeacherRegistration
+from core.models import Program, StudentRegistration
 from core.serializers import (
     ProgramSerializer,
     StudentRegSerializer,
     UserSerializer,
     UserSerializerWithToken,
 )
+from django.db import transaction
+from django.forms.models import model_to_dict
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -27,7 +29,9 @@ def current_user(request):
 
 class CreateUser(APIView):
     """
-    Create a new user.
+    Create a new user and return the access/refresh token pair.
+    This is used during the signup process.
+    Errors are not being handled yet.
     Permissions: any (don't have permissions before user is created)
     """
 
@@ -79,6 +83,7 @@ def get_student_dashboard(request):
 
     return Response({"previous": previous_json, "current": current_json})
 
+
 # Registration API calls
 
 
@@ -102,11 +107,11 @@ def current_studentreg(request):
 
 class Profile(APIView):
     """
-    Create a new user.
-    Permissions: any (don't have permissions before user is created)
+    Get/update user profile.
+    Permissions: logged in, is_student, has studentreg object
     """
 
-    permission_classes = (custom_permissions.StudentOrTeacherPermission,)
+    permission_classes = (custom_permissions.StudentPermission,)
 
     def get(self, request, format=None):
         user = request.user
@@ -115,52 +120,47 @@ class Profile(APIView):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "email": user.email,
-            "phone_number": profile.phone_number,
-            "pronouns": profile.pronouns,
-            "city": profile.city,
-            "state": profile.state,
-            "country": profile.country,
         }
-        if user.is_student:
-            profile = user.student_profile
-            data["date_of_birth"] = profile.date_of_birth
-            data["grad_year"] = profile.grad_year
-            data["school"] = profile.school
-
-        if user.is_teacher:
-            profile = user.teacher_profile
-            data["affiliation"] = profile.affiliation
+        data.update(model_to_dict(profile))
 
         return Response(data)
 
+    @transaction.atomic
     def post(self, request, format=None):
+        """
+        TODO: validate:
+            ensure email is in email format
+            ensure phone number is in phone number format
+            ensure country is an actual country
+            ideally, ensure state is in country (at least for US)
+            check pronouns (unless there's an Other field)
+
+        """
         user = request.user
         data = request.data
 
+        self.update_profile(user, data)
+        self.update_profile_check(user, data)
+
+        return Response({"message": "Success!"})
+
+    def update_profile(user, data):
         user.first_name = data["first_name"]
         user.last_name = data["last_name"]
         user.email = data["email"]
         user.save()
 
         if user.is_student:
-            self.update_student(user, data)
+            profile = user.student_profile
+            profile.phone_number = data["phone_number"]
+            profile.pronouns = data["pronouns"]
+            profile.city = data["city"]
+            profile.state = data["state"]
+            profile.country = data["country"]
+            profile.school = data["school"]
+            profile.save()
 
-        if user.is_teacher:
-            self.update_teacher(user, data)
-
-        # TODO add correction checks
-        return Response({"message": "Success!"})
-
-    def update_student(self, user, data):
-        profile = user.student_profile
-        profile.phone_number = data["phone_number"]
-        profile.pronouns = data["pronouns"]
-        profile.city = data["city"]
-        profile.state = data["state"]
-        profile.country = data["country"]
-        profile.school = data["school"]
-        profile.save()
-
+    def update_profile_check(user, data):
         if "update_profile" in data and data["update_profile"]:
             assert "program" in data
             assert "edition" in data
@@ -170,28 +170,12 @@ class Profile(APIView):
             studentreg.update_profile_check = True
             studentreg.save()
 
-    def update_teacher(self, user, data):
-        profile = user.teacher_profile
-        profile.phone_number = data["phone_number"]
-        profile.pronouns = data["pronouns"]
-        profile.city = data["city"]
-        profile.state = data["state"]
-        profile.affiliation = data["affiliation"]
-        profile.save()
-
-        if "update_profile" in data and data["update_profile"]:
-            assert "program" in data
-            assert "edition" in data
-            program = Program.objects.get(name=data["program"], edition=data["edition"])
-            teacherreg = TeacherRegistration.objects.get(teacher=user, program=program)
-            teacherreg.update_profile_check = True
-            teacherreg.save()
-
 
 class EmergencyInfo(APIView):
     """
-    Create a new user.
-    Permissions: any (don't have permissions before user is created)
+    Check off emergency info.
+    Will get/update emergency info in the future.
+    Permissions: logged in, is_student, has studentreg object
     """
 
     permission_classes = (custom_permissions.StudentPermission,)
@@ -226,8 +210,9 @@ class EmergencyInfo(APIView):
 
 class MedicalLiability(APIView):
     """
-    Create a new user.
-    Permissions: any (don't have permissions before user is created)
+    Check off medical liability waiver.
+    This will likely be a part of the hook that Formstack uses.
+    Permissions: logged in, is_student, has studentreg object
     """
 
     permission_classes = (custom_permissions.StudentPermission,)
@@ -250,8 +235,9 @@ class MedicalLiability(APIView):
 
 class LiabilityWaiver(APIView):
     """
-    Create a new user.
-    Permissions: any (don't have permissions before user is created)
+    Check off liability waiver.
+    This will likely be part of the hook that the waiver website uses.
+    Permissions: logged in, is_student, has studentreg object
     """
 
     permission_classes = (custom_permissions.StudentPermission,)
@@ -274,8 +260,9 @@ class LiabilityWaiver(APIView):
 
 class Availability(APIView):
     """
-    Create a new user.
-    Permissions: any (don't have permissions before user is created)
+    Check off availability form.
+    Will get/update availability info in the future.
+    Permissions: logged in, is_student, has studentreg object
     """
 
     permission_classes = (custom_permissions.StudentPermission,)
