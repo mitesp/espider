@@ -113,7 +113,7 @@ class StudentRegDashboard extends Component<Props, State> {
   renderRegStatus() {
     return (
       <div className="column is-3">
-        <h2 className="has-text-centered is-size-3">Registration Status</h2>
+        <h2 className="has-text-centered is-size-3  mb-2">Registration Status</h2>
         {this.state.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
         {this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
         {this.state.medliabCheck && renderTaskNoLink("Medical Form", true)}
@@ -126,7 +126,7 @@ class StudentRegDashboard extends Component<Props, State> {
   renderTasks() {
     return (
       <div className="column is-3 has-background-success-light">
-        <h2 className="has-text-centered is-size-3">Tasks</h2>
+        <h2 className="has-text-centered is-size-3 mb-2">Tasks</h2>
         {!this.state.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
         {!this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
         {!this.state.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
@@ -207,7 +207,7 @@ class StudentRegDashboard extends Component<Props, State> {
       this.state.availabilityCheck;
     return (
       <div className="column">
-        <h2 className="has-text-centered is-size-3">Classes</h2>
+        <h2 className="has-text-centered is-size-3 mb-2">Classes</h2>
         {canAddClasses ? (
           this.renderClassView()
         ) : (
