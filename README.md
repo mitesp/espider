@@ -68,6 +68,12 @@ issues then re-add the files and commit.<sup>[3](#footnote-lint)</sup>
 **Resolving conflicts**: If you run into conflicts, try fixing, readding the files, and calling `git rebase --continue`. If that doesn't work, consider aborting, squashing, then rebasing. If you're
 super worried about screwing up git, ask someone else for help!
 
+## Pull Requests
+
+For anything that isn't a minor change, create a new branch (`git checkout -b branch-name)`) and do all your work there. Then create a pull request (easiest to do in the UI) and ask someone else to review your changes. After all comments have been resolved, you can then merge all your changes into `master` using the `Squash and Merge` button.
+
+If a PR involves frontend changes, make sure to include screenshots of the changes in the PR message.
+
 # Deploying
 
 For now, we're using [Heroku](https://www.heroku.com/) to deploy to
