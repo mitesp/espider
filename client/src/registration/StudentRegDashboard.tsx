@@ -137,7 +137,7 @@ class StudentRegDashboard extends Component<Props, State> {
   renderClassSchedule(editsAllowed: boolean) {
     return (
       <div>
-        <table className="table is-fullwidth is-striped is-hoverable">
+        <table className="table is-fullwidth is-striped">
           <thead>
             <th>Time</th>
             <th>Class</th>
