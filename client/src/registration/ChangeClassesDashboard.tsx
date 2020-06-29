@@ -22,6 +22,14 @@ function renderTextInSection(displayedText: string, centered = false) {
   );
 }
 
+function renderLinkedText(displayedText: string, url: string) {
+  return (
+    <h3 className="is-size-5 has-text-centered">
+      <a href={url}>{displayedText}</a>
+    </h3>
+  );
+}
+
 class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -106,6 +114,7 @@ class StudentRegDashboard extends Component<Props, State> {
           {this.renderClassStatus()}
           {this.renderClassCatalog()}
         </div>
+        {renderLinkedText("Back to Dashboard", "dashboard")}
       </div>
     );
   }
