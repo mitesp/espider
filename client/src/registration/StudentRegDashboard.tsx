@@ -137,7 +137,23 @@ class StudentRegDashboard extends Component<Props, State> {
   renderClassSchedule(editsAllowed: boolean) {
     return (
       <div>
-        {renderTextInSection("View class schedule here")}
+        <table className="table is-fullwidth is-striped is-hoverable">
+          <thead>
+            <th>Time</th>
+            <th>Class</th>
+          </thead>
+          <tbody>
+            {this.state.classes.map((clazz, index) => {
+              return (
+                <tr>
+                  <td>{this.state.timeslots[index]}</td>
+                  <td>{clazz}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <br />
         {editsAllowed && renderTextInSection("Edit class schedule here")}
       </div>
     );

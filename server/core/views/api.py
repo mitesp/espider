@@ -298,7 +298,11 @@ class StudentClasses(APIView):
     # timeslots = Timeslot.objects.filter(program=prog)
 
     ret = {
-        "classes": ["class1", "class2", None],
+        "classes": [
+            "How to beat your dad at chess, MIT style",
+            "The Many Transformations of Transition Metals",
+            None,
+        ],
         "timeslots": ["Sat 10-11", "Sat 11-12", "Sat 12-1"],
     }
 
