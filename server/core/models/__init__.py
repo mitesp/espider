@@ -14,6 +14,38 @@ class Program(models.Model):
     def __str__(self):
         return self.name + " " + self.edition
 
+    @property
+    def url(self):
+        return self.name + "/" + self.edition  # TODO handle multi-word editions/seasons
+
+    @staticmethod
+    def get_open_student_programs():
+        return Program.objects.all().filter(student_reg_open=True)
+
+    @staticmethod
+    def get_previous_student_programs(user):
+        """
+        Get programs for which a student has a studentreg object and the program is over
+        """
+        studentregs = StudentRegistration.objects.filter(student=user)
+
+        previous_program_ids = studentregs.filter(
+            reg_status=RegStatusOptions.POST_PROGRAM
+        ).values_list("program", flat=True)
+        previous_programs = Program.objects.filter(
+            id__in=previous_program_ids, student_reg_open=False
+        )
+        return previous_programs
+
+    @staticmethod
+    def get_current_student_programs(user):
+        studentregs = StudentRegistration.objects.filter(student=user)
+        current_studentregs = studentregs.exclude(
+            reg_status=RegStatusOptions.POST_PROGRAM
+        ).values_list("program", flat=True)
+        current_programs = Program.objects.filter(id__in=current_studentregs)
+        return current_programs
+
 
 class Class(models.Model):
     title = models.CharField(max_length=200)
@@ -29,24 +61,27 @@ class Class(models.Model):
         return self.title
 
 
+class RegStatusOptions(models.TextChoices):
+    CLASS_PREFERENCES = ("CLASS_PREFERENCES",)
+    FROZEN_PREFERENCES = ("FROZEN_PREFERENCES",)
+    CHANGE_CLASSES = ("CHANGE_CLASSES",)
+    PRE_PROGRAM = ("PRE_PROGRAM",)
+    DAY_OF = ("DAY_OF",)
+    POST_PROGRAM = ("POST_PROGRAM",)
+
+
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
-    class RegStatusOptions(models.TextChoices):
-        CLASS_PREFERENCES = ("PREF",)
-        FROZEN_PREFERENCES = ("FROZ",)
-        CHANGE_CLASSES = ("CH",)
-        PRE_PROGRAM = ("PRE",)
-        DAY_OF = ("DAY",)
-        POST_PROGRAM = "POST"
-
     student = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
 
     # student reg status
     reg_status = models.CharField(
-        max_length=4, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES
+        max_length=20, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES
     )
 
+    # TODO(mvadari): hmm "updated" might be a better than "check"? (e.g. profile_updated)
+    # or maybe "completed"? Looks like these bubble up all the way to the frontend
     update_profile_check = models.BooleanField(default=False)
     emergency_info_check = models.BooleanField(default=False)
     liability_check = models.BooleanField(default=False)
@@ -60,24 +95,32 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
-    def classes(self):
+    def get_classes(self):
         ids = StudentClassRegistration.objects.filter(student=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
 
 class StudentClassRegistration(models.Model):
-    student = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
+    studentreg = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
     clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
 
-    # ensures a student can't register for the same class twice
     class Meta:
-        unique_together = (("student", "clazz"),)
+        unique_together = (("studentreg", "clazz"),)
+
+    @property
+    def student(self):
+        return self.studentreg.student
+
+    @property
+    def program(self):
+        return self.studentreg.program
 
     def __str__(self):
-        return str(self.student.student.username) + "/" + str(self.clazz)
+        return str(self.student.username) + "/" + str(self.clazz)
 
 
 class TeacherRegistration(models.Model):
+    # TODO(mvadari): same naming comment about "check" as above
     teacher = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     update_profile_check = models.BooleanField(default=False)
@@ -89,18 +132,25 @@ class TeacherRegistration(models.Model):
     def __str__(self):
         return str(self.teacher.username) + "/" + str(self.program)
 
-    def classes(self):
+    def get_classes(self):
         ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
 
 class TeacherClassRegistration(models.Model):
-    teacher = models.ForeignKey(TeacherRegistration, on_delete=models.CASCADE)
+    teacherreg = models.ForeignKey(TeacherRegistration, on_delete=models.CASCADE)
     clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
 
-    # ensures a teacher can't register the same class twice
     class Meta:
-        unique_together = (("teacher", "clazz"),)
+        unique_together = (("teacherreg", "clazz"),)
+
+    @property
+    def teacher(self):
+        return self.teacherreg.teacher
+
+    @property
+    def program(self):
+        return self.teacherreg.program
 
     def __str__(self):
-        return str(self.teacher.teacher.username) + "/" + str(self.clazz)
+        return str(self.teacher.username) + "/" + str(self.clazz)

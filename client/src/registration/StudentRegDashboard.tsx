@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { RegStatusOption } from "./types";
 
 type Props = {
   loggedIn: boolean;
@@ -14,8 +15,30 @@ type State = {
   liabilityCheck: boolean;
   medliabCheck: boolean;
   updateProfileCheck: boolean;
-  regStatus: string;
+  regStatus: RegStatusOption;
 };
+
+// helper functions
+
+function renderTextInSection(text: string) {
+  return <h3 className="is-size-5">{text}</h3>;
+}
+
+function renderTaskNoLink(taskName: string, taskCompleted: boolean) {
+  return (
+    <h3 className="is-size-5">
+      {taskName}: {taskCompleted ? "Done" : "Not Done"}
+    </h3>
+  );
+}
+
+function renderTaskLink(taskName: string, taskCompleted: boolean, link: string) {
+  return (
+    <h3 className="is-size-5">
+      <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
+    </h3>
+  );
+}
 
 class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
@@ -26,14 +49,12 @@ class StudentRegDashboard extends Component<Props, State> {
       liabilityCheck: false,
       medliabCheck: false,
       updateProfileCheck: false,
-      regStatus: "",
+      regStatus: RegStatusOption.Empty, // idk if this is the best solution
     };
   }
 
   componentDidMount() {
-    if (this.props.loggedIn) {
-      this.getStudentReg();
-    }
+    this.getStudentReg();
   }
 
   getStudentReg() {
@@ -58,37 +79,15 @@ class StudentRegDashboard extends Component<Props, State> {
     }
   }
 
-  textInSection(text: string) {
-    return <h3 className="is-size-5">{text}</h3>;
-  }
-
-  taskNoLink(taskName: string, taskCompleted: boolean) {
-    return (
-      <h3 className="is-size-5">
-        {taskName}: {taskCompleted ? "Done" : "Not Done"}
-      </h3>
-    );
-  }
-
-  taskWithLink(taskName: string, taskCompleted: boolean, link: string) {
-    return (
-      <h3 className="is-size-5">
-        <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
-      </h3>
-    );
-  }
-
   renderRegStatus() {
     return (
       <div className="column is-4">
         <h2 className="has-text-centered is-size-3">Registration Status</h2>
-        {this.state.updateProfileCheck &&
-          this.taskWithLink("Update Profile", true, "updateprofile")}
-        {this.state.emergencyInfoCheck &&
-          this.taskWithLink("Emergency Info", true, "emergencyinfo")}
-        {this.state.medliabCheck && this.taskNoLink("Medical Form", true)}
-        {this.state.liabilityCheck && this.taskNoLink("Liability Waiver", true)}
-        {this.state.availabilityCheck && this.taskWithLink("Availability", true, "availability")}
+        {this.state.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
+        {this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
+        {this.state.medliabCheck && renderTaskNoLink("Medical Form", true)}
+        {this.state.liabilityCheck && renderTaskNoLink("Liability Waiver", true)}
+        {this.state.availabilityCheck && renderTaskLink("Availability", true, "availability")}
       </div>
     );
   }
@@ -97,33 +96,31 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="column is-4 has-background-success-light">
         <h2 className="has-text-centered is-size-3">Tasks</h2>
-        {!this.state.updateProfileCheck &&
-          this.taskWithLink("Update Profile", false, "updateprofile")}
-        {!this.state.emergencyInfoCheck &&
-          this.taskWithLink("Emergency Info", false, "emergencyinfo")}
-        {!this.state.medliabCheck && this.taskWithLink("Medical Form", false, "medliab")}
-        {!this.state.liabilityCheck && this.taskWithLink("Liability Waiver", false, "waiver")}
-        {!this.state.availabilityCheck && this.taskWithLink("Availability", false, "availability")}
+        {!this.state.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
+        {!this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
+        {!this.state.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
+        {!this.state.liabilityCheck && renderTaskLink("Liability Waiver", false, "waiver")}
+        {!this.state.availabilityCheck && renderTaskLink("Availability", false, "availability")}
       </div>
     );
   }
 
   renderClassPrefs() {
     switch (this.state.regStatus) {
-      case "PREF":
-        return this.textInSection("Change class preferences here");
-      case "FROZ":
-        return this.textInSection("View class preferences here");
-      case "CH":
-        return this.textInSection("Change classes here");
-      case "PRE":
-        return this.textInSection("View classes here");
-      case "DAYOF":
-        return this.textInSection("View dayof link here");
-      case "POST":
-        return this.textInSection("View classes here");
+      case RegStatusOption.ClassPreferences:
+        return renderTextInSection("Change class preferences here");
+      case RegStatusOption.FrozenPreferences:
+        return renderTextInSection("View class preferences here");
+      case RegStatusOption.ChangeClasses:
+        return renderTextInSection("Change classes here");
+      case RegStatusOption.PreProgram:
+        return renderTextInSection("View classes here");
+      case RegStatusOption.DayOf:
+        return renderTextInSection("View dayof link here");
+      case RegStatusOption.PostProgram:
+        return renderTextInSection("View classes here");
       default:
-        return this.textInSection("");
+        return renderTextInSection("Something broke :("); // error message
     }
   }
 
@@ -155,6 +152,7 @@ class StudentRegDashboard extends Component<Props, State> {
         <h1 className="has-text-centered is-size-2">
           {this.props.program} {this.props.edition} Dashboard for {this.props.username}
         </h1>
+        <br />
         <div className="columns">
           {this.renderRegStatus()}
           {this.renderTasks()}

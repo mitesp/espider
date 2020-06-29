@@ -42,6 +42,8 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 class StudentRegSerializer(serializers.ModelSerializer):
     # student_reg_open = serializers.CharField(source='program.student_reg_open')
+    # commented code left in because it might be useful later, especially for access
+    #   checks (whether they're allowed to access certain pages)
 
     class Meta:
         model = StudentRegistration

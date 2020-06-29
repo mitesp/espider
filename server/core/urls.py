@@ -59,10 +59,11 @@ urlpatterns = [
     path("<program>/<edition>/students/", views.StudentsView.as_view(), name="students"),
     path("<program>/<edition>/classes/", views.ClassesView.as_view(), name="classes"),
     # api paths
+    # TODO: these paths are kinda messy -- we should read about API design and clean this up.
     path("api/", include(router.urls)),
     path("api/current_user/", views.current_user),
     path("api/current_studentreg/", views.current_studentreg),
-    path("api/studentdashboard/", views.getstudentdashboard),
+    path("api/studentdashboard/", views.get_student_dashboard),
     path("api/add_user/", views.CreateUser.as_view()),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),

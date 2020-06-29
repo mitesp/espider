@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
-type JSONProgram = {
-  name: string;
-  edition: string;
-  registered?: boolean;
-};
-
+// TODO refactor API so registered doesn't need to be optional
 type Program = {
   name: string;
   url: string;
@@ -35,25 +30,11 @@ export default class StudentDashboard extends Component<Props, State> {
     this.getStudentDashboard();
   }
 
-  generateProgramList(results: Array<JSONProgram>) {
-    const programs = Array<Program>(results.length);
-    let counter = 0;
-    results.forEach(function (r) {
-      const name = r.name + " " + r.edition;
-      const url = r.name + "/" + r.edition + "/dashboard";
-      const registered = r.registered;
-      let p: Program = { name: name, url: url, registered: registered };
-      programs[counter] = p;
-      counter++;
-    });
-    return programs;
-  }
-
   getStudentDashboard() {
     axiosInstance.get("/studentdashboard/").then(res => {
       this.setState({
-        programs: this.generateProgramList(res.data.current),
-        previousPrograms: this.generateProgramList(res.data.previous),
+        programs: res.data.current,
+        previousPrograms: res.data.previous,
       });
     });
   }
