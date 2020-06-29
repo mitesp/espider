@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
 type SignupProps = {
@@ -14,7 +14,7 @@ function isValidField(prop: string, obj: SignupState): prop is keyof SignupState
   return prop in obj;
 }
 
-class SignupForm extends React.Component<SignupProps, SignupState> {
+class SignupForm extends Component<SignupProps, SignupState> {
   constructor(props: SignupProps) {
     super(props);
     this.state = {
@@ -35,9 +35,9 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
     });
   };
 
-  handleSignup = (e: React.FormEvent<HTMLFormElement>, data: SignupState) => {
+  handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axiosInstance.post("/add_user/", JSON.stringify(data)).then(result => {
+    axiosInstance.post("/add_user/", JSON.stringify(this.state)).then(result => {
       axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
       localStorage.setItem("token", result.data.tokens.access);
       localStorage.setItem("refresh", result.data.tokens.refresh);
@@ -48,7 +48,7 @@ class SignupForm extends React.Component<SignupProps, SignupState> {
 
   render() {
     return (
-      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSignup(e, this.state)}>
+      <form onSubmit={this.handleSignup}>
         {/* Validation elements are concurrently commented out */}
         <div className="field">
           <label className="label" htmlFor="username">

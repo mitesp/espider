@@ -1,57 +1,51 @@
-import React from "react";
+import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
+import { PronounOptions } from "../forms/constants";
+import { customInput, labeledInput, labeledSelect } from "../forms/helpers";
 
 type Props = {
+  edition: string;
   isStudent: boolean;
   isTeacher: boolean;
   program: string;
-  edition: string;
 };
 
 type State = {
+  affiliation: string;
+  city: string;
+  country: string;
+  dateOfBirth: string;
   email: string;
   firstName: string;
+  gradYear: string;
   lastName: string;
   phoneNumber: string;
   pronouns: string;
-  city: string;
-  state: string;
-  country: string;
-  dateOfBirth: string;
-  gradYear: string;
   school: string;
-  affiliation: string;
+  state: string;
 };
-
-const PronounOptions: string[] = [
-  "He/Him/His",
-  "She/Her/Hers",
-  "They/Them/Theirs",
-  "Other",
-  "Prefer Not to Say",
-];
 
 function isValidField(prop: string, obj: State): prop is keyof State {
   return prop in obj;
 }
 
-class UpdateProfileForm extends React.Component<Props, State> {
+class UpdateProfileForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      affiliation: "",
+      city: "",
+      country: "",
+      dateOfBirth: "",
       email: "",
       firstName: "",
+      gradYear: "",
       lastName: "",
       phoneNumber: "",
       pronouns: "",
-      city: "",
-      state: "",
-      country: "United States",
-      dateOfBirth: "",
-      gradYear: "",
       school: "",
-      affiliation: "",
+      state: "",
     };
   }
 
@@ -62,51 +56,50 @@ class UpdateProfileForm extends React.Component<Props, State> {
   getProfileInfo() {
     axiosInstance.get("/profile/").then(res => {
       this.setState({
+        affiliation: res.data.affiliation,
+        city: res.data.city,
+        country: res.data.country,
+        dateOfBirth: res.data.date_of_birth,
         email: res.data.email,
         firstName: res.data.first_name,
+        gradYear: res.data.grad_year,
         lastName: res.data.last_name,
         phoneNumber: res.data.phone_number,
         pronouns: res.data.pronouns,
-        city: res.data.city,
-        state: res.data.state,
-        country: res.data.country,
-        dateOfBirth: res.data.date_of_birth,
-        gradYear: res.data.grad_year,
         school: res.data.school,
-        affiliation: res.data.affiliation,
+        state: res.data.state,
       });
     });
   }
 
   handleChange = (e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLSelectElement>) => {
-    const name = e.currentTarget.name;
-    const value = e.currentTarget.value as string;
-    this.setState((prevstate: State) => {
-      const newState = { ...prevstate };
-      if (isValidField(name, prevstate)) {
+    const { name, value } = e.currentTarget;
+    this.setState(() => {
+      const newState = { ...this.state };
+      if (isValidField(name, this.state)) {
         newState[name] = value;
       }
       return newState;
     });
   };
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>, data: State) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
       .post("/profile/", {
+        affiliation: this.state.affiliation,
+        city: this.state.city,
+        country: this.state.country,
+        edition: this.props.edition,
         first_name: this.state.firstName,
         last_name: this.state.lastName,
         email: this.state.email,
         phone_number: this.state.phoneNumber,
-        pronouns: this.state.pronouns,
-        city: this.state.city,
-        state: this.state.state,
-        country: this.state.country,
-        school: this.state.school,
-        affiliation: this.state.affiliation,
-        update_profile: true,
         program: this.props.program,
-        edition: this.props.edition,
+        pronouns: this.state.pronouns,
+        state: this.state.state,
+        school: this.state.school,
+        update_profile: true,
       })
       .then(result => {
         /*TODO check validity of submitted data*/
@@ -114,118 +107,20 @@ class UpdateProfileForm extends React.Component<Props, State> {
       });
   };
 
-  customInput(
-    label: string,
-    name: string,
-    value: string,
-    type: string,
-    icon?: string,
-    help?: string,
-    disabled?: boolean
-  ) {
-    let className = "control";
-    if (icon) {
-      className += " has-icons-left";
-    }
-    return (
-      <div className={className}>
-        <input
-          className="input"
-          id={name}
-          name={name}
-          type={type}
-          placeholder={label}
-          value={value}
-          onChange={this.handleChange}
-          disabled={disabled === true}
-        />
-        {icon && (
-          <span className="icon is-small is-left">
-            <i className={"fas fa-" + icon}></i>
-          </span>
-        )}
-      </div>
-    );
-  }
-
-  labeledInput(
-    label: string,
-    name: string,
-    value: string,
-    type: string,
-    icon?: string,
-    help?: string,
-    disabled?: boolean
-  ) {
-    return (
-      <div className="field">
-        <label className="label" htmlFor={name}>
-          {label}
-        </label>
-        {this.customInput(label, name, value, type, icon, help, disabled)}
-      </div>
-    );
-  }
-
-  labeledSelect(
-    label: string,
-    name: string,
-    value: string,
-    options: string[],
-    icon?: string,
-    help?: string
-  ) {
-    let className = "control";
-    if (icon) {
-      className += " has-icons-left";
-    }
-    return (
-      <div className="field">
-        <label className="label" htmlFor={name}>
-          {label}
-        </label>
-        <div className={className}>
-          <div className="select is-normal is-expanded">
-            <select
-              id={name}
-              name={name}
-              value={value}
-              placeholder={label}
-              onChange={this.handleChange}
-            >
-              {PronounOptions.map((pronoun, index) => {
-                return <option key={index} value={pronoun}>{pronoun}</option>;
-              })}
-            </select>
-          </div>
-          {icon && (
-            <span className="icon is-left">
-              <i className={"fas fa-" + icon}></i>
-            </span>
-          )}
-          {help && <p className="help"> {help} </p>}
-        </div>
-      </div>
-    );
-  }
-
   render() {
     return (
       <div className="container">
         <div className="columns">
           <div className="column is-6 is-offset-3">
             <h1 className="has-text-centered is-size-3">Update Profile</h1>
-            <form
-              onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e, this.state)}
-            >
-              <label className="label" htmlFor="name">
-                Name
-              </label>
+            <form onSubmit={this.handleSubmit}>
+              <label className="label">Name</label>
               <div className="field is-horizontal">
                 <div className="field-body">
                   <div className="field">
                     <div className="control is-expanded">
-                      {this.customInput(
+                      {customInput(
+                        this.handleChange,
                         "First Name",
                         "firstName",
                         this.state.firstName,
@@ -236,7 +131,8 @@ class UpdateProfileForm extends React.Component<Props, State> {
                   </div>
                   <div className="field">
                     <div className="control is-expanded">
-                      {this.customInput(
+                      {customInput(
+                        this.handleChange,
                         "Last Name",
                         "lastName",
                         this.state.lastName,
@@ -248,7 +144,8 @@ class UpdateProfileForm extends React.Component<Props, State> {
                 </div>
               </div>
 
-              {this.labeledSelect(
+              {labeledSelect(
+                this.handleChange,
                 "Pronouns",
                 "pronouns",
                 this.state.pronouns,
@@ -257,8 +154,16 @@ class UpdateProfileForm extends React.Component<Props, State> {
                 "We ask for this information for the purposes of helping our staff use the most respectful language when addressing you."
               )}
 
-              {this.labeledInput("E-mail", "email", this.state.email, "email", "envelope")}
-              {this.labeledInput(
+              {labeledInput(
+                this.handleChange,
+                "E-mail",
+                "email",
+                this.state.email,
+                "email",
+                "envelope"
+              )}
+              {labeledInput(
+                this.handleChange,
                 "Phone Number",
                 "phoneNumber",
                 this.state.phoneNumber,
@@ -266,12 +171,27 @@ class UpdateProfileForm extends React.Component<Props, State> {
                 "phone"
               )}
 
-              {this.labeledInput("City", "city", this.state.city, "text", "city")}
-              {this.labeledInput("State", "state", this.state.state, "text", "compass")}
-              {this.labeledInput("Country", "country", this.state.country, "text", "globe")}
+              {labeledInput(this.handleChange, "City", "city", this.state.city, "text", "city")}
+              {labeledInput(
+                this.handleChange,
+                "State",
+                "state",
+                this.state.state,
+                "text",
+                "compass"
+              )}
+              {labeledInput(
+                this.handleChange,
+                "Country",
+                "country",
+                this.state.country,
+                "text",
+                "globe"
+              )}
 
               {this.props.isStudent &&
-                this.labeledInput(
+                labeledInput(
+                  this.handleChange,
                   "Date of Birth",
                   "dateOfBirth",
                   this.state.dateOfBirth,
@@ -281,7 +201,8 @@ class UpdateProfileForm extends React.Component<Props, State> {
                   true
                 )}
               {this.props.isStudent &&
-                this.labeledInput(
+                labeledInput(
+                  this.handleChange,
                   "High School Graduation Year",
                   "gradYear",
                   this.state.gradYear,
@@ -291,7 +212,8 @@ class UpdateProfileForm extends React.Component<Props, State> {
                   true
                 )}
               {this.props.isStudent &&
-                this.labeledInput(
+                labeledInput(
+                  this.handleChange,
                   "Current School",
                   "school",
                   this.state.school,
@@ -300,7 +222,8 @@ class UpdateProfileForm extends React.Component<Props, State> {
                 )}
 
               {this.props.isTeacher &&
-                this.labeledInput(
+                labeledInput(
+                  this.handleChange,
                   "MIT Affiliation",
                   "affiliation",
                   this.state.affiliation,

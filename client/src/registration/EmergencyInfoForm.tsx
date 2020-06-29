@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
 
@@ -16,7 +16,7 @@ function isValidField(prop: string, obj: State): prop is keyof State {
   return prop in obj;
 }
 
-class EmergencyInfoForm extends React.Component<Props, State> {
+class EmergencyInfoForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -42,8 +42,8 @@ class EmergencyInfoForm extends React.Component<Props, State> {
   }
 
   handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const name = e.currentTarget.name as string;
-    const value = e.currentTarget.value as string;
+    const name = e.currentTarget.name;
+    const value = e.currentTarget.value;
     this.setState((prevstate: State) => {
       const newState = { ...prevstate };
       if (isValidField(name, prevstate)) {
@@ -53,7 +53,7 @@ class EmergencyInfoForm extends React.Component<Props, State> {
     });
   };
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>, data: State) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
       .post("/emergency_info/", {
@@ -108,9 +108,7 @@ class EmergencyInfoForm extends React.Component<Props, State> {
         <div className="columns">
           <div className="column is-6 is-offset-3">
             <h1 className="has-text-centered is-size-3">Emergency Info</h1>
-            <form
-              onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e, this.state)}
-            >
+            <form onSubmit={this.handleSubmit}>
               <label className="label" htmlFor="name">
                 I have no clue what fields go here
               </label>

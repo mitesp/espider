@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
 type LoginProps = {
@@ -14,7 +14,7 @@ function isValidField(prop: string, obj: LoginState): prop is keyof LoginState {
   return prop in obj;
 }
 
-class LoginForm extends React.Component<LoginProps, LoginState> {
+class LoginForm extends Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
     super(props);
     this.state = {
@@ -35,7 +35,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     });
   };
 
-  handleLogin = (e: React.FormEvent<HTMLFormElement>, data: LoginState) => {
+  handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
       .post("/token/", {
@@ -53,7 +53,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
 
   render() {
     return (
-      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleLogin(e, this.state)}>
+      <form onSubmit={this.handleLogin}>
         <h1 className="has-text-centered is-size-3">Log in</h1>
         <div className="field">
           <label className="label" htmlFor="username">

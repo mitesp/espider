@@ -1,13 +1,13 @@
-import React from "react";
+import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
 
 type Props = {
-  isStudent: boolean;
-  url: string;
-  formName: string;
-  program: string;
   edition: string;
+  formName: string;
+  isStudent: boolean;
+  program: string;
+  url: string;
 };
 
 type State = {};
@@ -15,13 +15,13 @@ type State = {};
 // This is a placeholder for forms that haven't been implemented yet
 // All they do is mark the form as completed in the backend on submit
 
-class DummyForm extends React.Component<Props, State> {
+class DummyForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {};
   }
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>, data: State) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
       .post("/" + this.props.url + "/", {
@@ -39,9 +39,7 @@ class DummyForm extends React.Component<Props, State> {
         <div className="columns">
           <div className="column is-6 is-offset-3">
             <h1 className="has-text-centered is-size-3">{this.props.formName}</h1>
-            <form
-              onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e, this.state)}
-            >
+            <form onSubmit={this.handleSubmit}>
               <label className="label" htmlFor="name">
                 This is a dummy form
               </label>
