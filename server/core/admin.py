@@ -43,6 +43,8 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
         "emergency_info_check",
         "medliab_check",
         "liability_check",
+        "availability_check",
+        "payment_check",
     )
     search_fields = ("student", "program")
 
