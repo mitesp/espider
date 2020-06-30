@@ -13,3 +13,12 @@ class TeacherPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.is_teacher
+
+
+class StudentOrTeacherPermission(permissions.BasePermission):
+    message = "Only students and teachers can perform this action."
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and (
+            request.user.is_student or request.user.is_teacher
+        )

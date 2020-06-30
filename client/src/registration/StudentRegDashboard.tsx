@@ -35,6 +35,7 @@ function renderTaskNoLink(taskName: string, taskCompleted: boolean) {
 function renderTaskLink(taskName: string, taskCompleted: boolean, link: string) {
   return (
     <h3 className="is-size-5">
+
       <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
     </h3>
   );

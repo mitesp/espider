@@ -6,6 +6,8 @@ from core.serializers import (
     UserSerializer,
     UserSerializerWithToken,
 )
+from django.db import transaction
+from django.forms.models import model_to_dict
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -27,7 +29,9 @@ def current_user(request):
 
 class CreateUser(APIView):
     """
-    Create a new user.
+    Create a new user and return the access/refresh token pair.
+    This is used during the signup process.
+    Errors are not being handled yet.
     Permissions: any (don't have permissions before user is created)
     """
 
@@ -62,8 +66,6 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
 def get_student_dashboard(request):
     user = request.user
 
-    # TODO(mvadari): this should all probably get moved into a class method in some model
-
     previous_programs = Program.get_previous_student_programs(user)
     previous_json = [{"name": str(p), "url": p.url} for p in previous_programs]
 
@@ -82,7 +84,7 @@ def get_student_dashboard(request):
     return Response({"previous": previous_json, "current": current_json})
 
 
-# Reg Dashboard API calls
+# Registration API calls
 
 
 @api_view(["GET"])
@@ -94,8 +96,8 @@ def current_studentreg(request):
         program open for registration, program not in Pre-Program/after
     """
 
-    program = request.GET["program"]
-    edition = request.GET["edition"]
+    program = request.GET.get("program")
+    edition = request.GET.get("edition")
     user = request.user
 
     # TODO make this check better
@@ -104,3 +106,178 @@ def current_studentreg(request):
     studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
     # TODO figure out how to change the default regstatus based on the program's status
     return Response(StudentRegSerializer(studentreg).data)
+
+
+class Profile(APIView):
+    """
+    Get/update user profile.
+    Permissions: logged in, is_student, has studentreg object
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    def get(self, request, format=None):
+        user = request.user
+        profile = user.profile
+        data = {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+        }
+        data.update(model_to_dict(profile))
+
+        return Response(data)
+
+    @transaction.atomic
+    def post(self, request, format=None):
+        """
+        TODO: validate:
+            ensure email is in email format
+            ensure phone number is in phone number format
+            ensure country is an actual country
+            ideally, ensure state is in country (at least for US)
+            check pronouns (unless there's an Other field)
+
+        """
+        user = request.user
+        data = request.data
+
+        self.update_profile(user, data)
+        self.update_profile_check(user, data)
+
+        return Response({"message": "Success!"})
+
+    def update_profile(user, data):
+        user.first_name = data.get("first_name")
+        user.last_name = data.get("last_name")
+        user.email = data.get("email")
+        user.save()
+
+        if user.is_student:
+            profile = user.profile
+            profile.phone_number = data.get("phone_number")
+            profile.pronouns = data.get("pronouns")
+            profile.city = data.get("city")
+            profile.state = data.get("state")
+            profile.country = data.get("country")
+            profile.school = data.get("school")
+            profile.save()
+
+    def update_profile_check(user, data):
+        if "update_profile" in data and data["update_profile"]:
+            program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
+            studentreg = StudentRegistration.objects.get(student=user, program=program)
+            studentreg.update_profile_check = True
+            studentreg.save()
+
+
+class EmergencyInfo(APIView):
+    """
+    Check off emergency info.
+    Will get/update emergency info in the future.
+    Permissions: logged in, is_student, has studentreg object
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    def get(self, request, format=None):
+        # user = request.user
+        # params = request.GET
+
+        # program = Program.objects.get(name=params["program"], edition=params["edition"])
+        # studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # return current emergency info
+        # maybe populate this with parent info (or have that be an option)
+
+        return Response({})
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # submit emergency info
+
+        studentreg.emergency_info_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})
+
+
+class MedicalLiability(APIView):
+    """
+    Check off medical liability waiver.
+    This will likely be a part of the hook that Formstack uses.
+    Permissions: logged in, is_student, has studentreg object
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # TODO maybe add other permissions to this so you can't accidentally do this?
+
+        studentreg.medliab_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})
+
+
+class LiabilityWaiver(APIView):
+    """
+    Check off liability waiver.
+    This will likely be part of the hook that the waiver website uses.
+    Permissions: logged in, is_student, has studentreg object
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        # TODO maybe add other permissions to this so you can't accidentally do this?
+
+        studentreg.liability_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})
+
+
+class Availability(APIView):
+    """
+    Check off availability form.
+    Will get/update availability info in the future.
+    Permissions: logged in, is_student, has studentreg object
+    """
+
+    permission_classes = (custom_permissions.StudentPermission,)
+
+    # TODO incorporate teacher stuff here too
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+
+        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        studentreg.availability_check = True
+        studentreg.save()
+
+        # TODO add correction checks
+        return Response({"message": "Success!"})

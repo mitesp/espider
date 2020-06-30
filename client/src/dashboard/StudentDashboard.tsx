@@ -44,6 +44,7 @@ export default class StudentDashboard extends Component<Props, State> {
   }
 
   render() {
+    // TODO add announcements/dates section
     return (
       <div className="container">
         <h1 className="has-text-centered is-size-2">Student Dashboard for {this.props.username}</h1>

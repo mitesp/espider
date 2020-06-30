@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { renderLabeledInput } from "../forms/helpers";
 
 type LoginProps = {
   onLogin: Function;
@@ -14,7 +15,7 @@ function isValidField(prop: string, obj: LoginState): prop is keyof LoginState {
   return prop in obj;
 }
 
-class LoginForm extends React.Component<LoginProps, LoginState> {
+class LoginForm extends Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
     super(props);
     this.state = {
@@ -35,7 +36,7 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
     });
   };
 
-  handleLogin = (e: React.FormEvent<HTMLFormElement>, data: LoginState) => {
+  handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
       .post("/token/", {
@@ -53,41 +54,25 @@ class LoginForm extends React.Component<LoginProps, LoginState> {
 
   render() {
     return (
-      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleLogin(e, this.state)}>
+      <form onSubmit={this.handleLogin}>
         <h1 className="has-text-centered is-size-3">Log in</h1>
-        <div className="field">
-          <label className="label" htmlFor="username">
-            Username
-          </label>
-          <div className="control">
-            <input
-              className="input"
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Username"
-              value={this.state.username}
-              onChange={this.handleChange}
-            />
-          </div>
-        </div>
+        {renderLabeledInput(
+          this.handleChange,
+          "Username",
+          "username",
+          this.state.username,
+          "text",
+          "user"
+        )}
 
-        <div className="field">
-          <label className="label" htmlFor="password">
-            Password
-          </label>
-          <div className="control">
-            <input
-              className="input"
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-          </div>
-        </div>
+        {renderLabeledInput(
+          this.handleChange,
+          "Password",
+          "password",
+          this.state.password,
+          "password",
+          "lock"
+        )}
         <div className="field">
           <div className="control">
             <button className="button is-link" type="submit">
