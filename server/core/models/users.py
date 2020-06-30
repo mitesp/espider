@@ -5,6 +5,8 @@ from django.db import models
 class ESPUser(AbstractUser):
     # inherits username, first_name, last_name, email, is_staff, is_superuser, etc.
 
+    # TODO add constraint so user cannot have both a student_profile and a teacher_profile
+
     @property
     def is_student(self):
         return hasattr(self, "student_profile")
