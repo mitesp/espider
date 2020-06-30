@@ -283,9 +283,9 @@ class Availability(APIView):
         return Response({"message": "Success!"})
 
 
-class StudentClasses(APIView):
+class StudentProgramClasses(APIView):
     """
-    Get/update a student's class list.
+    Get/update a student's class list for a given program.
     Permissions: logged in, is student, has studentreg object
     """
 

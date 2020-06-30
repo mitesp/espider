@@ -112,7 +112,7 @@ class StudentRegDashboard extends Component<Props, State> {
   renderRegStatus() {
     return (
       <div className="column is-3">
-        <h2 className="has-text-centered is-size-3  mb-2">Registration Status</h2>
+        <h2 className="has-text-centered is-size-3 mb-2">Registration Status</h2>
         {this.state.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
         {this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
         {this.state.medliabCheck && renderTaskNoLink("Medical Form", true)}
@@ -135,7 +135,7 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
-  renderClassPrefs(editsAllowed: boolean) {
+  renderClassPrefs(editsAllowed: boolean = false) {
     return (
       <div>
         {renderTextInSection("View class preferences here")}
@@ -144,7 +144,11 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
-  renderClassSchedule(editsAllowed: boolean) {
+  renderClassPrefsEditable() {
+    return this.renderClassPrefs(true);
+  }
+
+  renderClassSchedule(editsAllowed: boolean = false) {
     // tables might not be very accessible
     return (
       <div className="table-container">
@@ -171,6 +175,10 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
+  renderClassScheduleEditable() {
+    return this.renderClassSchedule(true);
+  }
+
   renderDayOfClassSchedule() {
     return (
       <div>
@@ -183,17 +191,17 @@ class StudentRegDashboard extends Component<Props, State> {
   renderClassView() {
     switch (this.state.regStatus) {
       case RegStatusOption.ClassPreferences:
-        return this.renderClassPrefs(true);
+        return this.renderClassPrefsEditable();
       case RegStatusOption.FrozenPreferences:
-        return this.renderClassPrefs(false);
+        return this.renderClassPrefs();
       case RegStatusOption.ChangeClasses:
-        return this.renderClassSchedule(true);
+        return this.renderClassScheduleEditable();
       case RegStatusOption.PreProgram:
-        return this.renderClassSchedule(false);
+        return this.renderClassSchedule();
       case RegStatusOption.DayOf:
         return this.renderDayOfClassSchedule();
       case RegStatusOption.PostProgram:
-        return this.renderClassSchedule(false);
+        return this.renderClassSchedule();
       default:
         return renderTextInSection("Something broke :("); // error message
     }

@@ -17,9 +17,7 @@ type State = {
 
 //mostly used for placeholders
 function renderTextInSection(displayedText: string, centered = false) {
-  return (
-    <h3 className={"is-size-5" + (centered ? " has has-text-centered" : "")}>{displayedText}</h3>
-  );
+  return <h3 className={"is-size-5" + (centered ? "has-text-centered" : "")}>{displayedText}</h3>;
 }
 
 function renderLinkedText(displayedText: string, url: string) {
@@ -66,13 +64,15 @@ class StudentRegDashboard extends Component<Props, State> {
         <div className="table-container">
           <table className="table is-fullwidth is-striped is-hoverable">
             <thead>
-              <th>Time</th>
-              <th>Class</th>
+              <tr>
+                <th>Time</th>
+                <th>Class</th>
+              </tr>
             </thead>
             <tbody>
               {this.state.classes.map((clazz, index) => {
                 return (
-                  <tr>
+                  <tr key={index}>
                     <th>{this.state.timeslots[index]}</th>
                     <td>{clazz}</td>
                   </tr>
