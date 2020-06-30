@@ -24,7 +24,7 @@ class DummyForm extends Component<Props, State> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post("/" + this.props.url + "/", {
+      .post(this.props.url, {
         program: this.props.program,
         edition: this.props.edition,
       })

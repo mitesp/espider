@@ -1,4 +1,5 @@
 import axios from "axios";
+import { tokenRefreshEndpoint } from "./apiEndpoints";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8000/api/",
@@ -27,7 +28,7 @@ axiosInstance.interceptors.response.use(
       const refreshToken = localStorage.getItem("refresh");
 
       return axiosInstance
-        .post("/token/refresh/", { refresh: refreshToken })
+        .post(tokenRefreshEndpoint, { refresh: refreshToken })
         .then(response => {
           localStorage.setItem("token", response.data.access);
           localStorage.setItem("refresh", response.data.refresh);

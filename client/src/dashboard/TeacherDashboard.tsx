@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { teacherDashboardEndpoint } from "../apiEndpoints";
 
 type JSONProgram = {
   name: string;
@@ -44,7 +45,7 @@ export default class TeacherDashboard extends Component<Props, State> {
   }
 
   getPrograms() {
-    axiosInstance.get("/teacherprograms/").then(res => {
+    axiosInstance.get(teacherDashboardEndpoint).then(res => {
       this.setState({ programs: this.generateProgramList(res.data.results) });
     });
   }

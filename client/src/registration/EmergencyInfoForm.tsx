@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
+import { emergencyInfoEndpoint } from "../apiEndpoints";
 
 type Props = {
   isStudent: boolean;
@@ -30,7 +31,7 @@ class EmergencyInfoForm extends Component<Props, State> {
 
   getEmergencyInfo() {
     axiosInstance
-      .get("/emergency_info/", {
+      .get(emergencyInfoEndpoint, {
         params: {
           program: this.props.program,
           edition: this.props.edition,
@@ -56,7 +57,7 @@ class EmergencyInfoForm extends Component<Props, State> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post("/emergency_info/", {
+      .post(emergencyInfoEndpoint, {
         program: this.props.program,
         edition: this.props.edition,
       })

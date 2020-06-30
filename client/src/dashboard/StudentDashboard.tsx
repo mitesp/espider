@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { studentDashboardEndpoint } from "../apiEndpoints";
 
 type CurrentProgram = {
   name: string;
@@ -35,7 +36,7 @@ export default class StudentDashboard extends Component<Props, State> {
   }
 
   getStudentDashboard() {
-    axiosInstance.get("/studentdashboard/").then(res => {
+    axiosInstance.get(studentDashboardEndpoint).then(res => {
       this.setState({
         programs: res.data.current,
         previousPrograms: res.data.previous,

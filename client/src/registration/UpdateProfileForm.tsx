@@ -3,6 +3,7 @@ import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
 import { PronounOptions } from "../constants";
 import { renderCustomInput, renderLabeledInput, renderLabeledSelect } from "../forms/helpers";
+import { studentProfileEndpoint } from "../apiEndpoints";
 
 type Props = {
   edition: string;
@@ -54,7 +55,7 @@ class UpdateProfileForm extends Component<Props, State> {
   }
 
   getProfileInfo() {
-    axiosInstance.get("/profile/").then(res => {
+    axiosInstance.get(studentProfileEndpoint).then(res => {
       this.setState({
         affiliation: res.data.affiliation,
         city: res.data.city,
@@ -86,7 +87,7 @@ class UpdateProfileForm extends Component<Props, State> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post("/profile/", {
+      .post(studentProfileEndpoint, {
         affiliation: this.state.affiliation,
         city: this.state.city,
         country: this.state.country,

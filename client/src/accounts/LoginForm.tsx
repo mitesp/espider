@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { renderLabeledInput } from "../forms/helpers";
+import { loginEndpoint } from "../apiEndpoints";
 
 type LoginProps = {
   onLogin: Function;
@@ -39,7 +40,7 @@ class LoginForm extends Component<LoginProps, LoginState> {
   handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post("/token/", {
+      .post(loginEndpoint, {
         username: this.state.username,
         password: this.state.password,
       })
