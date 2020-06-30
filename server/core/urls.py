@@ -11,9 +11,9 @@ router.register("teacherprograms", views.TeacherProgramViewSet)
 app_name = "core"
 urlpatterns = [
     # general pages
-    path("index", views.index, name="index"),
-    path("studentdashboard", views.studentdashboard, name="studentdashboard"),
-    path("teacherdashboard", views.teacherdashboard, name="teacherdashboard"),
+    # path("index", views.index, name="index"),
+    # path("studentdashboard", views.studentdashboard, name="studentdashboard"),
+    # path("teacherdashboard", views.teacherdashboard, name="teacherdashboard"),
     # accounts pages
     path(
         "accounts/",
@@ -32,16 +32,16 @@ urlpatterns = [
         ),
     ),
     # student registration
-    path(
-        "<program>/<edition>/studentprofile/",
-        views.StudentProfileView.as_view(),
-        name="studentprofile",
-    ),
-    path("<program>/<edition>/emergency_info/", views.emergency_info, name="emergency_info"),
-    path("<program>/<edition>/medliab/", views.medliab, name="medliab"),
-    path("<program>/<edition>/waiver/", views.waiver, name="waiver"),
+    # path(
+    #     "<program>/<edition>/studentprofile/",
+    #     views.StudentProfileView.as_view(),
+    #     name="studentprofile",
+    # ),
+    # path("<program>/<edition>/emergency_info/", views.emergency_info, name="emergency_info"),
+    # path("<program>/<edition>/medliab/", views.medliab, name="medliab"),
+    # path("<program>/<edition>/waiver/", views.waiver, name="waiver"),
     path("<program>/<edition>/studentclassreg/", views.studentclassreg, name="studentclassreg"),
-    path("<program>/<edition>/studentreg/", views.studentregdashboard, name="studentregdashboard"),
+    # path("<program>/<edition>/studentreg/", views.studentregdashboard,name="studentregdashboard"),
     path("<program>/<edition>/studentclasses/", views.studentclasses, name="studentclasses"),
     # teacher registration
     path(

@@ -98,8 +98,11 @@ def current_studentreg(request):
 
     program = request.GET.get("program")
     edition = request.GET.get("edition")
-    prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
     user = request.user
+
+    # TODO make this check better
+    prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
+
     studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
     # TODO figure out how to change the default regstatus based on the program's status
     return Response(StudentRegSerializer(studentreg).data)

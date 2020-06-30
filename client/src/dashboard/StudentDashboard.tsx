@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
-// TODO refactor API so registered doesn't need to be optional
-type Program = {
+type CurrentProgram = {
   name: string;
   url: string;
-  registered?: boolean;
+  registered: boolean;
+};
+
+type PastProgram = {
+  name: string;
+  url: string;
 };
 
 type Props = {
@@ -13,8 +17,8 @@ type Props = {
 };
 
 type State = {
-  programs: Program[];
-  previousPrograms: Program[];
+  programs: CurrentProgram[];
+  previousPrograms: PastProgram[];
 };
 
 export default class StudentDashboard extends Component<Props, State> {
