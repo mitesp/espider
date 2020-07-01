@@ -37,6 +37,7 @@ class ESPUserAdmin(admin.ModelAdmin):
 @admin.register(StudentRegistration)
 class StudentRegistrationAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "student",
         "program",
         "update_profile_check",

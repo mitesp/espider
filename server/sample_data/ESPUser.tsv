@@ -1,0 +1,13 @@
+id	username	password	is_staff	is_superuser
+1000	student0	password	False	False
+1001	student1	password	False	False
+1002	student2	password	False	False
+1003	student3	password	False	False
+1004	student4	password	False	False
+1005	student5	password	False	False
+1020	teacher0	password	False	False
+1021	teacher1	password	False	False
+1022	teacher2	password	False	False
+1023	teacher3	password	False	False
+1024	teacher4	password	False	False
+1040	edward	lobster	True	True
