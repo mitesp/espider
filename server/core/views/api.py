@@ -281,3 +281,32 @@ class Availability(APIView):
 
         # TODO add correction checks
         return Response({"message": "Success!"})
+
+
+class StudentProgramClasses(APIView):
+    """
+    Get/update a student's class list for a given program.
+    Permissions: logged in, is student, has studentreg object
+    """
+
+    def get(self, request, format=None):
+        # program = request.GET["program"]
+        # edition = request.GET["edition"]
+        # user = request.user
+
+        # # TODO make this check better
+        # prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
+        # studentreg = StudentRegistration.objects.get(student=user, program=prog)
+        # classes = studentreg.get_classes()
+        # timeslots = Timeslot.objects.filter(program=prog)
+
+        ret = {
+            "classes": [
+                "How to beat your dad at chess, MIT style",
+                "From Neurons to Thoughts: An Introduction to the Human Mind and Brain",
+                None,
+            ],
+            "timeslots": ["Sat 10-11", "Sat 11-12", "Sat 12-1"],
+        }
+
+        return Response(ret)

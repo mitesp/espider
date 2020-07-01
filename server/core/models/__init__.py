@@ -96,7 +96,9 @@ class StudentRegistration(models.Model):
         return str(self.student.username) + "/" + str(self.program)
 
     def get_classes(self):
-        ids = StudentClassRegistration.objects.filter(student=self).values_list("clazz", flat=True)
+        ids = StudentClassRegistration.objects.filter(studentreg=self).values_list(
+            "clazz", flat=True
+        )
         return Class.objects.filter(id__in=ids)
 
 

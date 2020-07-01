@@ -66,7 +66,7 @@ export default class StudentDashboard extends Component<Props, State> {
             {this.state.previousPrograms.map((program, index) => {
               return (
                 <h3 className="is-size-5" key={index}>
-                  {program.name}: <a href={program.url + "/dashboard"}>View</a>
+                  {program.name}: <a href={`${program.url}/dashboard`}>View</a>
                 </h3>
               );
             })}
