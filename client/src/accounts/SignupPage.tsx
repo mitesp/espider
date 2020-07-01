@@ -57,11 +57,13 @@ class SignupPage extends Component<Props, State> {
             {this.state.selectedSignupType === SignupType.Student && (
               <StudentSignupForm onLogin={onLogin} />
             )}
+
+            {/*TODO: add teacher form */}
           </div>
         </div>
       </div>
-      //TODO: already have an account?
-      //TODO figure out how to get this to automatically change when logged in
+      //TODO: add already have an account? link
+      //TODO: redirect or soemthing if already logged in
     );
   }
 }

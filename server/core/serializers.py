@@ -9,6 +9,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("username", "is_student", "is_teacher")
 
 
+# TODO: The following two serializers are used for account creation and eventually should be fleshed
+# out to include other fields as well as validation / legitimate error handling
 class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProfile
