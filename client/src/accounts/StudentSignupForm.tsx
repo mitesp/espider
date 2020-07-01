@@ -15,6 +15,7 @@ type State = {
   // TODO: the rest of the fields should be added in later
 };
 
+// TODO(sophie): look more at this
 function isValidField(prop: string, state: State): prop is keyof State {
   return prop in state;
 }
