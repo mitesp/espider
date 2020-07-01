@@ -1,11 +1,14 @@
 import csv
 
-import os  # isort:skip
+import os  # isort:skip # NOQA
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")  # NOQA
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")  # isort:skip # NOQA
+
+import django  # pylint: disable=import-error # isort:skip # NOQA
+
+django.setup()  # isort:skip  # NOQA
 
 # isort:imports-firstparty
-import django  # pylint: disable=import-error # NOQA
 from core.models import (  # NOQA
     Class,
     ESPUser,
@@ -18,7 +21,6 @@ from core.models import (  # NOQA
     TeacherRegistration,
 )
 
-django.setup()
 
 DATA_DIR = "sample_data"
 models_user = [ESPUser, StudentProfile, TeacherProfile]
