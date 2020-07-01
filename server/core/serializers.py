@@ -1,4 +1,4 @@
-from core.models import Class, ESPUser, Program, StudentRegistration
+from core.models import Class, ESPUser, Program, StudentProfile, StudentRegistration
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -9,9 +9,22 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("username", "is_student", "is_teacher")
 
 
-class UserSerializerWithToken(serializers.ModelSerializer):
+# TODO: The following two serializers are used for account creation and eventually should be fleshed
+# out to include other fields as well as validation / legitimate error handling
+class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = ["phone_number", "school"]
 
+
+class StudentSerializer(serializers.ModelSerializer):
+    profile = StudentProfileSerializer()
     tokens = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ESPUser
+        fields = ("tokens", "username", "password", "profile")
+        extra_kwargs = {"password": {"write_only": True}}
 
     def get_tokens(self, user):
         tokens = RefreshToken.for_user(user)
@@ -21,17 +34,10 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        password = validated_data.pop("password", None)
-        instance = self.Meta.model(**validated_data)
-        if password is not None:
-            instance.set_password(password)
-        instance.save()
-        return instance
-
-    class Meta:
-        model = ESPUser
-        fields = ("tokens", "username", "password")
-        extra_kwargs = {"password": {"write_only": True}}
+        profile_data = validated_data.pop("profile")
+        user = ESPUser.objects.create_user(**validated_data)
+        StudentProfile.objects.create(**profile_data, user=user)
+        return user
 
 
 class ProgramSerializer(serializers.ModelSerializer):

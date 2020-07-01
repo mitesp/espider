@@ -1,7 +1,7 @@
 import React from "react";
 
 // TODO consider replacing onChange with onBlur
-
+// TODO: these functions should be cleaned up and refactored. currently they take too many args
 function renderCustomInput(
   onChange: (e: React.FormEvent<HTMLInputElement>) => any,
   label: string,

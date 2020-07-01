@@ -3,8 +3,8 @@ from core.models import Program, StudentRegistration
 from core.serializers import (
     ProgramSerializer,
     StudentRegSerializer,
+    StudentSerializer,
     UserSerializer,
-    UserSerializerWithToken,
 )
 from django.db import transaction
 from django.forms.models import model_to_dict
@@ -27,9 +27,9 @@ def current_user(request):
     return Response(serializer.data)
 
 
-class CreateUser(APIView):
+class CreateStudent(APIView):
     """
-    Create a new user and return the access/refresh token pair.
+    Create a new student and return the access/refresh token pair.
     This is used during the signup process.
     Errors are not being handled yet.
     Permissions: any (don't have permissions before user is created)
@@ -39,7 +39,7 @@ class CreateUser(APIView):
     authentication_classes = []
 
     def post(self, request, format=None):
-        serializer = UserSerializerWithToken(data=request.data)
+        serializer = StudentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
