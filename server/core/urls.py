@@ -72,7 +72,7 @@ urlpatterns = [
     path("api/waiver/", views.LiabilityWaiver.as_view()),
     path("api/availability/", views.Availability.as_view()),
     # auth API calls
-    path("api/add_user/", views.CreateUser.as_view()),
+    path("api/add_student/", views.CreateStudent.as_view()),
     path("api/current_user/", views.current_user),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
