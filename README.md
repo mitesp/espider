@@ -18,6 +18,7 @@
 (Miscellaneous)
 
 7. Install linters (see Committing & Pushing Changes).
+8. To pre-populate the database with sample data, run `sudo docker-compose exec server python setup_sample_data.py`. See the [sample data directory](server/sample_data/README.md) for more information on adding sample data.
 
 # Making Changes
 
@@ -180,7 +181,8 @@ ever need an external library, try `pipenv install <library>`.
 
 # Troubleshooting
 
-Make sure you don't already have things running on your localhost ports.
+- Make sure you don't already have things running on your localhost ports.
+- Make sure you are using Python 3.
 
 # Useful tidbits
 
@@ -193,10 +195,10 @@ Here are Mayukha's favorite aliases:
 
     alias dockup="sudo docker-compose up" #spins up Docker
     alias dockex="sudo docker-compose exec server" #execute things in the server shell
-    alias dockman="sudo docker-compose exec server python3 manage.py" #exec
+    alias dockman="sudo docker-compose exec server python manage.py" #exec
     alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
-    alias herokumigrate="heroku run python3 server/manage.py migrate" #migrate in prod
-    alias herokumakemig="heroku run python3 server/manage.py makemigrations" #make migrations in prod
+    alias herokumigrate="heroku run python server/manage.py migrate" #migrate in prod
+    alias herokumakemig="heroku run python server/manage.py makemigrations" #make migrations in prod
 
 <a name="footnote-lint">3</a>: Our lint setup is in `.pre-commit-config.yaml`. Hopefully you won't need to touch it, but if
 you do, `pipenv run pre-commit run -a` will run the linter.

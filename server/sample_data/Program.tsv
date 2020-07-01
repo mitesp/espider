@@ -1,0 +1,6 @@
+id	name	edition	student_reg_open	teacher_reg_open
+100	Splash	2019	False	False
+101	HSSP	Spring 2019	False	False
+102	Spark	2020	False	False
+103	HSSP	Summer 2020	True	False
+104	Splash	2020	False	True
