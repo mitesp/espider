@@ -1,20 +1,22 @@
 // Accounts
 const loginEndpoint = "/token/";
 const tokenRefreshEndpoint = "/token/refresh/";
-const userDataEndpoint = "/current_user/";
-const signupEndpoint = "/add_user/";
+const userDataEndpoint = "/user/";
+const signupEndpoint = "/account/";
+
+// Profile
+const studentProfileEndpoint = "/profile/student/";
 
 // Dashboards
-const studentDashboardEndpoint = "/studentdashboard/";
-const teacherDashboardEndpoint = "/teacherprograms/";
+const studentDashboardEndpoint = "/dashboard/student/";
+const teacherDashboardEndpoint = "/dashboard/teacher/";
 
-// studentreg
-const studentRegEndpoint = "/current_studentreg/";
-const emergencyInfoEndpoint = "/emergency_info/";
-const studentProfileEndpoint = "/profile/";
-const medicalLiabilityEndpoint = "/medliab/";
-const liabilityWaiverEndpoint = "/waiver/";
-const studentAvailabilityEndpoint = "/availability/";
+// studentreg (these requires /program/edition/ before)
+const studentRegEndpoint = "student/";
+const emergencyInfoEndpoint = "student/emergency_info/";
+const medicalLiabilityEndpoint = "student/medliab/";
+const liabilityWaiverEndpoint = "student/waiver/";
+const studentAvailabilityEndpoint = "student/availability/";
 
 export {
   loginEndpoint,

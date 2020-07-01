@@ -76,12 +76,7 @@ class StudentRegDashboard extends Component<Props, State> {
 
   getStudentReg() {
     axiosInstance
-      .get(studentRegEndpoint, {
-        params: {
-          program: this.props.program,
-          edition: this.props.edition,
-        },
-      })
+      .get(`/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`)
       .then(res => {
         this.setState({
           availabilityCheck: res.data.availability_check,

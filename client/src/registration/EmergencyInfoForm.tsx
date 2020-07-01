@@ -10,7 +10,7 @@ type Props = {
 };
 
 type State = {
-  something: string;
+  endpoint: string;
 };
 
 function isValidField(prop: string, obj: State): prop is keyof State {
@@ -21,7 +21,7 @@ class EmergencyInfoForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      something: "",
+      endpoint: `/${this.props.program}/${this.props.edition}/${emergencyInfoEndpoint}`,
     };
   }
 
@@ -31,7 +31,7 @@ class EmergencyInfoForm extends Component<Props, State> {
 
   getEmergencyInfo() {
     axiosInstance
-      .get(emergencyInfoEndpoint, {
+      .get(this.state.endpoint, {
         params: {
           program: this.props.program,
           edition: this.props.edition,
@@ -57,7 +57,7 @@ class EmergencyInfoForm extends Component<Props, State> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post(emergencyInfoEndpoint, {
+      .post(this.state.endpoint, {
         program: this.props.program,
         edition: this.props.edition,
       })

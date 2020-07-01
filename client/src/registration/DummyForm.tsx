@@ -10,7 +10,9 @@ type Props = {
   url: string;
 };
 
-type State = {};
+type State = {
+  endpoint: string;
+};
 
 // This is a placeholder for forms that haven't been implemented yet
 // All they do is mark the form as completed in the backend on submit
@@ -18,13 +20,15 @@ type State = {};
 class DummyForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      endpoint: `/${this.props.program}/${this.props.edition}/${this.props.url}`,
+    };
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post(this.props.url, {
+      .post(this.state.endpoint, {
         program: this.props.program,
         edition: this.props.edition,
       })
