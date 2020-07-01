@@ -7,23 +7,15 @@ type Props = {
   onLogin: Function;
 };
 
-type Profile = {
-  phoneNumber: string;
-  school: string;
-};
-
 type State = {
   username: string;
   password: string;
-  profile: Profile;
+  phoneNumber: string;
+  school: string;
   // TODO: the rest of the fields should be added in later
 };
 
-function isProfileField(prop: string, profile: Profile): prop is keyof Profile {
-  return prop in profile;
-}
-
-function isStateField(prop: string, state: State): prop is keyof State {
+function isValidField(prop: string, state: State): prop is keyof State {
   return prop in state;
 }
 
@@ -34,10 +26,8 @@ class StudentSignupForm extends Component<Props, State> {
     this.state = {
       username: "",
       password: "",
-      profile: {
-        phoneNumber: "",
-        school: "",
-      },
+      phoneNumber: "",
+      school: "",
     };
   }
 
@@ -45,9 +35,7 @@ class StudentSignupForm extends Component<Props, State> {
     const { name, value } = e.currentTarget;
     this.setState((prevState: State) => {
       const newState = { ...prevState };
-      if (isProfileField(name, prevState.profile)) {
-        newState.profile[name] = value;
-      } else if (isStateField(name, prevState)) {
+      if (isValidField(name, prevState)) {
         newState[name] = value;
       }
       return newState;
@@ -56,14 +44,23 @@ class StudentSignupForm extends Component<Props, State> {
 
   handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axiosInstance.post("/add_student/", JSON.stringify(this.state)).then(result => {
-      // TODO: handle failure
-      axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
-      localStorage.setItem("token", result.data.tokens.access);
-      localStorage.setItem("refresh", result.data.tokens.refresh);
-      this.props.onLogin({ loggedIn: true });
-      navigate("dashboard");
-    });
+    axiosInstance
+      .post("/add_student/", {
+        username: this.state.username,
+        password: this.state.password,
+        profile: {
+          phone_number: this.state.phoneNumber,
+          school: this.state.school,
+        },
+      })
+      .then(result => {
+        // TODO: handle failure
+        axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
+        localStorage.setItem("token", result.data.tokens.access);
+        localStorage.setItem("refresh", result.data.tokens.refresh);
+        this.props.onLogin({ loggedIn: true });
+        navigate("dashboard");
+      });
   };
 
   render() {

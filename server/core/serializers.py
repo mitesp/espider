@@ -12,8 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProfile
-
-    fields = ["phone_number", "school"]
+        fields = ["phone_number", "school"]
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -22,7 +21,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ESPUser
-        fields = ("tokens", "username", "password")
+        fields = ("tokens", "username", "password", "profile")
         extra_kwargs = {"password": {"write_only": True}}
 
     def get_tokens(self, user):
@@ -33,13 +32,10 @@ class StudentSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        user = ESPUser.objects.create_user(**validated_data)
         profile_data = validated_data.pop("profile")
-        StudentProfile.create(**profile_data)
+        user = ESPUser.objects.create_user(**validated_data)
+        StudentProfile.objects.create(**profile_data, user=user)
         return user
-
-    def update(self, validated_data):
-        pass
 
 
 class ProgramSerializer(serializers.ModelSerializer):
