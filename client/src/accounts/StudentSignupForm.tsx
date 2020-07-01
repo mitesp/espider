@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
 import { renderLabeledInput } from "../forms/helpers";
+import { studentSignupEndpoint } from "../apiEndpoints";
 
 type Props = {
   onLogin: Function;
@@ -46,7 +47,7 @@ class StudentSignupForm extends Component<Props, State> {
   handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post("/add_student/", {
+      .post(studentSignupEndpoint, {
         username: this.state.username,
         password: this.state.password,
         profile: {

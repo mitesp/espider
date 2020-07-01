@@ -2,7 +2,7 @@
 const loginEndpoint = "/token/";
 const tokenRefreshEndpoint = "/token/refresh/";
 const userDataEndpoint = "/user/";
-const signupEndpoint = "/account/";
+const studentSignupEndpoint = "/account/student/";
 
 // Profile
 const studentProfileEndpoint = "/profile/student/";
@@ -22,7 +22,7 @@ export {
   loginEndpoint,
   tokenRefreshEndpoint,
   userDataEndpoint,
-  signupEndpoint,
+  studentSignupEndpoint,
   studentDashboardEndpoint,
   teacherDashboardEndpoint,
   studentRegEndpoint,

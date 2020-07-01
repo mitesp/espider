@@ -27,7 +27,7 @@ def current_user(request):
     return Response(serializer.data)
 
 
-class UserAccount(APIView):
+class StudentAccount(APIView):
     """
     Create a new student and return the access/refresh token pair.
     This is used during the signup process.
