@@ -198,7 +198,7 @@ class EmergencyInfo(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program=None, edition=None):
+    def get_object(self, program, edition):
         user = self.request.user
         program = Program.objects.get(name=program, edition=edition)
         # TODO add check for if studentreg object exists
@@ -228,12 +228,11 @@ class MedicalLiability(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program=None, edition=None):
+    def get_object(self, program, edition):
         user = self.request.user
         program = Program.objects.get(name=program, edition=edition)
         # TODO add check for if studentreg object exists
         studentreg = StudentRegistration.objects.get(student=user, program=program)
-        self.check_object_permissions(self.request, studentreg)
 
         return studentreg
 
@@ -258,12 +257,11 @@ class LiabilityWaiver(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program=None, edition=None):
+    def get_object(self, program, edition):
         user = self.request.user
         program = Program.objects.get(name=program, edition=edition)
         # TODO add check for if studentreg object exists
         studentreg = StudentRegistration.objects.get(student=user, program=program)
-        self.check_object_permissions(self.request, studentreg)
 
         return studentreg
 
@@ -288,7 +286,7 @@ class Availability(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program=None, edition=None):
+    def get_object(self, program, edition):
         user = self.request.user
         program = Program.objects.get(name=program, edition=edition)
         # TODO add check for if studentreg object exists
@@ -324,3 +322,6 @@ class StudentProgramClasses(APIView):
         }
 
         return Response(ret)
+
+
+# TODO figure out object permissions
