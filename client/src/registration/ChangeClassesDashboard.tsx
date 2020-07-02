@@ -14,7 +14,6 @@ type State = {
   catalog: Class[];
   enrolledClasses: string[];
   timeslots: string[];
-  catalog: Clazz[];
 };
 
 // helper functions
@@ -116,11 +115,13 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   addClass(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault();
     console.log("Adding " + clazz.title);
     // TODO make this functional
   }
 
   removeClass(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault();
     console.log("Removing " + clazz.title);
     // TODO make this functional
   }
@@ -135,7 +136,9 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="card" key={clazz.id}>
         <div className="card-header">
-          <h2 className="card-header-title">{clazz.title}</h2>
+          <a href="# " className="card-header-title" onClick={this.toggleClassDescription}>
+            {clazz.title}
+          </a>
           <a
             href="#void"
             role="button"
