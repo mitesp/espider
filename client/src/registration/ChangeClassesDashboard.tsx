@@ -79,6 +79,7 @@ class StudentRegDashboard extends Component<Props, State> {
               <tr>
                 <th>Time</th>
                 <th>Class</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -87,6 +88,11 @@ class StudentRegDashboard extends Component<Props, State> {
                   <tr key={index}>
                     <th>{this.state.timeslots[index]}</th>
                     <td>{clazz}</td>
+                    <td>
+                      <button className="delete is-centered"></button>
+                      {/*(for a) onClick=e => this.removeClass(e, clazz)
+                      TODO classes is Clazz[] instead of string[] */}
+                    </td>
                   </tr>
                 );
               })}
