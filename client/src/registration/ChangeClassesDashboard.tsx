@@ -14,6 +14,7 @@ type State = {
   catalog: Class[];
   enrolledClasses: string[];
   timeslots: string[];
+  catalog: Clazz[];
 };
 
 // helper functions
@@ -65,6 +66,14 @@ class StudentRegDashboard extends Component<Props, State> {
           catalog: res.data,
         });
       });
+  }
+
+  getClassCatalog() {
+    axiosInstance.get(`/${this.props.program}/${this.props.edition}/catalog/`).then(res => {
+      this.setState({
+        catalog: res.data,
+      });
+    });
   }
 
   renderClassSchedule() {
