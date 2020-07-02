@@ -16,7 +16,6 @@ type State = {
   displayOnlyOpenClasses: boolean;
   enrolledClasses: string[];
   timeslots: string[];
-  catalog: Clazz[];
 };
 
 // helper functions
