@@ -2,11 +2,13 @@
 // TODO figure out how to sync them
 
 type Clazz = {
+  id: string;
   title: string;
   description: string;
   teachers: string[];
   capacity: number;
   num_students: number;
+  expanded: boolean;
 };
 
 enum RegStatusOption {

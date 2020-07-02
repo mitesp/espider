@@ -97,12 +97,74 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
+  enrolledInClass(clazz: Clazz) {
+    return false;
+  }
+
+  addClass(e: React.MouseEvent, clazz: Clazz) {
+    console.log("Adding " + clazz.title);
+  }
+
+  removeClass(e: React.MouseEvent, clazz: Clazz) {
+    console.log("Removing " + clazz.title);
+  }
+
+  toggleClassDescription(e: React.MouseEvent) {
+    e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
+  }
+
+  renderClass(clazz: Clazz) {
+    const classHasSpace = clazz.capacity - clazz.num_students > 0;
+    return (
+      <div className="card" key={clazz.id}>
+        <header className="card-header">
+          <h2 className="card-header-title">{clazz.title}</h2>
+          <a
+            href="# "
+            className="card-header-icon card-toggle"
+            onClick={this.toggleClassDescription}
+          >
+            <span className="icon">
+              <i className="fas fa-angle-down"></i>
+            </span>
+          </a>
+        </header>
+        <div className="card-content is-hidden">
+          <div className="content">
+            <p>
+              <i>{clazz.teachers.join(", ")}</i>
+            </p>
+            <p>{clazz.description}</p>
+          </div>
+        </div>
+        <footer className="card-footer">
+          {this.enrolledInClass(clazz) ? (
+            <a href="# " className="card-footer-item" onClick={e => this.removeClass(e, clazz)}>
+              Remove Class
+            </a>
+          ) : classHasSpace ? (
+            <a href="# " className="card-footer-item" onClick={e => this.addClass(e, clazz)}>
+              Add Class
+            </a>
+          ) : (
+            <a href="# " className="card-footer-item">
+              Join waitlist
+            </a>
+          )}
+          <h3 className="card-footer-item">
+            {classHasSpace ? `${clazz.num_students}/${clazz.capacity} students` : "Class is full"}
+          </h3>
+        </footer>
+      </div>
+    );
+  }
+
   renderClassCatalog() {
     return (
       <div className="column">
         <h2 className="has-text-centered is-size-3">Class Catalog</h2>
-        <br />
-        {renderTextInSection("Class catalog here", false)}
+        {renderTextInSection("Insert filter options here")}
+        {this.state.catalog.map((clazz, index) => this.renderClass(clazz))}
       </div>
     );
   }

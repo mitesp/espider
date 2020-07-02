@@ -59,4 +59,4 @@ class StudentRegSerializer(serializers.ModelSerializer):
 class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
-        fields = ("title", "description", "teachers", "capacity", "num_students")
+        fields = ("id", "title", "description", "teachers", "capacity", "num_students")
