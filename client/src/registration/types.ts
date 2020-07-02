@@ -8,7 +8,6 @@ type Clazz = {
   teachers: string[];
   capacity: number;
   num_students: number;
-  expanded: boolean;
 };
 
 enum RegStatusOption {
