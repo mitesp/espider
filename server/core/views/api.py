@@ -1,6 +1,7 @@
 import core.permissions as custom_permissions
-from core.models import Program, StudentRegistration
+from core.models import Class, Program, StudentRegistration
 from core.serializers import (
+    ClassSerializer,
     ProgramSerializer,
     StudentRegSerializer,
     StudentSerializer,
@@ -59,6 +60,21 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     # TODO(mvadari): let's move this to a get_active_programs() in a Program Manager
     queryset = Program.objects.all().filter(teacher_reg_open=True).order_by("edition", "name")
     serializer_class = ProgramSerializer
+
+
+class ClassCatalog(APIView):
+    """
+    API endpoint that returns all classes.
+    Permissions: authenticated (should be anyone eventually)
+    """
+
+    def get(self, request, program, edition, format=None):
+        prog = Program.objects.get(name=program, edition=edition)
+
+        classes = Class.objects.filter(program=prog)
+        print(classes)
+
+        return Response([ClassSerializer(clazz).data for clazz in classes])
 
 
 @api_view(["GET"])

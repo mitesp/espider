@@ -1,6 +1,14 @@
 // should match RegStatusOptions in the backend
 // TODO figure out how to sync them
 
+type Clazz = {
+  title: string;
+  description: string;
+  teachers: string[];
+  capacity: number;
+  num_students: number;
+};
+
 enum RegStatusOption {
   ClassPreferences = "CLASS_PREFERENCES",
   FrozenPreferences = "FROZEN_PREFERENCES",
@@ -12,3 +20,5 @@ enum RegStatusOption {
 }
 
 export { RegStatusOption };
+
+export type { Clazz };

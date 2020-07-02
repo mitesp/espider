@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { Clazz } from "./types";
 
 type Props = {
   loggedIn: boolean;
@@ -11,6 +12,7 @@ type Props = {
 type State = {
   timeslots: string[];
   classes: string[];
+  catalog: Clazz[];
 };
 
 // helper functions
@@ -34,11 +36,13 @@ class StudentRegDashboard extends Component<Props, State> {
     this.state = {
       timeslots: [],
       classes: [],
+      catalog: [],
     };
   }
 
   componentDidMount() {
     this.getStudentClasses();
+    this.getClassCatalog();
   }
 
   getStudentClasses() {
@@ -55,6 +59,14 @@ class StudentRegDashboard extends Component<Props, State> {
           classes: res.data.classes,
         });
       });
+  }
+
+  getClassCatalog() {
+    axiosInstance.get(`/${this.props.program}/${this.props.edition}/catalog/`).then(res => {
+      this.setState({
+        catalog: res.data,
+      });
+    });
   }
 
   renderClassSchedule() {

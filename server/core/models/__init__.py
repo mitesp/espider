@@ -76,6 +76,16 @@ class Class(models.Model):
     class Meta:
         verbose_name_plural = "classes"
 
+    @property
+    def teachers(self):
+        teacherreg_ids = TeacherClassRegistration.objects.filter(clazz__id=self.id).values_list(
+            "teacherreg", flat=True
+        )
+        teacher_ids = TeacherRegistration.objects.filter(id__in=teacherreg_ids).values_list(
+            "teacher", flat=True
+        )
+        return ESPUser.objects.filter(id__in=teacher_ids).values_list("username", flat=True)
+
     def __str__(self):
         return self.title
 
