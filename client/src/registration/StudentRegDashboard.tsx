@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { RegStatusOption } from "./types";
+import { studentRegEndpoint } from "../apiEndpoints";
 
 type Props = {
   loggedIn: boolean;
@@ -75,12 +76,7 @@ class StudentRegDashboard extends Component<Props, State> {
 
   getStudentReg() {
     axiosInstance
-      .get("/current_studentreg/", {
-        params: {
-          program: this.props.program,
-          edition: this.props.edition,
-        },
-      })
+      .get(`/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`)
       .then(res => {
         this.setState({
           availabilityCheck: res.data.availability_check,

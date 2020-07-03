@@ -27,7 +27,7 @@ def current_user(request):
     return Response(serializer.data)
 
 
-class CreateStudent(APIView):
+class StudentAccount(APIView):
     """
     Create a new student and return the access/refresh token pair.
     This is used during the signup process.
@@ -55,14 +55,14 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
     Permissions: authenticated+teacher
     """
 
-    permission_classes = (custom_permissions.TeacherPermission,)
+    permission_classes = (custom_permissions.IsTeacher,)
     # TODO(mvadari): let's move this to a get_active_programs() in a Program Manager
     queryset = Program.objects.all().filter(teacher_reg_open=True).order_by("edition", "name")
     serializer_class = ProgramSerializer
 
 
 @api_view(["GET"])
-@permission_classes([custom_permissions.StudentPermission])
+@permission_classes([custom_permissions.IsStudent])
 def get_student_dashboard(request):
     user = request.user
 
@@ -85,36 +85,32 @@ def get_student_dashboard(request):
 
 
 # Registration API calls
-
-
-@api_view(["GET"])
-@permission_classes([custom_permissions.StudentPermission])
-def current_studentreg(request):
+class StudentRegAPI(APIView):
     """
     Determine the current studentreg object by the user and the program/edition
     Permissions: authenticated+student, student is in the correct grade range,
         program open for registration, program not in Pre-Program/after
     """
 
-    program = request.GET.get("program")
-    edition = request.GET.get("edition")
-    user = request.user
+    permission_classes = (custom_permissions.IsStudent,)
 
-    # TODO make this check better
-    prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
+    def get(self, request, program, edition, format=None):
+        user = request.user
 
-    studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
-    # TODO figure out how to change the default regstatus based on the program's status
-    return Response(StudentRegSerializer(studentreg).data)
+        prog = Program.objects.get(name=program, edition=edition)
+
+        studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
+        # TODO figure out how to change the default regstatus based on the program's status
+        return Response(StudentRegSerializer(studentreg).data)
 
 
 class Profile(APIView):
     """
     Get/update user profile.
-    Permissions: logged in, is_student, has studentreg object
+    Permissions: logged in, is_student
     """
 
-    permission_classes = (custom_permissions.StudentPermission,)
+    permission_classes = (custom_permissions.IsStudent,)
 
     def get(self, request, format=None):
         user = request.user
@@ -147,7 +143,7 @@ class Profile(APIView):
 
         return Response({"message": "Success!"})
 
-    def update_profile(user, data):
+    def update_profile(self, user, data):
         user.first_name = data.get("first_name")
         user.last_name = data.get("last_name")
         user.email = data.get("email")
@@ -163,7 +159,7 @@ class Profile(APIView):
             profile.school = data.get("school")
             profile.save()
 
-    def update_profile_check(user, data):
+    def update_profile_check(self, user, data):
         if "update_profile" in data and data["update_profile"]:
             program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
             studentreg = StudentRegistration.objects.get(student=user, program=program)
@@ -178,9 +174,9 @@ class EmergencyInfo(APIView):
     Permissions: logged in, is_student, has studentreg object
     """
 
-    permission_classes = (custom_permissions.StudentPermission,)
+    permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, format=None):
+    def get(self, request, program, edition, format=None):
         # user = request.user
         # params = request.GET
 
@@ -192,13 +188,8 @@ class EmergencyInfo(APIView):
 
         return Response({})
 
-    def post(self, request, format=None):
-        user = request.user
-        data = request.data
-
-        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
-        studentreg = StudentRegistration.objects.get(student=user, program=program)
-
+    def post(self, request, program, edition, format=None):
+        studentreg = self.get_object(program, edition)
         # submit emergency info
 
         studentreg.emergency_info_check = True
@@ -206,6 +197,14 @@ class EmergencyInfo(APIView):
 
         # TODO add correction checks
         return Response({"message": "Success!"})
+
+    def get_object(self, program, edition):
+        user = self.request.user
+        program = Program.objects.get(name=program, edition=edition)
+        # TODO add check for if studentreg object exists
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        return studentreg
 
 
 class MedicalLiability(APIView):
@@ -215,22 +214,27 @@ class MedicalLiability(APIView):
     Permissions: logged in, is_student, has studentreg object
     """
 
-    permission_classes = (custom_permissions.StudentPermission,)
+    permission_classes = (custom_permissions.IsStudent, custom_permissions.NoMedliabCheck)
 
-    def post(self, request, format=None):
-        user = request.user
-        data = request.data
-
-        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
-        studentreg = StudentRegistration.objects.get(student=user, program=program)
+    def post(self, request, program, edition, format=None):
+        studentreg = self.get_object(program, edition)
 
         # TODO maybe add other permissions to this so you can't accidentally do this?
+        # Like something from formstack
 
         studentreg.medliab_check = True
         studentreg.save()
 
         # TODO add correction checks
         return Response({"message": "Success!"})
+
+    def get_object(self, program, edition):
+        user = self.request.user
+        program = Program.objects.get(name=program, edition=edition)
+        # TODO add check for if studentreg object exists
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        return studentreg
 
 
 class LiabilityWaiver(APIView):
@@ -240,14 +244,10 @@ class LiabilityWaiver(APIView):
     Permissions: logged in, is_student, has studentreg object
     """
 
-    permission_classes = (custom_permissions.StudentPermission,)
+    permission_classes = (custom_permissions.IsStudent, custom_permissions.NoLiabilityCheck)
 
-    def post(self, request, format=None):
-        user = request.user
-        data = request.data
-
-        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
-        studentreg = StudentRegistration.objects.get(student=user, program=program)
+    def post(self, request, program, edition, format=None):
+        studentreg = self.get_object(program, edition)
 
         # TODO maybe add other permissions to this so you can't accidentally do this?
 
@@ -257,6 +257,14 @@ class LiabilityWaiver(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
+    def get_object(self, program, edition):
+        user = self.request.user
+        program = Program.objects.get(name=program, edition=edition)
+        # TODO add check for if studentreg object exists
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        return studentreg
+
 
 class Availability(APIView):
     """
@@ -265,22 +273,26 @@ class Availability(APIView):
     Permissions: logged in, is_student, has studentreg object
     """
 
-    permission_classes = (custom_permissions.StudentPermission,)
+    permission_classes = (custom_permissions.IsStudent,)
 
     # TODO incorporate teacher stuff here too
 
-    def post(self, request, format=None):
-        user = request.user
-        data = request.data
-
-        program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
-        studentreg = StudentRegistration.objects.get(student=user, program=program)
+    def post(self, request, program, edition, format=None):
+        studentreg = self.get_object(program, edition)
 
         studentreg.availability_check = True
         studentreg.save()
 
         # TODO add correction checks
         return Response({"message": "Success!"})
+
+    def get_object(self, program, edition):
+        user = self.request.user
+        program = Program.objects.get(name=program, edition=edition)
+        # TODO add check for if studentreg object exists
+        studentreg = StudentRegistration.objects.get(student=user, program=program)
+
+        return studentreg
 
 
 class StudentProgramClasses(APIView):
@@ -310,3 +322,6 @@ class StudentProgramClasses(APIView):
         }
 
         return Response(ret)
+
+
+# TODO figure out object permissions

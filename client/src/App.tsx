@@ -4,6 +4,12 @@ import { Router } from "@reach/router";
 import "./App.sass";
 
 import axiosInstance from "./axiosAPI";
+import {
+  userDataEndpoint,
+  medicalLiabilityEndpoint,
+  liabilityWaiverEndpoint,
+  studentAvailabilityEndpoint,
+} from "./apiEndpoints";
 
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
@@ -59,7 +65,7 @@ class App extends Component<{}, State> {
 
   componentDidMount() {
     if (this.state.loggedIn) {
-      axiosInstance.get("/current_user/").then(result => {
+      axiosInstance.get(userDataEndpoint).then(result => {
         this.setState({
           username: result.data.username,
           isStudent: result.data.is_student,
@@ -136,19 +142,19 @@ class App extends Component<{}, State> {
             <DummyForm
               path="/:program/:edition/medliab"
               isStudent={this.state.isStudent}
-              url="medliab"
+              url={medicalLiabilityEndpoint}
               formName="Medical Liabilility Form"
             />
             <DummyForm
               path="/:program/:edition/waiver"
               isStudent={this.state.isStudent}
-              url="waiver"
+              url={liabilityWaiverEndpoint}
               formName="Liability Waiver Form"
             />
             <DummyForm
               path="/:program/:edition/availability"
               isStudent={this.state.isStudent}
-              url="availability"
+              url={studentAvailabilityEndpoint}
               formName="Program Availability"
             />
             <ChangeClassesDashboard

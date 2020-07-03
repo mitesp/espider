@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
+import { emergencyInfoEndpoint } from "../apiEndpoints";
 
 type Props = {
   isStudent: boolean;
@@ -9,7 +10,7 @@ type Props = {
 };
 
 type State = {
-  something: string;
+  endpoint: string;
 };
 
 function isValidField(prop: string, obj: State): prop is keyof State {
@@ -20,7 +21,7 @@ class EmergencyInfoForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      something: "",
+      endpoint: `/${this.props.program}/${this.props.edition}/${emergencyInfoEndpoint}`,
     };
   }
 
@@ -30,7 +31,7 @@ class EmergencyInfoForm extends Component<Props, State> {
 
   getEmergencyInfo() {
     axiosInstance
-      .get("/emergency_info/", {
+      .get(this.state.endpoint, {
         params: {
           program: this.props.program,
           edition: this.props.edition,
@@ -56,7 +57,7 @@ class EmergencyInfoForm extends Component<Props, State> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-      .post("/emergency_info/", {
+      .post(this.state.endpoint, {
         program: this.props.program,
         edition: this.props.edition,
       })
