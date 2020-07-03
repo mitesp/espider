@@ -58,6 +58,10 @@ class Program(models.Model):
         current_programs = Program.objects.filter(id__in=current_studentregs)
         return current_programs
 
+    @staticmethod
+    def get_active_programs():
+        return Program.objects.exclude(student_reg_status=RegStatusOptions.POST_PROGRAM)
+
 
 class Class(models.Model):
     title = models.CharField(max_length=200)
@@ -102,7 +106,8 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
-    def get_classes(self):
+    @property
+    def classes(self):
         ids = StudentClassRegistration.objects.filter(studentreg=self).values_list(
             "clazz", flat=True
         )
@@ -141,7 +146,8 @@ class TeacherRegistration(models.Model):
     def __str__(self):
         return str(self.teacher.username) + "/" + str(self.program)
 
-    def get_classes(self):
+    @property
+    def classes(self):
         ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
