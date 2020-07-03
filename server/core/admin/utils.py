@@ -72,6 +72,23 @@ class ActiveProgramClassRegFilter(admin.SimpleListFilter):
             return queryset
 
 
+class ProgramActiveFilter(admin.SimpleListFilter):
+    title = "active"
+    parameter_name = "active"
+
+    def lookups(self, request, model_admin):
+        return [(1, "Yes"), (0, "No")]
+
+    def queryset(self, request, queryset):
+        print("(***************)")
+        if self.value() is not None:
+            active_programs = Program.get_active_programs()
+            if self.value() == 1:
+                return queryset.filter(id__in=active_programs)
+            else:
+                return queryset.exclude(id__in=active_programs)
+
+
 class UserTypeFilter(admin.SimpleListFilter):
     title = "user type"
     parameter_name = "user_type"
