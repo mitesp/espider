@@ -24,7 +24,7 @@ class ESPUserAdmin(admin.ModelAdmin):
     )
     search_fields = ("username", "email", "first_name", "last_name")
     inlines = [StudentInline, TeacherInline]
-    list_filter = (UserTypeFilter, "is_staff")
+    list_filter = (UserTypeFilter,)
     save_on_top = True
 
     def student(self, obj):

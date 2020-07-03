@@ -97,6 +97,7 @@ class UserTypeFilter(admin.SimpleListFilter):
         return (
             ("student", "Student"),
             ("teacher", "Teacher"),
+            ("admin", "Admin"),
         )
 
     def queryset(self, request, queryset):
@@ -107,6 +108,8 @@ class UserTypeFilter(admin.SimpleListFilter):
         elif value == "teacher":
             teachers = TeacherProfile.objects.all().values_list("user", flat=True)
             return queryset.filter(id__in=teachers)
+        elif value == "admin":
+            return queryset.filter(is_superuser=True)
 
 
 # Inlines
