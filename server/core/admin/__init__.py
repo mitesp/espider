@@ -91,12 +91,12 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
         "payment_check",
     )
     search_fields = ("student__username", "student__id", "program__name")
-    inlines = [StudentClassRegistrationInline]
     save_on_top = True
 
     def add_view(self, request, extra_content=None):
         self.fields = ("student", "program", "reg_status")
         self.readonly_fields = ()
+        self.inlines = []
         return super(StudentRegistrationAdmin, self).add_view(request, extra_content)
 
     def change_view(self, request, object_id, extra_content=None):
@@ -114,6 +114,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
             ),
         )
         self.readonly_fields = ("student", "program", "studentclassregistration_set")
+        self.inlines = [StudentClassRegistrationInline]
         return super(StudentRegistrationAdmin, self).change_view(request, object_id, extra_content)
 
     def get_search_results(self, request, queryset, search_term):
