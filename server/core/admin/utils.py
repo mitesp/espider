@@ -125,8 +125,6 @@ class TeacherInline(admin.StackedInline):
 
 class StudentClassRegistrationInline(admin.TabularInline):
     model = StudentClassRegistration
-    verbose_name = "Student"
-    verbose_name_plural = "Students"
     autocomplete_fields = ["studentreg", "clazz"]
 
 
@@ -134,6 +132,4 @@ class TeacherClassRegistrationInline(admin.TabularInline):
     model = TeacherClassRegistration
     min_num = 2
     extra = 0
-    verbose_name = "Teacher"
-    verbose_name_plural = "Teachers"
     autocomplete_fields = ["teacherreg", "clazz"]
