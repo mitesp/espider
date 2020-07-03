@@ -107,5 +107,17 @@ class TeacherRegistrationAdmin(admin.ModelAdmin):
     list_filter = (ActiveProgramFilter,)
 
 
-admin.site.register(TeacherClassRegistration)
-admin.site.register(StudentClassRegistration)
+@admin.register(TeacherClassRegistration)
+class TeacherClassRegistrationAdmin(admin.ModelAdmin):
+    readonly_fields = ("teacherreg", "teacher", "program", "clazz")
+    list_display = ("teacher", "program", "clazz")
+    search_fields = ("teacherreg", "clazz")
+    fields = ("teacher", "program", "clazz")
+
+
+@admin.register(StudentClassRegistration)
+class StudentClassRegistrationAdmin(admin.ModelAdmin):
+    readonly_fields = ("studentreg", "student", "program", "clazz")
+    list_display = ("student", "program", "clazz")
+    search_fields = ("studentreg", "clazz")
+    fields = ("student", "program", "clazz")
