@@ -69,6 +69,9 @@ class Class(models.Model):
     capacity = models.PositiveIntegerField()
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = "classes"
+
     @property
     def num_students(self):
         return StudentClassRegistration.objects.filter(clazz__id=self.id).count()
