@@ -1,5 +1,13 @@
-from core.models import Program, StudentProfile, TeacherProfile
+from core.models import (
+    Program,
+    StudentClassRegistration,
+    StudentProfile,
+    TeacherClassRegistration,
+    TeacherProfile,
+)
 from django.contrib import admin
+
+# Filters
 
 
 class ActiveProgramFilter(admin.SimpleListFilter):
@@ -53,9 +61,28 @@ class UserTypeFilter(admin.SimpleListFilter):
             return queryset.filter(id__in=teachers)
 
 
+# Inlines
+
+
 class StudentInline(admin.StackedInline):
     model = StudentProfile
 
 
 class TeacherInline(admin.StackedInline):
     model = TeacherProfile
+
+
+class StudentClassRegistrationInline(admin.TabularInline):
+    model = StudentClassRegistration
+    verbose_name = "Student"
+    verbose_name_plural = "Students"
+    autocomplete_fields = ["studentreg", "clazz"]
+
+
+class TeacherClassRegistrationInline(admin.TabularInline):
+    model = TeacherClassRegistration
+    min_num = 2
+    extra = 0
+    verbose_name = "Teacher"
+    verbose_name_plural = "Teachers"
+    autocomplete_fields = ["teacherreg", "clazz"]

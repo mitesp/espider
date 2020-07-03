@@ -120,6 +120,7 @@ class StudentClassRegistration(models.Model):
 
     class Meta:
         unique_together = (("studentreg", "clazz"),)
+        # TODO CONSTRAINT: clazz.program == studentreg.program
 
     @property
     def student(self):
@@ -158,6 +159,7 @@ class TeacherClassRegistration(models.Model):
 
     class Meta:
         unique_together = (("teacherreg", "clazz"),)
+        # TODO CONSTRAINT: clazz.program == teacherreg.program
 
     @property
     def teacher(self):
