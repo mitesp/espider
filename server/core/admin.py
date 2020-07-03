@@ -78,7 +78,6 @@ class ClassAdmin(admin.ModelAdmin):
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
     list_display = ("__str__", "student_reg_open", "student_reg_status", "teacher_reg_open")
-    fields = (("name", "edition"), "student_reg_open", "student_reg_status", "teacher_reg_open")
 
     def save_model(self, request, obj, form, change):
         if "student_reg_status" in form.changed_data:
@@ -86,10 +85,22 @@ class ProgramAdmin(admin.ModelAdmin):
             studentregs.update(reg_status=obj.student_reg_status)
         super().save_model(request, obj, form, change)
 
+    def add_view(self, request, extra_content=None):
+        self.fields = (("name", "edition"),)
+        return super(ProgramAdmin, self).add_view(request, extra_content)
+
+    def change_view(self, request, object_id, extra_content=None):
+        self.fields = (
+            ("name", "edition"),
+            "student_reg_open",
+            "student_reg_status",
+            "teacher_reg_open",
+        )
+        return super(ProgramAdmin, self).change_view(request, object_id, extra_content)
+
 
 @admin.register(StudentRegistration)
 class StudentRegistrationAdmin(admin.ModelAdmin):
-    readonly_fields = ("student", "program")
     list_display = (
         "id",
         "student",
@@ -111,19 +122,28 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
         "payment_check",
     )
     search_fields = ("student", "program")
-    fields = (
-        "student",
-        "program",
-        "reg_status",
-        (
-            "update_profile_check",
-            "emergency_info_check",
-            "medliab_check",
-            "liability_check",
-            "availability_check",
-            "payment_check",
-        ),
-    )
+
+    def add_view(self, request, extra_content=None):
+        self.fields = ("student", "program", "reg_status")
+        self.readonly_fields = ()
+        return super(StudentRegistrationAdmin, self).add_view(request, extra_content)
+
+    def change_view(self, request, object_id, extra_content=None):
+        self.fields = (
+            "student",
+            "program",
+            "reg_status",
+            (
+                "update_profile_check",
+                "emergency_info_check",
+                "medliab_check",
+                "liability_check",
+                "availability_check",
+                "payment_check",
+            ),
+        )
+        self.readonly_fields = ("student", "program")
+        return super(StudentRegistrationAdmin, self).change_view(request, object_id, extra_content)
 
 
 @admin.register(TeacherRegistration)
