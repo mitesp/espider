@@ -10,6 +10,7 @@ from django.contrib import admin
 
 from .users import *  # noqa
 from .utils import (
+    ActiveProgramClassRegFilter,
     ActiveProgramFilter,
     StudentClassRegistrationInline,
     TeacherClassRegistrationInline,
@@ -154,7 +155,7 @@ class StudentClassRegistrationAdmin(admin.ModelAdmin):
     list_display = ("student", "program", "clazz")
     search_fields = ("studentreg", "clazz")
     fields = ("student", "program", "clazz")
-    # list_filter = (ActiveProgramFilter,)
+    list_filter = (ActiveProgramClassRegFilter,)
 
 
 @admin.register(TeacherClassRegistration)
@@ -163,4 +164,4 @@ class TeacherClassRegistrationAdmin(admin.ModelAdmin):
     list_display = ("teacher", "program", "clazz")
     search_fields = ("teacherreg", "clazz")
     fields = ("teacher", "program", "clazz")
-    # list_filter = (ActiveProgramFilter,)
+    list_filter = (ActiveProgramClassRegFilter,)
