@@ -25,6 +25,7 @@ class ClassAdmin(admin.ModelAdmin):
     fields = ("id", "title", ("capacity", "num_students"), "program", "description")
     list_filter = (ActiveProgramFilter,)
     inlines = [TeacherClassRegistrationInline, StudentClassRegistrationInline]
+    save_on_top = True
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline
@@ -89,6 +90,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
     )
     search_fields = ("student__username", "student__id", "program__name")
     inlines = [StudentClassRegistrationInline]
+    save_on_top = True
 
     def add_view(self, request, extra_content=None):
         self.fields = ("student", "program", "reg_status")
@@ -133,12 +135,7 @@ class TeacherRegistrationAdmin(admin.ModelAdmin):
     )
     list_filter = (ActiveProgramFilter,)
     inlines = [TeacherClassRegistrationInline]
-
-    def get_form(self, request, obj=None, **kwargs):
-        # save program reference for future processing in Inline
-        request._program_ = obj.program
-        request._obj_ = "clazz"
-        return super(TeacherRegistrationAdmin, self).get_form(request, obj, **kwargs)
+    save_on_top = True
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline
