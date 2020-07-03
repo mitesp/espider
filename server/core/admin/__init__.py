@@ -8,6 +8,7 @@ from core.models import (
 )
 from django.contrib import admin
 
+from .users import *  # noqa
 from .utils import ActiveProgramFilter
 
 

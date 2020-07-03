@@ -1,6 +1,5 @@
+from core.models import Program, StudentProfile, TeacherProfile
 from django.contrib import admin
-
-from .models import Program, StudentProfile, TeacherProfile
 
 
 class ActiveProgramFilter(admin.SimpleListFilter):
@@ -32,6 +31,26 @@ class ActiveProgramFilter(admin.SimpleListFilter):
             return queryset.filter(program=self.value())
         else:
             return queryset
+
+
+class UserTypeFilter(admin.SimpleListFilter):
+    title = "user type"
+    parameter_name = "user_type"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("student", "Student"),
+            ("teacher", "Teacher"),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "student":
+            students = StudentProfile.objects.all().values_list("user", flat=True)
+            return queryset.filter(id__in=students)
+        elif value == "teacher":
+            teachers = TeacherProfile.objects.all().values_list("user", flat=True)
+            return queryset.filter(id__in=teachers)
 
 
 class StudentInline(admin.StackedInline):
