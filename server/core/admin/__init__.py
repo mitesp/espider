@@ -8,14 +8,9 @@ from core.models import (
 )
 from django.contrib import admin
 
+from .filters import ActiveProgramClassRegFilter, ActiveProgramFilter
+from .inlines import StudentClassRegistrationInline, TeacherClassRegistrationInline
 from .users import *  # noqa
-from .utils import (
-    ActiveProgramClassRegFilter,
-    ActiveProgramFilter,
-    ProgramActiveFilter,
-    StudentClassRegistrationInline,
-    TeacherClassRegistrationInline,
-)
 
 
 @admin.register(Class)
@@ -47,7 +42,6 @@ class ClassAdmin(admin.ModelAdmin):
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
     list_display = ("__str__", "student_reg_open", "student_reg_status", "teacher_reg_open")
-    list_filter = (ProgramActiveFilter, "student_reg_open", "teacher_reg_open")
 
     def save_model(self, request, obj, form, change):
         if "student_reg_status" in form.changed_data:

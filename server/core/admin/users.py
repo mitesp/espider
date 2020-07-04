@@ -1,7 +1,8 @@
 from core.models import ESPUser
 from django.contrib import admin
 
-from .utils import StudentInline, TeacherInline, UserTypeFilter
+from .filters import UserTypeFilter
+from .inlines import StudentInline, TeacherInline
 
 
 @admin.register(ESPUser)

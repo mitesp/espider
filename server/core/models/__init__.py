@@ -13,6 +13,9 @@ class RegStatusOptions(models.TextChoices):
     POST_PROGRAM = ("POST_PROGRAM",)
 
 
+# TODO move static methods to managers
+
+
 class Program(models.Model):
     name = models.CharField(max_length=200)  # TODO maybe this should be a constant set
     edition = models.CharField(max_length=200)  # this is (season +) year
