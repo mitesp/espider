@@ -30,7 +30,8 @@ class ClassAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline
-        if "autocomplete" in request.path:
+        # TODO figure out add
+        if "autocomplete" in request.path and "change" in request.META.get("HTTP_REFERER"):
             reg_id = int(request.META.get("HTTP_REFERER").split("/")[6])
             if "studentregistration" in request.META.get("HTTP_REFERER"):
                 program = StudentRegistration.objects.get(pk=reg_id).program
@@ -119,7 +120,11 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline
-        if "autocomplete" in request.path and "class" in request.META.get("HTTP_REFERER"):
+        if (
+            "autocomplete" in request.path
+            and "class" in request.META.get("HTTP_REFERER")
+            and "change" in request.META.get("HTTP_REFERER")
+        ):
             class_id = int(request.META.get("HTTP_REFERER").split("/")[6])
             program = Class.objects.get(pk=class_id).program
             queryset = queryset.filter(program__exact=program).order_by("student__username")
@@ -142,7 +147,11 @@ class TeacherRegistrationAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline
-        if "autocomplete" in request.path and "class" in request.META.get("HTTP_REFERER"):
+        if (
+            "autocomplete" in request.path
+            and "class" in request.META.get("HTTP_REFERER")
+            and "change" in request.META.get("HTTP_REFERER")
+        ):
             class_id = int(request.META.get("HTTP_REFERER").split("/")[6])
             program = Class.objects.get(pk=class_id).program
             queryset = queryset.filter(program__exact=program).order_by("teacher__username")
