@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   baseURL:
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000/api/"
-      : "http://espider.herokuapp.com/api/",
+      : "https://espider.herokuapp.com/api/",
   timeout: 5000,
   headers: {
     Authorization: "JWT " + localStorage.getItem("token"),
