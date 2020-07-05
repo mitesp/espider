@@ -84,6 +84,72 @@ class Class(models.Model):
         return self.title
 
 
+class Section(models.Model):
+    clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
+    number = models.PositiveIntegerField()
+    # TODO(constraint): PositiveIntegerField can be 0 due to django backwards
+    # compatibility, but we should constrain it
+
+    class Meta:
+        unique_together = (("clazz", "number"),)
+
+    def __str__(self):
+        return str(self.clazz) + " sec. " + str(self.number)
+
+
+class Timeslot(models.Model):
+    """
+    A Timeslot is a date x duration block during which a program is happening.
+    The duration should be the smallest denomination of time that schedule
+    offsets need to be able to accommodate.
+
+    TODO(constraint): Timeslot durations should be constant for a given program.
+    TODO(constraint): start < end
+    TODO(constraint): start.time and end.time could only be a fixed set of
+    values (potentially on the hour and half hour, maybe quarter hour)
+
+    Examples:
+    A Splash where all classes are multiples of an hour may have 19 timeslots
+        2019/11/16 10:00–11:00, 11:00–12:00, and so on (for a total of 10)
+        2019/11/17 09:00–10:00, 10:00–11:00, and so on (for a total of 9)
+
+    An HSSP with 1-hour and 1.5-hour classes may have 42 timeslots
+    (6 timeslots/day x 7 days/program)
+        2020/02/29 13:00–13:30, 13:30–14:00, ... , 15:30–16:00 (total of 6)
+        and repeated for 2020/03/07, and so on (for 7 Saturdays)
+    """
+
+    # TODO: come up with a way to disambiguate between slot times, class times,
+    # and effective class times (with transition)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.program) + "(" + str(self.start) + ", " + str(self.end) + ")"
+
+
+class ScheduledBlock(models.Model):
+    """
+    A ScheduledBlock represents a section of a class scheduled at a timeslot of
+    a program TODO: in a particular classroom.
+
+    A 2-hour section scheduled in a program with 1-hour timeslot durations would
+    be represented by two ScheduledBlock objects. A 1.5-hour section scheduled
+    in a program with half-hour timeslot durations would be represented by three
+    ScheduledBlock objects.
+
+    TODO(constraint): section.program == timeslot.program
+    TODO(constraint): timeslot x section is unique
+    """
+
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    timeslot = models.ForeignKey(Timeslot, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.section) + " during " + str(self.timeslot)
+
+
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
     student = models.ForeignKey(ESPUser, on_delete=models.CASCADE)

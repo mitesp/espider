@@ -1,16 +1,43 @@
 from core.models import (
     Class,
     Program,
+    ScheduledBlock,
+    Section,
     StudentClassRegistration,
     StudentRegistration,
     TeacherClassRegistration,
     TeacherRegistration,
+    Timeslot,
 )
 from django.contrib import admin
 
 from .filters import ActiveProgramClassRegFilter, ActiveProgramFilter
 from .inlines import StudentClassRegistrationInline, TeacherClassRegistrationInline
 from .users import *  # noqa
+
+
+@admin.register(Program)
+class ProgramAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "student_reg_open", "student_reg_status", "teacher_reg_open")
+
+    def save_model(self, request, obj, form, change):
+        if "student_reg_status" in form.changed_data:
+            studentregs = StudentRegistration.objects.filter(program=obj)
+            studentregs.update(reg_status=obj.student_reg_status)
+        super().save_model(request, obj, form, change)
+
+    def add_view(self, request, extra_content=None):
+        self.fields = (("name", "edition"),)
+        return super(ProgramAdmin, self).add_view(request, extra_content)
+
+    def change_view(self, request, object_id, extra_content=None):
+        self.fields = (
+            ("name", "edition"),
+            "student_reg_open",
+            "student_reg_status",
+            "teacher_reg_open",
+        )
+        return super(ProgramAdmin, self).change_view(request, object_id, extra_content)
 
 
 @admin.register(Class)
@@ -39,28 +66,19 @@ class ClassAdmin(admin.ModelAdmin):
         return super().get_search_results(request, queryset, search_term)
 
 
-@admin.register(Program)
-class ProgramAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "student_reg_open", "student_reg_status", "teacher_reg_open")
+@admin.register(Section)
+class SectionAdmin(admin.ModelAdmin):
+    pass
 
-    def save_model(self, request, obj, form, change):
-        if "student_reg_status" in form.changed_data:
-            studentregs = StudentRegistration.objects.filter(program=obj)
-            studentregs.update(reg_status=obj.student_reg_status)
-        super().save_model(request, obj, form, change)
 
-    def add_view(self, request, extra_content=None):
-        self.fields = (("name", "edition"),)
-        return super(ProgramAdmin, self).add_view(request, extra_content)
+@admin.register(Timeslot)
+class TimeslotAdmin(admin.ModelAdmin):
+    pass
 
-    def change_view(self, request, object_id, extra_content=None):
-        self.fields = (
-            ("name", "edition"),
-            "student_reg_open",
-            "student_reg_status",
-            "teacher_reg_open",
-        )
-        return super(ProgramAdmin, self).change_view(request, object_id, extra_content)
+
+@admin.register(ScheduledBlock)
+class ScheduledBlockAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(StudentRegistration)
