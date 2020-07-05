@@ -12,13 +12,20 @@ from core.models import (
 from django.contrib import admin
 
 from .filters import ActiveProgramClassRegFilter, ActiveProgramFilter
-from .inlines import StudentClassRegistrationInline, TeacherClassRegistrationInline
+from .inlines import (
+    ScheduledBlockInline,
+    SectionInline,
+    StudentClassRegistrationInline,
+    TeacherClassRegistrationInline,
+    TimeslotInline,
+)
 from .users import *  # noqa
 
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
     list_display = ("__str__", "student_reg_open", "student_reg_status", "teacher_reg_open")
+    inlines = [TimeslotInline]
 
     def save_model(self, request, obj, form, change):
         if "student_reg_status" in form.changed_data:
@@ -44,10 +51,10 @@ class ProgramAdmin(admin.ModelAdmin):
 class ClassAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "program", "capacity")
     search_fields = ("title", "id")
-    readonly_fields = ("id", "num_students")
-    fields = ("id", "title", ("capacity", "num_students"), "program", "description")
+    readonly_fields = ("id",)
+    fields = ("id", "title", "capacity", "program", "description")
     list_filter = (ActiveProgramFilter,)
-    inlines = [TeacherClassRegistrationInline, StudentClassRegistrationInline]
+    inlines = [TeacherClassRegistrationInline, SectionInline]
     save_on_top = True
 
     def get_search_results(self, request, queryset, search_term):
@@ -55,9 +62,6 @@ class ClassAdmin(admin.ModelAdmin):
         # TODO figure out add
         if "autocomplete" in request.path and "change" in request.META.get("HTTP_REFERER"):
             reg_id = int(request.META.get("HTTP_REFERER").split("/")[6])
-            if "studentregistration" in request.META.get("HTTP_REFERER"):
-                program = StudentRegistration.objects.get(pk=reg_id).program
-                queryset = queryset.filter(program__exact=program).order_by("title")
             if "teacherregistration" in request.META.get("HTTP_REFERER"):
                 program = TeacherRegistration.objects.get(pk=reg_id).program
                 queryset = queryset.filter(program__exact=program).order_by("title")
@@ -68,17 +72,46 @@ class ClassAdmin(admin.ModelAdmin):
 
 @admin.register(Section)
 class SectionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("__str__", "program")
+    search_fields = ("clazz__title", "clazz__id", "number")
+    inlines = [ScheduledBlockInline, StudentClassRegistrationInline]
+    save_on_top = True
+
+    def get_search_results(self, request, queryset, search_term):
+        # this is a little bit hacky but checks if it's an autocomplete request from an Inline
+        # TODO figure out add
+        if "autocomplete" in request.path and "change" in request.META.get("HTTP_REFERER"):
+            reg_id = int(request.META.get("HTTP_REFERER").split("/")[6])
+            if "studentregistration" in request.META.get("HTTP_REFERER"):
+                program = StudentRegistration.objects.get(pk=reg_id).program
+                queryset = queryset.filter(program__exact=program).order_by("title")
+                # TODO change to by timeslot after scheduling (or something)
+
+        return super().get_search_results(request, queryset, search_term)
 
 
 @admin.register(Timeslot)
 class TimeslotAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("start", "end", "program")
+    readonly_fields = ("program",)
+    search_fields = ("start", "end", "program")
+    inlines = [ScheduledBlockInline]
+
+    def get_search_results(self, request, queryset, search_term):
+        # this is a little bit hacky but checks if it's an autocomplete request from an Inline
+        # TODO figure out add
+        if "autocomplete" in request.path and "change" in request.META.get("HTTP_REFERER"):
+            section = int(request.META.get("HTTP_REFERER").split("/")[6])
+            if "section" in request.META.get("HTTP_REFERER"):
+                program = Section.objects.get(pk=section).clazz.program
+                queryset = queryset.filter(program__exact=program).order_by("start")
+
+        return super().get_search_results(request, queryset, search_term)
 
 
 @admin.register(ScheduledBlock)
 class ScheduledBlockAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("section", "timeslot", "program")
 
 
 @admin.register(StudentRegistration)
@@ -172,10 +205,10 @@ class TeacherRegistrationAdmin(admin.ModelAdmin):
 
 @admin.register(StudentClassRegistration)
 class StudentClassRegistrationAdmin(admin.ModelAdmin):
-    readonly_fields = ("studentreg", "student", "program", "clazz")
-    list_display = ("student", "program", "clazz")
-    search_fields = ("studentreg", "clazz")
-    fields = ("student", "program", "clazz")
+    readonly_fields = ("studentreg", "student", "program", "section")
+    list_display = ("student", "program", "section")
+    search_fields = ("studentreg", "section")
+    fields = ("student", "program", "section")
     list_filter = (ActiveProgramClassRegFilter,)
 
 
