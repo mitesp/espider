@@ -64,6 +64,8 @@ class App extends Component<{}, State> {
   }
 
   componentDidMount() {
+    console.log(process.env.baseURL);
+    console.log(process.env);
     if (this.state.loggedIn) {
       axiosInstance.get(userDataEndpoint).then(result => {
         this.setState({
