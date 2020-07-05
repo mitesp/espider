@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { renderLabeledInput } from "../forms/helpers";
 import { loginEndpoint } from "../apiEndpoints";
+import { navigate } from "@reach/router";
 
 type LoginProps = {
   onLogin: Function;
@@ -49,7 +50,7 @@ class LoginForm extends Component<LoginProps, LoginState> {
         localStorage.setItem("token", result.data.access);
         localStorage.setItem("refresh", result.data.refresh);
         this.props.onLogin({ loggedIn: true });
-        window.location.reload(false); // refresh page on submit
+        navigate("dashboard");
       });
   };
 

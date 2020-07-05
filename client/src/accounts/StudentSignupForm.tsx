@@ -61,7 +61,7 @@ class StudentSignupForm extends Component<Props, State> {
         localStorage.setItem("token", result.data.tokens.access);
         localStorage.setItem("refresh", result.data.tokens.refresh);
         this.props.onLogin({ loggedIn: true });
-        navigate("dashboard");
+        navigate("dashboard"); // TODO maybe make this redirect to profile editing page
       });
   };
 
