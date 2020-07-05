@@ -35,7 +35,7 @@ class ProgramAdmin(admin.ModelAdmin):
 
     def add_view(self, request, extra_content=None):
         self.fields = (("name", "edition"),)
-        return super(ProgramAdmin, self).add_view(request, extra_content)
+        return super(ProgramAdmin, self).add_view(request)
 
     def change_view(self, request, object_id, extra_content=None):
         self.fields = (
@@ -44,7 +44,7 @@ class ProgramAdmin(admin.ModelAdmin):
             "student_reg_status",
             "teacher_reg_open",
         )
-        return super(ProgramAdmin, self).change_view(request, object_id, extra_content)
+        return super(ProgramAdmin, self).change_view(request, object_id)
 
 
 @admin.register(Class)
@@ -143,7 +143,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
         self.fields = ("student", "program", "reg_status")
         self.readonly_fields = ()
         self.inlines = []
-        return super(StudentRegistrationAdmin, self).add_view(request, extra_content)
+        return super(StudentRegistrationAdmin, self).add_view(request)
 
     def change_view(self, request, object_id, extra_content=None):
         self.fields = (
@@ -161,7 +161,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
         )
         self.readonly_fields = ("student", "program", "studentclassregistration_set")
         self.inlines = [StudentClassRegistrationInline]
-        return super(StudentRegistrationAdmin, self).change_view(request, object_id, extra_content)
+        return super(StudentRegistrationAdmin, self).change_view(request, object_id)
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline
