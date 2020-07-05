@@ -13,6 +13,9 @@ class RegStatusOptions(models.TextChoices):
     POST_PROGRAM = ("POST_PROGRAM",)
 
 
+# TODO move static methods to managers
+
+
 class Program(models.Model):
     name = models.CharField(max_length=200)  # TODO maybe this should be a constant set
     edition = models.CharField(max_length=200)  # this is (season +) year
@@ -58,12 +61,20 @@ class Program(models.Model):
         current_programs = Program.objects.filter(id__in=current_studentregs)
         return current_programs
 
+    @staticmethod
+    def get_active_programs():
+        # TODO figure out what actually defines an "active" program
+        return Program.objects.exclude(student_reg_status=RegStatusOptions.POST_PROGRAM)
+
 
 class Class(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     capacity = models.PositiveIntegerField()
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "classes"
 
     @property
     def num_students(self):
@@ -102,7 +113,8 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
-    def get_classes(self):
+    @property
+    def classes(self):
         ids = StudentClassRegistration.objects.filter(studentreg=self).values_list(
             "clazz", flat=True
         )
@@ -115,6 +127,7 @@ class StudentClassRegistration(models.Model):
 
     class Meta:
         unique_together = (("studentreg", "clazz"),)
+        # TODO CONSTRAINT: clazz.program == studentreg.program
 
     @property
     def student(self):
@@ -141,7 +154,8 @@ class TeacherRegistration(models.Model):
     def __str__(self):
         return str(self.teacher.username) + "/" + str(self.program)
 
-    def get_classes(self):
+    @property
+    def classes(self):
         ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
@@ -152,6 +166,7 @@ class TeacherClassRegistration(models.Model):
 
     class Meta:
         unique_together = (("teacherreg", "clazz"),)
+        # TODO CONSTRAINT: clazz.program == teacherreg.program
 
     @property
     def teacher(self):
