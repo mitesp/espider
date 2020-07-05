@@ -29,8 +29,9 @@ class ActiveProgramFilter(admin.SimpleListFilter):
         `self.value()`.
         `self.value()` is the string used in the url query
         (the first element of the tuple in `lookups`). If
-        it is defined (is not None), then there is a filter
-        and this filter should filter the queryset.
+        it is defined (is not None), then thefilter is
+        being applied, and this filter should filter the
+        queryset.
         """
         if self.value():
             return queryset.filter(program=self.value())
@@ -75,4 +76,5 @@ class UserTypeFilter(admin.SimpleListFilter):
             teachers = TeacherProfile.objects.all().values_list("user", flat=True)
             return queryset.filter(id__in=teachers)
         elif value == "admin":
+            # TODO figure out what defines an "admin"
             return queryset.filter(is_superuser=True)

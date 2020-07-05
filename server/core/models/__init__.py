@@ -63,6 +63,7 @@ class Program(models.Model):
 
     @staticmethod
     def get_active_programs():
+        # TODO figure out what actually defines an "active" program
         return Program.objects.exclude(student_reg_status=RegStatusOptions.POST_PROGRAM)
 
 
