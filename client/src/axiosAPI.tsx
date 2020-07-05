@@ -2,7 +2,7 @@ import axios from "axios";
 import { tokenRefreshEndpoint } from "./apiEndpoints";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: process.env.baseURL || "http://localhost:8000/api/",
   timeout: 5000,
   headers: {
     Authorization: "JWT " + localStorage.getItem("token"),
