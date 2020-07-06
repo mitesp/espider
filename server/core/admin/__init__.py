@@ -33,18 +33,20 @@ class ProgramAdmin(admin.ModelAdmin):
             studentregs.update(reg_status=obj.student_reg_status)
         super().save_model(request, obj, form, change)
 
-    def add_view(self, request, extra_content=None):
+    def add_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
         self.fields = (("name", "edition"),)
-        return super(ProgramAdmin, self).add_view(request)
+        return super(ProgramAdmin, self).add_view(request, extra_context)
 
-    def change_view(self, request, object_id, extra_content=None):
+    def change_view(self, request, object_id, extra_context=None):
+        extra_context = extra_context or {}
         self.fields = (
             ("name", "edition"),
             "student_reg_open",
             "student_reg_status",
             "teacher_reg_open",
         )
-        return super(ProgramAdmin, self).change_view(request, object_id)
+        return super(ProgramAdmin, self).change_view(request, object_id, extra_context)
 
 
 @admin.register(Class)
@@ -139,13 +141,15 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
     search_fields = ("student__username", "student__id", "program__name")
     save_on_top = True
 
-    def add_view(self, request, extra_content=None):
+    def add_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
         self.fields = ("student", "program", "reg_status")
         self.readonly_fields = ()
         self.inlines = []
-        return super(StudentRegistrationAdmin, self).add_view(request)
+        return super(StudentRegistrationAdmin, self).add_view(request, extra_context)
 
-    def change_view(self, request, object_id, extra_content=None):
+    def change_view(self, request, object_id, extra_context=None):
+        extra_context = extra_context or {}
         self.fields = (
             "student",
             "program",
@@ -161,7 +165,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
         )
         self.readonly_fields = ("student", "program", "studentclassregistration_set")
         self.inlines = [StudentClassRegistrationInline]
-        return super(StudentRegistrationAdmin, self).change_view(request, object_id)
+        return super(StudentRegistrationAdmin, self).change_view(request, object_id, extra_context)
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline

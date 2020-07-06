@@ -26,12 +26,12 @@ class Program(models.Model):
     teacher_reg_open = models.BooleanField(default=False)
     # TODO add timeslots?
 
-    def __str__(self):
-        return self.name + " " + self.edition
-
     @property
     def url(self):
         return self.name + "/" + self.edition  # TODO handle multi-word editions/seasons
+
+    def __str__(self):
+        return self.name + " " + self.edition
 
     @staticmethod
     def get_open_student_programs():
@@ -157,7 +157,6 @@ class ScheduledBlock(models.Model):
     ScheduledBlock objects.
 
     TODO(constraint): section.program == timeslot.program
-    TODO(constraint): timeslot x section is unique
     """
 
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
@@ -197,12 +196,6 @@ class StudentRegistration(models.Model):
     availability_check = models.BooleanField(default=False)
     payment_check = models.BooleanField(default=False)
 
-    class Meta:
-        unique_together = (("student", "program"),)
-
-    def __str__(self):
-        return str(self.student.username) + "/" + str(self.program)
-
     @property
     def classes(self):
         sections = StudentClassRegistration.objects.filter(studentreg=self).values_list(
@@ -210,6 +203,12 @@ class StudentRegistration(models.Model):
         )
         ids = Section.objects.filter(pk__in=sections).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
+
+    class Meta:
+        unique_together = (("student", "program"),)
+
+    def __str__(self):
+        return str(self.student.username) + "/" + str(self.program)
 
 
 class StudentClassRegistration(models.Model):
@@ -242,13 +241,13 @@ class TeacherRegistration(models.Model):
     class Meta:
         unique_together = (("teacher", "program"),)
 
-    def __str__(self):
-        return str(self.teacher.username) + "/" + str(self.program)
-
     @property
     def classes(self):
         ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
+
+    def __str__(self):
+        return str(self.teacher.username) + "/" + str(self.program)
 
 
 class TeacherClassRegistration(models.Model):
