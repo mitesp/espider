@@ -26,12 +26,12 @@ class Program(models.Model):
     teacher_reg_open = models.BooleanField(default=False)
     # TODO add timeslots?
 
-    def __str__(self):
-        return self.name + " " + self.edition
-
     @property
     def url(self):
         return self.name + "/" + self.edition  # TODO handle multi-word editions/seasons
+
+    def __str__(self):
+        return self.name + " " + self.edition
 
     @staticmethod
     def get_open_student_programs():
@@ -76,10 +76,6 @@ class Class(models.Model):
     class Meta:
         verbose_name_plural = "classes"
 
-    @property
-    def num_students(self):
-        return StudentClassRegistration.objects.filter(clazz__id=self.id).count()
-
     def __str__(self):
         return self.title
 
@@ -92,6 +88,14 @@ class Section(models.Model):
 
     class Meta:
         unique_together = (("clazz", "number"),)
+
+    @property
+    def program(self):
+        return self.clazz.program
+
+    @property
+    def num_students(self):
+        return StudentClassRegistration.objects.filter(section__id=self.id).count()
 
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
@@ -107,6 +111,8 @@ class Timeslot(models.Model):
     TODO(constraint): start < end
     TODO(constraint): start.time and end.time could only be a fixed set of
     values (potentially on the hour and half hour, maybe quarter hour)
+    TODO(constraint): start and end on the same day, except for edge cases like
+    midnight (e.g. Firehose) (makes printing nicer as well)
 
     Examples:
     A Splash where all classes are multiples of an hour may have 19 timeslots
@@ -126,7 +132,18 @@ class Timeslot(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.program) + "(" + str(self.start) + ", " + str(self.end) + ")"
+        time_format = "%-I:%M %p"
+        date_format = "%-m/%d/%y"
+        return (
+            str(self.program)
+            + " ("
+            + self.start.strftime(date_format)
+            + ", "
+            + self.start.strftime(time_format)
+            + " to "
+            + self.end.strftime(time_format)
+            + ")"
+        )
 
 
 class ScheduledBlock(models.Model):
@@ -140,11 +157,17 @@ class ScheduledBlock(models.Model):
     ScheduledBlock objects.
 
     TODO(constraint): section.program == timeslot.program
-    TODO(constraint): timeslot x section is unique
     """
 
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     timeslot = models.ForeignKey(Timeslot, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("section", "timeslot"),)
+
+    @property
+    def program(self):
+        return self.timeslot.program
 
     def __str__(self):
         return str(self.section) + " during " + str(self.timeslot)
@@ -173,26 +196,27 @@ class StudentRegistration(models.Model):
     availability_check = models.BooleanField(default=False)
     payment_check = models.BooleanField(default=False)
 
+    @property
+    def classes(self):
+        sections = StudentClassRegistration.objects.filter(studentreg=self).values_list(
+            "section", flat=True
+        )
+        ids = Section.objects.filter(pk__in=sections).values_list("clazz", flat=True)
+        return Class.objects.filter(id__in=ids)
+
     class Meta:
         unique_together = (("student", "program"),)
 
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
-    @property
-    def classes(self):
-        ids = StudentClassRegistration.objects.filter(studentreg=self).values_list(
-            "clazz", flat=True
-        )
-        return Class.objects.filter(id__in=ids)
-
 
 class StudentClassRegistration(models.Model):
     studentreg = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
-    clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (("studentreg", "clazz"),)
+        unique_together = (("studentreg", "section"),)
         # TODO CONSTRAINT: clazz.program == studentreg.program
 
     @property
@@ -204,7 +228,7 @@ class StudentClassRegistration(models.Model):
         return self.studentreg.program
 
     def __str__(self):
-        return str(self.student.username) + "/" + str(self.clazz)
+        return str(self.student.username) + "/" + str(self.section)
 
 
 class TeacherRegistration(models.Model):
@@ -217,13 +241,13 @@ class TeacherRegistration(models.Model):
     class Meta:
         unique_together = (("teacher", "program"),)
 
-    def __str__(self):
-        return str(self.teacher.username) + "/" + str(self.program)
-
     @property
     def classes(self):
         ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
+
+    def __str__(self):
+        return str(self.teacher.username) + "/" + str(self.program)
 
 
 class TeacherClassRegistration(models.Model):

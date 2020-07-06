@@ -13,12 +13,15 @@ from core.models import (  # NOQA
     Class,
     ESPUser,
     Program,
+    ScheduledBlock,
+    Section,
     StudentClassRegistration,
     StudentProfile,
     StudentRegistration,
     TeacherClassRegistration,
     TeacherProfile,
     TeacherRegistration,
+    Timeslot,
 )
 
 
@@ -27,6 +30,9 @@ user_models = [ESPUser, StudentProfile, TeacherProfile]
 program_models = [
     Program,
     Class,
+    Timeslot,
+    Section,
+    ScheduledBlock,
     StudentRegistration,
     StudentClassRegistration,
     TeacherRegistration,
