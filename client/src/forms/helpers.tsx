@@ -189,16 +189,6 @@ function renderStandardFormField(
       return renderLabeledInput(onChange, "Username", "username", value, "text", "user");
     case "password":
       return renderLabeledInput(onChange, "Password", "password", value, "password", "lock");
-    case "pronouns":
-      return renderLabeledSelect(
-        onChange,
-        "Pronouns",
-        "pronouns",
-        value,
-        PronounOptions,
-        "transgender-alt",
-        pronounHelperText
-      );
     case "email":
       return renderLabeledInput(onChange, "E-mail", "email", value, "email", "envelope");
     case "phone":
