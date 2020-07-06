@@ -6,4 +6,7 @@ const PronounOptions: string[] = [
   "Prefer Not to Say",
 ];
 
-export { PronounOptions };
+const pronounHelperText =
+  "We ask for this information for the purposes of helping our staff use the most respectful language when addressing you.";
+
+export { PronounOptions, pronounHelperText };
