@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { renderLabeledInput } from "../forms/helpers";
+import { renderStandardFormField } from "../forms/helpers";
 import { loginEndpoint } from "../apiEndpoints";
 import { navigate } from "@reach/router";
 
@@ -58,23 +58,10 @@ class LoginForm extends Component<LoginProps, LoginState> {
     return (
       <form onSubmit={this.handleLogin}>
         <h1 className="has-text-centered is-size-3">Log in</h1>
-        {renderLabeledInput(
-          this.handleChange,
-          "Username",
-          "username",
-          this.state.username,
-          "text",
-          "user"
-        )}
+        {renderStandardFormField("username", this.handleChange, this.state.username)}
 
-        {renderLabeledInput(
-          this.handleChange,
-          "Password",
-          "password",
-          this.state.password,
-          "password",
-          "lock"
-        )}
+        {renderStandardFormField("password", this.handleChange, this.state.password)}
+
         <div className="field">
           <div className="control">
             <button className="button is-link" type="submit">

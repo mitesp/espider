@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
-import { renderLabeledInput } from "../forms/helpers";
+import { renderStandardFormField } from "../forms/helpers";
 import { studentSignupEndpoint } from "../apiEndpoints";
 
 type Props = {
@@ -68,22 +68,14 @@ class StudentSignupForm extends Component<Props, State> {
   render() {
     return (
       <form onSubmit={this.handleSignup}>
-        {renderLabeledInput(this.handleChange, "Username", "username", this.state.username, "text")}
-        {renderLabeledInput(
-          this.handleChange,
-          "Password",
-          "password",
-          this.state.password,
-          "password"
-        )}
-        {renderLabeledInput(
-          this.handleChange,
-          "Phone Number",
-          "phoneNumber",
-          this.state.phoneNumber,
-          "tel"
-        )}
-        {renderLabeledInput(this.handleChange, "School", "school", this.state.school, "text")}
+        {renderStandardFormField("username", this.handleChange, this.state.username)}
+
+        {renderStandardFormField("password", this.handleChange, this.state.password)}
+
+        {renderStandardFormField("phone", this.handleChange, this.state.phoneNumber)}
+
+        {renderStandardFormField("school", this.handleChange, this.state.school)}
+
         <div className="field">
           <div className="control">
             <button className="button is-link" type="submit">

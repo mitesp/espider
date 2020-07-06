@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
-import { PronounOptions } from "../constants";
-import { renderCustomInput, renderLabeledInput, renderLabeledSelect } from "../forms/helpers";
+import {
+  renderFirstLastName,
+  renderStandardFormField,
+  renderStandardFormSelect,
+} from "../forms/helpers";
 import { studentProfileEndpoint } from "../apiEndpoints";
 
 type Props = {
@@ -115,116 +118,25 @@ class UpdateProfileForm extends Component<Props, State> {
           <div className="column is-6 is-offset-3">
             <h1 className="has-text-centered is-size-3">Update Profile</h1>
             <form onSubmit={this.handleSubmit}>
-              <label className="label">Student Name</label>
-              <div className="field is-horizontal">
-                <div className="field-body">
-                  <div className="field">
-                    <div className="control is-expanded">
-                      {renderCustomInput(
-                        this.handleChange,
-                        "First Name",
-                        "firstName",
-                        this.state.firstName,
-                        "text",
-                        "user"
-                      )}
-                    </div>
-                  </div>
-                  <div className="field">
-                    <div className="control is-expanded">
-                      {renderCustomInput(
-                        this.handleChange,
-                        "Last Name",
-                        "lastName",
-                        this.state.lastName,
-                        "text",
-                        "user"
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {renderFirstLastName(this.handleChange, this.state.firstName, this.state.lastName)}
 
-              {renderLabeledSelect(
-                this.handleChange,
-                "Pronouns",
-                "pronouns",
-                this.state.pronouns,
-                PronounOptions,
-                "transgender-alt",
-                "We ask for this information for the purposes of helping our staff use the most respectful language when addressing you."
-              )}
+              {renderStandardFormSelect("pronouns", this.handleChange, this.state.pronouns)}
 
-              {renderLabeledInput(
-                this.handleChange,
-                "E-mail",
-                "email",
-                this.state.email,
-                "email",
-                "envelope"
-              )}
-              {renderLabeledInput(
-                this.handleChange,
-                "Phone Number",
-                "phoneNumber",
-                this.state.phoneNumber,
-                "tel",
-                "phone"
-              )}
+              {renderStandardFormField("email", this.handleChange, this.state.email)}
 
-              {renderLabeledInput(
-                this.handleChange,
-                "City",
-                "city",
-                this.state.city,
-                "text",
-                "city"
-              )}
-              {renderLabeledInput(
-                this.handleChange,
-                "State",
-                "state",
-                this.state.state,
-                "text",
-                "compass"
-              )}
-              {renderLabeledInput(
-                this.handleChange,
-                "Country",
-                "country",
-                this.state.country,
-                "text",
-                "globe"
-              )}
+              {renderStandardFormField("phone", this.handleChange, this.state.phoneNumber)}
 
-              {renderLabeledInput(
-                this.handleChange,
-                "Date of Birth",
-                "dateOfBirth",
-                this.state.dateOfBirth,
-                "date",
-                "birthday-cake",
-                undefined,
-                true
-              )}
-              {renderLabeledInput(
-                this.handleChange,
-                "High School Graduation Year",
-                "gradYear",
-                this.state.gradYear,
-                "number",
-                "graduation-cap",
-                undefined,
-                true
-              )}
-              {renderLabeledInput(
-                this.handleChange,
-                "Current School",
-                "school",
-                this.state.school,
-                "text",
-                "chalkboard-teacher"
-              )}
+              {renderStandardFormField("city", this.handleChange, this.state.city)}
+
+              {renderStandardFormField("state", this.handleChange, this.state.state)}
+
+              {renderStandardFormField("country", this.handleChange, this.state.country)}
+
+              {renderStandardFormField("dob", this.handleChange, this.state.dateOfBirth)}
+
+              {renderStandardFormField("gradyear", this.handleChange, this.state.gradYear)}
+
+              {renderStandardFormField("school", this.handleChange, this.state.school)}
 
               <div className="field">
                 <div className="control">
