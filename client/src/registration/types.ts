@@ -1,13 +1,13 @@
 // should match RegStatusOptions in the backend
 // TODO figure out how to sync them
 
-type Clazz = {
+type Class = {
   id: string;
   title: string;
   description: string;
-  teachers: string[];
   capacity: number;
   num_students: number;
+  teachers: string[];
 };
 
 enum RegStatusOption {
@@ -22,4 +22,4 @@ enum RegStatusOption {
 
 export { RegStatusOption };
 
-export type { Clazz };
+export type { Class };

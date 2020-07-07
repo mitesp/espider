@@ -11,8 +11,6 @@ type Props = {
 };
 
 type State = {
-  regEndpoint: string;
-  scheduleEndpoint: string;
   availabilityCheck: boolean;
   emergencyInfoCheck: boolean;
   liabilityCheck: boolean;
@@ -60,8 +58,6 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      regEndpoint: `/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`,
-      scheduleEndpoint: `/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`,
       availabilityCheck: false,
       emergencyInfoCheck: false,
       liabilityCheck: false,
@@ -79,25 +75,29 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   setupStudentReg() {
-    axiosInstance.get(this.state.regEndpoint).then(res => {
-      this.setState({
-        availabilityCheck: res.data.availability_check,
-        emergencyInfoCheck: res.data.emergency_info_check,
-        liabilityCheck: res.data.liability_check,
-        medliabCheck: res.data.medliab_check,
-        updateProfileCheck: res.data.update_profile_check,
-        regStatus: res.data.reg_status,
+    axiosInstance
+      .get(`/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`)
+      .then(res => {
+        this.setState({
+          availabilityCheck: res.data.availability_check,
+          emergencyInfoCheck: res.data.emergency_info_check,
+          liabilityCheck: res.data.liability_check,
+          medliabCheck: res.data.medliab_check,
+          updateProfileCheck: res.data.update_profile_check,
+          regStatus: res.data.reg_status,
+        });
       });
-    });
   }
 
   setupStudentClasses() {
-    axiosInstance.get(this.state.scheduleEndpoint).then(res => {
-      this.setState({
-        timeslots: res.data.timeslots,
-        classes: res.data.classes,
+    axiosInstance
+      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
+      .then(res => {
+        this.setState({
+          timeslots: res.data.timeslots,
+          classes: res.data.classes,
+        });
       });
-    });
   }
 
   renderRegStatus() {

@@ -65,7 +65,8 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
 class ClassCatalog(APIView):
     """
     API endpoint that returns all classes.
-    Permissions: authenticated (should be anyone eventually)
+    Permissions: authenticated
+    # TODO have some publicly accessible version of this API
     """
 
     def get(self, request, program, edition, format=None):
