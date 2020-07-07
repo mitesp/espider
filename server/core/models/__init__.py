@@ -27,6 +27,10 @@ class Program(models.Model):
     # TODO add timeslots?
 
     @property
+    def timeslots(self):
+        return self.timeslot_set.order_by("start")
+
+    @property
     def url(self):
         return self.name + "/" + self.edition  # TODO handle multi-word editions/seasons
 
@@ -106,6 +110,10 @@ class Section(models.Model):
     @property
     def num_students(self):
         return StudentClassRegistration.objects.filter(section__id=self.id).count()
+
+    @property
+    def scheduledblocks(self):
+        return self.scheduledblock_set
 
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
@@ -204,11 +212,15 @@ class StudentRegistration(models.Model):
     payment_check = models.BooleanField(default=False)
 
     @property
-    def classes(self):
+    def sections(self):
         sections = StudentClassRegistration.objects.filter(studentreg=self).values_list(
             "section", flat=True
         )
-        ids = Section.objects.filter(pk__in=sections).values_list("clazz", flat=True)
+        return Section.objects.filter(pk__in=sections)
+
+    @property
+    def classes(self):
+        ids = self.sections.values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
     class Meta:
@@ -216,6 +228,17 @@ class StudentRegistration(models.Model):
 
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
+
+    def get_schedule(self):
+        schedule = {timeslot: None for timeslot in self.program.timeslots}
+        sections = self.sections
+        for section in sections:
+            for block in section.scheduledblock_set.all():
+                timeslot = block.timeslot
+                schedule[timeslot] = section.clazz
+        # TODO add check to make sure sections don't overlap timeslots
+        # (or just make sure that's not possible when adding)
+        return sorted(list(schedule.items()), key=lambda pair: pair[0].start)
 
 
 class StudentClassRegistration(models.Model):
