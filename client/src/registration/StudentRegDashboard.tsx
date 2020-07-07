@@ -97,7 +97,7 @@ class StudentRegDashboard extends Component<Props, State> {
           timeslots: res.data.timeslots,
           classes: res.data.classes,
         });
-      });
+    });
   }
 
   renderRegStatus() {
