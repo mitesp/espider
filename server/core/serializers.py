@@ -65,8 +65,10 @@ class StudentRegSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(serializers.ModelSerializer):
-    scheduledblock_set = serializers.StringRelatedField(many=True)
     name = serializers.SerializerMethodField()
+    scheduledblock_set = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="timeslot_short"
+    )
 
     class Meta:
         model = Section

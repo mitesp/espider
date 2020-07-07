@@ -61,6 +61,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   setupClassCatalog() {
+    // TODO do more detailed JSON parsing
     axiosInstance
       .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`)
       .then(res => {
@@ -113,10 +114,17 @@ class StudentRegDashboard extends Component<Props, State> {
     // TODO will compare internal list of classes and catalog
   }
 
-  addClass(e: React.MouseEvent, clazz: Class) {
+
+  addSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
-    console.log("Adding " + clazz.title);
-    // TODO make this functional
+    console.log(`Adding ${clazz.title}`);
+    // TODO collect section number
+    // TODO refresh page or API calls
+  }
+
+  addWaitlistSection(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault();
+    console.log("Adding to waitlist " + clazz.title);
   }
 
   addWaitlistClass(e: React.MouseEvent, clazz: Class) {
@@ -130,6 +138,7 @@ class StudentRegDashboard extends Component<Props, State> {
     if (section) {
       console.log("Removing " + section.name);
       // TODO make this functional
+      // TODO refresh page or API calls
     }
   }
 
@@ -137,6 +146,50 @@ class StudentRegDashboard extends Component<Props, State> {
     e.preventDefault();
     e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
     // TODO do this in a better way than DOM manipulation
+  }
+
+  toggleAddClassDropdown(e: React.MouseEvent) {
+    e.preventDefault();
+    e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
+  }
+
+  renderAddClassDropdown(clazz: Class) {
+    return (
+      <div className="card-footer-item">
+        <div className="dropdown is-hoverable mr-4">
+          <div className="dropdown-trigger">
+            <button className="button" onClick={this.toggleAddClassDropdown}>
+              <span>Sections</span>
+              {/*TODO show selected section*/}
+              <span className="icon is-small">
+                <i className="fas fa-angle-down"></i>
+              </span>
+            </button>
+          </div>
+          <div className="dropdown-menu is-hidden">
+            <div className="dropdown-content">
+              {clazz.section_set.map((section, index) => {
+                return (
+                  <a
+                    href="#void"
+                    key={index}
+                    className="dropdown-item"
+                    onClick={e => this.addSection(e, clazz)}
+                  >
+                    {section.scheduledblock_set.join(" / ")}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        {/*TODO replace button with "waitlist" button if no space in the chosen section*/}
+        {/*TODO add relevant text */}
+        <button className="button" onClick={e => this.addSection(e, clazz)}>
+          Add class
+        </button>
+      </div>
+    );
   }
 
   renderClass(clazz: Class) {
@@ -172,29 +225,14 @@ class StudentRegDashboard extends Component<Props, State> {
           </div>
         </div>
         <div className="card-footer">
-          {classHasSpace ? (
-            <a
-              href="#void"
-              className="card-footer-item"
-              role="button"
-              onClick={e => this.addClass(e, clazz)}
-            >
-              Add Class
-            </a>
-          ) : (
-            <a
-              href="#void"
-              className="card-footer-item"
-              role="button"
-              onClick={e => this.addWaitlistClass(e, clazz)}
-            >
-              Join waitlist
-            </a>
-          )}
+          {this.renderAddClassDropdown(clazz)}
           <h3 className="card-footer-item">
-            {classHasSpace
-              ? `${clazz.section_set[0].num_students}/${clazz.capacity} students`
-              : "Class is full"}
+            {
+              /* TODO show details from the chosen section or something*/
+              classHasSpace
+                ? `${clazz.section_set[0].num_students}/${clazz.capacity} students`
+                : "Class is full"
+            }
           </h3>
         </div>
       </div>

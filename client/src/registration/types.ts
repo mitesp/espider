@@ -20,6 +20,7 @@ type Section = {
   name: string;
   num_students: number;
   number: number;
+  scheduledblock_set: string[];
 };
 
 type Class = {

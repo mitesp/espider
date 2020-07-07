@@ -196,6 +196,10 @@ class ScheduledBlock(models.Model):
     def program(self):
         return self.timeslot.program
 
+    @property
+    def timeslot_short(self):
+        return self.timeslot.shortstr
+
     def __str__(self):
         return str(self.section) + " during " + str(self.timeslot)
 
@@ -250,6 +254,7 @@ class StudentRegistration(models.Model):
                 schedule[timeslot] = section
         # TODO add check to make sure sections don't overlap timeslots
         # (or just make sure that's not possible when adding)
+        # TODO account for multi-instance programs
         return sorted(list(schedule.items()), key=lambda pair: pair[0].start)
 
 
