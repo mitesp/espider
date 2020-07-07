@@ -18,5 +18,8 @@ class ClassCatalog(APIView):
     """
 
     def get(self, request, program, edition, format=None):
+        # TODO remove classes the student is registered in
+        # TODO filter requests
+        # TODO account for multi-block classes
         classes = Program.objects.get(name=program, edition=edition).classes.all()
         return Response([ClassSerializer(clazz).data for clazz in classes])
