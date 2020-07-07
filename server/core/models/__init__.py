@@ -149,6 +149,18 @@ class Timeslot(models.Model):
     end = models.DateTimeField()
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
 
+    @property
+    def shortstr(self):
+        date_format = "%a"
+        time_format = "%-I:%M %p"
+        return (
+            self.start.strftime(date_format)
+            + " "
+            + self.start.strftime(time_format)
+            + "-"
+            + self.end.strftime(time_format)
+        )
+
     def __str__(self):
         time_format = "%-I:%M %p"
         date_format = "%-m/%d/%y"

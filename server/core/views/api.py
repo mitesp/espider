@@ -324,7 +324,10 @@ class StudentProgramClasses(APIView):
         studentreg = StudentRegistration.objects.get(student=user, program=prog)
         schedule = studentreg.get_schedule()
         ret = [
-            (str(timeslot), (ClassSerializer(clazz).data if clazz else None))
+            {
+                "timeslot": timeslot.shortstr,
+                "clazz": (ClassSerializer(clazz).data if clazz else None),
+            }
             for (timeslot, clazz) in schedule
         ]
 

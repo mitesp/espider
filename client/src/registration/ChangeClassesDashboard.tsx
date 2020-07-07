@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { Class } from "./types";
+import { Class, ScheduledTimeslot } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
 
@@ -15,6 +15,7 @@ type State = {
   catalog: Class[];
   enrolledClasses: string[];
   openClasses: boolean;
+  schedule: ScheduledTimeslot[];
   search: string;
   timeslots: string[];
 };
@@ -35,11 +36,12 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      timeslots: [],
       enrolledClasses: [],
       catalog: [],
-      search: "",
       openClasses: true,
+      search: "",
+      schedule: [],
+      timeslots: [],
     };
   }
 
@@ -53,8 +55,7 @@ class StudentRegDashboard extends Component<Props, State> {
       .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
       .then(res => {
         this.setState({
-          timeslots: res.data.timeslots,
-          enrolledClasses: res.data.classes,
+          schedule: res.data,
         });
       });
   }
@@ -84,11 +85,11 @@ class StudentRegDashboard extends Component<Props, State> {
               </tr>
             </thead>
             <tbody>
-              {this.state.enrolledClasses.map((clazz, index) => {
+              {this.state.schedule.map((scheduleItem, index) => {
                 return (
                   <tr key={index}>
-                    <th>{this.state.timeslots[index]}</th>
-                    <td>{clazz}</td>
+                    <th>{scheduleItem.timeslot}</th>
+                    <td>{scheduleItem.clazz && scheduleItem.clazz.title}</td>
                     <td>
                       <button className="delete is-centered"></button>
                       {/*(for a) onClick=e => this.removeClass(e, clazz)

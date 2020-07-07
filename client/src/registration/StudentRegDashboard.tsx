@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { RegStatusOption } from "./types";
+import { RegStatusOption, ScheduledTimeslot } from "./types";
 import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 
 type Props = {
@@ -17,8 +17,7 @@ type State = {
   medliabCheck: boolean;
   updateProfileCheck: boolean;
   regStatus: RegStatusOption;
-  timeslots: string[];
-  classes: string[];
+  schedule: ScheduledTimeslot[];
 };
 
 // helper functions
@@ -64,8 +63,7 @@ class StudentRegDashboard extends Component<Props, State> {
       medliabCheck: false,
       updateProfileCheck: false,
       regStatus: RegStatusOption.Empty, // idk if this is the best solution
-      timeslots: [],
-      classes: [],
+      schedule: [],
     };
   }
 
@@ -94,8 +92,7 @@ class StudentRegDashboard extends Component<Props, State> {
       .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
       .then(res => {
         this.setState({
-          timeslots: res.data.timeslots,
-          classes: res.data.classes,
+          schedule: res.data,
         });
     });
   }
@@ -151,11 +148,11 @@ class StudentRegDashboard extends Component<Props, State> {
             </tr>
           </thead>
           <tbody>
-            {this.state.classes.map((clazz, index) => {
+            {this.state.schedule.map((scheduleItem, index) => {
               return (
                 <tr key={index}>
-                  <th>{this.state.timeslots[index]}</th>
-                  <td>{clazz}</td>
+                  <th>{scheduleItem.timeslot}</th>
+                  <td>{scheduleItem.clazz && scheduleItem.clazz.title}</td>
                 </tr>
               );
             })}
