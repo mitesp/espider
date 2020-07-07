@@ -1,15 +1,5 @@
 // should match RegStatusOptions in the backend
 // TODO figure out how to sync them
-
-type Class = {
-  id: string;
-  title: string;
-  description: string;
-  capacity: number;
-  num_students: number;
-  teachers: string[];
-};
-
 enum RegStatusOption {
   ClassPreferences = "CLASS_PREFERENCES",
   FrozenPreferences = "FROZEN_PREFERENCES",
@@ -20,6 +10,23 @@ enum RegStatusOption {
   Empty = "",
 }
 
+
+type Section = {
+  num_students: number;
+  number: number;
+};
+
+type Class = {
+  id: string;
+  title: string;
+  description: string;
+  capacity: number;
+  section_set: Section[];
+  teachers: string[];
+};
+
+
+
 export { RegStatusOption };
 
-export type { Class };
+export type { Class, Section };
