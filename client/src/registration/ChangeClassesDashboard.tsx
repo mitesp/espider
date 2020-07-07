@@ -85,9 +85,12 @@ class ClassChangesDashboard extends Component<Props, State> {
                     <th>{scheduleItem.timeslot}</th>
                     <td>{scheduleItem.clazz && scheduleItem.clazz.title}</td>
                     <td>
-                      <button className="delete is-centered"></button>
-                      {/*(for a) onClick=e => this.removeClass(e, clazz)
-                      TODO enrolledClasses is Class[] instead of string[] */}
+                      {scheduleItem.clazz && (
+                        <button
+                          onClick={e => this.removeClass(e, scheduleItem.clazz)}
+                          className="delete is-centered"
+                        ></button>
+                      )}
                     </td>
                   </tr>
                 );
@@ -113,8 +116,10 @@ class ClassChangesDashboard extends Component<Props, State> {
 
   removeClass(e: React.MouseEvent, clazz: Class) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
-    console.log("Removing " + clazz.title);
-    // TODO make this functional
+    if (clazz) {
+      console.log("Removing " + clazz.title);
+      // TODO make this functional
+    }
   }
 
   toggleClassDescription(e: React.MouseEvent) {
@@ -130,13 +135,18 @@ class ClassChangesDashboard extends Component<Props, State> {
     return (
       <div className="card" key={clazz.id}>
         <div className="card-header">
-          <a href="#void" className="card-header-title" onClick={this.toggleClassDescription}>
+          <a
+            href="#void"
+            className="card-header-title"
+            role="button"
+            onClick={this.toggleClassDescription}
+          >
             {clazz.title}
           </a>
           <a
             href="#void"
-            role="button"
             className="card-header-icon card-toggle"
+            role="button"
             onClick={this.toggleClassDescription}
           >
             <span className="icon">
@@ -163,7 +173,7 @@ class ClassChangesDashboard extends Component<Props, State> {
               Add Class
             </a>
           ) : (
-            <a href="#void" className="card-footer-item">
+            <a href="#void" className="card-footer-item" role="button">
               Join waitlist
             </a>
           )}
