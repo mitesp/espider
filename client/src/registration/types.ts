@@ -13,7 +13,7 @@ enum RegStatusOption {
 
 type ScheduledTimeslot = {
   timeslot: string;
-  clazz: Clazz;
+  clazz: Class;
 };
 
 type Section = {
