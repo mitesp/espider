@@ -34,23 +34,18 @@ class StudentProgramClasses(APIView):
     Permissions: logged in, is student, has studentreg object
     """
 
+    permission_classes = (custom_permissions.IsStudent,)
+
     def get(self, request, program, edition, format=None):
-        # user = request.user
+        user = request.user
 
-        # # TODO make this check better
-        # prog = Program.objects.filter(name=program, edition=edition)[0]
-        # studentreg = StudentRegistration.objects.get(student=user, program=prog)
-        # classes = studentreg.get_classes()
-        # timeslots = Timeslot.objects.filter(program=prog)
-
-        ret = {
-            "classes": [
-                "How to beat your dad at chess, MIT style",
-                "From Neurons to Thoughts: An Introduction to the Human Mind and Brain",
-                None,
-            ],
-            "timeslots": ["Sat 10-11", "Sat 11-12", "Sat 12-1"],
-        }
+        prog = Program.objects.get(name=program, edition=edition)
+        studentreg = StudentRegistration.objects.get(student=user, program=prog)
+        schedule = studentreg.get_schedule()
+        ret = [
+            (str(timeslot), (ClassSerializer(clazz).data if clazz else None))
+            for (timeslot, clazz) in schedule
+        ]
 
         return Response(ret)
 

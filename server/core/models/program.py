@@ -16,6 +16,10 @@ class Program(models.Model):
     # TODO add timeslots?
 
     @property
+    def timeslots(self):
+        return self.timeslot_set.order_by("start")
+
+    @property
     def url(self):
         return self.name + "/" + self.edition  # TODO handle multi-word editions/seasons
 

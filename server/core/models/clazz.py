@@ -48,6 +48,10 @@ class Section(models.Model):
     def num_students(self):
         return self.studentclassregs.count()
 
+    @property
+    def scheduledblocks(self):
+        return self.scheduledblock_set.all()
+
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
 

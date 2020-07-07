@@ -1,4 +1,12 @@
-from core.models import Class, ESPUser, Program, Section, StudentProfile, StudentRegistration
+from core.models import (
+    Class,
+    ESPUser,
+    Program,
+    Section,
+    StudentProfile,
+    StudentRegistration,
+    Timeslot,
+)
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -71,3 +79,9 @@ class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = ("id", "title", "description", "teachers", "capacity", "sections")
+
+
+class TimeslotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Timeslot
+        fields = "__all__"
