@@ -26,10 +26,11 @@ class EmergencyInfoForm extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getEmergencyInfo();
+    this.setupEmergencyInfo();
   }
 
-  getEmergencyInfo() {
+  setupEmergencyInfo() {
+    // TODO make this functional
     axiosInstance
       .get(this.state.endpoint, {
         params: {

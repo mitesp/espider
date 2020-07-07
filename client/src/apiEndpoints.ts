@@ -11,12 +11,17 @@ const studentProfileEndpoint = "/profile/student/";
 const studentDashboardEndpoint = "/dashboard/student/";
 const teacherDashboardEndpoint = "/dashboard/teacher/";
 
-// studentreg (these requires /program/edition/ before)
+// Program-specific (these requires /program/edition/ before)
+
+const classCatalogEndpoint = "catalog/";
+
+// studentreg
 const studentRegEndpoint = "student/";
 const emergencyInfoEndpoint = "student/emergency_info/";
 const medicalLiabilityEndpoint = "student/medliab/";
 const liabilityWaiverEndpoint = "student/waiver/";
 const studentAvailabilityEndpoint = "student/availability/";
+const studentScheduleEndpoint = "student/schedule/";
 
 export {
   loginEndpoint,
@@ -25,10 +30,12 @@ export {
   studentSignupEndpoint,
   studentDashboardEndpoint,
   teacherDashboardEndpoint,
+  classCatalogEndpoint,
   studentRegEndpoint,
   emergencyInfoEndpoint,
   studentProfileEndpoint,
   medicalLiabilityEndpoint,
   liabilityWaiverEndpoint,
   studentAvailabilityEndpoint,
+  studentScheduleEndpoint,
 };

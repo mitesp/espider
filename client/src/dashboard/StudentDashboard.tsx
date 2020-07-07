@@ -32,10 +32,10 @@ export default class StudentDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getStudentDashboard();
+    this.setupStudentDashboard();
   }
 
-  getStudentDashboard() {
+  setupStudentDashboard() {
     axiosInstance.get(studentDashboardEndpoint).then(res => {
       this.setState({
         programs: res.data.current,

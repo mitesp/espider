@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { Clazz } from "./types";
+import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 
 type Props = {
   loggedIn: boolean;
@@ -10,8 +11,10 @@ type Props = {
 };
 
 type State = {
+  scheduleEndpoint: string;
+  catalogEndpoint: string;
   timeslots: string[];
-  classes: string[];
+  enrolledClasses: string[];
   catalog: Clazz[];
 };
 
@@ -34,35 +37,30 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      scheduleEndpoint: `/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`,
+      catalogEndpoint: `/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`,
       timeslots: [],
-      classes: [],
+      enrolledClasses: [],
       catalog: [],
     };
   }
 
   componentDidMount() {
-    this.getStudentClasses();
-    this.getClassCatalog();
+    this.setupStudentClasses();
+    this.setupClassCatalog();
   }
 
-  getStudentClasses() {
-    axiosInstance
-      .get("/studentclasses/", {
-        params: {
-          program: this.props.program,
-          edition: this.props.edition,
-        },
-      })
-      .then(res => {
-        this.setState({
-          timeslots: res.data.timeslots,
-          classes: res.data.classes,
-        });
+  setupStudentClasses() {
+    axiosInstance.get(this.state.scheduleEndpoint).then(res => {
+      this.setState({
+        timeslots: res.data.timeslots,
+        enrolledClasses: res.data.classes,
       });
+    });
   }
 
-  getClassCatalog() {
-    axiosInstance.get(`/${this.props.program}/${this.props.edition}/catalog/`).then(res => {
+  setupClassCatalog() {
+    axiosInstance.get(this.state.catalogEndpoint).then(res => {
       this.setState({
         catalog: res.data,
       });
@@ -83,7 +81,7 @@ class StudentRegDashboard extends Component<Props, State> {
               </tr>
             </thead>
             <tbody>
-              {this.state.classes.map((clazz, index) => {
+              {this.state.enrolledClasses.map((clazz, index) => {
                 return (
                   <tr key={index}>
                     <th>{this.state.timeslots[index]}</th>
@@ -91,7 +89,7 @@ class StudentRegDashboard extends Component<Props, State> {
                     <td>
                       <button className="delete is-centered"></button>
                       {/*(for a) onClick=e => this.removeClass(e, clazz)
-                      TODO classes is Clazz[] instead of string[] */}
+                      TODO enrolledClasses is Clazz[] instead of string[] */}
                     </td>
                   </tr>
                 );
@@ -109,10 +107,12 @@ class StudentRegDashboard extends Component<Props, State> {
 
   addClass(e: React.MouseEvent, clazz: Clazz) {
     console.log("Adding " + clazz.title);
+    // TODO make this functional
   }
 
   removeClass(e: React.MouseEvent, clazz: Clazz) {
     console.log("Removing " + clazz.title);
+    // TODO make this functional
   }
 
   toggleClassDescription(e: React.MouseEvent) {

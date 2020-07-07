@@ -54,10 +54,10 @@ class UpdateProfileForm extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getProfileInfo();
+    this.setupProfileInfo();
   }
 
-  getProfileInfo() {
+  setupProfileInfo() {
     axiosInstance.get(studentProfileEndpoint).then(res => {
       this.setState({
         affiliation: res.data.affiliation,

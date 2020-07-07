@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { RegStatusOption } from "./types";
-import { studentRegEndpoint } from "../apiEndpoints";
+import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 
 type Props = {
   loggedIn: boolean;
@@ -11,6 +11,8 @@ type Props = {
 };
 
 type State = {
+  regEndpoint: string;
+  scheduleEndpoint: string;
   availabilityCheck: boolean;
   emergencyInfoCheck: boolean;
   liabilityCheck: boolean;
@@ -58,6 +60,8 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      regEndpoint: `/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`,
+      scheduleEndpoint: `/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`,
       availabilityCheck: false,
       emergencyInfoCheck: false,
       liabilityCheck: false,
@@ -70,39 +74,30 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getStudentReg();
-    this.getStudentClasses();
+    this.setupStudentReg();
+    this.setupStudentClasses();
   }
 
-  getStudentReg() {
-    axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`)
-      .then(res => {
-        this.setState({
-          availabilityCheck: res.data.availability_check,
-          emergencyInfoCheck: res.data.emergency_info_check,
-          liabilityCheck: res.data.liability_check,
-          medliabCheck: res.data.medliab_check,
-          updateProfileCheck: res.data.update_profile_check,
-          regStatus: res.data.reg_status,
-        });
+  setupStudentReg() {
+    axiosInstance.get(this.state.regEndpoint).then(res => {
+      this.setState({
+        availabilityCheck: res.data.availability_check,
+        emergencyInfoCheck: res.data.emergency_info_check,
+        liabilityCheck: res.data.liability_check,
+        medliabCheck: res.data.medliab_check,
+        updateProfileCheck: res.data.update_profile_check,
+        regStatus: res.data.reg_status,
       });
+    });
   }
 
-  getStudentClasses() {
-    axiosInstance
-      .get("/studentclasses/", {
-        params: {
-          program: this.props.program,
-          edition: this.props.edition,
-        },
-      })
-      .then(res => {
-        this.setState({
-          timeslots: res.data.timeslots,
-          classes: res.data.classes,
-        });
+  setupStudentClasses() {
+    axiosInstance.get(this.state.scheduleEndpoint).then(res => {
+      this.setState({
+        timeslots: res.data.timeslots,
+        classes: res.data.classes,
       });
+    });
   }
 
   renderRegStatus() {

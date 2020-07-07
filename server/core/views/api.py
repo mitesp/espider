@@ -314,13 +314,11 @@ class StudentProgramClasses(APIView):
     Permissions: logged in, is student, has studentreg object
     """
 
-    def get(self, request, format=None):
-        # program = request.GET["program"]
-        # edition = request.GET["edition"]
+    def get(self, request, program, edition, format=None):
         # user = request.user
 
         # # TODO make this check better
-        # prog = Program.objects.filter(name__iexact=program, edition__iexact=edition)[0]
+        # prog = Program.objects.filter(name=program, edition=edition)[0]
         # studentreg = StudentRegistration.objects.get(student=user, program=prog)
         # classes = studentreg.get_classes()
         # timeslots = Timeslot.objects.filter(program=prog)
