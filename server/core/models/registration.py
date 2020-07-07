@@ -41,9 +41,7 @@ class StudentRegistration(models.Model):
 
     @property
     def sections(self):
-        sections = esp_models.StudentClassRegistration.objects.filter(studentreg=self).values_list(
-            "section", flat=True
-        )
+        sections = self.classregs.values_list("section", flat=True)
         return Section.objects.filter(pk__in=sections)
 
     @property
@@ -58,10 +56,10 @@ class StudentRegistration(models.Model):
         return str(self.student.username) + "/" + str(self.program)
 
     def get_schedule(self):
-        schedule = {timeslot: None for timeslot in self.program.timeslots}
+        schedule = {timeslot: None for timeslot in self.program.timeslots.all()}
         sections = self.sections
         for section in sections:
-            for block in section.scheduledblock_set.all():
+            for block in section.scheduled_blocks.all():
                 timeslot = block.timeslot
                 schedule[timeslot] = section.clazz
         # TODO add check to make sure sections don't overlap timeslots

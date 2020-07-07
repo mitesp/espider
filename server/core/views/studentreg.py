@@ -1,6 +1,6 @@
 import core.permissions as custom_permissions
 from core.models import Program, StudentRegistration
-from core.serializers import StudentRegSerializer
+from core.serializers import StudentRegSerializer, ClassSerializer
 from django.db import transaction
 from django.forms.models import model_to_dict
 from rest_framework.response import Response
@@ -43,7 +43,10 @@ class StudentProgramClasses(APIView):
         studentreg = StudentRegistration.objects.get(student=user, program=prog)
         schedule = studentreg.get_schedule()
         ret = [
-            (str(timeslot), (ClassSerializer(clazz).data if clazz else None))
+            {
+                "timeslot": timeslot.shortstr,
+                "clazz": (ClassSerializer(clazz).data if clazz else None),
+            }
             for (timeslot, clazz) in schedule
         ]
 
