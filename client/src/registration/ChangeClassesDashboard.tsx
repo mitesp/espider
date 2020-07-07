@@ -120,7 +120,6 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   renderClass(clazz: Clazz) {
-    const classHasSpace = clazz.capacity - clazz.num_students > 0;
     return (
       <div className="card" key={clazz.id}>
         <header className="card-header">
@@ -144,22 +143,12 @@ class StudentRegDashboard extends Component<Props, State> {
           </div>
         </div>
         <footer className="card-footer">
-          {this.enrolledInClass(clazz) ? (
-            <a href="# " className="card-footer-item" onClick={e => this.removeClass(e, clazz)}>
-              Remove Class
-            </a>
-          ) : classHasSpace ? (
+          {
             <a href="# " className="card-footer-item" onClick={e => this.addClass(e, clazz)}>
               Add Class
             </a>
-          ) : (
-            <a href="# " className="card-footer-item">
-              Join waitlist
-            </a>
-          )}
-          <h3 className="card-footer-item">
-            {classHasSpace ? `${clazz.num_students}/${clazz.capacity} students` : "Class is full"}
-          </h3>
+          }
+          <h3 className="card-footer-item">{`${clazz.capacity} students`}</h3>
         </footer>
       </div>
     );
