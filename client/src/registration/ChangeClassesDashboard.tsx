@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { Class } from "./types";
+import { Class, Section } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 
 type Props = {
@@ -58,6 +58,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   setupClassCatalog() {
+    // TODO do more detailed JSON parsing
     axiosInstance
       .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`)
       .then(res => {
@@ -106,16 +107,64 @@ class StudentRegDashboard extends Component<Props, State> {
     // TODO will compare internal list of classes and catalog
   }
 
-  addClass(e: React.MouseEvent, clazz: Class) {
+  addSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
-    console.log("Adding " + clazz.title);
-    // TODO make this functional
+    console.log(`Adding ${clazz.title}`);
+    // TODO collect section number
+    // TODO refresh page or API calls
   }
 
-  removeClass(e: React.MouseEvent, clazz: Class) {
+  addWaitlistSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
-    console.log("Removing " + clazz.title);
-    // TODO make this functional
+    console.log("Adding to waitlist " + clazz.title);
+  }
+
+  removeClass(e: React.MouseEvent, section: Section) {
+    e.preventDefault();
+    if (section) {
+      console.log("Removing " + section.number);
+      // TODO make this functional
+      // TODO refresh page or API calls
+    }
+  }
+
+  renderAddClassDropdown(clazz: Class) {
+    return (
+      <div className="card-footer-item">
+        <div className="dropdown is-hoverable mr-4">
+          <div className="dropdown-trigger">
+            <button className="button">
+              <span>Sections</span>
+              {/*TODO show selected section*/}
+              <span className="icon is-small">
+                <i className="fas fa-angle-down"></i>
+              </span>
+            </button>
+          </div>
+          <div className="dropdown-menu">
+            <div className="dropdown-content">
+              {clazz.sections.map((section, index) => {
+                return (
+                  <a
+                    href="#void"
+                    key={index}
+                    className="dropdown-item"
+                    onClick={e => this.addSection(e, clazz)}
+                  >
+                    {section.scheduledblock_set.join(" / ")}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        {/*TODO replace button with "waitlist" button if no space in the chosen section*/}
+        {/*TODO add relevant text */}
+        <button className="button" onClick={e => this.addSection(e, clazz)}>
+          Add class
+        </button>
+      </div>
+    );
   }
 
   toggleClassDescription(e: React.MouseEvent) {
@@ -154,24 +203,14 @@ class StudentRegDashboard extends Component<Props, State> {
           </div>
         </div>
         <div className="card-footer">
-          {classHasSpace ? (
-            <a
-              href="#void"
-              className="card-footer-item"
-              role="button"
-              onClick={e => this.addClass(e, clazz)}
-            >
-              Add Class
-            </a>
-          ) : (
-            <a href="#void" className="card-footer-item">
-              Join waitlist
-            </a>
-          )}
+          {this.renderAddClassDropdown(clazz)}
           <h3 className="card-footer-item">
-            {classHasSpace
-              ? `${clazz.sections[0].num_students}/${clazz.capacity} students`
-              : "Class is full"}
+            {
+              /* TODO show details from the chosen section or something*/
+              classHasSpace
+                ? `${clazz.sections[0].num_students}/${clazz.capacity} students`
+                : "Class is full"
+            }
           </h3>
         </div>
       </div>
