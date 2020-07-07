@@ -129,6 +129,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   renderClass(clazz: Class) {
+    const classHasSpace = clazz.capacity - clazz.section_set[0].num_students > 0;
     return (
       <div className="card" key={clazz.id}>
         <div className="card-header">
@@ -155,7 +156,7 @@ class StudentRegDashboard extends Component<Props, State> {
           </div>
         </div>
         <div className="card-footer">
-          {
+          {classHasSpace ? (
             <a
               href="#void"
               className="card-footer-item"
@@ -164,8 +165,16 @@ class StudentRegDashboard extends Component<Props, State> {
             >
               Add Class
             </a>
-          }
-          <h3 className="card-footer-item">{`${clazz.capacity} students`}</h3>
+          ) : (
+            <a href="# " className="card-footer-item">
+              Join waitlist
+            </a>
+          )}
+          <h3 className="card-footer-item">
+            {classHasSpace
+              ? `${clazz.section_set[0].num_students}/${clazz.capacity} students`
+              : "Class is full"}
+          </h3>
         </div>
       </div>
     );
