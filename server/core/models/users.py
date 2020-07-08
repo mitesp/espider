@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -24,6 +25,18 @@ class ESPUser(AbstractUser):
 
     def __str__(self):
         return "{} ({})".format(self.username, self.id)
+
+    def clean(self):
+        errors = {}
+        # assert user cannot have both a student_profile and a teacher_profile
+        if self.is_student and self.is_teacher:
+            errors["user"] = ValidationError("User cannot be both a student and a teacher.")
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # TODO potentially replace everywhere with the package django-fullclean
+        return super(ESPUser, self).save(*args, **kwargs)
 
 
 # TODO: for all profiles choose real lengths and figure out what shouldn't be blank/null

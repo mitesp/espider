@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from .users import *  # noqa
@@ -24,7 +25,6 @@ class Program(models.Model):
         max_length=20, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES
     )
     teacher_reg_open = models.BooleanField(default=False)
-    # TODO add timeslots?
 
     @property
     def url(self):
@@ -83,11 +83,13 @@ class Class(models.Model):
 class Section(models.Model):
     clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
-    # TODO(constraint): PositiveIntegerField can be 0 due to django backwards
-    # compatibility, but we should constrain it
 
     class Meta:
         unique_together = (("clazz", "number"),)
+        constraints = [
+            # number > 0
+            models.CheckConstraint(check=models.Q(number__gt=0), name="number_nonzero")
+        ]
 
     @property
     def program(self):
@@ -108,7 +110,6 @@ class Timeslot(models.Model):
     offsets need to be able to accommodate.
 
     TODO(constraint): Timeslot durations should be constant for a given program.
-    TODO(constraint): start < end
     TODO(constraint): start.time and end.time could only be a fixed set of
     values (potentially on the hour and half hour, maybe quarter hour)
     TODO(constraint): start and end on the same day, except for edge cases like
@@ -130,6 +131,13 @@ class Timeslot(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("start", "end", "program"),)
+        constraints = [
+            # start < end
+            models.CheckConstraint(check=models.Q(start__lt=models.F("end")), name="start_lt_end")
+        ]
 
     def __str__(self):
         time_format = "%-I:%M %p"
@@ -155,8 +163,6 @@ class ScheduledBlock(models.Model):
     be represented by two ScheduledBlock objects. A 1.5-hour section scheduled
     in a program with half-hour timeslot durations would be represented by three
     ScheduledBlock objects.
-
-    TODO(constraint): section.program == timeslot.program
     """
 
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
@@ -172,6 +178,24 @@ class ScheduledBlock(models.Model):
     def __str__(self):
         return str(self.section) + " during " + str(self.timeslot)
 
+    def clean(self):
+        errors = {}
+        # assert section.program == timeslot.program
+        if self.section.program != self.timeslot.program:
+            # both are here for the admin panel to generate errors in the correct location
+            errors["section"] = ValidationError(
+                "The Section's program must match the Timeslot's program."
+            )
+            errors["timeslot"] = ValidationError(
+                "The Section's program must match the Timeslot's program."
+            )
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(ScheduledBlock, self).save(*args, **kwargs)
+
 
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
@@ -179,13 +203,7 @@ class StudentRegistration(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
 
     # student reg status
-    reg_status = models.CharField(
-        max_length=20,
-        choices=RegStatusOptions.choices,
-        default=RegStatusOptions.CLASS_PREFERENCES
-        # TODO figure out if it's possible to make the default whatever the program value is
-        # might be easier to do this by hand in whatever function is creating this studentreg
-    )
+    reg_status = models.CharField(max_length=20, choices=RegStatusOptions.choices)
 
     # TODO(mvadari): hmm "updated" might be a better than "check"? (e.g. profile_updated)
     # or maybe "completed"? Looks like these bubble up all the way to the frontend
@@ -195,6 +213,11 @@ class StudentRegistration(models.Model):
     medliab_check = models.BooleanField(default=False)
     availability_check = models.BooleanField(default=False)
     payment_check = models.BooleanField(default=False)
+
+    def __init__(self, *args, **kwargs):
+        super(StudentRegistration, self).__init__(*args, **kwargs)
+        if not self.id and hasattr(self, "program") and not self.reg_status:
+            self.reg_status = self.program.student_reg_status
 
     @property
     def classes(self):
@@ -209,6 +232,23 @@ class StudentRegistration(models.Model):
 
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
+
+    def clean(self):
+        errors = {}
+        # assert student.is_student
+        if not self.student.is_student:
+            errors["student"] = ValidationError("This user is not a student.")
+        # assert program.student_reg_open (since we're creating a new StudentReg object)
+        if not self.program.student_reg_open:
+            errors["program"] = ValidationError(
+                "This program does not have student registration open."
+            )
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(StudentClassRegistration, self).save(*args, **kwargs)
 
 
 class StudentClassRegistration(models.Model):
@@ -229,6 +269,24 @@ class StudentClassRegistration(models.Model):
 
     def __str__(self):
         return str(self.student.username) + "/" + str(self.section)
+
+    def clean(self):
+        errors = {}
+        # assert clazz.program == studentreg.program
+        if self.clazz.program != self.studentreg.program:
+            # both are here for the admin panel to generate errors in the correct location
+            errors["clazz"] = ValidationError(
+                "The Class's program must match the StudentRegistration's program."
+            )
+            errors["studentreg"] = ValidationError(
+                "The Class's program must match the StudentRegistration's program."
+            )
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(StudentClassRegistration, self).save(*args, **kwargs)
 
 
 class TeacherRegistration(models.Model):
@@ -256,7 +314,6 @@ class TeacherClassRegistration(models.Model):
 
     class Meta:
         unique_together = (("teacherreg", "clazz"),)
-        # TODO CONSTRAINT: clazz.program == teacherreg.program
 
     @property
     def teacher(self):
@@ -268,3 +325,21 @@ class TeacherClassRegistration(models.Model):
 
     def __str__(self):
         return str(self.teacher.username) + "/" + str(self.clazz)
+
+    def clean(self):
+        errors = {}
+        # assert clazz.program == teacherreg.program
+        if self.clazz.program != self.teacherreg.program:
+            # both are here for the admin panel to generate errors in the correct location
+            errors["clazz"] = ValidationError(
+                "The Class's program must match the TeacherRegistration's program."
+            )
+            errors["teacherreg"] = ValidationError(
+                "The Class's program must match the TeacherRegistration's program."
+            )
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(TeacherClassRegistration, self).save(*args, **kwargs)
