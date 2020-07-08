@@ -26,6 +26,7 @@ from .users import *  # noqa
 class ProgramAdmin(admin.ModelAdmin):
     list_display = ("__str__", "student_reg_open", "student_reg_status", "teacher_reg_open")
     inlines = [TimeslotInline]
+    search_fields = ("program", "edition")
 
     def save_model(self, request, obj, form, change):
         if "student_reg_status" in form.changed_data:
@@ -88,7 +89,7 @@ class SectionAdmin(admin.ModelAdmin):
             reg_id = int(request.META.get("HTTP_REFERER").split("/")[6])
             if "studentregistration" in request.META.get("HTTP_REFERER"):
                 program = StudentRegistration.objects.get(pk=reg_id).program
-                queryset = queryset.filter(program__exact=program).order_by("title")
+                queryset = queryset.filter(clazz__program=program).order_by("clazz__title")
                 # TODO change to by timeslot after scheduling (or something)
 
         return super().get_search_results(request, queryset, search_term)
@@ -140,6 +141,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
         "availability_check",
         "payment_check",
     )
+    autocomplete_fields = ("student", "program")  # TODO filter for only students
     search_fields = ("student__username", "student__id", "program__name")
     save_on_top = True
 
@@ -165,7 +167,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
                 "payment_check",
             ),
         )
-        self.readonly_fields = ("student", "program", "studentclassregistration_set")
+        self.readonly_fields = ("student", "program")
         self.inlines = [StudentClassRegistrationInline]
         return super(StudentRegistrationAdmin, self).change_view(
             request, object_id, extra_context=extra_context
@@ -186,17 +188,31 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
 
 @admin.register(TeacherRegistration)
 class TeacherRegistrationAdmin(admin.ModelAdmin):
-    readonly_fields = ("teacher", "program")
     list_display = ("teacher", "program", "update_profile_check")
     search_fields = ("teacher__username", "teacher__id", "program__name")
-    fields = (
-        "teacher",
-        "program",
-        "update_profile_check",
-    )
     list_filter = (ActiveProgramFilter,)
-    inlines = [TeacherClassRegistrationInline]
+    autocomplete_fields = ("teacher", "program")  # TODO filter for only teachers
     save_on_top = True
+
+    def add_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        self.fields = ("teacher", "program")
+        self.readonly_fields = ()
+        self.inlines = []
+        return super(TeacherRegistrationAdmin, self).add_view(request, extra_context=extra_context)
+
+    def change_view(self, request, object_id, extra_context=None):
+        extra_context = extra_context or {}
+        self.fields = (
+            "teacher",
+            "program",
+            ("update_profile_check",),
+        )
+        self.readonly_fields = ("teacher", "program")
+        self.inlines = [TeacherClassRegistrationInline]
+        return super(TeacherRegistrationAdmin, self).change_view(
+            request, object_id, extra_context=extra_context
+        )
 
     def get_search_results(self, request, queryset, search_term):
         # this is a little bit hacky but checks if it's an autocomplete request from an Inline
