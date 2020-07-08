@@ -6,7 +6,13 @@ from django.db import models
 class ESPUser(AbstractUser):
     # inherits username, first_name, last_name, email, is_staff, is_superuser, etc.
 
-    # TODO add constraint so user cannot have both a student_profile and a teacher_profile
+    class Meta:
+        constraints = [
+            # is_staff == is_superuser
+            models.CheckConstraint(
+                check=models.Q(is_staff=models.F("is_superuser")), name="staff_equals_superuser"
+            )
+        ]
 
     @property
     def is_student(self):
@@ -28,6 +34,7 @@ class ESPUser(AbstractUser):
 
     def clean(self):
         errors = {}
+
         # assert user cannot have both a student_profile and a teacher_profile
         if self.is_student and self.is_teacher:
             errors["user"] = ValidationError("User cannot be both a student and a teacher.")
