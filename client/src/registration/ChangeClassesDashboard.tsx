@@ -103,6 +103,7 @@ class StudentRegDashboard extends Component<Props, State> {
 
   enrolledInClass(clazz: Class) {
     return false;
+    // TODO will compare internal list of classes and catalog
   }
 
   addClass(e: React.MouseEvent, clazz: Class) {
