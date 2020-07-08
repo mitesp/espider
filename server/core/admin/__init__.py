@@ -98,7 +98,6 @@ class SectionAdmin(admin.ModelAdmin):
 @admin.register(Timeslot)
 class TimeslotAdmin(admin.ModelAdmin):
     list_display = ("start", "end", "program")
-    readonly_fields = ("program",)
     search_fields = ("start", "end", "program")
     inlines = [ScheduledBlockInline]
 
