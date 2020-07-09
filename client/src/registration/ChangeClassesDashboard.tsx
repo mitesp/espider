@@ -117,6 +117,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   toggleClassDescription(e: React.MouseEvent) {
+    e.preventDefault();
     e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
     // TODO do this in a better way than DOM manipulation
   }
@@ -127,7 +128,8 @@ class StudentRegDashboard extends Component<Props, State> {
         <div className="card-header">
           <h2 className="card-header-title">{clazz.title}</h2>
           <a
-            href="# "
+            href="#void"
+            role="button"
             className="card-header-icon card-toggle"
             onClick={this.toggleClassDescription}
           >
@@ -146,7 +148,12 @@ class StudentRegDashboard extends Component<Props, State> {
         </div>
         <div className="card-footer">
           {
-            <a href="# " className="card-footer-item" onClick={e => this.addClass(e, clazz)}>
+            <a
+              href="#void"
+              className="card-footer-item"
+              role="button"
+              onClick={e => this.addClass(e, clazz)}
+            >
               Add Class
             </a>
           }
