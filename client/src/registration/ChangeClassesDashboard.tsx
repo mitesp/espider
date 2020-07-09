@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
+import { Class } from "./types";
+import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 
 type Props = {
   loggedIn: boolean;
@@ -9,8 +11,9 @@ type Props = {
 };
 
 type State = {
+  catalog: Class[];
+  enrolledClasses: string[];
   timeslots: string[];
-  classes: string[];
 };
 
 // helper functions
@@ -33,26 +36,33 @@ class StudentRegDashboard extends Component<Props, State> {
     super(props);
     this.state = {
       timeslots: [],
-      classes: [],
+      enrolledClasses: [],
+      catalog: [],
     };
   }
 
   componentDidMount() {
-    this.getStudentClasses();
+    this.setupStudentClasses();
+    this.setupClassCatalog();
   }
 
-  getStudentClasses() {
+  setupStudentClasses() {
     axiosInstance
-      .get("/studentclasses/", {
-        params: {
-          program: this.props.program,
-          edition: this.props.edition,
-        },
-      })
+      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
       .then(res => {
         this.setState({
           timeslots: res.data.timeslots,
-          classes: res.data.classes,
+          enrolledClasses: res.data.classes,
+        });
+      });
+  }
+
+  setupClassCatalog() {
+    axiosInstance
+      .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`)
+      .then(res => {
+        this.setState({
+          catalog: res.data,
         });
       });
   }
@@ -67,14 +77,20 @@ class StudentRegDashboard extends Component<Props, State> {
               <tr>
                 <th>Time</th>
                 <th>Class</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              {this.state.classes.map((clazz, index) => {
+              {this.state.enrolledClasses.map((clazz, index) => {
                 return (
                   <tr key={index}>
                     <th>{this.state.timeslots[index]}</th>
                     <td>{clazz}</td>
+                    <td>
+                      <button className="delete is-centered"></button>
+                      {/*(for a) onClick=e => this.removeClass(e, clazz)
+                      TODO enrolledClasses is Class[] instead of string[] */}
+                    </td>
                   </tr>
                 );
               })}
@@ -85,12 +101,74 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
+  enrolledInClass(clazz: Class) {
+    return false;
+    // TODO will compare internal list of classes and catalog
+  }
+
+  addClass(e: React.MouseEvent, clazz: Class) {
+    console.log("Adding " + clazz.title);
+    // TODO make this functional
+  }
+
+  removeClass(e: React.MouseEvent, clazz: Class) {
+    console.log("Removing " + clazz.title);
+    // TODO make this functional
+  }
+
+  toggleClassDescription(e: React.MouseEvent) {
+    e.preventDefault();
+    e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
+    // TODO do this in a better way than DOM manipulation
+  }
+
+  renderClass(clazz: Class) {
+    return (
+      <div className="card" key={clazz.id}>
+        <div className="card-header">
+          <h2 className="card-header-title">{clazz.title}</h2>
+          <a
+            href="#void"
+            role="button"
+            className="card-header-icon card-toggle"
+            onClick={this.toggleClassDescription}
+          >
+            <span className="icon">
+              <i className="fas fa-angle-down"></i>
+            </span>
+          </a>
+        </div>
+        <div className="card-content is-hidden">
+          <div className="content">
+            <p>
+              <i>{clazz.teachers.join(", ")}</i>
+            </p>
+            <p>{clazz.description}</p>
+          </div>
+        </div>
+        <div className="card-footer">
+          {
+            <a
+              href="#void"
+              className="card-footer-item"
+              role="button"
+              onClick={e => this.addClass(e, clazz)}
+            >
+              Add Class
+            </a>
+          }
+          <h3 className="card-footer-item">{`${clazz.capacity} students`}</h3>
+        </div>
+      </div>
+    );
+  }
+
   renderClassCatalog() {
     return (
       <div className="column">
         <h2 className="has-text-centered is-size-3">Class Catalog</h2>
-        <br />
-        {renderTextInSection("Class catalog here", false)}
+        {renderTextInSection("Insert filter options here")}
+        {this.state.catalog.map(clazz => this.renderClass(clazz))}
       </div>
     );
   }

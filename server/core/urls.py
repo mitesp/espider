@@ -60,8 +60,8 @@ urlpatterns = [
     path("<program>/<edition>/classes/", views.ClassesView.as_view(), name="classes"),
     # api paths
     # TODO: these paths are kinda messy -- we should read about API design and clean this up.
-    path("api/studentclasses/", views.StudentProgramClasses.as_view()),
     path("api/", include(router.urls)),
+    path("api/<program>/<edition>/catalog/", views.ClassCatalog.as_view()),
     # Dashboard
     path("api/dashboard/student/", views.get_student_dashboard),
     # Profile
@@ -72,6 +72,7 @@ urlpatterns = [
     path("api/<program>/<edition>/student/medliab/", views.MedicalLiability.as_view()),
     path("api/<program>/<edition>/student/waiver/", views.LiabilityWaiver.as_view()),
     path("api/<program>/<edition>/student/availability/", views.Availability.as_view()),
+    path("api/<program>/<edition>/student/schedule/", views.StudentProgramClasses.as_view()),
     # auth API calls
     path("api/account/student/", views.StudentAccount.as_view()),
     path("api/user/", views.current_user),

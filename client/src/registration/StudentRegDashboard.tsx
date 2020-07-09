@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { RegStatusOption } from "./types";
-import { studentRegEndpoint } from "../apiEndpoints";
+import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 
 type Props = {
   loggedIn: boolean;
@@ -70,11 +70,11 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getStudentReg();
-    this.getStudentClasses();
+    this.setupStudentReg();
+    this.setupStudentClasses();
   }
 
-  getStudentReg() {
+  setupStudentReg() {
     axiosInstance
       .get(`/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`)
       .then(res => {
@@ -89,14 +89,9 @@ class StudentRegDashboard extends Component<Props, State> {
       });
   }
 
-  getStudentClasses() {
+  setupStudentClasses() {
     axiosInstance
-      .get("/studentclasses/", {
-        params: {
-          program: this.props.program,
-          edition: this.props.edition,
-        },
-      })
+      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
       .then(res => {
         this.setState({
           timeslots: res.data.timeslots,

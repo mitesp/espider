@@ -29,7 +29,7 @@ export default class TeacherDashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getPrograms();
+    this.setupPrograms();
   }
 
   generateProgramList(results: Array<JSONProgram>) {
@@ -44,7 +44,7 @@ export default class TeacherDashboard extends Component<Props, State> {
     return programs;
   }
 
-  getPrograms() {
+  setupPrograms() {
     axiosInstance.get(teacherDashboardEndpoint).then(res => {
       this.setState({ programs: this.generateProgramList(res.data.results) });
     });
