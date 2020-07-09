@@ -248,7 +248,7 @@ class StudentRegistration(models.Model):
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        return super(StudentClassRegistration, self).save(*args, **kwargs)
+        return super(StudentRegistration, self).save(*args, **kwargs)
 
 
 class StudentClassRegistration(models.Model):
