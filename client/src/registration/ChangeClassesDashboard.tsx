@@ -3,6 +3,7 @@ import axiosInstance from "../axiosAPI";
 import { Class, Section, ScheduledTimeslot } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
+import "./Catalog.css";
 
 type Props = {
   loggedIn: boolean;
@@ -114,7 +115,6 @@ class StudentRegDashboard extends Component<Props, State> {
     // TODO will compare internal list of classes and catalog
   }
 
-
   addSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
     console.log(`Adding ${clazz.title}`);
@@ -156,9 +156,9 @@ class StudentRegDashboard extends Component<Props, State> {
   renderAddClassDropdown(clazz: Class) {
     return (
       <div className="card-footer-item">
-        <div className="dropdown is-hoverable mr-4">
+        <div className="dropdown is-hoverable is-fullwidth">
           <div className="dropdown-trigger">
-            <button className="button" onClick={this.toggleAddClassDropdown}>
+            <button className="button is-fullwidth" onClick={this.toggleAddClassDropdown}>
               <span>Sections</span>
               {/*TODO show selected section*/}
               <span className="icon is-small">
@@ -185,9 +185,6 @@ class StudentRegDashboard extends Component<Props, State> {
         </div>
         {/*TODO replace button with "waitlist" button if no space in the chosen section*/}
         {/*TODO add relevant text */}
-        <button className="button" onClick={e => this.addSection(e, clazz)}>
-          Add class
-        </button>
       </div>
     );
   }
@@ -233,6 +230,9 @@ class StudentRegDashboard extends Component<Props, State> {
                 ? `${clazz.section_set[0].num_students}/${clazz.capacity} students`
                 : "Class is full"
             }
+            <button className="button ml-4" onClick={e => this.addSection(e, clazz)}>
+              Add class
+            </button>
           </h3>
         </div>
       </div>
