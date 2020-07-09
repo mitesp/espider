@@ -133,7 +133,7 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO replace this with something that actually checks this once sections have been
     // properly implemented
     return (
-      <div className="card" key={clazz.id}>
+      <div className="card mb-1" key={clazz.id}>
         <div className="card-header">
           <a
             href="#void"
