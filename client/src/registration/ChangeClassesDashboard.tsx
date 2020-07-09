@@ -70,7 +70,6 @@ class StudentRegDashboard extends Component<Props, State> {
       });
   }
 
-
   renderClassSchedule() {
     return (
       <div className="column is-6">
@@ -137,13 +136,14 @@ class StudentRegDashboard extends Component<Props, State> {
   renderClass(clazz: Class) {
     const classHasSpace = clazz.capacity - clazz.section_set[0].num_students > 0;
     return (
-      <div className="card" key={clazz.id}>
+      <div className="card mb-1" key={clazz.id}>
         <div className="card-header">
-          <a 
-            href="#void" 
-            className="card-header-title" 
-            role="button" 
-            onClick={this.toggleClassDescription}>
+          <a
+            href="#void"
+            className="card-header-title"
+            role="button"
+            onClick={this.toggleClassDescription}
+          >
             {clazz.title}
           </a>
           <a
@@ -166,8 +166,8 @@ class StudentRegDashboard extends Component<Props, State> {
           </div>
         </div>
         <div className="card-footer">
-          {classHasSpace ?
-            (<a
+          {classHasSpace ? (
+            <a
               href="#void"
               className="card-footer-item"
               role="button"
@@ -204,6 +204,7 @@ class StudentRegDashboard extends Component<Props, State> {
     this.state.openClasses // previous state
       ? console.log("Open class filter off")
       : console.log("Open class filter on");
+    // TODO make this filtering functional
 
     e!.currentTarget!.classList.toggle("is-success");
     this.setState({
