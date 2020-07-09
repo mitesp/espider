@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { Class, Section } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
+import "./Catalog.css";
 
 type Props = {
   loggedIn: boolean;
@@ -131,9 +132,9 @@ class StudentRegDashboard extends Component<Props, State> {
   renderAddClassDropdown(clazz: Class) {
     return (
       <div className="card-footer-item">
-        <div className="dropdown is-hoverable mr-4">
-          <div className="dropdown-trigger">
-            <button className="button">
+        <div className="dropdown is-hoverable is-fullwidth">
+          <div className="dropdown-trigger is-fullwidth">
+            <button className="button is-fullwidth">
               <span>Sections</span>
               {/*TODO show selected section*/}
               <span className="icon is-small">
@@ -160,9 +161,6 @@ class StudentRegDashboard extends Component<Props, State> {
         </div>
         {/*TODO replace button with "waitlist" button if no space in the chosen section*/}
         {/*TODO add relevant text */}
-        <button className="button" onClick={e => this.addSection(e, clazz)}>
-          Add class
-        </button>
       </div>
     );
   }
@@ -211,6 +209,9 @@ class StudentRegDashboard extends Component<Props, State> {
                 ? `${clazz.sections[0].num_students}/${clazz.capacity} students`
                 : "Class is full"
             }
+            <button className="button ml-4" onClick={e => this.addSection(e, clazz)}>
+              Add class
+            </button>
           </h3>
         </div>
       </div>
