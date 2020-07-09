@@ -225,7 +225,8 @@ class StudentRegDashboard extends Component<Props, State> {
               ? clazz.capacity - clazz.sections[sectionNum].num_students > 0 // has space
                 ? `${clazz.sections[sectionNum].num_students}/${clazz.capacity} students`
                 : "Class is full"
-              : `Capacity ${clazz.capacity} students`}
+              : `Capacity ${clazz.capacity} students`
+            }
           </h3>
           {sectionNum !== undefined ? (
             clazz.capacity - clazz.sections[sectionNum].num_students > 0 ? ( // has space
