@@ -17,7 +17,7 @@ type Section = {
 };
 
 type Class = {
-  id: string;
+  id: number;
   title: string;
   description: string;
   capacity: number;

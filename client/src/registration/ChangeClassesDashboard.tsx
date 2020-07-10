@@ -13,6 +13,7 @@ type Props = {
 
 type State = {
   catalog: Class[];
+  catalogClassStatuses: { [classId: string]: number }; // classID -> selected section
   enrolledClasses: string[];
   timeslots: string[];
 };
@@ -36,9 +37,10 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      timeslots: [],
-      enrolledClasses: [],
       catalog: [],
+      catalogClassStatuses: {},
+      enrolledClasses: [],
+      timeslots: [],
     };
   }
 
@@ -110,33 +112,52 @@ class StudentRegDashboard extends Component<Props, State> {
 
   addSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
-    console.log(`Adding ${clazz.title}`);
-    // TODO collect section number
-    // TODO refresh page or API calls
-  }
-
-  addWaitlistSection(e: React.MouseEvent, clazz: Class) {
-    e.preventDefault();
-    console.log("Adding to waitlist " + clazz.title);
-  }
-
-  removeClass(e: React.MouseEvent, section: Section) {
-    e.preventDefault();
-    if (section) {
-      console.log("Removing " + section.number);
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
+    if (sectionNum !== undefined) {
+      console.log(`Adding "${clazz.title}" section ${sectionNum}`);
       // TODO make this functional
       // TODO refresh page or API calls
     }
   }
 
+  addWaitlistSection(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault();
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
+    if (sectionNum !== undefined) {
+      console.log(`Adding to waitlist "${clazz.title}" section ${sectionNum}`);
+      // TODO make this functional
+    }
+  }
+
+  removeSection(e: React.MouseEvent, section: Section) {
+    e.preventDefault();
+    if (section) {
+      console.log(`Removing "${section.number}"`);
+      // TODO make this functional
+      // TODO refresh page or API calls
+    }
+  }
+
+  changeSelectedSection(e: React.MouseEvent, clazz: Class, sectionNum: number) {
+    e.preventDefault();
+    const newCatalogClassStatuses = { ...this.state.catalogClassStatuses };
+    newCatalogClassStatuses[clazz.id] = sectionNum;
+    this.setState({ catalogClassStatuses: newCatalogClassStatuses });
+  }
+
   renderAddClassDropdown(clazz: Class) {
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
     return (
       <div className="card-footer-item">
         <div className="dropdown is-hoverable is-fullwidth">
           <div className="dropdown-trigger is-fullwidth">
             <button className="button is-fullwidth">
-              <span>Sections</span>
-              {/*TODO show selected section*/}
+              <span>
+                {sectionNum !== undefined
+                  ? clazz.sections[0].scheduledblock_set.join(" / ")
+                  : "Sections"}
+              </span>
+              {/*TODO show whole timespan of section as one block*/}
               <span className="icon is-small">
                 <i className="fas fa-angle-down"></i>
               </span>
@@ -150,7 +171,7 @@ class StudentRegDashboard extends Component<Props, State> {
                     href="#void"
                     key={index}
                     className="dropdown-item"
-                    onClick={e => this.addSection(e, clazz)}
+                    onClick={e => this.changeSelectedSection(e, clazz, index)}
                   >
                     {section.scheduledblock_set.join(" / ")}
                   </a>
@@ -159,7 +180,6 @@ class StudentRegDashboard extends Component<Props, State> {
             </div>
           </div>
         </div>
-        {/*TODO replace button with "waitlist" button if no space in the chosen section*/}
         {/*TODO add relevant text */}
       </div>
     );
@@ -172,9 +192,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   renderClass(clazz: Class) {
-    const classHasSpace = clazz.capacity - clazz.sections[0].num_students > 0;
-    // TODO replace this with something that actually checks this once sections have been
-    // properly implemented
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
     return (
       <div className="card" key={clazz.id}>
         <div className="card-header">
@@ -203,16 +221,33 @@ class StudentRegDashboard extends Component<Props, State> {
         <div className="card-footer">
           {this.renderAddClassDropdown(clazz)}
           <h3 className="card-footer-item">
-            {
-              /* TODO show details from the chosen section or something*/
-              classHasSpace
-                ? `${clazz.sections[0].num_students}/${clazz.capacity} students`
+            {sectionNum !== undefined
+              ? clazz.capacity - clazz.sections[sectionNum].num_students > 0 // has space
+                ? `${clazz.sections[sectionNum].num_students}/${clazz.capacity} students`
                 : "Class is full"
-            }
-            <button className="button ml-4" onClick={e => this.addSection(e, clazz)}>
-              Add class
-            </button>
+              : `Capacity ${clazz.capacity} students`}
           </h3>
+          {sectionNum !== undefined ? (
+            clazz.capacity - clazz.sections[sectionNum].num_students > 0 ? ( // has space
+              <a
+                href="#void"
+                className="card-footer-item ml-4"
+                onClick={e => this.addSection(e, clazz)}
+              >
+                Add class
+              </a>
+            ) : (
+              <a
+                href="#void"
+                className="card-footer-item ml-4"
+                onClick={e => this.addWaitlistSection(e, clazz)}
+              >
+                Join waitlist
+              </a>
+            )
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     );
