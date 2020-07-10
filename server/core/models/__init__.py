@@ -247,7 +247,7 @@ class StudentRegistration(models.Model):
         for section in sections:
             for block in section.scheduledblock_set.all():
                 timeslot = block.timeslot
-                schedule[timeslot] = section.clazz
+                schedule[timeslot] = section
         # TODO add check to make sure sections don't overlap timeslots
         # (or just make sure that's not possible when adding)
         return sorted(list(schedule.items()), key=lambda pair: pair[0].start)

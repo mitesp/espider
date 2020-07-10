@@ -66,10 +66,14 @@ class StudentRegSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
     scheduledblock_set = serializers.StringRelatedField(many=True)
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
-        fields = ("clazz", "number", "num_students", "scheduledblock_set")
+        fields = ("clazz", "name", "number", "num_students", "scheduledblock_set")
+
+    def get_name(self, instance):
+        return str(instance)
 
 
 class ClassSerializer(serializers.ModelSerializer):

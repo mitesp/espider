@@ -3,6 +3,7 @@ from core.models import Class, Program, StudentRegistration
 from core.serializers import (
     ClassSerializer,
     ProgramSerializer,
+    SectionSerializer,
     StudentRegSerializer,
     StudentSerializer,
     UserSerializer,
@@ -326,9 +327,9 @@ class StudentProgramClasses(APIView):
         ret = [
             {
                 "timeslot": timeslot.shortstr,
-                "clazz": (ClassSerializer(clazz).data if clazz else None),
+                "section": (SectionSerializer(section).data if section else None),
             }
-            for (timeslot, clazz) in schedule
+            for (timeslot, section) in schedule
         ]
 
         return Response(ret)

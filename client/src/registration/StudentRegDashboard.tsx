@@ -94,7 +94,7 @@ class StudentRegDashboard extends Component<Props, State> {
         this.setState({
           schedule: res.data,
         });
-    });
+      });
   }
 
   renderRegStatus() {
@@ -152,7 +152,7 @@ class StudentRegDashboard extends Component<Props, State> {
               return (
                 <tr key={index}>
                   <th>{scheduleItem.timeslot}</th>
-                  <td>{scheduleItem.clazz && scheduleItem.clazz.title}</td>
+                  <td>{scheduleItem.section && scheduleItem.section.name}</td>
                 </tr>
               );
             })}
