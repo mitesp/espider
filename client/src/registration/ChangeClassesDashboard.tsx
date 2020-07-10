@@ -14,6 +14,7 @@ type Props = {
 
 type State = {
   catalog: Class[];
+  catalogClassStatuses: { [classId: string]: number }; // classID -> selected section
   enrolledClasses: string[];
   openClasses: boolean;
   schedule: ScheduledTimeslot[];
@@ -37,8 +38,9 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      enrolledClasses: [],
       catalog: [],
+      catalogClassStatuses: {},
+      enrolledClasses: [],
       openClasses: true,
       searchClassQuery: "",
       schedule: [],
@@ -94,7 +96,7 @@ class StudentRegDashboard extends Component<Props, State> {
                     <td>
                       {scheduleItem.section && (
                         <button
-                          onClick={e => this.removeClass(e, scheduleItem.section)}
+                          onClick={e => this.removeSection(e, scheduleItem.section)}
                           className="delete is-centered"
                         ></button>
                       )}
@@ -117,26 +119,27 @@ class StudentRegDashboard extends Component<Props, State> {
 
   addSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
-    console.log(`Adding ${clazz.title}`);
-    // TODO collect section number
-    // TODO refresh page or API calls
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
+    if (sectionNum !== undefined) {
+      console.log(`Adding "${clazz.title}"" section ${sectionNum}`);
+      // TODO make this functional
+      // TODO refresh page or API calls
+    }
   }
 
   addWaitlistSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
-    console.log("Adding to waitlist " + clazz.title);
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
+    if (sectionNum !== undefined) {
+      console.log(`Adding to waitlist "${clazz.title}"" section ${sectionNum}`);
+      // TODO make this functional
+    }
   }
 
-  addWaitlistClass(e: React.MouseEvent, clazz: Class) {
-    e.preventDefault();
-    console.log("Adding to waitlist " + clazz.title);
-    // TODO make this functional
-  }
-
-  removeClass(e: React.MouseEvent, section: Section) {
+  removeSection(e: React.MouseEvent, section: Section) {
     e.preventDefault();
     if (section) {
-      console.log("Removing " + section.name);
+      console.log(`Removing "${section.name}"`);
       // TODO make this functional
       // TODO refresh page or API calls
     }
@@ -151,16 +154,29 @@ class StudentRegDashboard extends Component<Props, State> {
   toggleAddClassDropdown(e: React.MouseEvent) {
     e.preventDefault();
     e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
+    // TODO do this in a better way than DOM manipulation
+  }
+
+  changeSelectedSection(e: React.MouseEvent, clazz: Class, sectionNum: number) {
+    e.preventDefault();
+    const newCatalogClassStatuses = { ...this.state.catalogClassStatuses };
+    newCatalogClassStatuses[clazz.id] = sectionNum;
+    this.setState({ catalogClassStatuses: newCatalogClassStatuses });
   }
 
   renderAddClassDropdown(clazz: Class) {
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
     return (
       <div className="card-footer-item">
         <div className="dropdown is-hoverable is-fullwidth">
           <div className="dropdown-trigger">
             <button className="button is-fullwidth" onClick={this.toggleAddClassDropdown}>
-              <span>Sections</span>
-              {/*TODO show selected section*/}
+              <span>
+                {sectionNum !== undefined
+                  ? clazz.section_set[0].scheduledblock_set.join(" / ")
+                  : "Sections"}
+              </span>
+              {/*TODO show whole timespan of section as one block*/}
               <span className="icon is-small">
                 <i className="fas fa-angle-down"></i>
               </span>
@@ -174,7 +190,7 @@ class StudentRegDashboard extends Component<Props, State> {
                     href="#void"
                     key={index}
                     className="dropdown-item"
-                    onClick={e => this.addSection(e, clazz)}
+                    onClick={e => this.changeSelectedSection(e, clazz, index)}
                   >
                     {section.scheduledblock_set.join(" / ")}
                   </a>
@@ -183,14 +199,13 @@ class StudentRegDashboard extends Component<Props, State> {
             </div>
           </div>
         </div>
-        {/*TODO replace button with "waitlist" button if no space in the chosen section*/}
         {/*TODO add relevant text */}
       </div>
     );
   }
 
   renderClass(clazz: Class) {
-    const classHasSpace = clazz.capacity - clazz.section_set[0].num_students > 0;
+    const sectionNum = this.state.catalogClassStatuses[clazz.id];
     return (
       <div className="card mb-1" key={clazz.id}>
         <div className="card-header">
@@ -224,16 +239,33 @@ class StudentRegDashboard extends Component<Props, State> {
         <div className="card-footer">
           {this.renderAddClassDropdown(clazz)}
           <h3 className="card-footer-item">
-            {
-              /* TODO show details from the chosen section or something*/
-              classHasSpace
-                ? `${clazz.section_set[0].num_students}/${clazz.capacity} students`
+            {sectionNum !== undefined
+              ? clazz.capacity - clazz.section_set[sectionNum].num_students > 0 // has space
+                ? `${clazz.section_set[sectionNum].num_students}/${clazz.capacity} students`
                 : "Class is full"
-            }
-            <button className="button ml-4" onClick={e => this.addSection(e, clazz)}>
-              Add class
-            </button>
+              : `Capacity ${clazz.capacity} students`}
           </h3>
+          {sectionNum !== undefined ? (
+            clazz.capacity - clazz.section_set[sectionNum].num_students > 0 ? ( // has space
+              <a
+                href="#void"
+                className="card-footer-item ml-4"
+                onClick={e => this.addSection(e, clazz)}
+              >
+                Add class
+              </a>
+            ) : (
+              <a
+                href="#void"
+                className="card-footer-item ml-4"
+                onClick={e => this.addWaitlistSection(e, clazz)}
+              >
+                Join waitlist
+              </a>
+            )
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     );
