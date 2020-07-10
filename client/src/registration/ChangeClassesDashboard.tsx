@@ -114,6 +114,12 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO make this functional
   }
 
+  addWaitlistClass(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault();
+    console.log("Adding to waitlist " + clazz.title);
+    // TODO make this functional
+  }
+
   removeClass(e: React.MouseEvent, clazz: Class) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     if (clazz) {
@@ -173,7 +179,12 @@ class ClassChangesDashboard extends Component<Props, State> {
               Add Class
             </a>
           ) : (
-            <a href="#void" className="card-footer-item" role="button">
+            <a
+              href="#void"
+              className="card-footer-item"
+              role="button"
+              onClick={e => this.addWaitlistClass(e, clazz)}
+            >
               Join waitlist
             </a>
           )}
