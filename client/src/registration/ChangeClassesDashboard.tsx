@@ -161,12 +161,6 @@ class StudentRegDashboard extends Component<Props, State> {
     // TODO do this in a better way than DOM manipulation
   }
 
-  toggleAddClassDropdown(e: React.MouseEvent) {
-    e.preventDefault();
-    e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
-    // TODO do this in a better way than DOM manipulation
-  }
-
   changeSelectedSection(e: React.MouseEvent, clazz: Class, sectionNum: number) {
     e.preventDefault();
     const newCatalogClassStatuses = { ...this.state.catalogClassStatuses };
@@ -180,7 +174,7 @@ class StudentRegDashboard extends Component<Props, State> {
       <div className="card-footer-item">
         <div className="dropdown is-hoverable is-fullwidth">
           <div className="dropdown-trigger">
-            <button className="button is-fullwidth" onClick={this.toggleAddClassDropdown}>
+            <button className="button is-fullwidth">
               <span>
                 {sectionNum !== undefined
                   ? clazz.section_set[0].scheduledblock_set.join(" / ")
@@ -192,7 +186,7 @@ class StudentRegDashboard extends Component<Props, State> {
               </span>
             </button>
           </div>
-          <div className="dropdown-menu is-hidden">
+          <div className="dropdown-menu">
             <div className="dropdown-content">
               {clazz.section_set.map((section, index) => {
                 return (
