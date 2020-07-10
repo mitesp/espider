@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 from .users import *  # noqa
 from .users import ESPUser
@@ -233,6 +233,7 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
+    @transaction.atomic
     def add_section(self, section):
         if section.has_capacity() and self.section_fits_in_schedule(section):
             # TODO throw error or something if this if is false
