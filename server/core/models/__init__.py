@@ -112,6 +112,10 @@ class Section(models.Model):
     def num_students(self):
         return StudentClassRegistration.objects.filter(section__id=self.id).count()
 
+    @property
+    def capacity(self):
+        return self.clazz.capacity
+
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
 
@@ -222,10 +226,18 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
+    def add_section(self, section):
+        # TODO throw some sort of error if this if is false
+        if section.num_students < section.capacity:
+            classreg = StudentClassRegistration(studentreg=self, section=section)
+            classreg.save()
+
 
 class StudentClassRegistration(models.Model):
     studentreg = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
+
+    # TODO check the section has space before adding
 
     class Meta:
         unique_together = (("studentreg", "section"),)
