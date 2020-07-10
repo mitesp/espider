@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 from .users import *  # noqa
 from .users import ESPUser
@@ -264,6 +264,7 @@ class StudentRegistration(models.Model):
         # TODO account for multi-instance programs
         return sorted(list(schedule.items()), key=lambda pair: pair[0].start)
 
+    @transaction.atomic
     def add_section(self, section):
         if section.has_capacity() and self.section_fits_in_schedule(section):
             # TODO throw error or something if this if is false
