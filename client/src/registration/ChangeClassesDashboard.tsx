@@ -16,7 +16,7 @@ type State = {
   enrolledClasses: string[];
   openClasses: boolean;
   schedule: ScheduledTimeslot[];
-  search: string;
+  searchClassQuery: string;
   timeslots: string[];
 };
 
@@ -39,7 +39,7 @@ class StudentRegDashboard extends Component<Props, State> {
       enrolledClasses: [],
       catalog: [],
       openClasses: true,
-      search: "",
+      searchClassQuery: "",
       schedule: [],
       timeslots: [],
     };
@@ -119,6 +119,12 @@ class StudentRegDashboard extends Component<Props, State> {
     // TODO make this functional
   }
 
+  addWaitlistClass(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault();
+    console.log("Adding to waitlist " + clazz.title);
+    // TODO make this functional
+  }
+
   removeClass(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
     if (clazz) {
@@ -176,7 +182,12 @@ class StudentRegDashboard extends Component<Props, State> {
               Add Class
             </a>
           ) : (
-            <a href="#void" className="card-footer-item" role="button">
+            <a
+              href="#void"
+              className="card-footer-item"
+              role="button"
+              onClick={e => this.addWaitlistClass(e, clazz)}
+            >
               Join waitlist
             </a>
           )}
@@ -192,12 +203,13 @@ class StudentRegDashboard extends Component<Props, State> {
 
   handleSearchChange = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({
-      search: e.currentTarget.value,
+      searchClassQuery: e.currentTarget.value,
     });
   };
 
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("Searching for " + this.state.search);
+    console.log("Searching for " + this.state.searchClassQuery);
+    // TODO make this functional
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -224,7 +236,7 @@ class StudentRegDashboard extends Component<Props, State> {
                   this.handleSearchChange,
                   "Search for Class",
                   "search",
-                  this.state.search,
+                  this.state.searchClassQuery,
                   "text",
                   "search"
                 )}
