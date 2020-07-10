@@ -1,4 +1,5 @@
 from django.db import models
+import core.models as esp_models
 
 from .clazz import Class, Section
 from .constants import RegStatusOptions
@@ -61,7 +62,7 @@ class StudentRegistration(models.Model):
         for section in sections:
             for block in section.scheduled_blocks.all():
                 timeslot = block.timeslot
-                schedule[timeslot] = section.clazz
+                schedule[timeslot] = section
         # TODO add check to make sure sections don't overlap timeslots
         # (or just make sure that's not possible when adding)
         return sorted(list(schedule.items()), key=lambda pair: pair[0].start)

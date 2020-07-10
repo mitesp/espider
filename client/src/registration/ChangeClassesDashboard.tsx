@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { Class, ScheduledTimeslot } from "./types";
+import { Class, Section, ScheduledTimeslot } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
 
@@ -83,11 +83,11 @@ class ClassChangesDashboard extends Component<Props, State> {
                 return (
                   <tr key={index}>
                     <th>{scheduleItem.timeslot}</th>
-                    <td>{scheduleItem.clazz && scheduleItem.clazz.title}</td>
+                    <td>{scheduleItem.section && scheduleItem.section.name}</td>
                     <td>
-                      {scheduleItem.clazz && (
+                      {scheduleItem.section && (
                         <button
-                          onClick={e => this.removeClass(e, scheduleItem.clazz)}
+                          onClick={e => this.removeClass(e, scheduleItem.section)}
                           className="delete is-centered"
                         ></button>
                       )}
@@ -120,10 +120,10 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO make this functional
   }
 
-  removeClass(e: React.MouseEvent, clazz: Class) {
+  removeClass(e: React.MouseEvent, section: Section) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
-    if (clazz) {
-      console.log("Removing " + clazz.title);
+    if (section) {
+      console.log("Removing " + section.name);
       // TODO make this functional
     }
   }

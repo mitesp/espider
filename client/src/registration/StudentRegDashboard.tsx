@@ -130,7 +130,7 @@ function StudentRegDashboard(props: Props) {
               return (
                 <tr key={index}>
                   <th>{scheduleItem.timeslot}</th>
-                  <td>{scheduleItem.clazz && scheduleItem.clazz.title}</td>
+                  <td>{scheduleItem.section && scheduleItem.section.name}</td>
                 </tr>
               );
             })}
