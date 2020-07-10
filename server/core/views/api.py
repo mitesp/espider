@@ -1,5 +1,5 @@
 import core.permissions as custom_permissions
-from core.models import Class, Program, StudentRegistration
+from core.models import Class, Program, Section, StudentRegistration
 from core.serializers import (
     ClassSerializer,
     ProgramSerializer,
@@ -336,6 +336,39 @@ class StudentProgramClasses(APIView):
         ]
 
         return Response(ret)
+
+    def post(self, request, program, edition, format=None):
+        action = request.data["action"]
+        # action can be determined from section info, but it seems unnecessary
+        if action == "add":
+            return self.add(request, program, edition)
+        elif action == "remove":
+            return self.remove(request, program, edition)
+            # TODO implement this
+        elif action == "add_waitlist":
+            return self.add_waitlist(request, program, edition)
+            # TODO implement this
+
+    def add(self, request, program, edition):
+        data = request.data
+        user = request.user
+
+        prog = Program.objects.get(name=program, edition=edition)
+        studentreg = StudentRegistration.objects.get(student=user, program=prog)
+
+        clazz = Class.objects.get(id=data["class"])
+        section_num = data["section"]
+        section = Section.objects.get(clazz=clazz, number=section_num)
+
+        # check for space in the class
+        if section.num_students == section.capacity:
+            # TODO return an actual error
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        # TODO check for schedule compatibility
+
+        # create StudentClassRegistration object
+        studentreg.add_section(section)
+        return self.get(request, program, edition)
 
 
 # TODO figure out object permissions

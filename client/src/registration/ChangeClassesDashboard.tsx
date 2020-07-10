@@ -121,9 +121,19 @@ class StudentRegDashboard extends Component<Props, State> {
     e.preventDefault();
     const sectionNum = this.state.catalogClassStatuses[clazz.id];
     if (sectionNum !== undefined) {
-      console.log(`Adding "${clazz.title}"" section ${sectionNum}`);
-      // TODO make this functional
-      // TODO refresh page or API calls
+      axiosInstance
+        .post(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`, {
+          action: "add",
+          class: clazz.id,
+          section: sectionNum + 1, // convert from 0-indexing to 1-indexing
+        })
+        .then(res => {
+          console.log(res.data);
+          this.setState({
+            schedule: res.data,
+          });
+        });
+      // TODO refresh catalog (if catalog doesn't include classes that the student is in)
     }
   }
 

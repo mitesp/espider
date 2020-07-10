@@ -115,6 +115,10 @@ class Section(models.Model):
     def scheduledblocks(self):
         return self.scheduledblock_set
 
+    @property
+    def capacity(self):
+        return self.clazz.capacity
+
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
 
@@ -257,10 +261,18 @@ class StudentRegistration(models.Model):
         # TODO account for multi-instance programs
         return sorted(list(schedule.items()), key=lambda pair: pair[0].start)
 
+    def add_section(self, section):
+        # TODO throw some sort of error if this if is false
+        if section.num_students < section.capacity:
+            classreg = StudentClassRegistration(studentreg=self, section=section)
+            classreg.save()
+
 
 class StudentClassRegistration(models.Model):
     studentreg = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
+
+    # TODO check the section has space before adding
 
     class Meta:
         unique_together = (("studentreg", "section"),)
