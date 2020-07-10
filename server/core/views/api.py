@@ -363,10 +363,19 @@ class StudentProgramClasses(APIView):
         section = Section.objects.get(clazz=clazz, number=section_num)
 
         # check for space in the class
-        if section.num_students == section.capacity:
+        if not section.has_capacity():
             # TODO return an actual error
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "Section does not have open capacity"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         # TODO check for schedule compatibility
+        if not studentreg.section_fits_in_schedule(section):
+            # TODO return an actual error
+            return Response(
+                {"message": "Section does not fit in schedule"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         # create StudentClassRegistration object
         studentreg.add_section(section)

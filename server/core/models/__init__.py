@@ -113,11 +113,18 @@ class Section(models.Model):
         return StudentClassRegistration.objects.filter(section__id=self.id).count()
 
     @property
+    def scheduledblocks(self):
+        return self.scheduledblock_set.all()
+
+    @property
     def capacity(self):
         return self.clazz.capacity
 
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
+
+    def has_capacity(self):
+        return self.num_students < self.capacity
 
 
 class Timeslot(models.Model):
@@ -227,10 +234,21 @@ class StudentRegistration(models.Model):
         return str(self.student.username) + "/" + str(self.program)
 
     def add_section(self, section):
-        # TODO throw some sort of error if this if is false
-        if section.num_students < section.capacity:
+        if section.has_capacity() and self.section_fits_in_schedule(section):
+            # TODO throw error or something if this if is false
             classreg = StudentClassRegistration(studentreg=self, section=section)
             classreg.save()
+
+    def section_fits_in_schedule(self, section):
+        for block in section.scheduledblocks:
+            if not self.timeslot_free(block.timeslot):
+                return False
+        return True
+
+    def timeslot_free(self, timeslot):
+        return not ScheduledBlock.objects.filter(
+            section__in=self.sections, timeslot=timeslot
+        ).exists()
 
 
 class StudentClassRegistration(models.Model):
