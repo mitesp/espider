@@ -235,6 +235,7 @@ class StudentRegistration(models.Model):
 
     @transaction.atomic
     def add_section(self, section):
+        # TODO check if student is enrolled in another section of the class
         if section.has_capacity() and self.section_fits_in_schedule(section):
             # TODO throw error or something if this if is false
             classreg = StudentClassRegistration(studentreg=self, section=section)

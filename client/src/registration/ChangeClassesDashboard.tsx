@@ -111,6 +111,7 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   addSection(e: React.MouseEvent, clazz: Class) {
+    // TODO handle case where student wants to replace a class
     e.preventDefault();
     const sectionNum = this.state.catalogClassStatuses[clazz.id];
     if (sectionNum !== undefined) {
@@ -121,7 +122,6 @@ class StudentRegDashboard extends Component<Props, State> {
           section: sectionNum + 1, // convert from 0-indexing to 1-indexing
         })
         .then(res => {
-          console.log(res.data);
           this.setState({
             timeslots: res.data.timeslots,
             enrolledClasses: res.data.classes,
