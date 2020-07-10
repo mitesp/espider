@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 from .clazz import Class, Section
 from .constants import RegStatusOptions
@@ -62,6 +62,11 @@ class StudentRegistration(models.Model):
         # TODO add check to make sure sections don't overlap timeslots
         # (or just make sure that's not possible when adding)
         return sorted(list(schedule.items()), key=lambda pair: pair[0].start)
+
+    @transaction.atomic
+    def remove_section(self, section):
+        classreg = self.classregs.get(section=section)
+        classreg.delete()
 
     @staticmethod
     def get_previous_programs(user):

@@ -83,7 +83,7 @@ class ClassChangesDashboard extends Component<Props, State> {
                     <td>
                       {scheduleItem.section && (
                         <button
-                          onClick={e => this.removeClass(e, scheduleItem.section)}
+                          onClick={e => this.removeSection(e, scheduleItem.section)}
                           className="delete is-centered"
                         ></button>
                       )}
@@ -116,11 +116,22 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO make this functional
   }
 
-  removeClass(e: React.MouseEvent, section: Section) {
+  removeSection(e: React.MouseEvent, section: Section) {
+    // TODO add some kind of "Are you sure?" message
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     if (section) {
-      console.log("Removing " + section.name);
-      // TODO make this functional
+      axiosInstance
+        .post(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`, {
+          action: "remove",
+          class: section.clazz,
+          section: section.number,
+        })
+        .then(res => {
+          this.setState({
+            schedule: res.data,
+          });
+        });
+      // TODO refresh catalog (if catalog doesn't include classes that the student is in)
     }
   }
 

@@ -1,5 +1,5 @@
 import core.permissions as custom_permissions
-from core.models import Program, StudentRegistration
+from core.models import Class, Program, Section, StudentRegistration
 from core.serializers import SectionSerializer, StudentRegSerializer
 from django.db import transaction
 from django.forms.models import model_to_dict
@@ -36,13 +36,15 @@ class StudentProgramClasses(APIView):
 
     permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, program, edition, format=None):
+    def get(self, request, program, edition, format=None, include_empty_timeslots=False):
         user = request.user
         params = request.GET
 
         prog = Program.objects.get(name=program, edition=edition)
         studentreg = StudentRegistration.objects.get(student=user, program=prog)
-        include_empty_timeslots = params.get("include_empty_timeslots", False)
+        include_empty_timeslots = (
+            params.get("include_empty_timeslots", False) or include_empty_timeslots
+        )
         schedule = studentreg.get_schedule(include_empty_timeslots=include_empty_timeslots)
 
         ret = [
@@ -56,6 +58,32 @@ class StudentProgramClasses(APIView):
         # TODO consider refactoring to incorporate shardulc's comments in PR #22
 
         return Response(ret)
+
+    def post(self, request, program, edition, format=None):
+        action = request.data["action"]
+        # action can be determined from section info, but it seems unnecessary
+        if action == "add":
+            return self.add(request, program, edition)
+            # TODO implement this
+        elif action == "remove":
+            return self.remove(request, program, edition)
+        elif action == "add_waitlist":
+            return self.add_waitlist(request, program, edition)
+            # TODO implement this
+
+    def remove(self, request, program, edition):
+        data = request.data
+        user = request.user
+
+        prog = Program.objects.get(name=program, edition=edition)
+        studentreg = StudentRegistration.objects.get(student=user, program=prog)
+
+        clazz = Class.objects.get(id=data["class"])
+        section_num = data["section"]
+        section = Section.objects.get(clazz=clazz, number=section_num)
+
+        studentreg.remove_section(section)
+        return self.get(request, program, edition, include_empty_timeslots=True)
 
 
 class Profile(APIView):
