@@ -69,7 +69,6 @@ class StudentRegDashboard extends Component<Props, State> {
       });
   }
 
-
   renderClassSchedule() {
     return (
       <div className="column is-6">
