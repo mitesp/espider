@@ -132,7 +132,7 @@ class StudentRegDashboard extends Component<Props, State> {
     return (
       <div className="card" key={clazz.id}>
         <div className="card-header">
-          <a href="# " className="card-header-title" onClick={this.toggleClassDescription}>
+          <a href="#void" className="card-header-title" onClick={this.toggleClassDescription}>
             {clazz.title}
           </a>
           <a
@@ -165,7 +165,7 @@ class StudentRegDashboard extends Component<Props, State> {
               Add Class
             </a>
           ) : (
-            <a href="# " className="card-footer-item">
+            <a href="#void" className="card-footer-item">
               Join waitlist
             </a>
           )}
