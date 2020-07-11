@@ -67,15 +67,7 @@ class ClassChangesDashboard extends Component<Props, State> {
         });
       });
   }
-
-  getClassCatalog() {
-    axiosInstance.get(`/${this.props.program}/${this.props.edition}/catalog/`).then(res => {
-      this.setState({
-        catalog: res.data,
-      });
-    });
-  }
-
+  
   renderClassSchedule() {
     return (
       <div className="column is-6">
