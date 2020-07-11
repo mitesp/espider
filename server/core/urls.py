@@ -6,6 +6,7 @@ from rest_framework_simplejwt import views as jwt_views
 from . import views
 
 router = routers.DefaultRouter()
+# TODO: This is currently broken -- will get fixed when we do teacher stuff
 router.register("dashboard/teacher/", views.TeacherProgramViewSet)
 
 app_name = "core"
