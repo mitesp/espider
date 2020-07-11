@@ -67,7 +67,6 @@ class StudentRegDashboard extends Component<Props, State> {
       });
   }
 
-
   renderClassSchedule() {
     return (
       <div className="column is-6">
@@ -153,7 +152,7 @@ class StudentRegDashboard extends Component<Props, State> {
           </div>
         </div>
         <div className="card-footer">
-          {
+          {classHasSpace ? (
             <a
               href="#void"
               className="card-footer-item"
@@ -172,7 +171,7 @@ class StudentRegDashboard extends Component<Props, State> {
               ? `${clazz.section_set[0].num_students}/${clazz.capacity} students`
               : "Class is full"}
           </h3>
-        </footer>
+        </div>
       </div>
     );
   }
