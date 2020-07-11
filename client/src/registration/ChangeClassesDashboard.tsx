@@ -174,13 +174,14 @@ class StudentRegDashboard extends Component<Props, State> {
 
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log("Searching for " + this.state.search);
+    // TODO make this functional
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
     this.state.openClasses // previous state
       ? console.log("Open class filter off")
       : console.log("Open class filter on");
-
+    // TODO make this functional
     e!.currentTarget!.classList.toggle("is-success");
     this.setState({
       openClasses: !this.state.openClasses,
