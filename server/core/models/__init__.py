@@ -220,11 +220,15 @@ class StudentRegistration(models.Model):
     payment_check = models.BooleanField(default=False)
 
     @property
-    def classes(self):
+    def sections(self):
         sections = StudentClassRegistration.objects.filter(studentreg=self).values_list(
             "section", flat=True
         )
-        ids = Section.objects.filter(pk__in=sections).values_list("clazz", flat=True)
+        return Section.objects.filter(pk__in=sections)
+
+    @property
+    def classes(self):
+        ids = self.sections.values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
     class Meta:
