@@ -49,6 +49,9 @@ def resolve_ref_fields(model, data):
         if ref_model is not None:
             ref_obj = ref_model.objects.get(pk=value)
             data[field] = ref_obj
+        elif model == ESPUser and field == "password":
+            # properly hash passwords
+            data[field] = django.contrib.auth.hashers.make_password(value)
     return data
 
 
