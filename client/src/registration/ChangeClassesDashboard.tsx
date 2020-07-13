@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { Class } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
+import { renderCustomInput } from "../forms/helpers";
 
 type Props = {
   loggedIn: boolean;
@@ -12,6 +13,8 @@ type Props = {
 
 type State = {
   catalog: Class[];
+  classSearchQuery: string;
+  displayOnlyOpenClasses: boolean;
   enrolledClasses: string[];
   timeslots: string[];
 };
@@ -19,9 +22,6 @@ type State = {
 // helper functions
 
 //mostly used for placeholders
-function renderTextInSection(displayedText: string, centered = false) {
-  return <h3 className={"is-size-5" + (centered ? "has-text-centered" : "")}>{displayedText}</h3>;
-}
 
 function renderLinkedText(displayedText: string, url: string) {
   return (
@@ -35,9 +35,11 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      timeslots: [],
-      enrolledClasses: [],
       catalog: [],
+      classSearchQuery: "",
+      displayOnlyOpenClasses: true,
+      enrolledClasses: [],
+      timeslots: [],
     };
   }
 
@@ -97,6 +99,7 @@ class StudentRegDashboard extends Component<Props, State> {
             </tbody>
           </table>
         </div>
+        {renderLinkedText("Back to Dashboard", "dashboard")}
       </div>
     );
   }
@@ -163,11 +166,56 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
+  handleSearchChange = (e: React.FormEvent<HTMLInputElement>) => {
+    this.setState({
+      classSearchQuery: e.currentTarget.value,
+    });
+  };
+
+  submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("Searching for " + this.state.classSearchQuery);
+    // TODO make this functional
+  };
+
+  filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
+    this.state.displayOnlyOpenClasses // previous state
+      ? console.log("Open class filter off")
+      : console.log("Open class filter on");
+    // TODO make this functional
+    e!.currentTarget!.classList.toggle("is-success");
+    this.setState({
+      displayOnlyOpenClasses: !this.state.displayOnlyOpenClasses,
+    });
+  };
+
   renderClassCatalog() {
     return (
       <div className="column">
         <h2 className="has-text-centered is-size-3">Class Catalog</h2>
-        {renderTextInSection("Insert filter options here")}
+        <div className="field is-horizontal">
+          <div className="field-body">
+            <div className="field">
+              <div className="control is-expanded">
+                {renderCustomInput(
+                  this.handleSearchChange,
+                  "Search for Class",
+                  "search",
+                  this.state.classSearchQuery,
+                  "text",
+                  "search"
+                )}
+              </div>
+            </div>
+            <button className="button is-info" onClick={this.submitSearch}>
+              Search
+            </button>
+          </div>
+        </div>
+        <button className="button mb-4 is-success" onClick={this.filterOpenClasses}>
+          Only open classes
+        </button>
+        {/*TODO add more filters*/}
+
         {this.state.catalog.map(clazz => this.renderClass(clazz))}
       </div>
     );
@@ -185,7 +233,6 @@ class StudentRegDashboard extends Component<Props, State> {
           {this.renderClassSchedule()}
           {this.renderClassCatalog()}
         </div>
-        {renderLinkedText("Back to Dashboard", "dashboard")}
       </div>
     );
   }
