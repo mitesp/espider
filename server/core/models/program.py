@@ -24,7 +24,7 @@ class Program(models.Model):
 
     @staticmethod
     def get_open_student_programs():
-        return Program.objects.all().filter(student_reg_open=True)
+        return Program.objects.filter(student_reg_open=True)
 
     @staticmethod
     def get_active_programs():
@@ -60,7 +60,9 @@ class Timeslot(models.Model):
     # and effective class times (with transition)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    program = models.ForeignKey(
+        Program, on_delete=models.CASCADE, related_name="timeslots", related_query_name="timeslot"
+    )
 
     def __str__(self):
         time_format = "%-I:%M %p"

@@ -9,7 +9,9 @@ class Class(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     capacity = models.PositiveIntegerField()
-    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    program = models.ForeignKey(
+        Program, on_delete=models.CASCADE, related_name="classes", related_query_name="class"
+    )
 
     class Meta:
         verbose_name_plural = "classes"
@@ -21,20 +23,21 @@ class Class(models.Model):
 
     @property
     def teachers(self):
-        teacherreg_ids = esp_models.TeacherClassRegistration.objects.filter(
-            clazz__id=self.id
-        ).values_list("teacherreg", flat=True)
+        teacherreg_ids = self.teacherclassregs.values_list("teacherreg", flat=True)
         teacher_ids = esp_models.TeacherRegistration.objects.filter(
             id__in=teacherreg_ids
         ).values_list("teacher", flat=True)
         return ESPUser.objects.filter(id__in=teacher_ids).values_list("username", flat=True)
+        # TODO clean this type of query up with select_related
 
     def __str__(self):
         return self.title
 
 
 class Section(models.Model):
-    clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
+    clazz = models.ForeignKey(
+        Class, on_delete=models.CASCADE, related_name="sections", related_query_name="section"
+    )
     number = models.PositiveIntegerField()
     # TODO(constraint): PositiveIntegerField can be 0 due to django backwards
     # compatibility, but we should constrain it
@@ -48,7 +51,7 @@ class Section(models.Model):
 
     @property
     def num_students(self):
-        return esp_models.StudentClassRegistration.objects.filter(section__id=self.id).count()
+        return self.studentclassregs.count()
 
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
@@ -67,8 +70,18 @@ class ScheduledBlock(models.Model):
     TODO(constraint): section.program == timeslot.program
     """
 
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    timeslot = models.ForeignKey(Timeslot, on_delete=models.CASCADE)
+    section = models.ForeignKey(
+        Section,
+        on_delete=models.CASCADE,
+        related_name="scheduled_blocks",
+        related_query_name="scheduled_block",
+    )
+    timeslot = models.ForeignKey(
+        Timeslot,
+        on_delete=models.CASCADE,
+        related_name="scheduled_blocks",
+        related_query_name="scheduled_block",
+    )
 
     class Meta:
         unique_together = (("section", "timeslot"),)

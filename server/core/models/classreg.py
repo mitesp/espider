@@ -5,8 +5,18 @@ from .registration import StudentRegistration, TeacherRegistration
 
 
 class StudentClassRegistration(models.Model):
-    studentreg = models.ForeignKey(StudentRegistration, on_delete=models.CASCADE)
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    studentreg = models.ForeignKey(
+        StudentRegistration,
+        on_delete=models.CASCADE,
+        related_name="classregs",
+        related_query_name="classreg",
+    )
+    section = models.ForeignKey(
+        Section,
+        on_delete=models.CASCADE,
+        related_name="studentclassregs",
+        related_query_name="studentclassreg",
+    )
 
     class Meta:
         unique_together = (("studentreg", "section"),)
@@ -25,8 +35,18 @@ class StudentClassRegistration(models.Model):
 
 
 class TeacherClassRegistration(models.Model):
-    teacherreg = models.ForeignKey(TeacherRegistration, on_delete=models.CASCADE)
-    clazz = models.ForeignKey(Class, on_delete=models.CASCADE)
+    teacherreg = models.ForeignKey(
+        TeacherRegistration,
+        on_delete=models.CASCADE,
+        related_name="classregs",
+        related_query_name="classreg",
+    )
+    clazz = models.ForeignKey(
+        Class,
+        on_delete=models.CASCADE,
+        related_name="teacherclassregs",
+        related_query_name="teacherclassreg",
+    )
 
     class Meta:
         unique_together = (("teacherreg", "clazz"),)
