@@ -18,7 +18,10 @@
 (Miscellaneous)
 
 7. Install linters (see Committing & Pushing Changes).
-8. To pre-populate the database with sample data, run `sudo docker-compose exec server python setup_sample_data.py`. See the [sample data directory](server/sample_data/README.md) for more information on adding sample data.
+8. To pre-populate the database with sample data, run
+   `sudo docker-compose exec server python setup_sample_data.py`. See the
+   [sample data directory](server/sample_data/README.md) for more information on adding sample
+   data.
 
 # Making Changes
 
@@ -27,13 +30,16 @@ the code.
 
 Go ahead and edit code with your [favorite](https://code.visualstudio.com/)
 [text](https://www.sublimetext.com/) [editor](https://www.vim.org/) /
-[IDE](https://www.jetbrains.com/pycharm/). All changes should update automatically!
+[IDE](https://www.jetbrains.com/pycharm/). All changes should update automatically! If it doesn't,
+just stop the `sudo docker-compose up` command and re-run it.
+
+
 
 Some useful commands:
 
 - `docker-compose exec server`<sup>[2](#footnote-alias)</sup> runs commands inside the server
-  container, so `docker-compose exec server python manage.py createsuperuser` runs `python manage.py
-  createsuperuser` inside the `server` container.
+  container, so `docker-compose exec server python manage.py createsuperuser` runs
+  `python manage.py createsuperuser` inside the `server` container.
 - `docker-compose build` rebuilds the containers from scratch (e.g. your database is borked and you
   want a new one, or you want to [`pipenv install` a new library](https://pipenv.pypa.io/en/latest/)
   in the server container).
@@ -66,14 +72,22 @@ issues then re-add the files and commit.<sup>[3](#footnote-lint)</sup>
 
 **Pushing**: Please `git pull --rebase` (no merge commits allowed!).<sup>[4](#footnote-rebase)</sup>
 
-**Resolving conflicts**: If you run into conflicts, try fixing, readding the files, and calling `git rebase --continue`. If that doesn't work, consider aborting, squashing, then rebasing. If you're
+**Resolving conflicts**: If you run into conflicts, try fixing, readding the files, and calling
+`git rebase --continue`. If that doesn't work, consider aborting, squashing, then rebasing. If you're
 super worried about screwing up git, ask someone else for help!
 
 ## Pull Requests
 
-For anything that isn't a minor change, create a new branch (`git checkout -b branch-name)`) and do all your work there. Then create a pull request (easiest to do in the UI) and ask someone else to review your changes. After all comments have been resolved, you can then merge all your changes into `master` using the `Squash and Merge` button.
+For anything that isn't a minor change, create a new branch (`git checkout -b branch-name)`) and do
+all your work there. Then create a pull request (easiest to do in the UI) and ask someone else to
+review your changes. After all comments have been resolved, you can then merge all your changes
+into `master` using the `Squash and Merge` button.
 
-If a PR involves frontend changes, make sure to include screenshots of the changes in the PR message.
+### Pull Request Message
+
+Include details about the changes made in the PR. Talk about how you tested the change, to ensure
+it was robust. If a PR involves frontend changes, make sure to include screenshots of the changes
+in the PR message.
 
 # Deploying
 
@@ -99,30 +113,49 @@ Useful tools:
 
 # Dev Guide (a.k.a. Help! What's going on?)
 
-[**Django**](https://www.djangoproject.com/) is a web framework -- it lets us **send and receive
-messages over the internet**. It also comes with lots of existing features (it comes
-"batteries-included").
+[**Django**](https://www.djangoproject.com/) is a Python web framework -- it lets us **send and
+receive messages over the internet**. It also comes with lots of existing features (it comes
+"batteries-included"). It is used for the backend. We use Django as a method to more easily
+communicate with the database where all information is stored.
 
-- If you'd like to get a better handle on Django, we recommend [Django's official
-  tutorial](https://docs.djangoproject.com/en/3.0/intro/tutorial01/).
-- At a vague super high level, when you go to some URL (e.g. `localhost:8000/students`), **(1)**
-  Django looks inside [`urls.py`](https://docs.djangoproject.com/en/3.0/topics/http/urls/) for the
-  matching URL. **(2)** It calls the specified [**view**
-  function/class](https://docs.djangoproject.com/en/3.0/topics/http/views/) which does something
-  (maybe lookup or edit something in the database), then **(3)** it returns some HTML to the user
-  often based on a [**template**](https://docs.djangoproject.com/en/3.0/topics/templates/).
-- Django comes with built-in [Users](https://docs.djangoproject.com/en/3.0/topics/auth/) and
-  [Forms](https://docs.djangoproject.com/en/3.0/topics/forms/) which make it super easy to set
-  things up (honestly that's what _most_ of the website really does anyway).
-- The bulk of the important backend code can be found in `server/core`.
-  - `urls` has our url patterns
-  - `views` has the functions/classes called when a url is hit.
-  - `forms` has the forms often referenced by views.
-  - `models` describes the objects in our database that are touched by views/forms.
-  - `templates` has the actual HTML pages we return to users upon completion of a view.
-  - `admin` specifies what goes in the [admin panel](https://docs.djangoproject.com/en/3.0/ref/contrib/admin/).
-- There are tons of things Django does, so really just go through the tutorial and use Google when
-  stuck.
+If you'd like to get a better handle on Django, we highly recommend
+[Django's official tutorial](https://docs.djangoproject.com/en/3.0/intro/tutorial01/).
+
+The bulk of the important backend code can be found in `server/core`.
+- `urls` has our url patterns for the API
+- `views/` has the functions/classes called when a url is hit.
+- `models/` describes the objects in our database that are touched by views.
+- `admin/` specifies what goes in the
+  [admin panel](https://docs.djangoproject.com/en/3.0/ref/contrib/admin/).
+
+There are tons of things Django does, so really just go through the tutorial and use Google when
+stuck.
+
+[**React**](https://reactjs.org/) is another web framework, built in Javascript, used for the
+frontend. It generates **dynamic pages**, which lets us display a better user interface and have a
+better user experience.
+
+If you'd like to get a better handle on React, we highly recommend
+[React's official tutorial](https://reactjs.org/tutorial/tutorial.html).
+
+Pretty much all of the relevant frontend code can be found in `client/src`.
+- `App.tsx` is the main file. It contains routes to all the other pages.
+- `apiEndpoints.ts` contains all the API links.
+- `constants.ts` contains constants that are used across the website (such as pronoun options).
+- `accounts/` has the views relevant to login and signup.
+- `dashboard/` has the student and teacher dashboards.
+- `forms/` contains helper stuff for form generation.
+- `info/` has all the static info pages.
+- `layout/` has the bits of the website that are visible everywhere - the navigation bar and the
+  footer.
+- `registration/` has the views relevant to student registration.
+
+[**Bulma**](https://bulma.io/) is the CSS framework that we are using. The documentation is pretty
+good.
+
+The parts of Bulma that have been imported are available in `client/src/App.sass`.
+
+There is documentation more specific to
 
 [**Postgres**](https://www.postgresql.org/) is a database system. It's really good at handling data
 -- searching, updating, deleting, almost anything you want. Django has a [fancy built-in
@@ -131,8 +164,8 @@ way](https://www.fullstackpython.com/django-orm.html) to talk to Postgres.
 - There is a way to [talk to Postgres directly](http://postgresguide.com/utilities/psql.html), but
   hopefully you'll never need it since Django covers most use cases.
 
-[**Docker**](https://www.docker.com/) and [**Docker Compose**](https://docs.docker.com/compose/) are
-**container managers**. We use them for **cleanly setting up local development**.
+[**Docker**](https://www.docker.com/) and [**Docker Compose**](https://docs.docker.com/compose/)
+are **container managers**. We use them for **cleanly setting up local development**.
 
 - In the real world, web frameworks/servers and databases run on different machines (i.e. not your
   singular laptop).
@@ -140,8 +173,8 @@ way](https://www.fullstackpython.com/django-orm.html) to talk to Postgres.
   (mostly) isolated environments.
 - Running `docker-compose up` for the first time sets up the containers (creates containers, puts
   our code inside them, installs libraries). When stopped, those same containers go to sleep (but
-  they're still there on your computer). The next `docker-compose up` will just wake them up. If you
-  want to rebuild the containers from scratch, run `docker-compose build`.
+  they're still there on your computer). The next `docker-compose up` will just wake them up. If
+  you want to rebuild the containers from scratch, run `docker-compose build`.
 - They also figure out all the library installation/networking for us!
 - Hopefully you won't need to touch the config ever (`Dockerfile` and `docker-compose.yaml`) --
   after being set up one they should just work!
@@ -160,8 +193,8 @@ the process of deploying** websites.
   wanted).
 - Their [CLI](https://devcenter.heroku.com/articles/heroku-cli) is pretty powerful and they
   generally have good tutorials.
-- Since Heroku is the expensive side of the spectrum, our plan is to use it until it's not worth the
-  money.
+- Since Heroku is the expensive side of the spectrum, our plan is to use it until it's not worth
+  the money.
 
 [**Pipenv**](https://pipenv.pypa.io/en/latest/) is our python package manager. Basically, if you
 ever need an external library, try `pipenv install <library>`.
@@ -186,11 +219,11 @@ ever need an external library, try `pipenv install <library>`.
 
 # Useful tidbits
 
-<a name="footnote-sudo">1</a>: If you get tired of typing `sudo` in front of `docker-compose`, [you can do
-that](https://docs.docker.com/engine/install/linux-postinstall/).
+<a name="footnote-sudo">1</a>: If you get tired of typing `sudo` in front of `docker-compose`,
+[you can do that](https://docs.docker.com/engine/install/linux-postinstall/).
 
-<a name="footnote-alias">2</a>: If you just generally feel too lazy to type things, we encourage using
-[aliases](https://tldp.org/LDP/abs/html/aliases.html).
+<a name="footnote-alias">2</a>: If you just generally feel too lazy to type things, we encourage
+using [aliases](https://tldp.org/LDP/abs/html/aliases.html).
 Here are Mayukha's favorite aliases:
 
     alias dockup="sudo docker-compose up" #spins up Docker
@@ -198,9 +231,9 @@ Here are Mayukha's favorite aliases:
     alias dockman="sudo docker-compose exec server python manage.py" #exec
     alias dockdb="sudo docker-compose exec db psql -U postgres" #spin up the database
     alias herokumigrate="heroku run python server/manage.py migrate" #migrate in prod
-    alias herokumakemig="heroku run python server/manage.py makemigrations" #make migrations in prod
 
-<a name="footnote-lint">3</a>: Our lint setup is in `.pre-commit-config.yaml`. Hopefully you won't need to touch it, but if
-you do, `pipenv run pre-commit run -a` will run the linter.
+<a name="footnote-lint">3</a>: Our lint setup is in `.pre-commit-config.yaml`. Hopefully you won't
+need to touch it, but if you do, `pipenv run pre-commit run -a` will run the linter.
 
-<a name="footnote-rebase">4</a>: You can set this to be the default by running `git config pull.rebase true`.
+<a name="footnote-rebase">4</a>: You can set this to be the default by running
+`git config pull.rebase true`.
