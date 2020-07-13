@@ -66,9 +66,12 @@ class Timeslot(models.Model):
         time_format = "%-I:%M %p"
         date_format = "%-m/%d/%y"
         return (
-            self.start.strftime(date_format)
+            str(self.program)
+            + " ("
+            + self.start.strftime(date_format)
             + ", "
             + self.start.strftime(time_format)
             + " to "
             + self.end.strftime(time_format)
+            + ")"
         )

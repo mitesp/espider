@@ -174,7 +174,8 @@ class StudentRegDashboard extends Component<Props, State> {
           <h3 className="card-footer-item">
             {classHasSpace
               ? `${clazz.sections[0].num_students}/${clazz.capacity} students`
-              : "Class is full"}
+              : // TODO this shouldn't refer to just the first section
+                "Class is full"}
           </h3>
         </div>
       </div>
