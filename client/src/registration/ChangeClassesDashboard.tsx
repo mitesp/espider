@@ -30,6 +30,12 @@ function renderLinkedText(displayedText: string, url: string) {
   );
 }
 
+function renderTextInSection(displayedText: string, centered = false) {
+  return (
+    <h3 className={"is-size-5" + (centered ? " has has-text-centered" : "")}>{displayedText}</h3>
+  );
+}
+
 class ClassChangesDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -72,7 +78,6 @@ class ClassChangesDashboard extends Component<Props, State> {
         params: params,
       })
       .then(res => {
-        console.log(res.data);
         this.setState({
           catalog: res.data,
         });
@@ -199,7 +204,6 @@ class ClassChangesDashboard extends Component<Props, State> {
   };
 
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("Searching for " + this.state.classSearchQuery);
     this.sendClassCatalogRequest(true);
     // TODO consider sending this request upon edit
   };
@@ -242,8 +246,9 @@ class ClassChangesDashboard extends Component<Props, State> {
           Only open classes
         </button>
         {/*TODO add more filters*/}
-
-        {this.state.catalog.map(clazz => this.renderClass(clazz))}
+        {this.state.catalog.length > 0
+          ? this.state.catalog.map(clazz => this.renderClass(clazz))
+          : renderTextInSection("No classes available.", true)}
       </div>
     );
   }
