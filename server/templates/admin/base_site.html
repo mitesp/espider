@@ -1,9 +1,15 @@
 {% extends "admin/base.html" %}
 
+{% load static %}
+
+{% block extrahead %}
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+{% endblock %}
+
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">ESP Administration</a></h1>
+  <h1 id="site-name"><a href="{% url 'admin:index' %}">ESP Administration</a></h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
