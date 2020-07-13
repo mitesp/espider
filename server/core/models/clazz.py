@@ -1,3 +1,4 @@
+import core.models as esp_models
 from django.db import models
 
 from .program import Program, Timeslot
@@ -15,15 +16,12 @@ class Class(models.Model):
 
     @property
     def teachers(self):
-        from .registration import TeacherRegistration
-        from .classreg import TeacherClassRegistration
-
-        teacherreg_ids = TeacherClassRegistration.objects.filter(clazz__id=self.id).values_list(
-            "teacherreg", flat=True
-        )
-        teacher_ids = TeacherRegistration.objects.filter(id__in=teacherreg_ids).values_list(
-            "teacher", flat=True
-        )
+        teacherreg_ids = esp_models.TeacherClassRegistration.objects.filter(
+            clazz__id=self.id
+        ).values_list("teacherreg", flat=True)
+        teacher_ids = esp_models.TeacherRegistration.objects.filter(
+            id__in=teacherreg_ids
+        ).values_list("teacher", flat=True)
         return ESPUser.objects.filter(id__in=teacher_ids).values_list("username", flat=True)
 
     def __str__(self):
@@ -45,9 +43,7 @@ class Section(models.Model):
 
     @property
     def num_students(self):
-        from .classreg import StudentClassRegistration
-
-        return StudentClassRegistration.objects.filter(section__id=self.id).count()
+        return esp_models.StudentClassRegistration.objects.filter(section__id=self.id).count()
 
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)

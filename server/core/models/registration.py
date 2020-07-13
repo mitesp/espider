@@ -1,3 +1,4 @@
+import core.models as esp_models
 from django.db import models
 
 from .clazz import Class, Section
@@ -31,9 +32,7 @@ class StudentRegistration(models.Model):
 
     @property
     def classes(self):
-        from .classreg import StudentClassRegistration
-
-        sections = StudentClassRegistration.objects.filter(studentreg=self).values_list(
+        sections = esp_models.StudentClassRegistration.objects.filter(studentreg=self).values_list(
             "section", flat=True
         )
         ids = Section.objects.filter(pk__in=sections).values_list("clazz", flat=True)
@@ -82,9 +81,9 @@ class TeacherRegistration(models.Model):
 
     @property
     def classes(self):
-        from .classreg import TeacherClassRegistration
-
-        ids = TeacherClassRegistration.objects.filter(teacher=self).values_list("clazz", flat=True)
+        ids = esp_models.TeacherClassRegistration.objects.filter(teacher=self).values_list(
+            "clazz", flat=True
+        )
         return Class.objects.filter(id__in=ids)
 
     def __str__(self):
