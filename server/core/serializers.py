@@ -65,8 +65,9 @@ class SectionSerializer(serializers.ModelSerializer):
 
 
 class ClassSerializer(serializers.ModelSerializer):
-    section_set = SectionSerializer(many=True)
+    sections = SectionSerializer(many=True)
+    # TODO figure out how to make this ordered
 
     class Meta:
         model = Class
-        fields = ("id", "title", "description", "teachers", "capacity", "section_set")
+        fields = ("id", "title", "description", "teachers", "capacity", "sections")

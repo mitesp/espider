@@ -77,6 +77,11 @@ class Class(models.Model):
         verbose_name_plural = "classes"
 
     @property
+    def sections(self):
+        # TODO change `related_name` instead of this helper function
+        return self.section_set.all().order_by("number")
+
+    @property
     def teachers(self):
         teacherreg_ids = TeacherClassRegistration.objects.filter(clazz__id=self.id).values_list(
             "teacherreg", flat=True
