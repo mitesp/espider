@@ -10,7 +10,6 @@ enum RegStatusOption {
   Empty = "",
 }
 
-
 type Section = {
   num_students: number;
   number: number;
@@ -21,11 +20,9 @@ type Class = {
   title: string;
   description: string;
   capacity: number;
-  section_set: Section[];
+  sections: Section[];
   teachers: string[];
 };
-
-
 
 export { RegStatusOption };
 

@@ -128,7 +128,9 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   renderClass(clazz: Class) {
-    const classHasSpace = clazz.capacity - clazz.section_set[0].num_students > 0;
+    const classHasSpace = clazz.capacity - clazz.sections[0].num_students > 0;
+    // TODO replace this with something that actually checks this once sections have been
+    // properly implemented
     return (
       <div className="card" key={clazz.id}>
         <div className="card-header">
@@ -171,7 +173,7 @@ class StudentRegDashboard extends Component<Props, State> {
           )}
           <h3 className="card-footer-item">
             {classHasSpace
-              ? `${clazz.section_set[0].num_students}/${clazz.capacity} students`
+              ? `${clazz.sections[0].num_students}/${clazz.capacity} students`
               : "Class is full"}
           </h3>
         </div>
