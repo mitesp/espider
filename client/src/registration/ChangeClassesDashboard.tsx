@@ -114,12 +114,13 @@ class StudentRegDashboard extends Component<Props, State> {
     // TODO handle case where student wants to replace a class
     e.preventDefault();
     const sectionNum = this.state.catalogClassStatuses[clazz.id];
+    const section = clazz.section_set[sectionNum];
     if (sectionNum !== undefined) {
       axiosInstance
         .post(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`, {
           action: "add",
           class: clazz.id,
-          section: sectionNum + 1, // convert from 0-indexing to 1-indexing
+          section: section.number,
         })
         .then(res => {
           this.setState({
