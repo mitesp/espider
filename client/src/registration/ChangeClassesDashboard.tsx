@@ -13,9 +13,9 @@ type Props = {
 
 type State = {
   catalog: Class[];
+  classSearchQuery: string;
+  displayOnlyOpenClasses: boolean;
   enrolledClasses: string[];
-  openClasses: boolean;
-  search: string;
   timeslots: string[];
 };
 
@@ -35,11 +35,11 @@ class StudentRegDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      timeslots: [],
-      enrolledClasses: [],
       catalog: [],
-      search: "",
-      openClasses: true,
+      classSearchQuery: "",
+      displayOnlyOpenClasses: true,
+      enrolledClasses: [],
+      timeslots: [],
     };
   }
 
@@ -168,23 +168,23 @@ class StudentRegDashboard extends Component<Props, State> {
 
   handleSearchChange = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({
-      search: e.currentTarget.value,
+      classSearchQuery: e.currentTarget.value,
     });
   };
 
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("Searching for " + this.state.search);
+    console.log("Searching for " + this.state.classSearchQuery);
     // TODO make this functional
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.state.openClasses // previous state
+    this.state.displayOnlyOpenClasses // previous state
       ? console.log("Open class filter off")
       : console.log("Open class filter on");
     // TODO make this functional
     e!.currentTarget!.classList.toggle("is-success");
     this.setState({
-      openClasses: !this.state.openClasses,
+      displayOnlyOpenClasses: !this.state.displayOnlyOpenClasses,
     });
   };
 
@@ -200,7 +200,7 @@ class StudentRegDashboard extends Component<Props, State> {
                   this.handleSearchChange,
                   "Search for Class",
                   "search",
-                  this.state.search,
+                  this.state.classSearchQuery,
                   "text",
                   "search"
                 )}
