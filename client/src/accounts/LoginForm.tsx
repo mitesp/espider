@@ -1,77 +1,81 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import axiosInstance from "../axiosAPI";
 import { renderStandardFormField } from "../forms/helpers";
 import { loginEndpoint } from "../apiEndpoints";
+
 import { navigate } from "@reach/router";
 
-type LoginProps = {
-  onLogin: Function;
+import { useAuth } from "../context/auth";
+
+type Props = {
+  setToken: (arg0: string) => void;
+  location?: { state: { referer: string } };
 };
 
-type LoginState = {
-  username: string;
-  password: string;
-};
+function LoginForm(props: Props) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-function isValidField(prop: string, obj: LoginState): prop is keyof LoginState {
-  return prop in obj;
-}
+  const authToken = useAuth();
 
-class LoginForm extends Component<LoginProps, LoginState> {
-  constructor(props: LoginProps) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-    };
-  }
+  // If there was no referred, default to the dashboard.
+  const referer = props.location ? props.location.state.referer : "/dashboard";
 
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+  function handleChange(e: React.FormEvent<HTMLInputElement>) {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
-    this.setState((prevstate: LoginState) => {
-      const newState = { ...prevstate };
-      if (isValidField(name, prevstate)) {
-        newState[name] = value;
-      }
-      return newState;
-    });
-  };
+    switch (name) {
+      case "username":
+        setUsername(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+    }
+  }
 
-  handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     axiosInstance
-      .post(loginEndpoint, {
-        username: this.state.username,
-        password: this.state.password,
-      })
+      .post(loginEndpoint, { username, password })
       .then(result => {
-        axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
-        localStorage.setItem("token", result.data.access);
-        localStorage.setItem("refresh", result.data.refresh);
-        this.props.onLogin({ loggedIn: true });
-        navigate("dashboard");
+        if (result.status === 200) {
+          axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
+          localStorage.setItem("token", result.data.access);
+          localStorage.setItem("refresh", result.data.refresh);
+          props.setToken(result.data.access);
+          // test referrer in the future
+          navigate(referer);
+        } else {
+          console.log(`bad status ${result.status}`);
+          // TODO error state
+        }
+      })
+      .catch(e => {
+        // TODO error state
+        console.log(`login post error ${e}`);
       });
-  };
-
-  render() {
-    return (
-      <form onSubmit={this.handleLogin}>
-        <h1 className="has-text-centered is-size-3">Log in</h1>
-        {renderStandardFormField("username", this.handleChange, this.state.username)}
-
-        {renderStandardFormField("password", this.handleChange, this.state.password)}
-
-        <div className="field">
-          <div className="control">
-            <button className="button is-link" type="submit">
-              Submit
-            </button>
-          </div>
-        </div>
-      </form>
-    );
   }
+
+  // TODO: add in this redirect behavior, test with referrer later
+  if (authToken) {
+    navigate(referer);
+  }
+
+  return (
+    <form onSubmit={handleLogin}>
+      <h1 className="has-text-centered is-size-3">Log in</h1>
+      {renderStandardFormField("username", handleChange, username)}
+      {renderStandardFormField("password", handleChange, password)}
+      <div className="field">
+        <div className="control">
+          <button className="button is-link" type="submit">
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  );
 }
 
 export default LoginForm;

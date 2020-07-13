@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { navigate } from "@reach/router";
 import { renderStandardFormField } from "../forms/helpers";
 import { studentSignupEndpoint } from "../apiEndpoints";
 
+import { navigate } from "@reach/router";
+
 type Props = {
-  onLogin: Function;
+  setToken: (arg0: string) => void;
 };
 
 type State = {
@@ -58,9 +59,10 @@ class StudentSignupForm extends Component<Props, State> {
       .then(result => {
         // TODO: handle failure
         axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
+        // TODO: add this back, and REFACTOR. This should not have been in two places.
         localStorage.setItem("token", result.data.tokens.access);
         localStorage.setItem("refresh", result.data.tokens.refresh);
-        this.props.onLogin({ loggedIn: true });
+        this.props.setToken(result.data.tokens.access);
         navigate("dashboard"); // TODO maybe make this redirect to profile editing page
       });
   };
@@ -69,11 +71,8 @@ class StudentSignupForm extends Component<Props, State> {
     return (
       <form onSubmit={this.handleSignup}>
         {renderStandardFormField("username", this.handleChange, this.state.username)}
-
         {renderStandardFormField("password", this.handleChange, this.state.password)}
-
         {renderStandardFormField("phone", this.handleChange, this.state.phoneNumber)}
-
         {renderStandardFormField("school", this.handleChange, this.state.school)}
 
         <div className="field">

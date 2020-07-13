@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import StudentSignupForm from "./StudentSignupForm";
-import { UserState } from "../App";
 import { SignupType } from "./types";
 
 type Props = {
-  onLogin: (data: UserState) => void;
-  loggedIn: boolean;
   username: string;
+  setToken: (arg0: string) => void;
 };
 
 type State = {
@@ -32,8 +30,6 @@ class SignupPage extends Component<Props, State> {
   }
 
   render() {
-    const { onLogin } = this.props;
-
     return (
       <div className="container">
         <div className="columns">
@@ -55,7 +51,7 @@ class SignupPage extends Component<Props, State> {
             </button>
 
             {this.state.selectedSignupType === SignupType.Student && (
-              <StudentSignupForm onLogin={onLogin} />
+              <StudentSignupForm setToken={this.props.setToken} />
             )}
 
             {/*TODO: add teacher form */}
