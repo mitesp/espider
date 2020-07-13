@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 
 # Registration API calls
 
-
 class StudentRegAPI(APIView):
     """
     Determine the current studentreg object by the user and the program/edition

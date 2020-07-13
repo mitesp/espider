@@ -59,9 +59,20 @@ class ClassChangesDashboard extends Component<Props, State> {
   }
 
   setupClassCatalog() {
+    this.sendClassCatalogRequest();
+  }
+
+  sendClassCatalogRequest(includeSearch: boolean = false) {
+    const params = {} as any;
+    if (includeSearch) {
+      params["search"] = this.state.classSearchQuery;
+    }
     axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`)
+      .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`, {
+        params: params,
+      })
       .then(res => {
+        console.log(res.data);
         this.setState({
           catalog: res.data,
         });
@@ -189,7 +200,8 @@ class ClassChangesDashboard extends Component<Props, State> {
 
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log("Searching for " + this.state.classSearchQuery);
-    // TODO make this functional
+    this.sendClassCatalogRequest(true);
+    // TODO consider sending this request upon edit
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
