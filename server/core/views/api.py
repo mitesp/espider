@@ -320,7 +320,6 @@ class StudentProgramClasses(APIView):
 
         # # TODO make this check better
         # prog = Program.objects.filter(name=program, edition=edition)[0]
-
         # studentreg = StudentRegistration.objects.get(student=user, program=prog)
         # classes = studentreg.get_classes()
         # timeslots = Timeslot.objects.filter(program=prog)
