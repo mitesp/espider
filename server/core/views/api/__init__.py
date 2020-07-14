@@ -24,6 +24,7 @@ class ClassCatalog(APIView):
         if "search" in params:
             query = params["search"]
             classes = classes.filter(Q(title__icontains=query) | Q(description__icontains=query))
+            # TODO consider putting this in a well-named manager query
             # TODO investigate speed of query, consider postgres.search
 
         return Response([ClassSerializer(clazz).data for clazz in classes])

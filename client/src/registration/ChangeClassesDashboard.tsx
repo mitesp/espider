@@ -18,6 +18,10 @@ type State = {
   timeslots: string[];
 };
 
+type CatalogParams = {
+  query?: string;
+};
+
 // helper functions
 
 //mostly used for placeholders
@@ -64,14 +68,10 @@ class ClassChangesDashboard extends Component<Props, State> {
       });
   }
 
-  setupClassCatalog() {
-    this.sendClassCatalogRequest();
-  }
-
-  sendClassCatalogRequest(includeSearch: boolean = false) {
-    const params = {} as any;
+  setupClassCatalog(includeSearch: boolean = false) {
+    const params = {} as CatalogParams;
     if (includeSearch) {
-      params["search"] = this.state.classSearchQuery;
+      params["query"] = this.state.classSearchQuery;
     }
     axiosInstance
       .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`, {
@@ -204,7 +204,7 @@ class ClassChangesDashboard extends Component<Props, State> {
   };
 
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.sendClassCatalogRequest(true);
+    this.setupClassCatalog(true);
     // TODO consider sending this request upon edit
   };
 
