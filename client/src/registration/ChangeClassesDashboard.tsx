@@ -110,26 +110,33 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   addClass(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     console.log("Adding " + clazz.title);
     // TODO make this functional
   }
 
   removeClass(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     console.log("Removing " + clazz.title);
     // TODO make this functional
   }
 
   toggleClassDescription(e: React.MouseEvent) {
-    e.preventDefault();
+    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
     // TODO do this in a better way than DOM manipulation
   }
 
   renderClass(clazz: Class) {
+    const classHasSpace = clazz.capacity - clazz.sections[0].num_students > 0;
+    // TODO replace this with something that actually checks this once sections have been
+    // properly implemented
     return (
       <div className="card" key={clazz.id}>
         <div className="card-header">
-          <h2 className="card-header-title">{clazz.title}</h2>
+          <a href="#void" className="card-header-title" onClick={this.toggleClassDescription}>
+            {clazz.title}
+          </a>
           <a
             href="#void"
             role="button"
@@ -150,7 +157,7 @@ class StudentRegDashboard extends Component<Props, State> {
           </div>
         </div>
         <div className="card-footer">
-          {
+          {classHasSpace ? (
             <a
               href="#void"
               className="card-footer-item"
@@ -159,8 +166,17 @@ class StudentRegDashboard extends Component<Props, State> {
             >
               Add Class
             </a>
-          }
-          <h3 className="card-footer-item">{`${clazz.capacity} students`}</h3>
+          ) : (
+            <a href="#void" className="card-footer-item">
+              Join waitlist
+            </a>
+          )}
+          <h3 className="card-footer-item">
+            {classHasSpace
+              ? `${clazz.sections[0].num_students}/${clazz.capacity} students`
+              : // TODO this shouldn't refer to just the first section
+                "Class is full"}
+          </h3>
         </div>
       </div>
     );
