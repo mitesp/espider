@@ -17,11 +17,6 @@ class Class(models.Model):
         verbose_name_plural = "classes"
 
     @property
-    def sections(self):
-        # TODO change `related_name` instead of this helper function
-        return self.section_set.all().order_by("number")
-
-    @property
     def teachers(self):
         teacherreg_ids = self.teacherclassregs.values_list("teacherreg", flat=True)
         teacher_ids = esp_models.TeacherRegistration.objects.filter(
