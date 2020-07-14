@@ -96,7 +96,7 @@ class TeacherRegistration(models.Model):
 
     @property
     def classes(self):
-        ids = self.classregs.all().values_list("clazz", flat=True)
+        ids = self.classregs.values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
     def __str__(self):
