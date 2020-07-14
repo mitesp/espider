@@ -110,19 +110,19 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 
   addClass(e: React.MouseEvent, clazz: Class) {
-    e.preventDefault();
+    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     console.log("Adding " + clazz.title);
     // TODO make this functional
   }
 
   removeClass(e: React.MouseEvent, clazz: Class) {
-    e.preventDefault();
+    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     console.log("Removing " + clazz.title);
     // TODO make this functional
   }
 
   toggleClassDescription(e: React.MouseEvent) {
-    e.preventDefault();
+    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
     // TODO do this in a better way than DOM manipulation
   }
