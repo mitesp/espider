@@ -32,9 +32,7 @@ function renderLinkedText(displayedText: string, url: string) {
 }
 
 function renderTextInSection(displayedText: string, centered = false) {
-  return (
-    <h3 className={"is-size-5" + (centered ? " has has-text-centered" : "")}>{displayedText}</h3>
-  );
+  return <h3 className={"is-size-5" + (centered ? " has-text-centered" : "")}>{displayedText}</h3>;
 }
 
 class ClassChangesDashboard extends Component<Props, State> {
