@@ -1,5 +1,5 @@
 import core.permissions as custom_permissions
-from core.models import Program
+from core.models import Program, StudentRegistration
 from core.serializers import ProgramSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -25,10 +25,10 @@ class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
 def get_student_dashboard(request):
     user = request.user
 
-    previous_programs = Program.get_previous_student_programs(user)
+    previous_programs = StudentRegistration.get_previous_programs(user)
     previous_json = [{"name": str(p), "url": p.url} for p in previous_programs]
 
-    current_programs = Program.get_current_student_programs(user)
+    current_programs = StudentRegistration.get_current_programs(user)
 
     open_programs = Program.get_open_student_programs().exclude(id__in=current_programs)
     # TODO add grade checks
