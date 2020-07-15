@@ -13,13 +13,10 @@ type Props = {
 type State = {
   catalog: Class[];
   classSearchQuery: string;
+  displayedCatalog: Class[];
   displayOnlyOpenClasses: boolean;
   enrolledClasses: string[];
   timeslots: string[];
-};
-
-type CatalogParams = {
-  query?: string;
 };
 
 // helper functions
@@ -46,6 +43,7 @@ class ClassChangesDashboard extends Component<Props, State> {
     this.state = {
       catalog: [],
       classSearchQuery: "",
+      displayedCatalog: [],
       displayOnlyOpenClasses: true,
       enrolledClasses: [],
       timeslots: [],
@@ -68,18 +66,13 @@ class ClassChangesDashboard extends Component<Props, State> {
       });
   }
 
-  setupClassCatalog(includeSearch: boolean = false) {
-    const params = {} as CatalogParams;
-    if (includeSearch) {
-      params["query"] = this.state.classSearchQuery;
-    }
+  setupClassCatalog() {
     axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`, {
-        params: params,
-      })
+      .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`)
       .then(res => {
         this.setState({
           catalog: res.data,
+          displayedCatalog: res.data,
         });
       });
   }
@@ -204,8 +197,14 @@ class ClassChangesDashboard extends Component<Props, State> {
   };
 
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.setupClassCatalog(true);
-    // TODO consider sending this request upon edit
+    console.log(`submit search for ${this.state.classSearchQuery}`);
+    this.setState({
+      displayedCatalog: this.state.catalog.filter(
+        clazz =>
+          clazz.title.toLowerCase().indexOf(this.state.classSearchQuery) >= 0 ||
+          clazz.description.toLowerCase().indexOf(this.state.classSearchQuery) >= 0
+      ),
+    });
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -247,7 +246,7 @@ class ClassChangesDashboard extends Component<Props, State> {
         </button>
         {/*TODO add more filters*/}
         {this.state.catalog.length > 0
-          ? this.state.catalog.map(clazz => this.renderClass(clazz))
+          ? this.state.displayedCatalog.map(clazz => this.renderClass(clazz))
           : renderTextInSection("No classes available.", true)}
       </div>
     );
