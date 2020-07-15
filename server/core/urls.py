@@ -34,5 +34,5 @@ urlpatterns = [
     # The pattern has a trailing slash so it doesn't accidentally catch patterns without trailing
     # slashes like "admin". (Django first checks "admin" and then checks "admin/" so we want to make
     # sure "admin" is not caught by the React pattern.)
-    re_path("^.*/$", TemplateView.as_view(template_name="index.html"), name="react"),
+    re_path("(^.*/$|^$)", TemplateView.as_view(template_name="index.html"), name="react"),
 ]
