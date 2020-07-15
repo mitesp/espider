@@ -58,8 +58,7 @@ class StudentRegistration(models.Model):
 
     def get_schedule(self):
         schedule = {timeslot: None for timeslot in self.program.timeslots.all()}
-        sections = self.sections
-        for section in sections:
+        for section in self.sections:
             for block in section.scheduled_blocks.all():
                 timeslot = block.timeslot
                 schedule[timeslot] = section

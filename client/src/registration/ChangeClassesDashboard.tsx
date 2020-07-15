@@ -33,8 +33,8 @@ class ClassChangesDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      classSearchQuery: "",
       catalog: [],
+      classSearchQuery: "",
       displayOnlyOpenClasses: true,
       schedule: [],
     };
