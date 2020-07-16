@@ -18,6 +18,5 @@ class ClassCatalog(APIView):
     """
 
     def get(self, request, program, edition, format=None):
-        prog = Program.objects.get(name=program, edition=edition)
-        classes = Class.objects.filter(program=prog)
+        classes = Program.objects.get(name=program, edition=edition).classes.all()
         return Response([ClassSerializer(clazz).data for clazz in classes])
