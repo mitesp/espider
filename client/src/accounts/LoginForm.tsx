@@ -5,7 +5,7 @@ import { loginEndpoint } from "../apiEndpoints";
 
 import { navigate } from "@reach/router";
 
-import { useAuth } from "../context/auth";
+import { useLoggedIn } from "../context/auth";
 
 type Props = {
   setToken: (token: string) => void;
@@ -16,7 +16,7 @@ function LoginForm(props: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const authToken = useAuth();
+  const isLoggedIn = useLoggedIn();
 
   // If there was no referer, default to the dashboard.
   const referer = props.location ? props.location.state.referer : "/dashboard";
@@ -59,7 +59,7 @@ function LoginForm(props: Props) {
 
   // TODO: add in this redirect behavior, test with referer later.
   // TODO: maybe move to LoginPage
-  if (authToken) {
+  if (isLoggedIn) {
     navigate(referer);
   }
 

@@ -53,7 +53,6 @@ type UserState = {
 };
 
 function App(props: {}) {
-  // TODO: Move to a global context
   const [userInfo, setUserInfo] = useState({
     username: "",
     isStudent: false,
@@ -83,7 +82,7 @@ function App(props: {}) {
   // where they currently live
 
   return (
-    <AuthContext.Provider value={authToken}>
+    <AuthContext.Provider value={{ token: authToken, ...userInfo }}>
       <Nav loggedIn={authToken} username={userInfo.username} setToken={setToken} />
       <main className="px-3 py-5">
         <Router>
