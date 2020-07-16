@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { Class, Section, ScheduledTimeslot } from "./types";
+import { Class, Section, ScheduleItem } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
 
@@ -14,7 +14,7 @@ type State = {
   catalog: Class[];
   classSearchQuery: string;
   displayOnlyOpenClasses: boolean;
-  schedule: ScheduledTimeslot[];
+  schedule: ScheduleItem[];
 };
 
 // helper functions
@@ -47,7 +47,11 @@ class ClassChangesDashboard extends Component<Props, State> {
 
   setupStudentClasses() {
     axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
+      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`, {
+        params: {
+          include_empty_timeslots: true,
+        },
+      })
       .then(res => {
         this.setState({
           schedule: res.data,

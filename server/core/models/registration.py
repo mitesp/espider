@@ -1,5 +1,4 @@
 from django.db import models
-import core.models as esp_models
 
 from .clazz import Class, Section
 from .constants import RegStatusOptions
@@ -40,24 +39,21 @@ class StudentRegistration(models.Model):
     availability_check = models.BooleanField(default=False)
     payment_check = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = (("student", "program"),)
+
     @property
     def sections(self):
         sections = self.classregs.values_list("section", flat=True)
         return Section.objects.filter(pk__in=sections)
 
-    @property
-    def classes(self):
-        ids = self.sections.values_list("clazz", flat=True)
-        return Class.objects.filter(id__in=ids)
-
-    class Meta:
-        unique_together = (("student", "program"),)
-
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
-    def get_schedule(self):
-        schedule = {timeslot: None for timeslot in self.program.timeslots.all()}
+    def get_schedule(self, include_empty_timeslots=False):
+        schedule = {}
+        if include_empty_timeslots:
+            schedule = {timeslot: None for timeslot in self.program.timeslots.all()}
         for section in self.sections:
             for block in section.scheduled_blocks.all():
                 timeslot = block.timeslot

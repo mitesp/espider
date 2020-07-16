@@ -10,7 +10,7 @@ enum RegStatusOption {
   Empty = "",
 }
 
-type ScheduledTimeslot = {
+type ScheduleItem = {
   timeslot: string;
   section: Section;
 };
@@ -33,4 +33,4 @@ type Class = {
 
 export { RegStatusOption };
 
-export type { Class, Section, ScheduledTimeslot };
+export type { Class, Section, ScheduleItem };

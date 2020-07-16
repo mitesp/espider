@@ -1,6 +1,6 @@
 import core.permissions as custom_permissions
 from core.models import Program, StudentRegistration
-from core.serializers import StudentRegSerializer, SectionSerializer
+from core.serializers import SectionSerializer, StudentRegSerializer
 from django.db import transaction
 from django.forms.models import model_to_dict
 from rest_framework.response import Response
@@ -38,17 +38,23 @@ class StudentProgramClasses(APIView):
 
     def get(self, request, program, edition, format=None):
         user = request.user
+        params = request.GET
 
         prog = Program.objects.get(name=program, edition=edition)
         studentreg = StudentRegistration.objects.get(student=user, program=prog)
-        schedule = studentreg.get_schedule()
+        if "include_empty_timeslots" in params and params["include_empty_timeslots"]:
+            schedule = studentreg.get_schedule(include_empty_timeslots=True)
+        else:
+            schedule = studentreg.get_schedule()
         ret = [
             {
-                "timeslot": timeslot.shortstr,
+                "timeslot": timeslot.date_time_str,
                 "section": (SectionSerializer(section).data if section else None),
             }
             for (timeslot, section) in schedule
         ]
+        # TODO handle multi-timeblocks classes better
+        # TODO consider refactoring to incorporate shardulc's comments in PR #22
 
         return Response(ret)
 
@@ -242,4 +248,3 @@ class Availability(APIView):
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
         return studentreg
-

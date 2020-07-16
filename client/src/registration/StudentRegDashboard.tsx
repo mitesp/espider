@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../axiosAPI";
-import { RegStatusOption, ScheduledTimeslot } from "./types";
+import { RegStatusOption, ScheduleItem } from "./types";
 import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 
 import { useAuth } from "../context/auth";
@@ -55,7 +55,7 @@ function StudentRegDashboard(props: Props) {
     regStatus: RegStatusOption.Empty, // idk if this is the best solution
   });
 
-  const [schedule, setSchedule] = useState([] as ScheduledTimeslot[]);
+  const [schedule, setSchedule] = useState([] as ScheduleItem[]);
 
   useEffect(() => {
     // Set up student reg

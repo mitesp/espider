@@ -65,9 +65,9 @@ class Timeslot(models.Model):
     )
 
     @property
-    def shortstr(self):
-        date_format = "%a"
-        time_format = "%-I:%M %p"
+    def date_time_str(self):
+        date_format = "%a"  # day of week
+        time_format = "%-I:%M %p"  # 12hr HH:MM am/pm
         return (
             self.start.strftime(date_format)
             + " "
@@ -77,8 +77,8 @@ class Timeslot(models.Model):
         )
 
     def __str__(self):
-        time_format = "%-I:%M %p"
-        date_format = "%-m/%d/%y"
+        time_format = "%-I:%M %p"  # 12hr HH:MM am/pm
+        date_format = "%-m/%d/%y"  # mm/dd/yyyy
         return (
             self.start.strftime(date_format)
             + ", "

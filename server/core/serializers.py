@@ -72,8 +72,8 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = ("clazz", "name", "number", "num_students", "scheduled_blocks")
 
-    def get_name(self, instance):
-        return str(instance)
+    def get_name(self, section):
+        return str(section)
 
 
 class ClassSerializer(serializers.ModelSerializer):
