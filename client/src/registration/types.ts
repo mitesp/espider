@@ -13,6 +13,7 @@ enum RegStatusOption {
 type Section = {
   num_students: number;
   number: number;
+  scheduled_blocks: string[];
 };
 
 type Class = {
