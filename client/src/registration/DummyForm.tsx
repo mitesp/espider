@@ -5,7 +5,6 @@ import { navigate } from "@reach/router";
 type Props = {
   edition: string;
   formName: string;
-  isStudent: boolean;
   program: string;
   url: string;
 };

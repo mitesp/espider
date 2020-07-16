@@ -5,7 +5,6 @@ import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
 
 type Props = {
-  loggedIn: boolean;
   username: string;
   program: string;
   edition: string;
@@ -31,7 +30,7 @@ function renderLinkedText(displayedText: string, url: string) {
   );
 }
 
-class StudentRegDashboard extends Component<Props, State> {
+class ClassChangesDashboard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -254,4 +253,4 @@ class StudentRegDashboard extends Component<Props, State> {
   }
 }
 
-export default StudentRegDashboard;
+export default ClassChangesDashboard;

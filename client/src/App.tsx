@@ -1,4 +1,4 @@
-//@ts-nocheck TODO: fix
+// @ts-nocheck TODO: fix
 import React, { useState, useEffect } from "react";
 import { Router } from "@reach/router";
 import "./App.sass";
@@ -45,13 +45,6 @@ const NotFound = () => (
   </section>
 );
 
-// TODO: rename, see if we can just get rid of it
-type UserState = {
-  username: string;
-  isStudent: boolean;
-  isTeacher: boolean;
-};
-
 function App(props: {}) {
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -83,7 +76,7 @@ function App(props: {}) {
 
   return (
     <AuthContext.Provider value={{ token: authToken, ...userInfo }}>
-      <Nav loggedIn={authToken} username={userInfo.username} setToken={setToken} />
+      <Nav setToken={setToken} />
       <main className="px-3 py-5">
         <Router>
           <Home path="/" />
@@ -91,13 +84,7 @@ function App(props: {}) {
           <LoginPage path="login" username={userInfo.username} setToken={setToken} />
           <SignupPage path="signup" username={userInfo.username} setToken={setToken} />
 
-          <Dashboard
-            path="dashboard"
-            loggedIn={authToken}
-            username={userInfo.username}
-            isStudent={userInfo.isStudent}
-            isTeacher={userInfo.isTeacher}
-          />
+          <Dashboard path="dashboard" />
           <AboutUs path="aboutus" />
           <Teach path="teach" />
           <Learn path="learn" />
@@ -105,45 +92,25 @@ function App(props: {}) {
 
           {/*TODO figure out how to move these routes elsewhere for better organization*/}
 
-          <RegDashboard
-            path="/:program/:edition/dashboard"
-            loggedIn={authToken}
-            username={userInfo.username}
-            isStudent={userInfo.isStudent}
-            isTeacher={userInfo.isTeacher}
-          />
-          <UpdateProfileForm
-            path="/:program/:edition/updateprofile"
-            isStudent={userInfo.isStudent}
-            isTeacher={userInfo.isTeacher}
-          />
-          <EmergencyInfoForm
-            path="/:program/:edition/emergencyinfo"
-            isStudent={userInfo.isStudent}
-          />
+          <RegDashboard path="/:program/:edition/dashboard" />
+          <UpdateProfileForm path="/:program/:edition/updateprofile" />
+          <EmergencyInfoForm path="/:program/:edition/emergencyinfo" />
           <DummyForm
             path="/:program/:edition/medliab"
-            isStudent={userInfo.isStudent}
             url={medicalLiabilityEndpoint}
             formName="Medical Liabilility Form"
           />
           <DummyForm
             path="/:program/:edition/waiver"
-            isStudent={userInfo.isStudent}
             url={liabilityWaiverEndpoint}
             formName="Liability Waiver Form"
           />
           <DummyForm
             path="/:program/:edition/availability"
-            isStudent={userInfo.isStudent}
             url={studentAvailabilityEndpoint}
             formName="Program Availability"
           />
-          <ChangeClassesDashboard
-            path="/:program/:edition/changeclasses"
-            loggedIn={authToken}
-            username={userInfo.username}
-          />
+          <ChangeClassesDashboard path="/:program/:edition/changeclasses" />
           {programList.map(program => (
             <Program key={program} path={program} program={program} />
           ))}
@@ -154,7 +121,5 @@ function App(props: {}) {
     </AuthContext.Provider>
   );
 }
-
-export { UserState };
 
 export default App;

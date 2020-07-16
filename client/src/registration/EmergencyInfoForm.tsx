@@ -4,7 +4,6 @@ import { navigate } from "@reach/router";
 import { emergencyInfoEndpoint } from "../apiEndpoints";
 
 type Props = {
-  isStudent: boolean;
   program: string;
   edition: string;
 };

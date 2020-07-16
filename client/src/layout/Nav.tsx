@@ -6,17 +6,16 @@ import { Link } from "@reach/router";
 import { canonicalizeProgramName, programList } from "../info/Program";
 import axiosInstance from "../axiosAPI";
 
+import { useAuth, useLoggedIn } from "../context/auth";
+
 type Props = {
-  loggedIn: boolean;
-  username: string;
   setToken: (token: string) => void;
 };
 
-type State = {
-  mobileOpen: boolean;
-};
-
 function Nav(props: Props) {
+  const { username } = useAuth();
+  const loggedIn = useLoggedIn();
+
   const [mobileOpen, setMobileOpen] = useState(false);
 
   function toggleMobileMenu() {
@@ -49,7 +48,7 @@ function Nav(props: Props) {
     return (
       <div className="navbar-item has-dropdown is-hoverable">
         <a className="navbar-link has-text-weight-bold" href="/dashboard">
-          {props.username}
+          {username}
         </a>
 
         <div className="navbar-dropdown is-right">
@@ -130,7 +129,7 @@ function Nav(props: Props) {
               About Us
             </a>
           </div>
-          <div className="navbar-item">{props.loggedIn ? loggedInView() : loggedOutView()}</div>
+          <div className="navbar-item">{loggedIn ? loggedInView() : loggedOutView()}</div>
         </div>
       </div>
     </nav>
