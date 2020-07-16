@@ -14,5 +14,5 @@ export function useAuth() {
 
 export function useLoggedIn() {
   const auth = useContext(AuthContext);
-  return auth.token;
+  return auth.token !== "";
 }
