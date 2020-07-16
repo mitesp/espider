@@ -1,0 +1,11 @@
+.button-reset {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.button-reset:focus,
+.button-reset:active {
+  outline: none;
+}
