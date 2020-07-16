@@ -3,6 +3,7 @@ import axiosInstance from "../axiosAPI";
 import { Class } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
+import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 type Props = {
   username: string;
@@ -18,22 +19,6 @@ type State = {
   enrolledClasses: string[];
   timeslots: string[];
 };
-
-// helper functions
-
-//mostly used for placeholders
-
-function renderLinkedText(displayedText: string, url: string) {
-  return (
-    <h3 className="is-size-5 has-text-centered">
-      <a href={url}>{displayedText}</a>
-    </h3>
-  );
-}
-
-function renderTextInSection(displayedText: string, centered = false) {
-  return <h3 className={"is-size-5" + (centered ? " has-text-centered" : "")}>{displayedText}</h3>;
-}
 
 class ClassChangesDashboard extends Component<Props, State> {
   constructor(props: Props) {
@@ -199,10 +184,11 @@ class ClassChangesDashboard extends Component<Props, State> {
     this.setState({
       displayedCatalog: this.state.catalog.filter(
         clazz =>
-          clazz.title.toLowerCase().indexOf(this.state.classSearchQuery) >= 0 ||
-          clazz.description.toLowerCase().indexOf(this.state.classSearchQuery) >= 0
+          clazz.title.toLowerCase().indexOf(this.state.classSearchQuery.toLowerCase()) >= 0 ||
+          clazz.description.toLowerCase().indexOf(this.state.classSearchQuery.toLowerCase()) >= 0
       ),
     });
+    // TODO make search functionality better/more useful
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {

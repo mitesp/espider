@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../axiosAPI";
 import { RegStatusOption } from "./types";
 import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
+import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 import { useAuth } from "../context/auth";
 
@@ -11,21 +12,6 @@ type Props = {
 };
 
 // helper functions
-
-//mostly used for placeholders
-function renderTextInSection(displayedText: string, centered = false) {
-  return (
-    <h3 className={"is-size-5" + (centered ? " has has-text-centered" : "")}>{displayedText}</h3>
-  );
-}
-
-function renderLinkedText(displayedText: string, url: string) {
-  return (
-    <h3 className="is-size-5 has-text-centered">
-      <a href={url}>{displayedText}</a>
-    </h3>
-  );
-}
 
 function renderTaskNoLink(taskName: string, taskCompleted: boolean) {
   return (
