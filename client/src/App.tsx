@@ -1,5 +1,5 @@
-// @ts-nocheck TODO: fix\
-import React, { Component } from "react";
+//@ts-nocheck TODO: fix
+import React, { useState, useEffect } from "react";
 import { Router } from "@reach/router";
 import "./App.sass";
 
@@ -10,6 +10,8 @@ import {
   liabilityWaiverEndpoint,
   studentAvailabilityEndpoint,
 } from "./apiEndpoints";
+
+import { AuthContext } from "./context/auth";
 
 import Nav from "./layout/Nav";
 import Footer from "./layout/Footer";
@@ -43,135 +45,115 @@ const NotFound = () => (
   </section>
 );
 
+// TODO: rename, see if we can just get rid of it
 type UserState = {
-  loggedIn: boolean;
   username: string;
   isStudent: boolean;
   isTeacher: boolean;
 };
 
-type State = UserState;
+function App(props: {}) {
+  // TODO: Move to a global context
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    isStudent: false,
+    isTeacher: false,
+  });
 
-class App extends Component<{}, State> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loggedIn: localStorage.getItem("token") ? true : false,
-      username: "",
-      isStudent: false,
-      isTeacher: false,
-    };
-  }
+  const existingToken = localStorage.getItem("token") || "";
+  const [authToken, setAuthToken] = useState(existingToken);
 
-  componentDidMount() {
-    if (this.state.loggedIn) {
+  useEffect(() => {
+    if (authToken) {
       axiosInstance.get(userDataEndpoint).then(result => {
-        this.setState({
+        setUserInfo({
           username: result.data.username,
           isStudent: result.data.is_student,
           isTeacher: result.data.is_teacher,
         });
       });
     }
+  }, [authToken]);
+
+  function setToken(accessToken: string) {
+    setAuthToken(accessToken);
   }
 
-  login = (data: UserState) => {
-    this.setState(data);
-    //TODO: manually calling component did mount?
-    this.componentDidMount();
-  };
+  // TODO (important): refactor login and logout logic out of the UI components
+  // where they currently live
 
-  logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh");
-    delete axiosInstance.defaults.headers.common["Authorization"];
-    this.setState({ loggedIn: false, username: "", isStudent: false, isTeacher: false });
-  };
+  return (
+    <AuthContext.Provider value={authToken}>
+      <Nav loggedIn={authToken} username={userInfo.username} setToken={setToken} />
+      <main className="px-3 py-5">
+        <Router>
+          <Home path="/" />
+          <Home path="logout" />
+          <LoginPage path="login" username={userInfo.username} setToken={setToken} />
+          <SignupPage path="signup" username={userInfo.username} setToken={setToken} />
 
-  render() {
-    return (
-      <React.Fragment>
-        <Nav loggedIn={this.state.loggedIn} username={this.state.username} logout={this.logout} />
-        <main className="px-3 py-5">
-          <Router>
-            <Home path="/" />
-            {/* TODO: This is terrible, actually do it correctly, without the onClick on the log out link. */}
-            <Home path="/logout" />
-            <Dashboard
-              path="dashboard"
-              loggedIn={this.state.loggedIn}
-              username={this.state.username}
-              isStudent={this.state.isStudent}
-              isTeacher={this.state.isTeacher}
-            />
-            <AboutUs path="aboutus" />
-            <Teach path="teach" />
-            <Learn path="learn" />
-            <Nextup path="next" />
-            <LoginPage
-              path="login"
-              onLogin={this.login}
-              loggedIn={this.state.loggedIn}
-              username={this.state.username}
-            />
-            <SignupPage
-              path="signup"
-              onLogin={this.login}
-              loggedIn={this.state.loggedIn}
-              username={this.state.username}
-            />
+          <Dashboard
+            path="dashboard"
+            loggedIn={authToken}
+            username={userInfo.username}
+            isStudent={userInfo.isStudent}
+            isTeacher={userInfo.isTeacher}
+          />
+          <AboutUs path="aboutus" />
+          <Teach path="teach" />
+          <Learn path="learn" />
+          <Nextup path="next" />
 
-            {/*TODO figure out how to move these routes elsewhere for better organization*/}
+          {/*TODO figure out how to move these routes elsewhere for better organization*/}
 
-            <RegDashboard
-              path="/:program/:edition/dashboard"
-              loggedIn={this.state.loggedIn}
-              username={this.state.username}
-              isStudent={this.state.isStudent}
-              isTeacher={this.state.isTeacher}
-            />
-            <UpdateProfileForm
-              path="/:program/:edition/updateprofile"
-              isStudent={this.state.isStudent}
-              isTeacher={this.state.isTeacher}
-            />
-            <EmergencyInfoForm
-              path="/:program/:edition/emergencyinfo"
-              isStudent={this.state.isStudent}
-            />
-            <DummyForm
-              path="/:program/:edition/medliab"
-              isStudent={this.state.isStudent}
-              url={medicalLiabilityEndpoint}
-              formName="Medical Liabilility Form"
-            />
-            <DummyForm
-              path="/:program/:edition/waiver"
-              isStudent={this.state.isStudent}
-              url={liabilityWaiverEndpoint}
-              formName="Liability Waiver Form"
-            />
-            <DummyForm
-              path="/:program/:edition/availability"
-              isStudent={this.state.isStudent}
-              url={studentAvailabilityEndpoint}
-              formName="Program Availability"
-            />
-            <ChangeClassesDashboard
-              path="/:program/:edition/changeclasses"
-              loggedIn={this.state.loggedIn}
-              username={this.state.username}
-            />
-            {programList.map(program => (
-              <Program key={program} path={program} program={program} />
-            ))}
-            <NotFound default />
-          </Router>
-        </main>
-        <Footer />
-      </React.Fragment>
-    );
-  }
+          <RegDashboard
+            path="/:program/:edition/dashboard"
+            loggedIn={authToken}
+            username={userInfo.username}
+            isStudent={userInfo.isStudent}
+            isTeacher={userInfo.isTeacher}
+          />
+          <UpdateProfileForm
+            path="/:program/:edition/updateprofile"
+            isStudent={userInfo.isStudent}
+            isTeacher={userInfo.isTeacher}
+          />
+          <EmergencyInfoForm
+            path="/:program/:edition/emergencyinfo"
+            isStudent={userInfo.isStudent}
+          />
+          <DummyForm
+            path="/:program/:edition/medliab"
+            isStudent={userInfo.isStudent}
+            url={medicalLiabilityEndpoint}
+            formName="Medical Liabilility Form"
+          />
+          <DummyForm
+            path="/:program/:edition/waiver"
+            isStudent={userInfo.isStudent}
+            url={liabilityWaiverEndpoint}
+            formName="Liability Waiver Form"
+          />
+          <DummyForm
+            path="/:program/:edition/availability"
+            isStudent={userInfo.isStudent}
+            url={studentAvailabilityEndpoint}
+            formName="Program Availability"
+          />
+          <ChangeClassesDashboard
+            path="/:program/:edition/changeclasses"
+            loggedIn={authToken}
+            username={userInfo.username}
+          />
+          {programList.map(program => (
+            <Program key={program} path={program} program={program} />
+          ))}
+          <NotFound default />
+        </Router>
+      </main>
+      <Footer />
+    </AuthContext.Provider>
+  );
 }
 
 export { UserState };
