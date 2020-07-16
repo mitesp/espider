@@ -23,6 +23,15 @@ services:
     volumes:
       - ./client:/client
       - /client/node_modules # don't override the node_module folder
+  scheduler:
+    stdin_open: true # https://github.com/facebook/create-react-app/issues/8688
+    build: ./scheduler
+    command: yarn start
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./scheduler:/scheduler
+      - /scheduler/node_modules # don't override the node_module folder
   db:
     image: postgres:latest
     environment:
