@@ -1,4 +1,3 @@
-import core.models as esp_models
 from django.db import models
 
 from .clazz import Class, Section
@@ -9,8 +8,18 @@ from .users import ESPUser
 
 # TODO: Validate that the fk users have correct type before creation
 class StudentRegistration(models.Model):
-    student = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
-    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        ESPUser,
+        on_delete=models.CASCADE,
+        related_name="studentregs",
+        related_query_name="studentreg",
+    )
+    program = models.ForeignKey(
+        Program,
+        on_delete=models.CASCADE,
+        related_name="studentregs",
+        related_query_name="studentreg",
+    )
 
     # student reg status
     reg_status = models.CharField(
@@ -32,11 +41,10 @@ class StudentRegistration(models.Model):
 
     @property
     def classes(self):
-        sections = esp_models.StudentClassRegistration.objects.filter(studentreg=self).values_list(
-            "section", flat=True
-        )
+        sections = self.classregs.values_list("section", flat=True)
         ids = Section.objects.filter(pk__in=sections).values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
+        # TODO clean this type of query up with select_related
 
     class Meta:
         unique_together = (("student", "program"),)
@@ -49,9 +57,7 @@ class StudentRegistration(models.Model):
         """
         Get programs for which a student has a studentreg object and the program is over
         """
-        studentregs = StudentRegistration.objects.filter(student=user)
-
-        previous_program_ids = studentregs.filter(
+        previous_program_ids = user.studentregs.filter(
             reg_status=RegStatusOptions.POST_PROGRAM
         ).values_list("program", flat=True)
         previous_programs = Program.objects.filter(
@@ -61,8 +67,7 @@ class StudentRegistration(models.Model):
 
     @staticmethod
     def get_current_programs(user):
-        studentregs = StudentRegistration.objects.filter(student=user)
-        current_studentregs = studentregs.exclude(
+        current_studentregs = user.studentregs.exclude(
             reg_status=RegStatusOptions.POST_PROGRAM
         ).values_list("program", flat=True)
         current_programs = Program.objects.filter(id__in=current_studentregs)
@@ -71,8 +76,18 @@ class StudentRegistration(models.Model):
 
 class TeacherRegistration(models.Model):
     # TODO(mvadari): same naming comment about "check" as above
-    teacher = models.ForeignKey(ESPUser, on_delete=models.CASCADE)
-    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(
+        ESPUser,
+        on_delete=models.CASCADE,
+        related_name="teacherregs",
+        related_query_name="teacherreg",
+    )
+    program = models.ForeignKey(
+        Program,
+        on_delete=models.CASCADE,
+        related_name="teacherregs",
+        related_query_name="teacherreg",
+    )
     update_profile_check = models.BooleanField(default=False)
     # TODO add shirt size
 
@@ -81,9 +96,7 @@ class TeacherRegistration(models.Model):
 
     @property
     def classes(self):
-        ids = esp_models.TeacherClassRegistration.objects.filter(teacher=self).values_list(
-            "clazz", flat=True
-        )
+        ids = self.classregs.values_list("clazz", flat=True)
         return Class.objects.filter(id__in=ids)
 
     def __str__(self):
