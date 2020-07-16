@@ -118,7 +118,7 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO do this in a better way than DOM manipulation
   }
 
-  renderClass(clazz: Class) {
+  renderClass = (clazz: Class) => {
     const classHasSpace = clazz.capacity - clazz.sections[0].num_students > 0;
     // TODO replace this with something that actually checks this once sections have been
     // properly implemented
@@ -171,7 +171,7 @@ class ClassChangesDashboard extends Component<Props, State> {
         </div>
       </div>
     );
-  }
+  };
 
   handleSearchChange = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({
@@ -230,7 +230,7 @@ class ClassChangesDashboard extends Component<Props, State> {
         </button>
         {/*TODO add more filters*/}
         {this.state.displayedCatalog.length > 0
-          ? this.state.displayedCatalog.map(clazz => this.renderClass(clazz))
+          ? this.state.displayedCatalog.map(this.renderClass)
           : renderTextInSection("No classes available.", true)}
       </div>
     );
