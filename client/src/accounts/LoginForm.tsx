@@ -16,7 +16,7 @@ function LoginForm(props: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const isLoggedIn = useLoggedIn();
+  const loggedIn = useLoggedIn();
 
   // If there was no referer, default to the dashboard.
   const referer = props.location ? props.location.state.referer : "/dashboard";
@@ -59,7 +59,7 @@ function LoginForm(props: Props) {
 
   // TODO: add in this redirect behavior, test with referer later.
   // TODO: maybe move to LoginPage
-  if (isLoggedIn) {
+  if (loggedIn) {
     navigate(referer);
   }
 
