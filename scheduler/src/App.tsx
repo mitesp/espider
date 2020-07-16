@@ -3,19 +3,8 @@ import React, { Component } from "react";
 import { Router } from "@reach/router";
 import "./App.sass";
 
-import Nav from "./layout/Nav";
-
 import Home from "./Home";
 import LoginPage from "./accounts/LoginPage";
-
-const NotFound = () => (
-  <section className="pt-5 pb-5 container has-text-centered">
-    <p>Invalid URL. Sorry, nothing here!</p>
-    <p>
-      Return to the <a href="/">homepage</a>.
-    </p>
-  </section>
-);
 
 export type UserState = {
   loggedIn: boolean;
@@ -55,7 +44,6 @@ class App extends Component<{}, State> {
   render() {
     return (
       <React.Fragment>
-        <Nav loggedIn={this.state.loggedIn} username={this.state.username} logout={this.logout} />
         <main className="px-3 py-5">
           <Router>
             <Home path="/" />
@@ -65,8 +53,6 @@ class App extends Component<{}, State> {
               loggedIn={this.state.loggedIn}
               username={this.state.username}
             />
-            {/* TODO: This is terrible, actually do it correctly, without the onClick on the log out link. */}
-            <NotFound default />
           </Router>
         </main>
       </React.Fragment>
