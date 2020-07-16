@@ -179,16 +179,24 @@ class ClassChangesDashboard extends Component<Props, State> {
     });
   };
 
+  textContainsQuery = (text: string, query: string) => {
+    return text.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  };
+
+  classContainsQuery = (clazz: Class, query: string) => {
+    return (
+      this.textContainsQuery(clazz.title, query) || this.textContainsQuery(clazz.description, query)
+    );
+  };
+
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(`submit search for ${this.state.classSearchQuery}`);
     this.setState({
-      displayedCatalog: this.state.catalog.filter(
-        clazz =>
-          clazz.title.toLowerCase().indexOf(this.state.classSearchQuery.toLowerCase()) >= 0 ||
-          clazz.description.toLowerCase().indexOf(this.state.classSearchQuery.toLowerCase()) >= 0
+      displayedCatalog: this.state.catalog.filter(clazz =>
+        this.classContainsQuery(clazz, this.state.classSearchQuery)
       ),
     });
     // TODO make search functionality better/more useful
+    // TODO consider doing this on edit/removing the button
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -231,7 +239,7 @@ class ClassChangesDashboard extends Component<Props, State> {
         {/*TODO add more filters*/}
         {this.state.displayedCatalog.length > 0
           ? this.state.displayedCatalog.map(this.renderClass)
-          : renderTextInSection("No classes available.", true)}
+          : renderTextInSection("No classes match your search filters.", true)}
       </div>
     );
   }
