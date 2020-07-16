@@ -69,7 +69,7 @@ class ClassChangesDashboard extends Component<Props, State> {
         });
       });
   }
-  
+
   renderClassSchedule() {
     return (
       <div className="column is-6">
@@ -119,13 +119,13 @@ class ClassChangesDashboard extends Component<Props, State> {
 
   addWaitlistSection(e: React.MouseEvent, clazz: Class) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
-    console.log("Adding to waitlist " + clazz.title);
+    console.log(`Adding to waitlist ${clazz.title}`);
   }
 
   removeSection(e: React.MouseEvent, section: Section) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     if (section) {
-      console.log("Removing " + section.number);
+      console.log(`Removing ${section.number}`);
       // TODO make this functional
       // TODO refresh page or API calls
     }
