@@ -12,10 +12,6 @@ type Props = {
   setToken: (token: string) => void;
 };
 
-type State = {
-  mobileOpen: boolean;
-};
-
 function Nav(props: Props) {
   const { username } = useAuth();
   const loggedIn = useLoggedIn();

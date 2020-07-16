@@ -46,7 +46,7 @@ function renderTaskLink(taskName: string, taskCompleted: boolean, link: string) 
 function StudentRegDashboard(props: Props) {
   const { username } = useAuth();
 
-  const [checks, setChecks] = useState({
+  const [regState, setRegState] = useState({
     availabilityCheck: false,
     emergencyInfoCheck: false,
     liabilityCheck: false,
@@ -61,7 +61,7 @@ function StudentRegDashboard(props: Props) {
   useEffect(() => {
     // Set up student reg
     axiosInstance.get(`/${props.program}/${props.edition}/${studentRegEndpoint}`).then(res => {
-      setChecks({
+      setRegState({
         availabilityCheck: res.data.availability_check,
         emergencyInfoCheck: res.data.emergency_info_check,
         liabilityCheck: res.data.liability_check,
@@ -81,11 +81,11 @@ function StudentRegDashboard(props: Props) {
     return (
       <div className="column is-3">
         <h2 className="has-text-centered is-size-3 mb-2">Registration Status</h2>
-        {checks.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
-        {checks.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
-        {checks.medliabCheck && renderTaskNoLink("Medical Form", true)}
-        {checks.liabilityCheck && renderTaskNoLink("Liability Waiver", true)}
-        {checks.availabilityCheck && renderTaskLink("Availability", true, "availability")}
+        {regState.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
+        {regState.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
+        {regState.medliabCheck && renderTaskNoLink("Medical Form", true)}
+        {regState.liabilityCheck && renderTaskNoLink("Liability Waiver", true)}
+        {regState.availabilityCheck && renderTaskLink("Availability", true, "availability")}
       </div>
     );
   }
@@ -94,11 +94,11 @@ function StudentRegDashboard(props: Props) {
     return (
       <div className="column is-3 has-background-success-light">
         <h2 className="has-text-centered is-size-3 mb-2">Tasks</h2>
-        {!checks.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
-        {!checks.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
-        {!checks.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
-        {!checks.liabilityCheck && renderTaskLink("Liability Waiver", false, "waiver")}
-        {!checks.availabilityCheck && renderTaskLink("Availability", false, "availability")}
+        {!regState.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
+        {!regState.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
+        {!regState.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
+        {!regState.liabilityCheck && renderTaskLink("Liability Waiver", false, "waiver")}
+        {!regState.availabilityCheck && renderTaskLink("Availability", false, "availability")}
       </div>
     );
   }
@@ -157,7 +157,7 @@ function StudentRegDashboard(props: Props) {
   }
 
   function renderClassView() {
-    switch (checks.regStatus) {
+    switch (regState.regStatus) {
       case RegStatusOption.ClassPreferences:
         return renderClassPrefsEditable();
       case RegStatusOption.FrozenPreferences:
@@ -177,11 +177,11 @@ function StudentRegDashboard(props: Props) {
 
   function renderClassStatus() {
     const canAddClasses =
-      checks.updateProfileCheck &&
-      checks.emergencyInfoCheck &&
-      checks.medliabCheck &&
-      checks.liabilityCheck &&
-      checks.availabilityCheck;
+      regState.updateProfileCheck &&
+      regState.emergencyInfoCheck &&
+      regState.medliabCheck &&
+      regState.liabilityCheck &&
+      regState.availabilityCheck;
     return (
       <div className="column">
         <h2 className="has-text-centered is-size-3 mb-2">Classes</h2>

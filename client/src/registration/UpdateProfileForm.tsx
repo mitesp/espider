@@ -13,7 +13,9 @@ type Props = {
   program: string;
 };
 
-/** TODO: This is student specific, but that's not built into this component */
+/**************************************************************************
+ * TODO: This is student specific, but that's not built into this component
+ *************************************************************************/
 
 function UpdateProfileForm(props: Props) {
   const [fields, setFields] = useState({
