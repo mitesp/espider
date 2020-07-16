@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
 import {
@@ -10,56 +10,34 @@ import { studentProfileEndpoint } from "../apiEndpoints";
 
 type Props = {
   edition: string;
-  isStudent: boolean;
-  isTeacher: boolean;
   program: string;
 };
 
-type State = {
-  affiliation: string;
-  city: string;
-  country: string;
-  dateOfBirth: string;
-  email: string;
-  firstName: string;
-  gradYear: string;
-  lastName: string;
-  phoneNumber: string;
-  pronouns: string;
-  school: string;
-  state: string;
-};
+/** TODO: This is student specific, but that's not built into this component */
 
-function isValidField(prop: string, obj: State): prop is keyof State {
-  return prop in obj;
-}
+function UpdateProfileForm(props: Props) {
+  const [fields, setFields] = useState({
+    affiliation: "",
+    city: "",
+    country: "",
+    dateOfBirth: "",
+    email: "",
+    firstName: "",
+    gradYear: "",
+    lastName: "",
+    phoneNumber: "",
+    pronouns: "",
+    school: "",
+    state: "",
+  });
 
-class UpdateProfileForm extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      affiliation: "",
-      city: "",
-      country: "",
-      dateOfBirth: "",
-      email: "",
-      firstName: "",
-      gradYear: "",
-      lastName: "",
-      phoneNumber: "",
-      pronouns: "",
-      school: "",
-      state: "",
-    };
-  }
+  useEffect(() => {
+    setupProfileInfo();
+  }, []);
 
-  componentDidMount() {
-    this.setupProfileInfo();
-  }
-
-  setupProfileInfo() {
+  function setupProfileInfo() {
     axiosInstance.get(studentProfileEndpoint).then(res => {
-      this.setState({
+      setFields({
         affiliation: res.data.affiliation,
         city: res.data.city,
         country: res.data.country,
@@ -76,81 +54,68 @@ class UpdateProfileForm extends Component<Props, State> {
     });
   }
 
-  handleChange = (e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLSelectElement>) => {
+  function handleChange(e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLSelectElement>) {
     const { name, value } = e.currentTarget;
-    this.setState(() => {
-      const newState = { ...this.state };
-      if (isValidField(name, this.state)) {
-        newState[name] = value;
-      }
-      return newState;
-    });
-  };
+    const newFields = { ...fields };
+    // @ts-ignore TODO: figure out better way to do this. There's a better way
+    // to create this dependency between the variable name and the string name
+    // used for form field attributes
+    newFields[name] = value;
+    setFields(newFields);
+  }
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     axiosInstance
       .post(studentProfileEndpoint, {
-        affiliation: this.state.affiliation,
-        city: this.state.city,
-        country: this.state.country,
-        edition: this.props.edition,
-        first_name: this.state.firstName,
-        last_name: this.state.lastName,
-        email: this.state.email,
-        phone_number: this.state.phoneNumber,
-        program: this.props.program,
-        pronouns: this.state.pronouns,
-        state: this.state.state,
-        school: this.state.school,
+        affiliation: fields.affiliation,
+        city: fields.city,
+        country: fields.country,
+        edition: props.edition,
+        first_name: fields.firstName,
+        last_name: fields.lastName,
+        email: fields.email,
+        phone_number: fields.phoneNumber,
+        program: props.program,
+        pronouns: fields.pronouns,
+        state: fields.state,
+        school: fields.school,
         update_profile: true,
       })
       .then(result => {
         /*TODO check validity of submitted data*/
         navigate("dashboard");
       });
-  };
+  }
 
-  render() {
-    return (
-      <div className="container">
-        <div className="columns">
-          <div className="column is-6 is-offset-3">
-            <h1 className="has-text-centered is-size-3">Update Profile</h1>
-            <form onSubmit={this.handleSubmit}>
-              {renderFirstLastName(this.handleChange, this.state.firstName, this.state.lastName)}
-
-              {renderStandardFormSelect("pronouns", this.handleChange, this.state.pronouns)}
-
-              {renderStandardFormField("email", this.handleChange, this.state.email)}
-
-              {renderStandardFormField("phone", this.handleChange, this.state.phoneNumber)}
-
-              {renderStandardFormField("city", this.handleChange, this.state.city)}
-
-              {renderStandardFormField("state", this.handleChange, this.state.state)}
-
-              {renderStandardFormField("country", this.handleChange, this.state.country)}
-
-              {renderStandardFormField("dob", this.handleChange, this.state.dateOfBirth)}
-
-              {renderStandardFormField("gradyear", this.handleChange, this.state.gradYear)}
-
-              {renderStandardFormField("school", this.handleChange, this.state.school)}
-
-              <div className="field">
-                <div className="control">
-                  <button className="button is-link" type="submit">
-                    Submit
-                  </button>
-                </div>
+  return (
+    <div className="container">
+      <div className="columns">
+        <div className="column is-6 is-offset-3">
+          <h1 className="has-text-centered is-size-3">Update Profile</h1>
+          <form onSubmit={handleSubmit}>
+            {renderFirstLastName(handleChange, fields.firstName, fields.lastName)}
+            {renderStandardFormSelect("pronouns", handleChange, fields.pronouns)}
+            {renderStandardFormField("email", handleChange, fields.email)}
+            {renderStandardFormField("phone", handleChange, fields.phoneNumber)}
+            {renderStandardFormField("city", handleChange, fields.city)}
+            {renderStandardFormField("state", handleChange, fields.state)}
+            {renderStandardFormField("country", handleChange, fields.country)}
+            {renderStandardFormField("dob", handleChange, fields.dateOfBirth)}
+            {renderStandardFormField("gradyear", handleChange, fields.gradYear)}
+            {renderStandardFormField("school", handleChange, fields.school)}
+            <div className="field">
+              <div className="control">
+                <button className="button is-link" type="submit">
+                  Submit
+                </button>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default UpdateProfileForm;

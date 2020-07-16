@@ -1,29 +1,25 @@
-import React, { Component } from "react";
+import React from "react";
 
 import StudentDashboard from "./StudentDashboard";
 import TeacherDashboard from "./TeacherDashboard";
 
-// TODO: Come up with a "login" wall barrier component
-type Props = {
-  loggedIn: boolean;
-  username: string;
-  isStudent: boolean;
-  isTeacher: boolean;
-};
+import { useAuth, useLoggedIn } from "../context/auth";
 
-export default class Dashboard extends Component<Props, {}> {
-  render() {
-    const { loggedIn, username, isStudent, isTeacher } = this.props;
-    if (loggedIn) {
-      return (
-        <div className="container">
-          {isStudent && <StudentDashboard username={username} />}
-          {isTeacher && <TeacherDashboard username={username} />}
-        </div>
-      );
-    } else {
-      return <div></div>;
-      // TODO: login screen, redirect?
-    }
+function Dashboard(props: {}) {
+  const { username, isStudent, isTeacher } = useAuth();
+  const loggedIn = useLoggedIn();
+
+  if (loggedIn) {
+    return (
+      <div className="container">
+        {isStudent && <StudentDashboard username={username} />}
+        {isTeacher && <TeacherDashboard username={username} />}
+      </div>
+    );
+  } else {
+    // TODO: login screen, redirect?
+    return <div></div>;
   }
 }
+
+export default Dashboard;

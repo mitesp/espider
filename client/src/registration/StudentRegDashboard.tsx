@@ -1,24 +1,13 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import axiosInstance from "../axiosAPI";
 import { RegStatusOption } from "./types";
 import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 
+import { useAuth } from "../context/auth";
+
 type Props = {
-  loggedIn: boolean;
-  username: string;
   program: string;
   edition: string;
-};
-
-type State = {
-  availabilityCheck: boolean;
-  emergencyInfoCheck: boolean;
-  liabilityCheck: boolean;
-  medliabCheck: boolean;
-  updateProfileCheck: boolean;
-  regStatus: RegStatusOption;
-  timeslots: string[];
-  classes: string[];
 };
 
 // helper functions
@@ -54,79 +43,67 @@ function renderTaskLink(taskName: string, taskCompleted: boolean, link: string) 
   );
 }
 
-class StudentRegDashboard extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      availabilityCheck: false,
-      emergencyInfoCheck: false,
-      liabilityCheck: false,
-      medliabCheck: false,
-      updateProfileCheck: false,
-      regStatus: RegStatusOption.Empty, // idk if this is the best solution
-      timeslots: [],
-      classes: [],
-    };
-  }
+function StudentRegDashboard(props: Props) {
+  const { username } = useAuth();
 
-  componentDidMount() {
-    this.setupStudentReg();
-    this.setupStudentClasses();
-  }
+  const [checks, setChecks] = useState({
+    availabilityCheck: false,
+    emergencyInfoCheck: false,
+    liabilityCheck: false,
+    medliabCheck: false,
+    updateProfileCheck: false,
+    regStatus: RegStatusOption.Empty, // idk if this is the best solution
+  });
 
-  setupStudentReg() {
-    axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${studentRegEndpoint}`)
-      .then(res => {
-        this.setState({
-          availabilityCheck: res.data.availability_check,
-          emergencyInfoCheck: res.data.emergency_info_check,
-          liabilityCheck: res.data.liability_check,
-          medliabCheck: res.data.medliab_check,
-          updateProfileCheck: res.data.update_profile_check,
-          regStatus: res.data.reg_status,
-        });
+  const [timeslots, setTimeslots] = useState([]);
+  const [classes, setClasses] = useState([]);
+
+  useEffect(() => {
+    // Set up student reg
+    axiosInstance.get(`/${props.program}/${props.edition}/${studentRegEndpoint}`).then(res => {
+      setChecks({
+        availabilityCheck: res.data.availability_check,
+        emergencyInfoCheck: res.data.emergency_info_check,
+        liabilityCheck: res.data.liability_check,
+        medliabCheck: res.data.medliab_check,
+        updateProfileCheck: res.data.update_profile_check,
+        regStatus: res.data.reg_status,
       });
-  }
-
-  setupStudentClasses() {
-    axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
-      .then(res => {
-        this.setState({
-          timeslots: res.data.timeslots,
-          classes: res.data.classes,
-        });
     });
-  }
+    // Set up student classes
+    axiosInstance.get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`).then(res => {
+      setTimeslots(res.data.timeslots);
+      setClasses(res.data.classes);
+    });
+  }, [props.edition, props.program]);
 
-  renderRegStatus() {
+  function renderRegStatus() {
     return (
       <div className="column is-3">
         <h2 className="has-text-centered is-size-3 mb-2">Registration Status</h2>
-        {this.state.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
-        {this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
-        {this.state.medliabCheck && renderTaskNoLink("Medical Form", true)}
-        {this.state.liabilityCheck && renderTaskNoLink("Liability Waiver", true)}
-        {this.state.availabilityCheck && renderTaskLink("Availability", true, "availability")}
+        {checks.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
+        {checks.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
+        {checks.medliabCheck && renderTaskNoLink("Medical Form", true)}
+        {checks.liabilityCheck && renderTaskNoLink("Liability Waiver", true)}
+        {checks.availabilityCheck && renderTaskLink("Availability", true, "availability")}
       </div>
     );
   }
 
-  renderTasks() {
+  function renderTasks() {
     return (
       <div className="column is-3 has-background-success-light">
         <h2 className="has-text-centered is-size-3 mb-2">Tasks</h2>
-        {!this.state.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
-        {!this.state.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
-        {!this.state.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
-        {!this.state.liabilityCheck && renderTaskLink("Liability Waiver", false, "waiver")}
-        {!this.state.availabilityCheck && renderTaskLink("Availability", false, "availability")}
+        {!checks.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
+        {!checks.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
+        {!checks.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
+        {!checks.liabilityCheck && renderTaskLink("Liability Waiver", false, "waiver")}
+        {!checks.availabilityCheck && renderTaskLink("Availability", false, "availability")}
       </div>
     );
   }
 
-  renderClassPrefs(editsAllowed: boolean = false) {
+  function renderClassPrefs(editsAllowed: boolean = false) {
     return (
       <div>
         {renderTextInSection("View class preferences here")}
@@ -135,11 +112,11 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
-  renderClassPrefsEditable() {
-    return this.renderClassPrefs(true);
+  function renderClassPrefsEditable() {
+    return renderClassPrefs(true);
   }
 
-  renderClassSchedule(editsAllowed: boolean = false) {
+  function renderClassSchedule(editsAllowed: boolean = false) {
     // tables might not be very accessible
     return (
       <div className="table-container">
@@ -151,10 +128,10 @@ class StudentRegDashboard extends Component<Props, State> {
             </tr>
           </thead>
           <tbody>
-            {this.state.classes.map((clazz, index) => {
+            {classes.map((clazz, index) => {
               return (
                 <tr key={index}>
-                  <th>{this.state.timeslots[index]}</th>
+                  <th>{timeslots[index]}</th>
                   <td>{clazz}</td>
                 </tr>
               );
@@ -166,11 +143,11 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
-  renderClassScheduleEditable() {
-    return this.renderClassSchedule(true);
+  function renderClassScheduleEditable() {
+    return renderClassSchedule(true);
   }
 
-  renderDayOfClassSchedule() {
+  function renderDayOfClassSchedule() {
     return (
       <div>
         {renderTextInSection("View day-of link here")}
@@ -179,37 +156,37 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
-  renderClassView() {
-    switch (this.state.regStatus) {
+  function renderClassView() {
+    switch (checks.regStatus) {
       case RegStatusOption.ClassPreferences:
-        return this.renderClassPrefsEditable();
+        return renderClassPrefsEditable();
       case RegStatusOption.FrozenPreferences:
-        return this.renderClassPrefs();
+        return renderClassPrefs();
       case RegStatusOption.ChangeClasses:
-        return this.renderClassScheduleEditable();
+        return renderClassScheduleEditable();
       case RegStatusOption.PreProgram:
-        return this.renderClassSchedule();
+        return renderClassSchedule();
       case RegStatusOption.DayOf:
-        return this.renderDayOfClassSchedule();
+        return renderDayOfClassSchedule();
       case RegStatusOption.PostProgram:
-        return this.renderClassSchedule();
+        return renderClassSchedule();
       default:
         return renderTextInSection("Something broke :("); // error message
     }
   }
 
-  renderClassStatus() {
+  function renderClassStatus() {
     const canAddClasses =
-      this.state.updateProfileCheck &&
-      this.state.emergencyInfoCheck &&
-      this.state.medliabCheck &&
-      this.state.liabilityCheck &&
-      this.state.availabilityCheck;
+      checks.updateProfileCheck &&
+      checks.emergencyInfoCheck &&
+      checks.medliabCheck &&
+      checks.liabilityCheck &&
+      checks.availabilityCheck;
     return (
       <div className="column">
         <h2 className="has-text-centered is-size-3 mb-2">Classes</h2>
         {canAddClasses ? (
-          this.renderClassView()
+          renderClassView()
         ) : (
           <h3 className="is-size-5 has-text-centered has-text-danger">
             You need to finish all the tasks assigned to you before you can add classes.
@@ -219,22 +196,20 @@ class StudentRegDashboard extends Component<Props, State> {
     );
   }
 
-  render() {
-    //TODO block view if studentreg isn't open (or something)
-    return (
-      <div className="container">
-        <h1 className="has-text-centered is-size-2">
-          {this.props.program} {this.props.edition} Dashboard for {this.props.username}
-        </h1>
-        <br />
-        <div className="columns">
-          {this.renderRegStatus()}
-          {this.renderTasks()}
-          {this.renderClassStatus()}
-        </div>
+  //TODO block view if studentreg isn't open (or something)
+  return (
+    <div className="container">
+      <h1 className="has-text-centered is-size-2">
+        {props.program} {props.edition} Dashboard for {username}
+      </h1>
+      <br />
+      <div className="columns">
+        {renderRegStatus()}
+        {renderTasks()}
+        {renderClassStatus()}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default StudentRegDashboard;
