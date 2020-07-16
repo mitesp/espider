@@ -4,9 +4,9 @@ import { Router } from "@reach/router";
 import "./App.sass";
 
 import Nav from "./layout/Nav";
-import Footer from "./layout/Footer";
 
 import Home from "./Home";
+import LoginPage from "./accounts/LoginPage";
 
 const NotFound = () => (
   <section className="pt-5 pb-5 container has-text-centered">
@@ -17,7 +17,7 @@ const NotFound = () => (
   </section>
 );
 
-type UserState = {
+export type UserState = {
   loggedIn: boolean;
   username: string;
   isStudent: boolean;
@@ -59,11 +59,16 @@ class App extends Component<{}, State> {
         <main className="px-3 py-5">
           <Router>
             <Home path="/" />
+            <LoginPage
+              path="login"
+              onLogin={this.login}
+              loggedIn={this.state.loggedIn}
+              username={this.state.username}
+            />
             {/* TODO: This is terrible, actually do it correctly, without the onClick on the log out link. */}
             <NotFound default />
           </Router>
         </main>
-        <Footer />
       </React.Fragment>
     );
   }

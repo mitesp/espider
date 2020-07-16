@@ -28,7 +28,7 @@ services:
     build: ./scheduler
     command: yarn start
     ports:
-      - "5000:5000"
+      - "5000:3000"
     volumes:
       - ./scheduler:/scheduler
       - /scheduler/node_modules # don't override the node_module folder
