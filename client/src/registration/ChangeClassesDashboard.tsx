@@ -229,7 +229,7 @@ class ClassChangesDashboard extends Component<Props, State> {
           Only open classes
         </button>
         {/*TODO add more filters*/}
-        {this.state.catalog.length > 0
+        {this.state.displayedCatalog.length > 0
           ? this.state.displayedCatalog.map(clazz => this.renderClass(clazz))
           : renderTextInSection("No classes available.", true)}
       </div>
