@@ -1,6 +1,6 @@
 import React from "react";
 import LoginForm from "./LoginForm";
-import { useAuth } from "../context/auth";
+import { useLoggedIn } from "../context/auth";
 
 type Props = {
   username: string;
@@ -8,13 +8,13 @@ type Props = {
 };
 
 function LoginPage(props: Props) {
-  const authToken = useAuth();
+  const loggedIn = useLoggedIn();
 
   return (
     <div className="container">
       <div className="columns">
         <div className="column is-6 is-offset-3">
-          {authToken ? <h3> Hi, {props.username}! </h3> : <LoginForm setToken={props.setToken} />}
+          {loggedIn ? <h3> Hi, {props.username}! </h3> : <LoginForm setToken={props.setToken} />}
         </div>
       </div>
     </div>
