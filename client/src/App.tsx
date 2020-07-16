@@ -89,7 +89,6 @@ function App(props: {}) {
         <Router>
           <Home path="/" />
           <Home path="logout" />
-          {/* <PrivateRoute as={Nextup} path="private" /> */}
           <LoginPage path="login" username={userInfo.username} setToken={setToken} />
           <SignupPage path="signup" username={userInfo.username} setToken={setToken} />
 

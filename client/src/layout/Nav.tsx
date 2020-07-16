@@ -9,7 +9,7 @@ import axiosInstance from "../axiosAPI";
 type Props = {
   loggedIn: boolean;
   username: string;
-  setToken: (arg0: string) => void;
+  setToken: (token: string) => void;
 };
 
 type State = {

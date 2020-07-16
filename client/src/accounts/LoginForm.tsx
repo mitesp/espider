@@ -8,7 +8,7 @@ import { navigate } from "@reach/router";
 import { useAuth } from "../context/auth";
 
 type Props = {
-  setToken: (arg0: string) => void;
+  setToken: (token: string) => void;
   location?: { state: { referer: string } };
 };
 
@@ -18,7 +18,7 @@ function LoginForm(props: Props) {
 
   const authToken = useAuth();
 
-  // If there was no referred, default to the dashboard.
+  // If there was no referer, default to the dashboard.
   const referer = props.location ? props.location.state.referer : "/dashboard";
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
@@ -57,7 +57,8 @@ function LoginForm(props: Props) {
       });
   }
 
-  // TODO: add in this redirect behavior, test with referrer later
+  // TODO: add in this redirect behavior, test with referer later.
+  // TODO: maybe move to LoginPage
   if (authToken) {
     navigate(referer);
   }

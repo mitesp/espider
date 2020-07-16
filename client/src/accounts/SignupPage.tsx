@@ -4,7 +4,7 @@ import { SignupType } from "./types";
 
 type Props = {
   username: string;
-  setToken: (arg0: string) => void;
+  setToken: (token: string) => void;
 };
 
 type State = {

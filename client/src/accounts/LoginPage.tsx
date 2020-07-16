@@ -4,7 +4,7 @@ import { useAuth } from "../context/auth";
 
 type Props = {
   username: string;
-  setToken: (arg0: string) => void;
+  setToken: (token: string) => void;
 };
 
 function LoginPage(props: Props) {

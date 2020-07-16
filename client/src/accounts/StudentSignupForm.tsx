@@ -6,7 +6,7 @@ import { studentSignupEndpoint } from "../apiEndpoints";
 import { navigate } from "@reach/router";
 
 type Props = {
-  setToken: (arg0: string) => void;
+  setToken: (token: string) => void;
 };
 
 type State = {
