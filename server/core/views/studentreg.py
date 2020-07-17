@@ -24,7 +24,6 @@ class StudentRegAPI(APIView):
         prog = Program.objects.get(name=program, edition=edition)
 
         studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
-        # TODO figure out how to change the default regstatus based on the program's status
         return Response(StudentRegSerializer(studentreg).data)
 
 
