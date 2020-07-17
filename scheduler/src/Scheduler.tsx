@@ -1,9 +1,37 @@
 import React, { Component } from "react";
 
+type State = {
+  timeslots: string[];
+  classrooms: string[];
+  classes: string[];
+};
+
 export default class Scheduler extends Component<{}, {}> {
   constructor(props: {}) {
     super(props);
-    this.state = {};
+    this.state = {
+      timeslots: [],
+      classrooms: [],
+      classes: [],
+    };
+  }
+
+  componentDidMount() {
+    this.setupClasses();
+    this.setupTimeslots();
+    this.setupClassrooms();
+  }
+
+  setupClasses() {
+    // TODO get list of classes
+  }
+
+  setupTimeslots() {
+    // TODO get program timeslots
+  }
+
+  setupClassrooms() {
+    // TODO get program classrooms
   }
 
   render() {
