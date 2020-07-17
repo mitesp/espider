@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Router } from "@reach/router";
 import "./App.sass";
 
-import Home from "./Home";
+import Scheduler from "./Scheduler";
 import LoginPage from "./accounts/LoginPage";
 
 class App extends Component<{}, State> {
@@ -27,7 +27,7 @@ class App extends Component<{}, State> {
       <React.Fragment>
         <main className="px-3 py-5">
           <Router>
-            <Home path="/" />
+            <Scheduler path="/" />
             <LoginPage path="login" />
           </Router>
         </main>
