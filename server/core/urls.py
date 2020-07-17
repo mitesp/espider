@@ -28,11 +28,11 @@ urlpatterns = [
                     include(
                         [
                             path("", views.StudentRegAPI.as_view()),
-                            path("schedule/", views.StudentProgramClasses.as_view()),
+                            path("availability/", views.Availability.as_view()),
                             path("emergency_info/", views.EmergencyInfo.as_view()),
                             path("medliab/", views.MedicalLiability.as_view()),
+                            path("schedule/", views.StudentProgramClasses.as_view()),
                             path("waiver/", views.LiabilityWaiver.as_view()),
-                            path("availability/", views.Availability.as_view()),
                         ]
                     ),
                 ),
@@ -41,9 +41,9 @@ urlpatterns = [
     ),
     # auth API calls
     path("api/account/student/", views.StudentAccount.as_view()),
-    path("api/user/", views.current_user),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/user/", views.current_user),
     # Reroute all other paths to React frontend.
     # The pattern has a trailing slash so it doesn't accidentally catch patterns without trailing
     # slashes like "admin". (Django first checks "admin" and then checks "admin/" so we want to make
