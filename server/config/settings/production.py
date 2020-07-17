@@ -12,7 +12,7 @@ PROJECT_ROOT = os.path.dirname(DJANGO_ROOT)
 DEBUG = False
 SECRET_KEY = os.environ["SECRET_KEY"]
 
-TEMPLATES["DIR"].append(os.path.join(PROJECT_ROOT, "client", "build"))
+TEMPLATES[0]["DIR"].append(os.path.join(PROJECT_ROOT, "client", "build"))
 
 DATABASES["default"].update(
     {"USER": os.environ["POSTGRES_USER"], "PASSWORD": os.environ["POSTGRES_PASSWORD"],}
