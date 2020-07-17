@@ -3,18 +3,14 @@ import axiosInstance from "../axiosAPI";
 import { loginEndpoint } from "../apiEndpoints";
 import { navigate } from "@reach/router";
 
-type LoginProps = {
-  onLogin: Function;
-};
-
-type LoginState = {
+type State = {
   username: string;
   password: string;
 };
 
-class LoginForm extends Component<LoginProps, LoginState> {
-  constructor(props: LoginProps) {
-    super(props);
+class LoginForm extends Component<{}, State> {
+  constructor() {
+    super({});
     this.state = {
       username: "",
       password: "",
@@ -45,7 +41,6 @@ class LoginForm extends Component<LoginProps, LoginState> {
         axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
         localStorage.setItem("token", result.data.access);
         localStorage.setItem("refresh", result.data.refresh);
-        this.props.onLogin({ loggedIn: true });
         navigate("/");
       });
   };
