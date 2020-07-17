@@ -64,16 +64,25 @@ class Timeslot(models.Model):
         Program, on_delete=models.CASCADE, related_name="timeslots", related_query_name="timeslot"
     )
 
-    def __str__(self):
-        time_format = "%-I:%M %p"
-        date_format = "%-m/%d/%y"
+    @property
+    def date_time_str(self):
+        date_format = "%a"  # day of week
+        time_format = "%-I:%M %p"  # 12hr HH:MM am/pm
         return (
-            str(self.program)
-            + " ("
-            + self.start.strftime(date_format)
+            self.start.strftime(date_format)
+            + " "
+            + self.start.strftime(time_format)
+            + "-"
+            + self.end.strftime(time_format)
+        )
+
+    def __str__(self):
+        time_format = "%-I:%M %p"  # 12hr HH:MM am/pm
+        date_format = "%-m/%d/%y"  # mm/dd/yyyy
+        return (
+            self.start.strftime(date_format)
             + ", "
             + self.start.strftime(time_format)
             + " to "
             + self.end.strftime(time_format)
-            + ")"
         )

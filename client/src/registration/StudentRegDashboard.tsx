@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../axiosAPI";
-import { RegStatusOption } from "./types";
+import { RegStatusOption, ScheduleItem } from "./types";
 import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 
 import { useAuth } from "../context/auth";
@@ -55,8 +55,7 @@ function StudentRegDashboard(props: Props) {
     regStatus: RegStatusOption.Empty, // idk if this is the best solution
   });
 
-  const [timeslots, setTimeslots] = useState([]);
-  const [classes, setClasses] = useState([]);
+  const [schedule, setSchedule] = useState([] as ScheduleItem[]);
 
   useEffect(() => {
     // Set up student reg
@@ -72,8 +71,7 @@ function StudentRegDashboard(props: Props) {
     });
     // Set up student classes
     axiosInstance.get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`).then(res => {
-      setTimeslots(res.data.timeslots);
-      setClasses(res.data.classes);
+      setSchedule(res.data);
     });
   }, [props.edition, props.program]);
 
@@ -128,11 +126,11 @@ function StudentRegDashboard(props: Props) {
             </tr>
           </thead>
           <tbody>
-            {classes.map((clazz, index) => {
+            {schedule.map((scheduleItem, index) => {
               return (
                 <tr key={index}>
-                  <th>{timeslots[index]}</th>
-                  <td>{clazz}</td>
+                  <th>{scheduleItem.timeslot}</th>
+                  <td>{scheduleItem.section && scheduleItem.section.name}</td>
                 </tr>
               );
             })}

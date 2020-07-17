@@ -1,6 +1,6 @@
 import core.permissions as custom_permissions
 from core.models import Program, StudentRegistration
-from core.serializers import StudentRegSerializer
+from core.serializers import SectionSerializer, StudentRegSerializer
 from django.db import transaction
 from django.forms.models import model_to_dict
 from rest_framework.response import Response
@@ -34,23 +34,26 @@ class StudentProgramClasses(APIView):
     Permissions: logged in, is student, has studentreg object
     """
 
+    permission_classes = (custom_permissions.IsStudent,)
+
     def get(self, request, program, edition, format=None):
-        # user = request.user
+        user = request.user
+        params = request.GET
 
-        # # TODO make this check better
-        # prog = Program.objects.filter(name=program, edition=edition)[0]
-        # studentreg = StudentRegistration.objects.get(student=user, program=prog)
-        # classes = studentreg.get_classes()
-        # timeslots = Timeslot.objects.filter(program=prog)
+        prog = Program.objects.get(name=program, edition=edition)
+        studentreg = StudentRegistration.objects.get(student=user, program=prog)
+        include_empty_timeslots = params.get("include_empty_timeslots", False)
+        schedule = studentreg.get_schedule(include_empty_timeslots=include_empty_timeslots)
 
-        ret = {
-            "classes": [
-                "How to beat your dad at chess, MIT style",
-                "From Neurons to Thoughts: An Introduction to the Human Mind and Brain",
-                None,
-            ],
-            "timeslots": ["Sat 10-11", "Sat 11-12", "Sat 12-1"],
-        }
+        ret = [
+            {
+                "timeslot": timeslot.date_time_str,
+                "section": (SectionSerializer(section).data if section else None),
+            }
+            for (timeslot, section) in schedule
+        ]
+        # TODO handle multi-timeblocks classes better
+        # TODO consider refactoring to incorporate shardulc's comments in PR #22
 
         return Response(ret)
 

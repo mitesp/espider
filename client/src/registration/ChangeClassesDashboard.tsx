@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
-import { Class } from "./types";
+import { Class, Section, ScheduleItem } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
 
@@ -14,8 +14,7 @@ type State = {
   catalog: Class[];
   classSearchQuery: string;
   displayOnlyOpenClasses: boolean;
-  enrolledClasses: string[];
-  timeslots: string[];
+  schedule: ScheduleItem[];
 };
 
 // helper functions
@@ -37,8 +36,7 @@ class ClassChangesDashboard extends Component<Props, State> {
       catalog: [],
       classSearchQuery: "",
       displayOnlyOpenClasses: true,
-      enrolledClasses: [],
-      timeslots: [],
+      schedule: [],
     };
   }
 
@@ -49,11 +47,14 @@ class ClassChangesDashboard extends Component<Props, State> {
 
   setupStudentClasses() {
     axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`)
+      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`, {
+        params: {
+          include_empty_timeslots: true,
+        },
+      })
       .then(res => {
         this.setState({
-          timeslots: res.data.timeslots,
-          enrolledClasses: res.data.classes,
+          schedule: res.data,
         });
       });
   }
@@ -82,15 +83,18 @@ class ClassChangesDashboard extends Component<Props, State> {
               </tr>
             </thead>
             <tbody>
-              {this.state.enrolledClasses.map((clazz, index) => {
+              {this.state.schedule.map((scheduleItem, index) => {
                 return (
                   <tr key={index}>
-                    <th>{this.state.timeslots[index]}</th>
-                    <td>{clazz}</td>
+                    <th>{scheduleItem.timeslot}</th>
+                    <td>{scheduleItem.section && scheduleItem.section.name}</td>
                     <td>
-                      <button className="delete is-centered"></button>
-                      {/*(for a) onClick=e => this.removeClass(e, clazz)
-                      TODO enrolledClasses is Class[] instead of string[] */}
+                      {scheduleItem.section && (
+                        <button
+                          onClick={e => this.removeClass(e, scheduleItem.section)}
+                          className="delete is-centered"
+                        ></button>
+                      )}
                     </td>
                   </tr>
                 );
@@ -114,10 +118,18 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO make this functional
   }
 
-  removeClass(e: React.MouseEvent, clazz: Class) {
-    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
-    console.log("Removing " + clazz.title);
+  addWaitlistClass(e: React.MouseEvent, clazz: Class) {
+    e.preventDefault();
+    console.log("Adding to waitlist " + clazz.title);
     // TODO make this functional
+  }
+
+  removeClass(e: React.MouseEvent, section: Section) {
+    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
+    if (section) {
+      console.log("Removing " + section.name);
+      // TODO make this functional
+    }
   }
 
   toggleClassDescription(e: React.MouseEvent) {
@@ -131,15 +143,20 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO replace this with something that actually checks this once sections have been
     // properly implemented
     return (
-      <div className="card" key={clazz.id}>
+      <div className="card mb-1" key={clazz.id}>
         <div className="card-header">
-          <a href="#void" className="card-header-title" onClick={this.toggleClassDescription}>
+          <a
+            href="#void"
+            className="card-header-title"
+            role="button"
+            onClick={this.toggleClassDescription}
+          >
             {clazz.title}
           </a>
           <a
             href="#void"
-            role="button"
             className="card-header-icon card-toggle"
+            role="button"
             onClick={this.toggleClassDescription}
           >
             <span className="icon">
@@ -166,7 +183,12 @@ class ClassChangesDashboard extends Component<Props, State> {
               Add Class
             </a>
           ) : (
-            <a href="#void" className="card-footer-item">
+            <a
+              href="#void"
+              className="card-footer-item"
+              role="button"
+              onClick={e => this.addWaitlistClass(e, clazz)}
+            >
               Join waitlist
             </a>
           )}

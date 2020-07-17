@@ -1,4 +1,12 @@
-from core.models import Class, ESPUser, Program, Section, StudentProfile, StudentRegistration
+from core.models import (
+    Class,
+    ESPUser,
+    Program,
+    Section,
+    StudentProfile,
+    StudentRegistration,
+    Timeslot,
+)
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -58,10 +66,14 @@ class StudentRegSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
     scheduled_blocks = serializers.StringRelatedField(many=True)
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
-        fields = ("clazz", "number", "num_students", "scheduled_blocks")
+        fields = ("clazz", "name", "number", "num_students", "scheduled_blocks")
+
+    def get_name(self, section):
+        return str(section)
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -71,3 +83,9 @@ class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = ("id", "title", "description", "teachers", "capacity", "sections")
+
+
+class TimeslotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Timeslot
+        fields = "__all__"

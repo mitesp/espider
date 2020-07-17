@@ -39,18 +39,29 @@ class StudentRegistration(models.Model):
     availability_check = models.BooleanField(default=False)
     payment_check = models.BooleanField(default=False)
 
-    @property
-    def classes(self):
-        sections = self.classregs.values_list("section", flat=True)
-        ids = Section.objects.filter(pk__in=sections).values_list("clazz", flat=True)
-        return Class.objects.filter(id__in=ids)
-        # TODO clean this type of query up with select_related
-
     class Meta:
         unique_together = (("student", "program"),)
 
+    @property
+    def sections(self):
+        sections = self.classregs.values_list("section", flat=True)
+        return Section.objects.filter(pk__in=sections)
+        # TODO figure out if this is possible without using Section
+
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
+
+    def get_schedule(self, include_empty_timeslots=False):
+        schedule = {}
+        if include_empty_timeslots:
+            schedule = {timeslot: None for timeslot in self.program.timeslots.all()}
+        for section in self.sections:
+            for block in section.scheduled_blocks.all():
+                timeslot = block.timeslot
+                schedule[timeslot] = section
+        # TODO add check to make sure sections don't overlap timeslots
+        # (or just make sure that's not possible when adding)
+        return sorted(list(schedule.items()), key=lambda pair: pair[0].start)
 
     @staticmethod
     def get_previous_programs(user):
