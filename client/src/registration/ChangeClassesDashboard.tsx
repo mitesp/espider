@@ -3,6 +3,7 @@ import axiosInstance from "../axiosAPI";
 import { Class, Section, ScheduleItem } from "./types";
 import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
+import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 type Props = {
   username: string;
@@ -13,21 +14,10 @@ type Props = {
 type State = {
   catalog: Class[];
   classSearchQuery: string;
+  displayedCatalog: Class[];
   displayOnlyOpenClasses: boolean;
   schedule: ScheduleItem[];
 };
-
-// helper functions
-
-//mostly used for placeholders
-
-function renderLinkedText(displayedText: string, url: string) {
-  return (
-    <h3 className="is-size-5 has-text-centered">
-      <a href={url}>{displayedText}</a>
-    </h3>
-  );
-}
 
 class ClassChangesDashboard extends Component<Props, State> {
   constructor(props: Props) {
@@ -35,6 +25,7 @@ class ClassChangesDashboard extends Component<Props, State> {
     this.state = {
       catalog: [],
       classSearchQuery: "",
+      displayedCatalog: [],
       displayOnlyOpenClasses: true,
       schedule: [],
     };
@@ -65,6 +56,7 @@ class ClassChangesDashboard extends Component<Props, State> {
       .then(res => {
         this.setState({
           catalog: res.data,
+          displayedCatalog: res.data,
         });
       });
   }
@@ -138,7 +130,7 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO do this in a better way than DOM manipulation
   }
 
-  renderClass(clazz: Class) {
+  renderClass = (clazz: Class) => {
     const classHasSpace = clazz.capacity - clazz.sections[0].num_students > 0;
     // TODO replace this with something that actually checks this once sections have been
     // properly implemented
@@ -201,7 +193,7 @@ class ClassChangesDashboard extends Component<Props, State> {
         </div>
       </div>
     );
-  }
+  };
 
   handleSearchChange = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({
@@ -209,9 +201,24 @@ class ClassChangesDashboard extends Component<Props, State> {
     });
   };
 
+  textContainsQuery = (text: string, query: string) => {
+    return text.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  };
+
+  classContainsQuery = (clazz: Class, query: string) => {
+    return (
+      this.textContainsQuery(clazz.title, query) || this.textContainsQuery(clazz.description, query)
+    );
+  };
+
   submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("Searching for " + this.state.classSearchQuery);
-    // TODO make this functional
+    this.setState({
+      displayedCatalog: this.state.catalog.filter(clazz =>
+        this.classContainsQuery(clazz, this.state.classSearchQuery)
+      ),
+    });
+    // TODO make search functionality better/more useful
+    // TODO consider doing this on edit/removing the button
   };
 
   filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -252,8 +259,9 @@ class ClassChangesDashboard extends Component<Props, State> {
           Only open classes
         </button>
         {/*TODO add more filters*/}
-
-        {this.state.catalog.map(clazz => this.renderClass(clazz))}
+        {this.state.displayedCatalog.length > 0
+          ? this.state.displayedCatalog.map(this.renderClass)
+          : renderTextInSection("No classes match your search filters.", true)}
       </div>
     );
   }
