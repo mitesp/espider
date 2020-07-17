@@ -38,6 +38,4 @@ def get_student_dashboard(request):
     ]
     current_json.sort(key=lambda p: p["name"])  # TODO edit to be better
 
-    # TODO clean up API so we don't need weird conditionals in the UI
-
     return Response({"previous": previous_json, "current": current_json})
