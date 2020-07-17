@@ -11,20 +11,34 @@ router.register("dashboard/teacher/", views.TeacherProgramViewSet)
 
 app_name = "core"
 urlpatterns = [
-    # TODO: these paths are kinda messy -- we should read about API design and clean this up.
     path("api/", include(router.urls)),
-    path("api/<program>/<edition>/catalog/", views.ClassCatalog.as_view()),
     # Dashboard
     path("api/dashboard/student/", views.get_student_dashboard),
     # Profile
     path("api/profile/student/", views.Profile.as_view()),
-    # studentreg
-    path("api/<program>/<edition>/student/", views.StudentRegAPI.as_view()),
-    path("api/<program>/<edition>/student/emergency_info/", views.EmergencyInfo.as_view()),
-    path("api/<program>/<edition>/student/medliab/", views.MedicalLiability.as_view()),
-    path("api/<program>/<edition>/student/waiver/", views.LiabilityWaiver.as_view()),
-    path("api/<program>/<edition>/student/availability/", views.Availability.as_view()),
-    path("api/<program>/<edition>/student/schedule/", views.StudentProgramClasses.as_view()),
+    # program-specific
+    path(
+        "api/<program>/<edition>/",
+        include(
+            [
+                path("catalog/", views.ClassCatalog.as_view()),
+                # student registration
+                path(
+                    "student/",
+                    include(
+                        [
+                            path("", views.StudentRegAPI.as_view()),
+                            path("schedule/", views.StudentProgramClasses.as_view()),
+                            path("emergency_info/", views.EmergencyInfo.as_view()),
+                            path("medliab/", views.MedicalLiability.as_view()),
+                            path("waiver/", views.LiabilityWaiver.as_view()),
+                            path("availability/", views.Availability.as_view()),
+                        ]
+                    ),
+                ),
+            ]
+        ),
+    ),
     # auth API calls
     path("api/account/student/", views.StudentAccount.as_view()),
     path("api/user/", views.current_user),
