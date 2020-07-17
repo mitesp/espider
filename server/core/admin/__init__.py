@@ -146,7 +146,7 @@ class StudentRegistrationAdmin(admin.ModelAdmin):
 
     def add_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        self.fields = ("student", "program", "reg_status")
+        self.fields = ("student", "program")
         self.readonly_fields = ()
         self.inlines = []
         return super(StudentRegistrationAdmin, self).add_view(request, extra_context=extra_context)

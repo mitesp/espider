@@ -52,6 +52,12 @@ class StudentRegistration(models.Model):
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)
 
+    def save(self, *args, **kwargs):
+        if self.id is None:  # new object
+            if self.program is not None:
+                self.reg_status = self.program.student_reg_status
+        super(StudentRegistration, self).save(*args, **kwargs)
+
     @staticmethod
     def get_previous_programs(user):
         """
