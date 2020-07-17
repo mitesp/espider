@@ -4,6 +4,7 @@ import axiosInstance from "../axiosAPI";
 
 import StudentRegDashboard from "./StudentRegDashboard";
 import StudentRegistration from "./StudentRegistration";
+import ChangeClassesDashboard from "./ChangeClassesDashboard";
 import { studentRegEndpoint } from "../apiEndpoints";
 import { RegStatusOption } from "./types";
 
@@ -64,6 +65,8 @@ function RegDashboard(props: Props) {
             />
             {/* @ts-ignore TODO: thanks reach router */}
             <StudentRegistration path="register" checks={regChecks} />
+            {/* @ts-ignore TODO: thanks reach router */}
+            <ChangeClassesDashboard path="changeclasses" />
           </Router>
         )}
 

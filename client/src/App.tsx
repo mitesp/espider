@@ -17,9 +17,7 @@ import SignupPage from "./accounts/SignupPage";
 import Home from "./info/Home";
 
 import Dashboard from "./dashboard/Dashboard";
-
 import RegDashboard from "./registration/RegDashboard";
-import ChangeClassesDashboard from "./registration/ChangeClassesDashboard";
 
 import AboutUs from "./info/AboutUs";
 import Learn from "./info/Learn";
@@ -27,7 +25,6 @@ import Nextup from "./info/Nextup";
 import Program from "./info/Program";
 import Teach from "./info/Teach";
 import { programList } from "./info/Program";
-import StudentRegistration from "./registration/StudentRegistration";
 
 const NotFound = () => (
   <section className="pt-5 pb-5 container has-text-centered">
@@ -87,7 +84,6 @@ function App(props: {}) {
           {/*TODO figure out how to move these routes elsewhere for better organization*/}
 
           <RegDashboard path="/:program/:edition/*" />
-          <ChangeClassesDashboard path="/:program/:edition/changeclasses" />
           {programList.map(program => (
             <Program key={program} path={program} program={program} />
           ))}
