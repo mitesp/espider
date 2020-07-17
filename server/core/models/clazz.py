@@ -1,4 +1,3 @@
-import core.models as esp_models
 from django.db import models
 
 from .program import Program, Timeslot
@@ -18,10 +17,7 @@ class Class(models.Model):
 
     @property
     def teachers(self):
-        teacherreg_ids = self.teacherclassregs.values_list("teacherreg", flat=True)
-        teacher_ids = esp_models.TeacherRegistration.objects.filter(
-            id__in=teacherreg_ids
-        ).values_list("teacher", flat=True)
+        teacher_ids = self.teacherclassregs.values_list("teacherreg__teacher", flat=True)
         return ESPUser.objects.filter(id__in=teacher_ids).values_list("username", flat=True)
         # TODO clean this type of query up with select_related
 
