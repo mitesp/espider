@@ -45,6 +45,10 @@ const NotFound = () => (
   </section>
 );
 
+const Empty = ({ children }) => {
+  return children;
+};
+
 function App(props: {}) {
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -90,27 +94,32 @@ function App(props: {}) {
           <Learn path="learn" />
           <Nextup path="next" />
 
-          {/*TODO figure out how to move these routes elsewhere for better organization*/}
-
-          <RegDashboard path="/:program/:edition/dashboard" />
-          <UpdateProfileForm path="/:program/:edition/updateprofile" />
-          <EmergencyInfoForm path="/:program/:edition/emergencyinfo" />
-          <DummyForm
-            path="/:program/:edition/medliab"
-            url={medicalLiabilityEndpoint}
-            formName="Medical Liabilility Form"
-          />
-          <DummyForm
-            path="/:program/:edition/waiver"
-            url={liabilityWaiverEndpoint}
-            formName="Liability Waiver Form"
-          />
-          <DummyForm
-            path="/:program/:edition/availability"
-            url={studentAvailabilityEndpoint}
-            formName="Program Availability"
-          />
-          <ChangeClassesDashboard path="/:program/:edition/changeclasses" />
+          {/*TODO add optional season param*/}
+          <Empty path=":program/:edition">
+            {/*TODO make program-specific*/}
+            {/*TODO ban routes for programs/editions that don't exists */}
+            <Program path="/" />
+            <RegDashboard path="dashboard/" />
+            <UpdateProfileForm path="updateprofile" />
+            <EmergencyInfoForm path="emergencyinfo" />
+            <DummyForm
+              path="medliab"
+              url={medicalLiabilityEndpoint}
+              formName="Medical Liabilility Form"
+            />
+            <DummyForm
+              path="waiver"
+              url={liabilityWaiverEndpoint}
+              formName="Liability Waiver Form"
+            />
+            <DummyForm
+              path="availability"
+              url={studentAvailabilityEndpoint}
+              formName="Program Availability"
+            />
+            <ChangeClassesDashboard path="changeclasses" />
+            <NotFound default />
+          </Empty>
           {programList.map(program => (
             <Program key={program} path={program} program={program} />
           ))}
