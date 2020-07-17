@@ -46,6 +46,7 @@ class StudentRegistration(models.Model):
     def sections(self):
         sections = self.classregs.values_list("section", flat=True)
         return Section.objects.filter(pk__in=sections)
+        # TODO figure out if this is possible without using Section
 
     def __str__(self):
         return str(self.student.username) + "/" + str(self.program)

@@ -42,10 +42,9 @@ class StudentProgramClasses(APIView):
 
         prog = Program.objects.get(name=program, edition=edition)
         studentreg = StudentRegistration.objects.get(student=user, program=prog)
-        if "include_empty_timeslots" in params and params["include_empty_timeslots"]:
-            schedule = studentreg.get_schedule(include_empty_timeslots=True)
-        else:
-            schedule = studentreg.get_schedule()
+        include_empty_timeslots = params.get("include_empty_timeslots", False)
+        schedule = studentreg.get_schedule(include_empty_timeslots=include_empty_timeslots)
+
         ret = [
             {
                 "timeslot": timeslot.date_time_str,
