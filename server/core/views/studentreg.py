@@ -3,6 +3,7 @@ from core.models import Class, Program, Section, StudentRegistration
 from core.serializers import SectionSerializer, StudentRegSerializer
 from django.db import transaction
 from django.forms.models import model_to_dict
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -30,21 +31,19 @@ class StudentRegAPI(APIView):
 
 class StudentProgramClasses(APIView):
     """
-    Get/update a student's class list for a given program.
+    Get/update a student's section list for a given program.
     Permissions: logged in, is student, has studentreg object
     """
 
     permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, program, edition, format=None, include_empty_timeslots=False):
+    def get(self, request, program, edition, format=None):
         user = request.user
         params = request.GET
 
         prog = Program.objects.get(name=program, edition=edition)
         studentreg = StudentRegistration.objects.get(student=user, program=prog)
-        include_empty_timeslots = (
-            params.get("include_empty_timeslots", False) or include_empty_timeslots
-        )
+        include_empty_timeslots = params.get("include_empty_timeslots", False)
         schedule = studentreg.get_schedule(include_empty_timeslots=include_empty_timeslots)
 
         ret = [
@@ -59,31 +58,26 @@ class StudentProgramClasses(APIView):
 
         return Response(ret)
 
-    def post(self, request, program, edition, format=None):
-        action = request.data["action"]
-        # action can be determined from section info, but it seems unnecessary
-        if action == "add":
-            return self.add(request, program, edition)
-            # TODO implement this
-        elif action == "remove":
-            return self.remove(request, program, edition)
-        elif action == "add_waitlist":
-            return self.add_waitlist(request, program, edition)
-            # TODO implement this
 
-    def remove(self, request, program, edition):
-        data = request.data
-        user = request.user
+@api_view(["POST"])
+@permission_classes([custom_permissions.IsStudent])
+def student_remove_section(request, program, edition):
+    """
+    Remove a section from a student's enrolled sections.
+    """
+    data = request.data
+    user = request.user
 
-        prog = Program.objects.get(name=program, edition=edition)
-        studentreg = StudentRegistration.objects.get(student=user, program=prog)
+    prog = Program.objects.get(name=program, edition=edition)
+    studentreg = StudentRegistration.objects.get(student=user, program=prog)
 
-        clazz = Class.objects.get(id=data["class"])
-        section_num = data["section"]
-        section = Section.objects.get(clazz=clazz, number=section_num)
+    clazz = Class.objects.get(id=data["class"])
+    section_num = data["section"]
+    section = Section.objects.get(clazz=clazz, number=section_num)
 
-        studentreg.remove_section(section)
-        return self.get(request, program, edition, include_empty_timeslots=True)
+    studentreg.remove_section(section)
+    return Response({"message": "Success!"})
+    # TODO figure out better POST response messages
 
 
 class Profile(APIView):

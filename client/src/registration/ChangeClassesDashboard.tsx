@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 import { Class, Section, ScheduleItem } from "./types";
-import { studentScheduleEndpoint, classCatalogEndpoint } from "../apiEndpoints";
+import {
+  studentScheduleEndpoint,
+  classCatalogEndpoint,
+  studentRemoveClassesEndpoint,
+} from "../apiEndpoints";
 import { renderCustomInput } from "../forms/helpers";
 import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
@@ -121,15 +125,13 @@ class ClassChangesDashboard extends Component<Props, State> {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     if (section) {
       axiosInstance
-        .post(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`, {
-          action: "remove",
+        .post(`/${this.props.program}/${this.props.edition}/${studentRemoveClassesEndpoint}`, {
           class: section.clazz,
           section: section.number,
         })
         .then(res => {
-          this.setState({
-            schedule: res.data,
-          });
+          // TODO error handling
+          this.setupStudentClasses();
         });
       // TODO refresh catalog (if catalog doesn't include classes that the student is in)
     }
