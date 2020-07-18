@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 
 # Get the root directory of the Django project
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 ALLOWED_HOSTS = []
 
