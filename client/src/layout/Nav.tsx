@@ -4,7 +4,7 @@ import "./Nav.css";
 import { Link } from "@reach/router";
 
 import { canonicalizeProgramName, programList } from "../info/Program";
-import axiosInstance from "../axiosAPI";
+import { logout } from "../accounts/manage";
 
 import { useAuth, useLoggedIn } from "../context/auth";
 
@@ -22,12 +22,8 @@ function Nav(props: Props) {
     setMobileOpen(!mobileOpen);
   }
 
-  function logout() {
-    console.log("Logging out");
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh");
-    delete axiosInstance.defaults.headers.common["Authorization"];
-
+  function handleLogout() {
+    logout();
     props.setToken("");
   }
 
@@ -65,7 +61,7 @@ function Nav(props: Props) {
             Profile
           </a>
           <hr className="navbar-divider"></hr>
-          <Link className="navbar-item" to="logout" onClick={logout}>
+          <Link className="navbar-item" to="logout" onClick={handleLogout}>
             Log out
           </Link>
         </div>
