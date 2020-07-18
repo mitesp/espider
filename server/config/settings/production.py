@@ -3,11 +3,11 @@ import os
 import django_heroku
 
 from .base import *  # noqa
-from .base import DATABASES, DJANGO_ROOT, STATICFILES_DIRS, TEMPLATES
+from .base import BASE_DIR, DATABASES, STATICFILES_DIRS, TEMPLATES
 
 # The root directory of our codebase is one level above the django root directory
 # This lets us access things inside client (e.g. templates, static files)
-PROJECT_ROOT = os.path.dirname(DJANGO_ROOT)
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
 
 DEBUG = False
 SECRET_KEY = os.environ["SECRET_KEY"]

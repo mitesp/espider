@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 
 # Get the root directory of the Django project
-DJANGO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ALLOWED_HOSTS = []
 
@@ -34,7 +34,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(DJANGO_ROOT, "templates")],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -65,7 +65,7 @@ USE_TZ = True
 TIME_ZONE = "UTC"
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(DJANGO_ROOT, "static")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # TODO: REST/CORS/JWT stuff needs to be cleaned (ask mvadari since she set it up)
 REST_FRAMEWORK = {
