@@ -36,3 +36,7 @@ class ProgramTests(TestCase):
         active_program = active_programs[0]
         expected_program = Program.objects.get(name="Droplet", edition="3030")
         self.assertEquals(active_program, expected_program)
+
+
+class TimeslotTests(TestCase):
+    pass
