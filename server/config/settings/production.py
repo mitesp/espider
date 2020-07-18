@@ -14,8 +14,9 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 
 TEMPLATES[0]["DIRS"].append(os.path.join(PROJECT_ROOT, "client", "build"))
 
+# TODO: this probably should pull from env vars
 DATABASES["default"].update(
-    {"USER": os.environ["POSTGRES_USER"], "PASSWORD": os.environ["POSTGRES_PASSWORD"],}
+    {"USER": "postgres", "PASSWORD": "postgres",}
 )
 
 AUTH_PASSWORD_VALIDATORS = [

@@ -2,7 +2,7 @@ import csv
 
 import os  # isort:skip # NOQA
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")  # isort:skip # NOQA
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")  # isort:skip # NOQA
 
 import django  # pylint: disable=import-error # isort:skip # NOQA
 

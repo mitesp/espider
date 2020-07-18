@@ -51,7 +51,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "esp_database",
+        "NAME": "postgres",
         "HOST": "db",
         "PORT": 5432,
     }
@@ -59,13 +59,14 @@ DATABASES = {
 
 AUTH_USER_MODEL = "core.ESPUser"
 
-USE_I18N = False  # Turn off translation for now
+USE_I18N = False  # Turn off translation for now (consider turning on in the future?)
 USE_TZ = True
 TIME_ZONE = "UTC"
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(DJANGO_ROOT, "static")]
 
+# TODO: REST/CORS/JWT stuff needs to be cleaned (ask mvadari since she set it up)
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
