@@ -65,6 +65,7 @@ class StudentRegistration(models.Model):
 
     @transaction.atomic
     def remove_section(self, section):
+        # TODO account for if the student isn't enrolled in the section
         classreg = self.classregs.get(section=section)
         classreg.delete()
 

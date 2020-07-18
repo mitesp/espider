@@ -75,6 +75,7 @@ def student_remove_section(request, program, edition):
     section_num = data["section"]
     section = Section.objects.get(clazz=clazz, number=section_num)
 
+    # TODO account for if the student isn't enrolled in the section
     studentreg.remove_section(section)
     return Response({"message": "Success!"})
     # TODO figure out better POST response messages
