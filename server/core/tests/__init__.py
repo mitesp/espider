@@ -1,1 +1,1 @@
-from .test_models import *  # noqa
+from .models import *  # noqa
