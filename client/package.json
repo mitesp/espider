@@ -22,7 +22,16 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+        "react-app",
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript"
+    ],
+    "settings": {
+        "import/core-modules": ["react", "@reach/router"]
+    }
   },
   "browserslist": {
     "production": [

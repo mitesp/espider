@@ -1,40 +1,34 @@
 // @ts-nocheck TODO: fix
-import React, { useState, useEffect } from "react";
-import { Router } from "@reach/router";
 import "./App.sass";
 
-import axiosInstance from "./axiosAPI";
+import React, { useEffect, useState } from "react";
+import { Router } from "@reach/router";
 import {
-  userDataEndpoint,
-  medicalLiabilityEndpoint,
   liabilityWaiverEndpoint,
+  medicalLiabilityEndpoint,
   studentAvailabilityEndpoint,
+  userDataEndpoint,
 } from "./apiEndpoints";
-
 import { AuthContext } from "./context/auth";
+import Program, { programList } from "./info/Program";
 
-import Nav from "./layout/Nav";
-import Footer from "./layout/Footer";
-
-import LoginPage from "./accounts/LoginPage";
-import SignupPage from "./accounts/SignupPage";
-
-import Home from "./info/Home";
-
+import axiosInstance from "./axiosAPI";
+import AboutUs from "./info/AboutUs";
+import ChangeClassesDashboard from "./registration/ChangeClassesDashboard";
 import Dashboard from "./dashboard/Dashboard";
-
 import DummyForm from "./registration/DummyForm";
 import EmergencyInfoForm from "./registration/EmergencyInfoForm";
-import RegDashboard from "./registration/RegDashboard";
-import UpdateProfileForm from "./registration/UpdateProfileForm";
-import ChangeClassesDashboard from "./registration/ChangeClassesDashboard";
-
-import AboutUs from "./info/AboutUs";
+import Footer from "./layout/Footer";
+import Home from "./info/Home";
 import Learn from "./info/Learn";
+import LoginPage from "./accounts/LoginPage";
+import Nav from "./layout/Nav";
 import Nextup from "./info/Nextup";
-import Program from "./info/Program";
+
+import RegDashboard from "./registration/RegDashboard";
+import SignupPage from "./accounts/SignupPage";
 import Teach from "./info/Teach";
-import { programList } from "./info/Program";
+import UpdateProfileForm from "./registration/UpdateProfileForm";
 
 const NotFound = () => (
   <section className="pt-5 pb-5 container has-text-centered">
