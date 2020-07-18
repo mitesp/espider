@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import axiosInstance from "../axiosAPI";
-import { renderStandardFormField } from "../forms/helpers";
-import { loginEndpoint } from "../apiEndpoints";
-
 import { navigate } from "@reach/router";
+import React, { useState } from "react";
 
+import { loginEndpoint } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 import { useLoggedIn } from "../context/auth";
+import { renderStandardFormField } from "../forms/helpers";
 
 type Props = {
   setToken: (token: string) => void;

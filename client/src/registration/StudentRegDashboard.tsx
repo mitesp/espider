@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axiosInstance from "../axiosAPI";
-import { RegStatusOption, ScheduleItem } from "./types";
-import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
-import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
+import { RegStatusOption, ScheduleItem } from "./types";
+
+import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 import { useAuth } from "../context/auth";
+import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 type Props = {
   program: string;

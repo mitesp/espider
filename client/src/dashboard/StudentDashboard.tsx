@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import axiosInstance from "../axiosAPI";
+
 import { studentDashboardEndpoint } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 
 type CurrentProgram = {
   name: string;

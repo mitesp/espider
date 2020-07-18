@@ -1,12 +1,10 @@
+import { Link } from "@reach/router";
 import React, { useState } from "react";
 import "./Nav.css";
 
-import { Link } from "@reach/router";
-
-import { canonicalizeProgramName, programList } from "../info/Program";
 import axiosInstance from "../axiosAPI";
-
 import { useAuth, useLoggedIn } from "../context/auth";
+import { canonicalizeProgramName, programList } from "../info/Program";
 
 type Props = {
   setToken: (token: string) => void;

@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
+import React, { Component } from "react";
+
+import axiosInstance from "../axiosAPI";
 
 type Props = {
   edition: string;

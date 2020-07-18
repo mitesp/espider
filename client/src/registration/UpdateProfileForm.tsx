@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import axiosInstance from "../axiosAPI";
 import { navigate } from "@reach/router";
+import React, { useEffect, useState } from "react";
+
+import { studentProfileEndpoint } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 import {
   renderFirstLastName,
   renderStandardFormField,
   renderStandardFormSelect,
 } from "../forms/helpers";
-import { studentProfileEndpoint } from "../apiEndpoints";
 
 type Props = {
   edition: string;

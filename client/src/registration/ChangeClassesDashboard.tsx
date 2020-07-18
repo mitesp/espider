@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Class, ScheduleItem, Section } from "./types";
-import { classCatalogEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
-import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
+import { Class, ScheduleItem, Section } from "./types";
+
+import { classCatalogEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 import { renderCustomInput } from "../forms/helpers";
+import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 type Props = {
   username: string;
