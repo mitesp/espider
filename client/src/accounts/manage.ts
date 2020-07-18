@@ -14,7 +14,6 @@ async function login(
   return await axiosInstance
     .post(loginEndpoint, { username, password })
     .then(result => {
-      console.log(result);
       if (result.status === 200) {
         axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
         localStorage.setItem("token", result.data.access);
