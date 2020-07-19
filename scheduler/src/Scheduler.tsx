@@ -65,9 +65,11 @@ export default class Scheduler extends Component<Props, State> {
       <div className="box" key={clazz.id}>
         <div className="content">
           <p>
-            <strong>{clazz.title}</strong>
+            <i>
+              <strong>{clazz.id}</strong> - {clazz.title}
+            </i>
             <br />
-            {clazz.description}
+            {clazz.capacity} students
           </p>
         </div>
       </div>
