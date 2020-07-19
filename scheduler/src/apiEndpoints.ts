@@ -2,4 +2,7 @@
 const loginEndpoint = "/token/";
 const tokenRefreshEndpoint = "/token/refresh/";
 
-export { loginEndpoint, tokenRefreshEndpoint };
+// Program-specific (these requires /program/edition/ before)
+const timeslotEndpoint = "timeslots/";
+
+export { loginEndpoint, tokenRefreshEndpoint, timeslotEndpoint };

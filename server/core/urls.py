@@ -37,6 +37,7 @@ urlpatterns = [
                         ]
                     ),
                 ),
+                path("timeslots/", views.get_program_timeslots),
             ]
         ),
     ),

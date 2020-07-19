@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import axiosInstance from "./axiosAPI";
+import { timeslotEndpoint } from "./apiEndpoints";
 
 type Props = {
   programName: string;
@@ -32,7 +34,13 @@ export default class Scheduler extends Component<Props, State> {
   }
 
   setupTimeslots() {
-    // TODO get program timeslots
+    axiosInstance
+      .get(`/${this.props.programName}/${this.props.programEdition}/${timeslotEndpoint}`)
+      .then(res => {
+        this.setState({
+          timeslots: res.data,
+        });
+      });
   }
 
   setupClassrooms() {
@@ -53,18 +61,21 @@ export default class Scheduler extends Component<Props, State> {
                   <tr>
                     <th></th>
                     {this.state.timeslots.map((timeslot, index) => {
-                      return <th>{timeslot}</th>;
+                      return <th key={index}>{timeslot}</th>;
                     })}
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.classrooms.map((classroom, index) => {
+                  {/*this.state.classrooms.map((classroom, index) => {
                     return (
-                      <tr key={index}>
-                        <th>{classroom}</th>
+                      <tr key="classroom${index}">
+                        <th>{"classroom" + index}</th>
+                        {this.state.timeslots.map((timeslot, index) => {
+                          return <th key={"classroom" + index + "timeslot" + index}>{timeslot}</th>;
+                        })}
                       </tr>
                     );
-                  })}
+                  })*/}
                 </tbody>
               </table>
             </div>

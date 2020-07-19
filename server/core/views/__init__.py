@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 
 from .accounts import *  # noqa
 from .dashboard import *  # noqa
+from .scheduler import *  # noqa
 from .studentreg import *  # noqa
 
 # TODO figure out object permissions for all API calls
