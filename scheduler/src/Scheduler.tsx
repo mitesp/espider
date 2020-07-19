@@ -61,21 +61,21 @@ export default class Scheduler extends Component<Props, State> {
                   <tr>
                     <th></th>
                     {this.state.timeslots.map((timeslot, index) => {
-                      return <th key={index}>{timeslot}</th>;
+                      return <th key={"timeslot" + index}>{timeslot}</th>;
                     })}
                   </tr>
                 </thead>
                 <tbody>
-                  {/*this.state.classrooms.map((classroom, index) => {
+                  {this.state.classrooms.map((classroom, index) => {
                     return (
-                      <tr key="classroom${index}">
+                      <tr key={"classroom" + index}>
                         <th>{"classroom" + index}</th>
                         {this.state.timeslots.map((timeslot, index) => {
                           return <th key={"classroom" + index + "timeslot" + index}>{timeslot}</th>;
                         })}
                       </tr>
                     );
-                  })*/}
+                  })}
                 </tbody>
               </table>
             </div>
