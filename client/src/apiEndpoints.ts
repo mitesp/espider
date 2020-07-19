@@ -17,7 +17,7 @@ const classCatalogEndpoint = "catalog/";
 
 // studentreg
 const studentRegEndpoint = "student/";
-const studentRemoveClassesEndpoint = "student/classes/remove";
+const studentRemoveClassesEndpoint = "student/classes/remove/";
 
 const emergencyInfoEndpoint = "student/emergency_info/";
 const medicalLiabilityEndpoint = "student/medliab/";
