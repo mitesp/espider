@@ -1,28 +1,44 @@
 // Accounts
-export const loginEndpoint = "/token/";
-export const tokenRefreshEndpoint = "/token/refresh/";
-export const userDataEndpoint = "/user/";
-export const studentSignupEndpoint = "/account/student/";
+const loginEndpoint = "/token/";
+const tokenRefreshEndpoint = "/token/refresh/";
+const userDataEndpoint = "/user/";
+const studentSignupEndpoint = "/account/student/";
 
 // Profile
-export const studentProfileEndpoint = "/profile/student/";
+const studentProfileEndpoint = "/profile/student/";
 
 // Dashboards
-export const studentDashboardEndpoint = "/dashboard/student/";
-export const teacherDashboardEndpoint = "/dashboard/teacher/";
+const studentDashboardEndpoint = "/dashboard/student/";
+const teacherDashboardEndpoint = "/dashboard/teacher/";
 
 // Program-specific (these requires /program/edition/ before)
 
-export const classCatalogEndpoint = "catalog/";
+const classCatalogEndpoint = "catalog/";
 
 // studentreg
-export const studentRegEndpoint = "student/";
+const studentRegEndpoint = "student/";
+const studentRemoveClassesEndpoint = "student/classes/remove";
 
-export const studentRemoveClassesEndpoint = "student/classes/remove/";
-export const studentScheduleEndpoint = "student/schedule/";
+const emergencyInfoEndpoint = "student/emergency_info/";
+const medicalLiabilityEndpoint = "student/medliab/";
+const liabilityWaiverEndpoint = "student/waiver/";
+const studentAvailabilityEndpoint = "student/availability/";
+const studentScheduleEndpoint = "student/schedule/";
 
-// student registration forms
-export const emergencyInfoEndpoint = "student/emergency_info/";
-export const medicalLiabilityEndpoint = "student/medliab/";
-export const liabilityWaiverEndpoint = "student/waiver/";
-export const studentAvailabilityEndpoint = "student/availability/";
+export {
+  loginEndpoint,
+  tokenRefreshEndpoint,
+  userDataEndpoint,
+  studentSignupEndpoint,
+  studentDashboardEndpoint,
+  teacherDashboardEndpoint,
+  classCatalogEndpoint,
+  studentRegEndpoint,
+  emergencyInfoEndpoint,
+  studentProfileEndpoint,
+  medicalLiabilityEndpoint,
+  liabilityWaiverEndpoint,
+  studentAvailabilityEndpoint,
+  studentScheduleEndpoint,
+  studentRemoveClassesEndpoint,
+};
