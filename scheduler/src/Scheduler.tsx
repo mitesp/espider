@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axiosInstance from "./axiosAPI";
-import { timeslotEndpoint, classroomEndpoint } from "./apiEndpoints";
+import { timeslotEndpoint, classroomEndpoint, classesEndpoint } from "./apiEndpoints";
+import { Class } from "./types";
 
 type Props = {
   programName: string;
@@ -10,7 +11,7 @@ type Props = {
 type State = {
   timeslots: string[];
   classrooms: string[];
-  classes: string[];
+  classes: Class[];
 };
 
 export default class Scheduler extends Component<Props, State> {
@@ -30,7 +31,13 @@ export default class Scheduler extends Component<Props, State> {
   }
 
   setupClasses() {
-    // TODO get list of classes
+    axiosInstance
+      .get(`/${this.props.programName}/${this.props.programEdition}/${classesEndpoint}`)
+      .then(res => {
+        this.setState({
+          classes: res.data,
+        });
+      });
   }
 
   setupTimeslots() {
