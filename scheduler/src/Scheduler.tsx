@@ -60,6 +60,20 @@ export default class Scheduler extends Component<Props, State> {
       });
   }
 
+  renderClass = (clazz: Class) => {
+    return (
+      <div className="box" key={clazz.id}>
+        <div className="content">
+          <p>
+            <strong>{clazz.title}</strong>
+            <br />
+            {clazz.description}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div className="container content">
@@ -93,7 +107,10 @@ export default class Scheduler extends Component<Props, State> {
               </table>
             </div>
           </div>
-          <div className="column is-3 has-text-centered">Insert class list here</div>
+          <div className="column is-3 has-text-centered">
+            <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
+            {this.state.classes.map(this.renderClass)}
+          </div>
         </div>
       </div>
     );
