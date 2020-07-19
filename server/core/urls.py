@@ -22,6 +22,7 @@ urlpatterns = [
         include(
             [
                 path("catalog/", views.ClassCatalog.as_view()),
+                path("classrooms/", views.get_program_classrooms),
                 # student registration
                 path(
                     "student/",
