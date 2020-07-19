@@ -27,7 +27,7 @@ class App extends Component<{}, State> {
       <React.Fragment>
         <main className="px-3 py-5">
           <Router>
-            <Scheduler path="/" />
+            <Scheduler path="/" programName="HSSP" programEdition="Summer_2020" />
             <LoginPage path="login" />
           </Router>
         </main>

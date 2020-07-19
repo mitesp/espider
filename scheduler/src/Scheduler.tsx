@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 
+type Props = {
+  programName: string;
+  programEdition: string;
+};
+
 type State = {
   timeslots: string[];
   classrooms: string[];
   classes: string[];
 };
 
-export default class Scheduler extends Component<{}, State> {
-  constructor(props: {}) {
+export default class Scheduler extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       timeslots: [],
@@ -39,7 +44,9 @@ export default class Scheduler extends Component<{}, State> {
       <div className="container content">
         <div className="columns">
           <div className="column has-text-centered has-background-success-light">
-            <h1>Scheduler for [Program Name]</h1>
+            <h1>
+              Scheduler for {this.props.programName} {this.props.programEdition}
+            </h1>
             <div className="table-container">
               <table className="table is-fullwidth is-striped is-hoverable">
                 <thead>
