@@ -4,6 +4,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import DisplayedClass from "./DisplayedClass";
+import ClassSlot from "./ClassSlot";
 
 import axiosInstance from "./axiosAPI";
 import { timeslotEndpoint, classroomEndpoint, classesEndpoint } from "./apiEndpoints";
@@ -66,7 +67,7 @@ export default function Scheduler(props: Props) {
                           {classroom}
                         </th>
                         {timeslots.map((timeslot, index) => {
-                          return <th key={"classroom" + index + "timeslot" + index}></th>;
+                          return <ClassSlot timeslot={timeslot} classroom={classroom} />;
                         })}
                       </tr>
                     );
