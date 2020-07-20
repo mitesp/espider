@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+import { studentScheduleEndpoint } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 import { RegStatusOption, ScheduleItem } from "./types";
+import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 import { studentRegEndpoint, studentScheduleEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
@@ -10,83 +13,31 @@ import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 type Props = {
   program: string;
   edition: string;
+  checks: {
+    availabilityCheck: boolean;
+    emergencyInfoCheck: boolean;
+    liabilityCheck: boolean;
+    medliabCheck: boolean;
+    updateProfileCheck: boolean;
+  };
+  regStatus: RegStatusOption;
 };
 
 // helper functions
 
-function renderTaskNoLink(taskName: string, taskCompleted: boolean) {
-  return (
-    <h3 className="is-size-5">
-      {taskName}: {taskCompleted ? "Done" : "Not Done"}
-    </h3>
-  );
-}
-
-function renderTaskLink(taskName: string, taskCompleted: boolean, link: string) {
-  return (
-    <h3 className="is-size-5">
-      <a href={link}>{taskName}</a>: {taskCompleted ? "Done" : "Not Done"}
-    </h3>
-  );
-}
-
 function StudentRegDashboard(props: Props) {
   const { username } = useAuth();
 
-  const [regState, setRegState] = useState({
-    availabilityCheck: false,
-    emergencyInfoCheck: false,
-    liabilityCheck: false,
-    medliabCheck: false,
-    updateProfileCheck: false,
-    regStatus: RegStatusOption.Empty, // idk if this is the best solution
-  });
-
   const [schedule, setSchedule] = useState([] as ScheduleItem[]);
+  const [timeslots, setTimeslots] = useState([]);
+  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    // Set up student reg
-    axiosInstance.get(`/${props.program}/${props.edition}/${studentRegEndpoint}`).then(res => {
-      setRegState({
-        availabilityCheck: res.data.availability_check,
-        emergencyInfoCheck: res.data.emergency_info_check,
-        liabilityCheck: res.data.liability_check,
-        medliabCheck: res.data.medliab_check,
-        updateProfileCheck: res.data.update_profile_check,
-        regStatus: res.data.reg_status,
-      });
-    });
     // Set up student classes
     axiosInstance.get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`).then(res => {
       setSchedule(res.data);
     });
   }, [props.edition, props.program]);
-
-  function renderRegStatus() {
-    return (
-      <div className="column is-3">
-        <h2 className="has-text-centered is-size-3 mb-2">Registration Status</h2>
-        {regState.updateProfileCheck && renderTaskLink("Update Profile", true, "updateprofile")}
-        {regState.emergencyInfoCheck && renderTaskLink("Emergency Info", true, "emergencyinfo")}
-        {regState.medliabCheck && renderTaskNoLink("Medical Form", true)}
-        {regState.liabilityCheck && renderTaskNoLink("Liability Waiver", true)}
-        {regState.availabilityCheck && renderTaskLink("Availability", true, "availability")}
-      </div>
-    );
-  }
-
-  function renderTasks() {
-    return (
-      <div className="column is-3 has-background-success-light">
-        <h2 className="has-text-centered is-size-3 mb-2">Tasks</h2>
-        {!regState.updateProfileCheck && renderTaskLink("Update Profile", false, "updateprofile")}
-        {!regState.emergencyInfoCheck && renderTaskLink("Emergency Info", false, "emergencyinfo")}
-        {!regState.medliabCheck && renderTaskLink("Medical Form", false, "medliab")}
-        {!regState.liabilityCheck && renderTaskLink("Liability Waiver", false, "waiver")}
-        {!regState.availabilityCheck && renderTaskLink("Availability", false, "availability")}
-      </div>
-    );
-  }
 
   function renderClassPrefs(editsAllowed: boolean = false) {
     return (
@@ -142,7 +93,7 @@ function StudentRegDashboard(props: Props) {
   }
 
   function renderClassView() {
-    switch (regState.regStatus) {
+    switch (props.regStatus) {
       case RegStatusOption.ClassPreferences:
         return renderClassPrefsEditable();
       case RegStatusOption.FrozenPreferences:
@@ -162,11 +113,11 @@ function StudentRegDashboard(props: Props) {
 
   function renderClassStatus() {
     const canAddClasses =
-      regState.updateProfileCheck &&
-      regState.emergencyInfoCheck &&
-      regState.medliabCheck &&
-      regState.liabilityCheck &&
-      regState.availabilityCheck;
+      props.checks.updateProfileCheck &&
+      props.checks.emergencyInfoCheck &&
+      props.checks.medliabCheck &&
+      props.checks.liabilityCheck &&
+      props.checks.availabilityCheck;
     return (
       <div className="column">
         <h2 className="has-text-centered is-size-3 mb-2">Classes</h2>
@@ -189,8 +140,10 @@ function StudentRegDashboard(props: Props) {
       </h1>
       <br />
       <div className="columns">
-        {renderRegStatus()}
-        {renderTasks()}
+        <div className="column">
+          <h2 className="has-text-centered is-size-3 mb-2">Register</h2>
+          <a href="register">Registration steps</a>
+        </div>
         {renderClassStatus()}
       </div>
     </div>

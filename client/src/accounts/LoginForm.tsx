@@ -1,8 +1,10 @@
+import React, { useState } from "react";
+import { renderStandardFormField } from "../forms/helpers";
+
 import { navigate } from "@reach/router";
 import React, { useState } from "react";
 
-import { loginEndpoint } from "../apiEndpoints";
-import axiosInstance from "../axiosAPI";
+import { login } from "./manage";
 import { useLoggedIn } from "../context/auth";
 import { renderStandardFormField } from "../forms/helpers";
 
@@ -35,25 +37,16 @@ function LoginForm(props: Props) {
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    axiosInstance
-      .post(loginEndpoint, { username, password })
-      .then(result => {
-        if (result.status === 200) {
-          axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.access;
-          localStorage.setItem("token", result.data.access);
-          localStorage.setItem("refresh", result.data.refresh);
-          props.setToken(result.data.access);
-          // test referrer in the future
-          navigate(referer);
-        } else {
-          console.log(`bad status ${result.status}`);
-          // TODO error state
-        }
-      })
-      .catch(e => {
-        // TODO error state
-        console.log(`login post error ${e}`);
-      });
+    login(username, password).then(result => {
+      if (result.success) {
+        props.setToken(result.info);
+        // TODO: test referer in the future
+        navigate(referer);
+      } else {
+        // TODO: will need to surface error to user
+        console.log("Error with login " + result.info);
+      }
+    });
   }
 
   // TODO: add in this redirect behavior, test with referer later.

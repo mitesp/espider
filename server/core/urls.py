@@ -29,6 +29,7 @@ urlpatterns = [
                         [
                             path("", views.StudentRegAPI.as_view()),
                             path("availability/", views.Availability.as_view()),
+                            path("classes/remove/", views.student_remove_section),
                             path("emergency_info/", views.EmergencyInfo.as_view()),
                             path("medliab/", views.MedicalLiability.as_view()),
                             path("schedule/", views.StudentProgramClasses.as_view()),
