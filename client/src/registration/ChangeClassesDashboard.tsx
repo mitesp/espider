@@ -117,11 +117,6 @@ class ClassChangesDashboard extends Component<Props, State> {
     // TODO refresh page or API calls
   }
 
-  addWaitlistSection(e: React.MouseEvent, clazz: Class) {
-    e.preventDefault(); // TODO use button instead of anchor so this isn't needed
-    console.log(`Adding to waitlist ${clazz.title}`);
-  }
-
   removeSection(e: React.MouseEvent, section: Section) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     if (section) {
@@ -152,7 +147,7 @@ class ClassChangesDashboard extends Component<Props, State> {
                     href="#void"
                     key={index}
                     className="dropdown-item"
-                    onClick={e => this.addSection(e, clazz)}
+                    onClick={e => console.log(`Selected ${clazz.title} section ${section.number}`)}
                   >
                     {section.scheduled_blocks.join(" / ")}
                   </a>

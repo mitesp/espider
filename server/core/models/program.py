@@ -65,4 +65,5 @@ class Timeslot(models.Model):
     )
 
     def __str__(self):
+        # looks like Wed 10:00 AM-11:00 AM
         return "{:%-m/%d/%y, %-I:%M %p} to {:%-I:%M %p}".format(self.start, self.end)
