@@ -41,6 +41,10 @@ export default function Scheduler(props: Props) {
       });
   }, [props.programEdition, props.programName]);
 
+  function getClassById(id: number) {
+    return classes.filter(clazz => clazz.id === id)[0];
+  }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="container content">
@@ -67,7 +71,13 @@ export default function Scheduler(props: Props) {
                           {classroom}
                         </th>
                         {timeslots.map((timeslot, index) => {
-                          return <ClassSlot timeslot={timeslot} classroom={classroom} />;
+                          return (
+                            <ClassSlot
+                              timeslot={timeslot}
+                              classroom={classroom}
+                              getClass={getClassById}
+                            />
+                          );
                         })}
                       </tr>
                     );

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactTooltip from "react-tooltip";
-import { useDrag, DragSourceMonitor } from "react-dnd";
+import { useDrag } from "react-dnd";
 
 import { Class } from "./types";
 
@@ -11,12 +11,6 @@ type Props = {
 export default function DisplayedClass(props: Props) {
   const [, drag] = useDrag({
     item: { id: props.clazz.id, type: "Class" },
-    end: (item: { id: number } | undefined, monitor: DragSourceMonitor) => {
-      const dropResult = monitor.getDropResult();
-      if (item && dropResult) {
-        console.log(`You moved ${item.id} to ${dropResult.id}!`);
-      }
-    },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
