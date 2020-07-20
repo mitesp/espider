@@ -66,7 +66,7 @@ export default class Scheduler extends Component<Props, State> {
 
   renderClass = (clazz: Class) => {
     return (
-      <div className="box" key={clazz.id}>
+      <div className="box" key={clazz.id} data-tip data-for={"class-data" + clazz.id}>
         <div className="content">
           <p>
             <i>
@@ -76,6 +76,15 @@ export default class Scheduler extends Component<Props, State> {
             {clazz.capacity} students
           </p>
         </div>
+        <ReactTooltip
+          id={"class-data" + clazz.id}
+          key={"class-data" + clazz.id}
+          place="top"
+          type="info"
+          effect="solid"
+        >
+          <span>Show {clazz.title} information</span>
+        </ReactTooltip>
       </div>
     );
   };
