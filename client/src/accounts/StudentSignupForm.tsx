@@ -1,9 +1,9 @@
+import { navigate } from "@reach/router";
 import React, { Component } from "react";
+
+import { studentSignupEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 import { renderStandardFormField } from "../forms/helpers";
-import { studentSignupEndpoint } from "../apiEndpoints";
-
-import { navigate } from "@reach/router";
 
 type Props = {
   setToken: (token: string) => void;

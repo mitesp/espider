@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import StudentSignupForm from "./StudentSignupForm";
 import { SignupType } from "./types";
 

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { renderStandardFormField } from "../forms/helpers";
-
 import { navigate } from "@reach/router";
+import React, { useState } from "react";
 
 import { login } from "./manage";
+
 import { useLoggedIn } from "../context/auth";
+import { renderStandardFormField } from "../forms/helpers";
 
 type Props = {
   setToken: (token: string) => void;

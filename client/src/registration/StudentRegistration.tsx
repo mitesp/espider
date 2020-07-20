@@ -3,6 +3,10 @@ import React, { useState } from "react";
 //TODO use sass for customization possibilities in the future
 import "./bulma-steps.min.css";
 
+import DummyForm from "./DummyForm";
+import EmergencyInfoForm from "./EmergencyInfoForm";
+import UpdateProfileForm from "./UpdateProfileForm";
+
 import {
   liabilityWaiverEndpoint,
   medicalLiabilityEndpoint,
@@ -10,10 +14,6 @@ import {
 } from "../apiEndpoints";
 
 // import { useAuth } from "../context/auth";
-
-import UpdateProfileForm from "./UpdateProfileForm";
-import EmergencyInfoForm from "./EmergencyInfoForm";
-import DummyForm from "./DummyForm";
 
 type Props = {
   program: string;

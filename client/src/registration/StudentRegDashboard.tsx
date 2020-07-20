@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
+import { RegStatusOption, ScheduleItem } from "./types";
+
 import { studentScheduleEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
-import { RegStatusOption, ScheduleItem } from "./types";
-import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
-
 import { useAuth } from "../context/auth";
+import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 type Props = {
   program: string;
@@ -26,8 +26,6 @@ function StudentRegDashboard(props: Props) {
   const { username } = useAuth();
 
   const [schedule, setSchedule] = useState([] as ScheduleItem[]);
-  const [timeslots, setTimeslots] = useState([]);
-  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
     // Set up student classes

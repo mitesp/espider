@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import axiosInstance from "../axiosAPI";
-import { Class, Section, ScheduleItem } from "./types";
+
+import { Class, ScheduleItem, Section } from "./types";
+
 import {
   studentScheduleEndpoint,
   classCatalogEndpoint,
   studentRemoveClassesEndpoint,
 } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 import { renderCustomInput } from "../forms/helpers";
 import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 

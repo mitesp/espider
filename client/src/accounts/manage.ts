@@ -1,5 +1,5 @@
-import axiosInstance from "../axiosAPI";
 import { loginEndpoint } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 
 /**
  * Attempts to log in with given username and password. If successful, sets

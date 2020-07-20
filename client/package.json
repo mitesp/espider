@@ -22,7 +22,23 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:import/typescript"
+    ],
+    "rules": {
+      "import/no-unresolved": ["off"],
+      "import/order": ["error", {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "groups": ["builtin", "external", "internal", "sibling", "parent"],
+        "newlines-between": "always"
+      }]
+    }
   },
   "browserslist": {
     "production": [

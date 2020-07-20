@@ -1,30 +1,24 @@
 // @ts-nocheck TODO: fix
-import React, { useState, useEffect } from "react";
-import { Router } from "@reach/router";
 import "./App.sass";
 
-import axiosInstance from "./axiosAPI";
-import { userDataEndpoint } from "./apiEndpoints";
-
-import { AuthContext } from "./context/auth";
-
-import Nav from "./layout/Nav";
-import Footer from "./layout/Footer";
+import { Router } from "@reach/router";
+import React, { useEffect, useState } from "react";
 
 import LoginPage from "./accounts/LoginPage";
 import SignupPage from "./accounts/SignupPage";
-
-import Home from "./info/Home";
-
+import { userDataEndpoint } from "./apiEndpoints";
+import axiosInstance from "./axiosAPI";
+import { AuthContext } from "./context/auth";
 import Dashboard from "./dashboard/Dashboard";
-import RegDashboard from "./registration/RegDashboard";
-
 import AboutUs from "./info/AboutUs";
+import Home from "./info/Home";
 import Learn from "./info/Learn";
 import Nextup from "./info/Nextup";
-import Program from "./info/Program";
+import Program, { programList } from "./info/Program";
 import Teach from "./info/Teach";
-import { programList } from "./info/Program";
+import Footer from "./layout/Footer";
+import Nav from "./layout/Nav";
+import RegDashboard from "./registration/RegDashboard";
 
 const NotFound = () => (
   <section className="pt-5 pb-5 container has-text-centered">
