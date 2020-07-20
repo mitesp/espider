@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
 import { Router, Redirect } from "@reach/router";
-import axiosInstance from "../axiosAPI";
+import React, { useEffect, useState } from "react";
 
+import ChangeClassesDashboard from "./ChangeClassesDashboard";
 import StudentRegDashboard from "./StudentRegDashboard";
 import StudentRegistration from "./StudentRegistration";
-import ChangeClassesDashboard from "./ChangeClassesDashboard";
-import { studentRegEndpoint } from "../apiEndpoints";
 import { RegStatusOption } from "./types";
 
+import { studentRegEndpoint } from "../apiEndpoints";
+import axiosInstance from "../axiosAPI";
 import { useAuth, useLoggedIn } from "../context/auth";
 
 // import TeacherDashboard from "./TeacherRegDashboard";
