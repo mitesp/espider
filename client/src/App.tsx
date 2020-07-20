@@ -71,6 +71,7 @@ function App(props: {}) {
         <Router>
           {/* TODO: nest routes */}
           <Home path="/" />
+          {/* TODO: better page than homepage? Notification of logout success? */}
           <Home path="logout" />
           <LoginPage path="login" username={userInfo.username} setToken={setToken} />
           <SignupPage path="signup" username={userInfo.username} setToken={setToken} />
