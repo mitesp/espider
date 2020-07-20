@@ -3,6 +3,8 @@ import ReactTooltip from "react-tooltip";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
+import DisplayedClass from "./DisplayedClass";
+
 import axiosInstance from "./axiosAPI";
 import { timeslotEndpoint, classroomEndpoint, classesEndpoint } from "./apiEndpoints";
 import { Class } from "./types";
@@ -37,31 +39,6 @@ export default function Scheduler(props: Props) {
         setClasses(res.data);
       });
   }, [props.programEdition, props.programName]);
-
-  function renderClass(clazz: Class) {
-    return (
-      <div className="box" key={clazz.id} data-tip data-for={"class-data" + clazz.id}>
-        <div className="content">
-          <p>
-            <i>
-              <strong>{clazz.id}</strong> - {clazz.title}
-            </i>
-            <br />
-            {clazz.capacity} students
-          </p>
-        </div>
-        <ReactTooltip
-          id={"class-data" + clazz.id}
-          key={"class-data" + clazz.id}
-          place="top"
-          type="info"
-          effect="solid"
-        >
-          <span>Show {clazz.title} information</span>
-        </ReactTooltip>
-      </div>
-    );
-  }
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -113,7 +90,9 @@ export default function Scheduler(props: Props) {
           </div>
           <div className="column is-3 has-text-centered">
             <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
-            {classes.map(renderClass)}
+            {classes.map(clazz => (
+              <DisplayedClass clazz={clazz} />
+            ))}
           </div>
         </div>
       </div>
