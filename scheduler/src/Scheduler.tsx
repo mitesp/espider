@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import ReactTooltip from "react-tooltip";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -12,59 +12,33 @@ type Props = {
   programEdition: string;
 };
 
-type State = {
-  timeslots: string[];
-  classrooms: string[];
-  classes: Class[];
-};
+export default function Scheduler(props: Props) {
+  const [timeslots, setTimeslots] = useState([] as string[]);
+  const [classrooms, setClassrooms] = useState([] as string[]);
+  const [classes, setClasses] = useState([] as Class[]);
 
-export default class Scheduler extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      timeslots: [],
-      classrooms: [],
-      classes: [],
-    };
-  }
-
-  componentDidMount() {
-    this.setupClasses();
-    this.setupTimeslots();
-    this.setupClassrooms();
-  }
-
-  setupClasses() {
+  useEffect(() => {
+    // Set up timeslots
     axiosInstance
-      .get(`/${this.props.programName}/${this.props.programEdition}/${classesEndpoint}`)
+      .get(`/${props.programName}/${props.programEdition}/${timeslotEndpoint}`)
       .then(res => {
-        this.setState({
-          classes: res.data,
-        });
+        setTimeslots(res.data);
       });
-  }
-
-  setupTimeslots() {
+    // Set up classrooms
     axiosInstance
-      .get(`/${this.props.programName}/${this.props.programEdition}/${timeslotEndpoint}`)
+      .get(`/${props.programName}/${props.programEdition}/${classroomEndpoint}`)
       .then(res => {
-        this.setState({
-          timeslots: res.data,
-        });
+        setClassrooms(res.data);
       });
-  }
-
-  setupClassrooms() {
+    // Set up classes
     axiosInstance
-      .get(`/${this.props.programName}/${this.props.programEdition}/${classroomEndpoint}`)
+      .get(`/${props.programName}/${props.programEdition}/${classesEndpoint}`)
       .then(res => {
-        this.setState({
-          classrooms: res.data,
-        });
+        setClasses(res.data);
       });
-  }
+  }, [props.programEdition, props.programName]);
 
-  renderClass = (clazz: Class) => {
+  function renderClass(clazz: Class) {
     return (
       <div className="box" key={clazz.id} data-tip data-for={"class-data" + clazz.id}>
         <div className="content">
@@ -87,64 +61,62 @@ export default class Scheduler extends Component<Props, State> {
         </ReactTooltip>
       </div>
     );
-  };
+  }
 
-  render() {
-    return (
-      <DndProvider backend={HTML5Backend}>
-        <div className="container content">
-          <div className="columns">
-            <div className="column has-text-centered has-background-success-light">
-              <h1>
-                Scheduler for {this.props.programName} {this.props.programEdition}
-              </h1>
-              <div className="table-container">
-                <table className="table is-fullwidth is-striped is-hoverable">
-                  <thead>
-                    <tr>
-                      <th></th>
-                      {this.state.timeslots.map((timeslot, index) => {
-                        return <th key={"timeslot" + index}>{timeslot}</th>;
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.classrooms.map((classroom, index) => {
-                      return (
-                        <tr key={"classroom" + index}>
-                          <th data-tip data-for={"classroom-data" + index}>
-                            {classroom}
-                          </th>
-                          {this.state.timeslots.map((timeslot, index) => {
-                            return <th key={"classroom" + index + "timeslot" + index}></th>;
-                          })}
-                        </tr>
-                      );
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="container content">
+        <div className="columns">
+          <div className="column has-text-centered has-background-success-light">
+            <h1>
+              Scheduler for {props.programName} {props.programEdition}
+            </h1>
+            <div className="table-container">
+              <table className="table is-fullwidth is-striped is-hoverable">
+                <thead>
+                  <tr>
+                    <th></th>
+                    {timeslots.map((timeslot, index) => {
+                      return <th key={"timeslot" + index}>{timeslot}</th>;
                     })}
-                  </tbody>
-                </table>
-                {this.state.classrooms.map((classroom, index) => {
-                  return (
-                    <ReactTooltip
-                      id={"classroom-data" + index}
-                      key={"classroom-data" + index}
-                      place="right"
-                      type="info"
-                      effect="solid"
-                    >
-                      <span>Show {classroom} information</span>
-                    </ReactTooltip>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="column is-3 has-text-centered">
-              <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
-              {this.state.classes.map(this.renderClass)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {classrooms.map((classroom, index) => {
+                    return (
+                      <tr key={"classroom" + index}>
+                        <th data-tip data-for={"classroom-data" + index}>
+                          {classroom}
+                        </th>
+                        {timeslots.map((timeslot, index) => {
+                          return <th key={"classroom" + index + "timeslot" + index}></th>;
+                        })}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {classrooms.map((classroom, index) => {
+                return (
+                  <ReactTooltip
+                    id={"classroom-data" + index}
+                    key={"classroom-data" + index}
+                    place="right"
+                    type="info"
+                    effect="solid"
+                  >
+                    <span>Show {classroom} information</span>
+                  </ReactTooltip>
+                );
+              })}
             </div>
           </div>
+          <div className="column is-3 has-text-centered">
+            <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
+            {classes.map(renderClass)}
+          </div>
         </div>
-      </DndProvider>
-    );
-  }
+      </div>
+    </DndProvider>
+  );
 }
