@@ -4,12 +4,7 @@ import { Router } from "@reach/router";
 import "./App.sass";
 
 import axiosInstance from "./axiosAPI";
-import {
-  userDataEndpoint,
-  medicalLiabilityEndpoint,
-  liabilityWaiverEndpoint,
-  studentAvailabilityEndpoint,
-} from "./apiEndpoints";
+import { userDataEndpoint } from "./apiEndpoints";
 
 import { AuthContext } from "./context/auth";
 
@@ -22,12 +17,7 @@ import SignupPage from "./accounts/SignupPage";
 import Home from "./info/Home";
 
 import Dashboard from "./dashboard/Dashboard";
-
-import DummyForm from "./registration/DummyForm";
-import EmergencyInfoForm from "./registration/EmergencyInfoForm";
 import RegDashboard from "./registration/RegDashboard";
-import UpdateProfileForm from "./registration/UpdateProfileForm";
-import ChangeClassesDashboard from "./registration/ChangeClassesDashboard";
 
 import AboutUs from "./info/AboutUs";
 import Learn from "./info/Learn";
@@ -79,6 +69,7 @@ function App(props: {}) {
       <Nav setToken={setToken} />
       <main className="px-3 py-5">
         <Router>
+          {/* TODO: nest routes */}
           <Home path="/" />
           <Home path="logout" />
           <LoginPage path="login" username={userInfo.username} setToken={setToken} />
@@ -92,25 +83,7 @@ function App(props: {}) {
 
           {/*TODO figure out how to move these routes elsewhere for better organization*/}
 
-          <RegDashboard path="/:program/:edition/dashboard" />
-          <UpdateProfileForm path="/:program/:edition/updateprofile" />
-          <EmergencyInfoForm path="/:program/:edition/emergencyinfo" />
-          <DummyForm
-            path="/:program/:edition/medliab"
-            url={medicalLiabilityEndpoint}
-            formName="Medical Liabilility Form"
-          />
-          <DummyForm
-            path="/:program/:edition/waiver"
-            url={liabilityWaiverEndpoint}
-            formName="Liability Waiver Form"
-          />
-          <DummyForm
-            path="/:program/:edition/availability"
-            url={studentAvailabilityEndpoint}
-            formName="Program Availability"
-          />
-          <ChangeClassesDashboard path="/:program/:edition/changeclasses" />
+          <RegDashboard path="/:program/:edition/*" />
           {programList.map(program => (
             <Program key={program} path={program} program={program} />
           ))}
