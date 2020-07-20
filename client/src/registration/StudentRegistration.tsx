@@ -80,7 +80,6 @@ function StudentRegistration(props: Props) {
     );
   }
 
-  console.log(props.checks);
   return (
     <div className="container">
       <ul className="steps has-content-centered">
