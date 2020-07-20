@@ -24,6 +24,7 @@ function Nav(props: Props) {
 
   function handleLogout() {
     logout();
+    // NOTE: we need to set the token to empty for application context state
     props.setToken("");
   }
 
