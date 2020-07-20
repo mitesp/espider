@@ -1,8 +1,9 @@
 import core.permissions as custom_permissions
-from core.models import Program, StudentRegistration
+from core.models import Class, Program, Section, StudentRegistration
 from core.serializers import SectionSerializer, StudentRegSerializer
 from django.db import transaction
 from django.forms.models import model_to_dict
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -30,7 +31,7 @@ class StudentRegAPI(APIView):
 
 class StudentProgramClasses(APIView):
     """
-    Get/update a student's class list for a given program.
+    Get/update a student's section list for a given program.
     Permissions: logged in, is student, has studentreg object
     """
 
@@ -56,6 +57,28 @@ class StudentProgramClasses(APIView):
         # TODO consider refactoring to incorporate shardulc's comments in PR #22
 
         return Response(ret)
+
+
+@api_view(["POST"])
+@permission_classes([custom_permissions.IsStudent])
+def student_remove_section(request, program, edition):
+    """
+    Remove a section from a student's enrolled sections.
+    """
+    data = request.data
+    user = request.user
+
+    prog = Program.objects.get(name=program, edition=edition)
+    studentreg = StudentRegistration.objects.get(student=user, program=prog)
+
+    clazz = Class.objects.get(id=data["class"])
+    section_num = data["section"]
+    section = Section.objects.get(clazz=clazz, number=section_num)
+
+    # TODO account for if the student isn't enrolled in the section
+    studentreg.remove_section(section)
+    return Response({"message": "Success!"})
+    # TODO figure out better POST response messages
 
 
 class Profile(APIView):
