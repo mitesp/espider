@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 import axiosInstance from "./axiosAPI";
 import { timeslotEndpoint, classroomEndpoint, classesEndpoint } from "./apiEndpoints";
 import { Class } from "./types";
@@ -79,58 +82,60 @@ export default class Scheduler extends Component<Props, State> {
 
   render() {
     return (
-      <div className="container content">
-        <div className="columns">
-          <div className="column has-text-centered has-background-success-light">
-            <h1>
-              Scheduler for {this.props.programName} {this.props.programEdition}
-            </h1>
-            <div className="table-container">
-              <table className="table is-fullwidth is-striped is-hoverable">
-                <thead>
-                  <tr>
-                    <th></th>
-                    {this.state.timeslots.map((timeslot, index) => {
-                      return <th key={"timeslot" + index}>{timeslot}</th>;
+      <DndProvider backend={HTML5Backend}>
+        <div className="container content">
+          <div className="columns">
+            <div className="column has-text-centered has-background-success-light">
+              <h1>
+                Scheduler for {this.props.programName} {this.props.programEdition}
+              </h1>
+              <div className="table-container">
+                <table className="table is-fullwidth is-striped is-hoverable">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      {this.state.timeslots.map((timeslot, index) => {
+                        return <th key={"timeslot" + index}>{timeslot}</th>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.classrooms.map((classroom, index) => {
+                      return (
+                        <tr key={"classroom" + index}>
+                          <th data-tip data-for={"classroom-data" + index}>
+                            {classroom}
+                          </th>
+                          {this.state.timeslots.map((timeslot, index) => {
+                            return <th key={"classroom" + index + "timeslot" + index}></th>;
+                          })}
+                        </tr>
+                      );
                     })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.classrooms.map((classroom, index) => {
-                    return (
-                      <tr key={"classroom" + index}>
-                        <th data-tip data-for={"classroom-data" + index}>
-                          {classroom}
-                        </th>
-                        {this.state.timeslots.map((timeslot, index) => {
-                          return <th key={"classroom" + index + "timeslot" + index}></th>;
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              {this.state.classrooms.map((classroom, index) => {
-                return (
-                  <ReactTooltip
-                    id={"classroom-data" + index}
-                    key={"classroom-data" + index}
-                    place="right"
-                    type="info"
-                    effect="solid"
-                  >
-                    <span>Show {classroom} information</span>
-                  </ReactTooltip>
-                );
-              })}
+                  </tbody>
+                </table>
+                {this.state.classrooms.map((classroom, index) => {
+                  return (
+                    <ReactTooltip
+                      id={"classroom-data" + index}
+                      key={"classroom-data" + index}
+                      place="right"
+                      type="info"
+                      effect="solid"
+                    >
+                      <span>Show {classroom} information</span>
+                    </ReactTooltip>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="column is-3 has-text-centered">
+              <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
+              {this.state.classes.map(this.renderClass)}
             </div>
           </div>
-          <div className="column is-3 has-text-centered">
-            <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
-            {this.state.classes.map(this.renderClass)}
-          </div>
         </div>
-      </div>
+      </DndProvider>
     );
   }
 }
