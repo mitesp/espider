@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactTooltip from "react-tooltip";
 import axiosInstance from "./axiosAPI";
 import { timeslotEndpoint, classroomEndpoint, classesEndpoint } from "./apiEndpoints";
 import { Class } from "./types";
@@ -98,7 +99,9 @@ export default class Scheduler extends Component<Props, State> {
                   {this.state.classrooms.map((classroom, index) => {
                     return (
                       <tr key={"classroom" + index}>
-                        <th>{classroom}</th>
+                        <th data-tip data-for={"classroom-data" + index}>
+                          {classroom}
+                        </th>
                         {this.state.timeslots.map((timeslot, index) => {
                           return <th key={"classroom" + index + "timeslot" + index}></th>;
                         })}
@@ -107,6 +110,19 @@ export default class Scheduler extends Component<Props, State> {
                   })}
                 </tbody>
               </table>
+              {this.state.classrooms.map((classroom, index) => {
+                return (
+                  <ReactTooltip
+                    id={"classroom-data" + index}
+                    key={"classroom-data" + index}
+                    place="right"
+                    type="info"
+                    effect="solid"
+                  >
+                    <span>Show {classroom} information</span>
+                  </ReactTooltip>
+                );
+              })}
             </div>
           </div>
           <div className="column is-3 has-text-centered">
