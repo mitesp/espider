@@ -17,6 +17,8 @@ function LoginForm(props: Props) {
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
+    // TODO: find better way than to associate field variable name and form
+    // string name
     switch (name) {
       case "username":
         setUsername(value);

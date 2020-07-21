@@ -1,4 +1,4 @@
-import { loginEndpoint } from "../apiEndpoints";
+import { loginEndpoint, studentSignupEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 
 /**
@@ -28,6 +28,36 @@ async function login(
     });
 }
 
+async function signupStudent(
+  username: string,
+  password: string,
+  phoneNumber: string,
+  school: string
+): Promise<{ success: boolean; info: string }> {
+  return await axiosInstance
+    .post(studentSignupEndpoint, {
+      username,
+      password,
+      profile: {
+        phone_number: phoneNumber,
+        school: school,
+      },
+    })
+    .then(result => {
+      if (result.status === 201) {
+        axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
+        localStorage.setItem("token", result.data.tokens.access);
+        localStorage.setItem("refresh", result.data.tokens.refresh);
+        return { success: true, info: result.data.access };
+      } else {
+        return { success: false, info: `return bad status ${result.status}` };
+      }
+    })
+    .catch(e => {
+      return { success: false, info: e };
+    });
+}
+
 /**
  * Logs user out by deleting local tokens.
  * TODO: keep track of logging out on the server?
@@ -38,4 +68,4 @@ function logout() {
   delete axiosInstance.defaults.headers.common["Authorization"];
 }
 
-export { login, logout };
+export { login, logout, signupStudent };

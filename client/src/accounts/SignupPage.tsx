@@ -1,68 +1,87 @@
-import React, { Component } from "react";
+import { Link } from "@reach/router";
+import React, { useState } from "react";
 
 import StudentSignupForm from "./StudentSignupForm";
 import { SignupType } from "./types";
 
+import { logout } from "../accounts/manage";
+import { useAuth, useLoggedIn } from "../context/auth";
+
 type Props = {
-  username: string;
   setToken: (token: string) => void;
 };
 
-type State = {
-  selectedSignupType: SignupType;
-};
+function SignupPage(props: Props) {
+  const { username } = useAuth();
+  const loggedIn = useLoggedIn();
 
-class SignupPage extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      selectedSignupType: SignupType.Student,
-    };
+  const [selectedSignupType, setSelectedSignupType] = useState(SignupType.Student);
+
+  function getButtonClass(signupType: SignupType) {
+    return `button ${selectedSignupType === signupType ? "is-active" : ""}`;
   }
 
-  getButtonClass(signupType: SignupType) {
-    return `button ${this.state.selectedSignupType === signupType ? "is-active" : ""}`;
-  }
-
-  handleClick(signupType: SignupType) {
-    if (signupType !== this.state.selectedSignupType) {
-      this.setState({ selectedSignupType: signupType });
+  function handleClick(signupType: SignupType) {
+    if (signupType !== selectedSignupType) {
+      setSelectedSignupType(signupType);
     }
   }
 
-  render() {
+  function handleLogout() {
+    logout();
+    // NOTE: we need to set the token to empty for application context state
+    props.setToken("");
+  }
+
+  function renderAlreadyLoggedIn() {
     return (
-      <div className="container">
-        <div className="columns">
-          <div className="column is-6 is-offset-3">
-            <h1 className="has-text-centered is-size-3">Sign Up</h1>
-            <p>I am a...</p>
-
-            <button
-              className={this.getButtonClass(SignupType.Student)}
-              onClick={() => this.handleClick(SignupType.Student)}
-            >
-              Student
-            </button>
-            <button
-              className={this.getButtonClass(SignupType.Teacher)}
-              onClick={() => this.handleClick(SignupType.Teacher)}
-            >
-              Teacher
-            </button>
-
-            {this.state.selectedSignupType === SignupType.Student && (
-              <StudentSignupForm setToken={this.props.setToken} />
-            )}
-
-            {/*TODO: add teacher form */}
-          </div>
-        </div>
-      </div>
-      //TODO: add already have an account? link
-      //TODO: redirect or soemthing if already logged in
+      <p>
+        You are currently logged in as {username}. To create a new account, please{" "}
+        <Link to="logout" onClick={handleLogout}>
+          log out
+        </Link>{" "}
+        first.
+      </p>
     );
   }
+
+  function renderSignupForms() {
+    return (
+      <React.Fragment>
+        <h1 className="has-text-centered is-size-3">Sign Up</h1>
+        <p>I am a...</p>
+
+        <button
+          className={getButtonClass(SignupType.Student)}
+          onClick={() => handleClick(SignupType.Student)}
+        >
+          Student
+        </button>
+        <button
+          className={getButtonClass(SignupType.Teacher)}
+          onClick={() => handleClick(SignupType.Teacher)}
+        >
+          Teacher
+        </button>
+
+        {selectedSignupType === SignupType.Student && (
+          <StudentSignupForm setToken={props.setToken} />
+        )}
+
+        {/*TODO: add teacher form */}
+      </React.Fragment>
+    );
+  }
+
+  return (
+    <div className="container">
+      <div className="columns">
+        <div className="column is-6 is-offset-3">
+          {loggedIn ? renderAlreadyLoggedIn() : renderSignupForms()}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default SignupPage;
