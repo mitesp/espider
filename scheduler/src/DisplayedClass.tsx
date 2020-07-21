@@ -1,15 +1,15 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 
-import { Class } from "./types";
+import { Section } from "./types";
 
 type Props = {
-  clazz: Class;
+  section: Section;
 };
 
-export default function DisplayedClass(props: Props) {
+export default function DisplayedSection(props: Props) {
   const [, drag] = useDrag({
-    item: { id: props.clazz.id, type: "Class" },
+    item: { id: props.section.id, type: "Section" },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
@@ -19,17 +19,17 @@ export default function DisplayedClass(props: Props) {
     <div
       ref={drag}
       className="box"
-      key={props.clazz.id}
+      key={props.section.id}
       data-tip
-      data-for={"class-data" + props.clazz.id}
+      data-for={"class-data" + props.section.id}
     >
       <div className="content">
         <p>
           <i>
-            <strong>{props.clazz.id}</strong> - {props.clazz.title}
+            <strong>{props.section.clazz}</strong> - {props.section.name}
           </i>
           <br />
-          {props.clazz.capacity} students
+          Other relevant information
         </p>
       </div>
     </div>

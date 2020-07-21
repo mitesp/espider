@@ -7,8 +7,8 @@ import DisplayedClass from "./DisplayedClass";
 import ClassSlot from "./ClassSlot";
 
 import axiosInstance from "./axiosAPI";
-import { timeslotEndpoint, classroomEndpoint, classesEndpoint } from "./apiEndpoints";
-import { Class } from "./types";
+import { timeslotEndpoint, classroomEndpoint, sectionsEndpoint } from "./apiEndpoints";
+import { Section } from "./types";
 
 type Props = {
   programName: string;
@@ -18,8 +18,8 @@ type Props = {
 export default function Scheduler(props: Props) {
   const [timeslots, setTimeslots] = useState([] as string[]);
   const [classrooms, setClassrooms] = useState([] as string[]);
-  const [classes, setClasses] = useState([] as Class[]);
-  const [unscheduledClasses, setUnscheduledClasses] = useState([] as Class[]);
+  const [sections, setSections] = useState([] as Section[]);
+  const [unscheduledSections, setUnscheduledSections] = useState([] as Section[]);
 
   useEffect(() => {
     // Set up timeslots
@@ -34,25 +34,26 @@ export default function Scheduler(props: Props) {
       .then(res => {
         setClassrooms(res.data);
       });
-    // Set up classes
+    // Set up sections
     axiosInstance
-      .get(`/${props.programName}/${props.programEdition}/${classesEndpoint}`)
+      .get(`/${props.programName}/${props.programEdition}/${sectionsEndpoint}`)
       .then(res => {
-        setClasses(res.data);
-        setUnscheduledClasses(res.data);
+        setSections(res.data);
+        setUnscheduledSections(res.data);
       });
   }, [props.programEdition, props.programName]);
 
-  function getClassById(id: number) {
-    return classes.filter(clazz => clazz.id === id)[0];
+  function getSectionById(id: number) {
+    return sections.filter(section => section.id === id)[0];
   }
 
-  function scheduleClass(id: number, classroom: string, timeslot: string) {
-    const clazz = getClassById(id);
-    clazz.scheduled = true;
-    setUnscheduledClasses(classes.filter(clazz => clazz.scheduled !== true));
-    // TODO send API call to actually schedule the class
-    console.log(`Scheduled class ${id} in ${classroom} at ${timeslot}`);
+  function scheduleSection(id: number, classroom: string, timeslot: string) {
+    const section = getSectionById(id);
+    section.scheduled = true;
+    setUnscheduledSections(sections.filter(section => section.scheduled !== true));
+    // TODO sort ^ by clazz
+    // TODO send API call to actually schedule the section
+    console.log(`Scheduled section ${id} in ${classroom} at ${timeslot}`);
   }
 
   return (
@@ -86,8 +87,8 @@ export default function Scheduler(props: Props) {
                               key={`${timeslot}/${classroom}`}
                               timeslot={timeslot}
                               classroom={classroom}
-                              getClass={getClassById}
-                              scheduleClass={scheduleClass}
+                              getSection={getSectionById}
+                              scheduleSection={scheduleSection}
                             />
                           );
                         })}
@@ -109,17 +110,17 @@ export default function Scheduler(props: Props) {
                   </ReactTooltip>
                 );
               })}
-              {classes.map((clazz, index) => {
+              {sections.map((section, index) => {
                 return (
                   <ReactTooltip
-                    id={"classData-" + clazz.id}
-                    key={"classData-" + clazz.id}
+                    id={"classData-" + section.id}
+                    key={"classData-" + section.id}
                     place="right"
                     type="info"
                     effect="solid"
                   >
                     <span>
-                      {clazz.title}
+                      {section.name}
                       <br />
                       Show class information here
                     </span>
@@ -130,10 +131,10 @@ export default function Scheduler(props: Props) {
           </div>
           <div className="column is-3 has-text-centered">
             <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
-            {unscheduledClasses
-              .filter(clazz => !clazz.scheduled)
-              .map(clazz => (
-                <DisplayedClass key={clazz.id} clazz={clazz} />
+            {unscheduledSections
+              .filter(section => !section.scheduled)
+              .map(section => (
+                <DisplayedClass key={section.id} section={section} />
               ))}
           </div>
         </div>

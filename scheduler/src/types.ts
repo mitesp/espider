@@ -4,5 +4,12 @@ export type Class = {
   description: string;
   capacity: number;
   teachers: string[];
-  scheduled?: boolean; // will be replaced by scheduling information in Section
+};
+
+export type Section = {
+  id: number;
+  clazz: number;
+  name: string;
+  number: number;
+  scheduled?: boolean; //// will be replaced by scheduling information
 };

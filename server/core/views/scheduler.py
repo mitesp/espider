@@ -1,4 +1,5 @@
-from core.models import Program
+from core.models import Program, Section
+from core.serializers import SectionSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -15,3 +16,11 @@ def get_program_classrooms(request, program, edition):
     program = Program.objects.get(name=program, edition=edition)
     classrooms = ["32-123", "26-100", "36-153", "10-250", "66-168"]
     return Response(classrooms)
+
+
+@api_view(["GET"])
+def get_program_sections(request, program, edition):
+    program = Program.objects.get(name=program, edition=edition)
+    sections = Section.objects.filter(clazz__program=program).order_by("clazz__id")
+    serialized_sections = [SectionSerializer(section).data for section in sections]
+    return Response(serialized_sections)

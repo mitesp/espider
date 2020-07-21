@@ -70,7 +70,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ("clazz", "name", "number", "num_students", "scheduled_blocks")
+        fields = ("id", "clazz", "name", "number", "num_students", "scheduled_blocks")
 
     def get_name(self, section):
         return str(section)

@@ -38,6 +38,7 @@ urlpatterns = [
                         ]
                     ),
                 ),
+                path("sections/", views.get_program_sections),
                 path("timeslots/", views.get_program_timeslots),
             ]
         ),
