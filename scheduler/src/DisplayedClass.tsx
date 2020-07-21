@@ -1,5 +1,4 @@
 import React from "react";
-import ReactTooltip from "react-tooltip";
 import { useDrag } from "react-dnd";
 
 import { Class } from "./types";
@@ -33,16 +32,6 @@ export default function DisplayedClass(props: Props) {
           {props.clazz.capacity} students
         </p>
       </div>
-      <ReactTooltip
-        id={"class-data" + props.clazz.id}
-        key={"class-data" + props.clazz.id}
-        place="top"
-        type="info"
-        effect="solid"
-      >
-        {/*TODO figure out how to hide tooltip when dragging*/}
-        <span>Show {props.clazz.title} information</span>
-      </ReactTooltip>
     </div>
   );
 }

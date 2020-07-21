@@ -37,8 +37,8 @@ export default function ClassSlot(props: Props) {
   // TODO consider colorblindness in color selections
 
   return (
-    <th className={backgroundClassName} ref={drop} key={props.timeslot + "/" + props.classroom}>
-      {clazz && clazz.id}
-    </th>
+    <td className={backgroundClassName} ref={drop}>
+      {clazz.id && clazz.id}
+    </td>
   );
 }

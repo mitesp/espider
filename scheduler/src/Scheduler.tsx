@@ -67,12 +67,13 @@ export default function Scheduler(props: Props) {
                   {classrooms.map((classroom, index) => {
                     return (
                       <tr key={"classroom" + index}>
-                        <th data-tip data-for={"classroom-data" + index}>
+                        <th data-tip data-for={"classroomData-" + classroom}>
                           {classroom}
                         </th>
                         {timeslots.map((timeslot, index) => {
                           return (
                             <ClassSlot
+                              key={`${timeslot}/${classroom}`}
                               timeslot={timeslot}
                               classroom={classroom}
                               getClass={getClassById}
@@ -87,8 +88,8 @@ export default function Scheduler(props: Props) {
               {classrooms.map((classroom, index) => {
                 return (
                   <ReactTooltip
-                    id={"classroom-data" + index}
-                    key={"classroom-data" + index}
+                    id={"classroomData-" + classroom}
+                    key={"classroomData-" + classroom}
                     place="right"
                     type="info"
                     effect="solid"
@@ -97,12 +98,29 @@ export default function Scheduler(props: Props) {
                   </ReactTooltip>
                 );
               })}
+              {classes.map((clazz, index) => {
+                return (
+                  <ReactTooltip
+                    id={"classData-" + clazz.id}
+                    key={"classData-" + clazz.id}
+                    place="right"
+                    type="info"
+                    effect="solid"
+                  >
+                    <span>
+                      {clazz.title}
+                      <br />
+                      Show class information here
+                    </span>
+                  </ReactTooltip>
+                );
+              })}
             </div>
           </div>
           <div className="column is-3 has-text-centered">
             <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
             {classes.map(clazz => (
-              <DisplayedClass clazz={clazz} />
+              <DisplayedClass key={clazz.id} clazz={clazz} />
             ))}
           </div>
         </div>
