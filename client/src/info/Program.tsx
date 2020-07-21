@@ -9,7 +9,7 @@ export function canonicalizeProgramName(program: string) {
 export const programList = ["splash", "spark", "hssp", "cascade", "firestorm"];
 
 //TODO: we could write this stuff in md format or something and generate it
-export default function (props: { program: string }) {
+export default function Program(props: { program: string }) {
   const program = canonicalizeProgramName(props.program);
   return (
     <div className="container content">

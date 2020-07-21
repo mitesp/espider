@@ -14,7 +14,7 @@ const generateLinksList = (linksInfo: string[][]) => (
   </ul>
 );
 
-export default function () {
+export default function Footer() {
   const programs = [
     ["/splash", "Splash", "9–12"],
     ["/spark", "Spark", "7–8"],

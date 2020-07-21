@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function () {
+export default function AboutUs() {
   return (
     <div className="container content">
       <div className="columns">

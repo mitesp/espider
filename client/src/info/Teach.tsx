@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function () {
+export default function Teach() {
   return (
     <div className="container content">
       <div className="columns">

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from "react";
 
-export default function () {
+export default function Nextup() {
   return (
     <div className="container content">
       <div className="has-text-centered pb-5">
