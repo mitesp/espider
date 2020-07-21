@@ -18,6 +18,7 @@ import Program, { programList } from "./info/Program";
 import Teach from "./info/Teach";
 import Footer from "./layout/Footer";
 import Nav from "./layout/Nav";
+import PrivateRoute from "./PrivateRoute";
 import RegDashboard from "./registration/RegDashboard";
 
 const NotFound = () => (
@@ -63,6 +64,7 @@ function App(props: {}) {
           <Home path="/" />
           {/* TODO: better page than homepage? Notification of logout success? */}
           <Home path="logout" />
+          <PrivateRoute path="nextup" as={Nextup} />
           <LoginPage path="login" username={userInfo.username} setToken={setToken} />
           <SignupPage path="signup" username={userInfo.username} setToken={setToken} />
 

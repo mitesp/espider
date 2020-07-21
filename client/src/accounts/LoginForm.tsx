@@ -3,22 +3,16 @@ import React, { useState } from "react";
 
 import { login } from "./manage";
 
-import { useLoggedIn } from "../context/auth";
 import { renderStandardFormField } from "../forms/helpers";
 
 type Props = {
   setToken: (token: string) => void;
-  location?: { state: { referer: string } };
+  refererPath: string;
 };
 
 function LoginForm(props: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const loggedIn = useLoggedIn();
-
-  // If there was no referer, default to the dashboard.
-  const referer = props.location ? props.location.state.referer : "/dashboard";
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
     const name = e.currentTarget.name;
@@ -38,19 +32,12 @@ function LoginForm(props: Props) {
     login(username, password).then(result => {
       if (result.success) {
         props.setToken(result.info);
-        // TODO: test referer in the future
-        navigate(referer);
+        navigate(props.refererPath);
       } else {
         // TODO: will need to surface error to user
         console.log("Error with login " + result.info);
       }
     });
-  }
-
-  // TODO: add in this redirect behavior, test with referer later.
-  // TODO: maybe move to LoginPage
-  if (loggedIn) {
-    navigate(referer);
   }
 
   return (
