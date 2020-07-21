@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 import { useLoggedIn } from "./context/auth";
 
-//@ts-ignore
+//@ts-ignore TODO: fix
 function PrivateRoute({ as: Component, ...props }) {
   const loggedIn = useLoggedIn();
   useEffect(() => {

@@ -7,7 +7,7 @@ import { renderStandardFormField } from "../forms/helpers";
 
 type Props = {
   setToken: (token: string) => void;
-  referer: string;
+  refererPath: string;
 };
 
 function LoginForm(props: Props) {
@@ -32,7 +32,7 @@ function LoginForm(props: Props) {
     login(username, password).then(result => {
       if (result.success) {
         props.setToken(result.info);
-        navigate(props.referer);
+        navigate(props.refererPath);
       } else {
         // TODO: will need to surface error to user
         console.log("Error with login " + result.info);

@@ -14,17 +14,17 @@ function LoginPage(props: Props) {
   const loggedIn = useLoggedIn();
 
   // If there was no referer, default to the dashboard.
-  const referer = props.location.state?.referer.pathname || "/dashboard";
+  const refererPath = props.location.state?.referer.pathname || "/dashboard";
 
   if (loggedIn) {
-    navigate(referer);
+    navigate(refererPath);
   }
 
   return (
     <div className="container">
       <div className="columns">
         <div className="column is-6 is-offset-3">
-          <LoginForm setToken={props.setToken} referer={referer} />
+          <LoginForm setToken={props.setToken} refererPath={refererPath} />
         </div>
       </div>
     </div>
