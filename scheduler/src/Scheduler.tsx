@@ -71,7 +71,7 @@ export default function Scheduler(props: Props) {
               Scheduler for {props.programName} {props.programEdition}
             </h1>
             <div className="table-container">
-              <table className="table is-fullwidth is-striped is-hoverable">
+              <table className="table is-fullwidth is-striped is-hoverable is-bordered">
                 <thead>
                   <tr>
                     <th></th>
