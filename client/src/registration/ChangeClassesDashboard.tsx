@@ -10,6 +10,7 @@ import {
 import axiosInstance from "../axiosAPI";
 import { renderCustomInput } from "../forms/helpers";
 import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
+import { generalPage } from "../layout/Page";
 
 type Props = {
   username: string;
@@ -283,8 +284,8 @@ class ClassChangesDashboard extends Component<Props, State> {
 
   render() {
     //TODO block view if studentreg isn't open (or something)
-    return (
-      <div className="container">
+    return generalPage("Class changes dashboard | MIT ESP")(
+      <React.Fragment>
         <h1 className="has-text-centered is-size-2">
           {this.props.program} {this.props.edition}: Change Classes
         </h1>
@@ -293,7 +294,7 @@ class ClassChangesDashboard extends Component<Props, State> {
           {this.renderClassSchedule()}
           {this.renderClassCatalog()}
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

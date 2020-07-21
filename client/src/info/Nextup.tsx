@@ -1,9 +1,10 @@
 /* eslint-disable */
 import React from "react";
+import { contentPage } from "../layout/Page";
 
 export default function Nextup() {
-  return (
-    <div className="container content">
+  return contentPage("Next up for espider")(
+    <React.Fragment>
       <div className="has-text-centered pb-5">
         <h1 className="title mb-2">Join us!</h1>
         <p className="has-text-weight-bold">
@@ -76,6 +77,6 @@ export default function Nextup() {
           </ul>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 }

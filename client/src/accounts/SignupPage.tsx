@@ -6,6 +6,7 @@ import { SignupType } from "./types";
 
 import { logout } from "../accounts/manage";
 import { useAuth, useLoggedIn } from "../context/auth";
+import { generalPage } from "../layout/Page";
 
 type Props = {
   setToken: (token: string) => void;
@@ -46,7 +47,7 @@ function SignupPage(props: Props) {
   }
 
   function renderSignupForms() {
-    return (
+    return generalPage("Sign up | MIT ESP")(
       <React.Fragment>
         <h1 className="has-text-centered is-size-3">Sign Up</h1>
         <p>I am a...</p>

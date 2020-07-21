@@ -19,16 +19,18 @@ import Teach from "./info/Teach";
 import Footer from "./layout/Footer";
 import Nav from "./layout/Nav";
 import PrivateRoute from "./PrivateRoute";
+import { contentPage } from "./layout/Page";
 import RegDashboard from "./registration/RegDashboard";
 
-const NotFound = () => (
-  <section className="pt-5 pb-5 container has-text-centered">
-    <p>Invalid URL. Sorry, nothing here!</p>
-    <p>
-      Return to the <a href="/">homepage</a>.
-    </p>
-  </section>
-);
+const NotFound = () =>
+  contentPage("404 Not found")(
+    <section className="pt-5 pb-5 container has-text-centered">
+      <p>Invalid URL. Sorry, nothing here!</p>
+      <p>
+        Return to the <a href="/">homepage</a>.
+      </p>
+    </section>
+  );
 
 function App(props: {}) {
   const [userInfo, setUserInfo] = useState({

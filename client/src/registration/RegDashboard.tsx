@@ -9,6 +9,7 @@ import { RegStatusOption } from "./types";
 import { studentRegEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 import { useAuth, useLoggedIn } from "../context/auth";
+import { generalPage } from "../layout/Page";
 
 // import TeacherDashboard from "./TeacherRegDashboard";
 
@@ -48,9 +49,9 @@ function RegDashboard(props: Props) {
   }, [props.edition, props.program]);
 
   if (loggedIn) {
-    return (
+    return generalPage(`${props.program} ${props.edition} | MIT ESP`)(
       // TODO: create program-specific context and provider to subsequent components
-      <div className="container">
+      <React.Fragment>
         {isStudent && (
           // TODO: overarching application routing organization in one place
           <Router>
@@ -71,7 +72,7 @@ function RegDashboard(props: Props) {
         )}
 
         {isTeacher && true /*<TeacherRegDashboard username={username} />*/}
-      </div>
+      </React.Fragment>
     );
   } else {
     return <div></div>;
