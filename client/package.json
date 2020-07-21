@@ -29,15 +29,26 @@
       "plugin:import/typescript"
     ],
     "rules": {
-      "import/no-unresolved": ["off"],
-      "import/order": ["error", {
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        },
-        "groups": ["builtin", "external", "internal", "sibling", "parent"],
-        "newlines-between": "always"
-      }]
+      "import/no-unresolved": [
+        "off"
+      ],
+      "import/order": [
+        "error",
+        {
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          },
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "sibling",
+            "parent"
+          ],
+          "newlines-between": "always"
+        }
+      ]
     }
   },
   "browserslist": {
