@@ -10,6 +10,8 @@ type Props = {
 };
 
 function LoginPage(props: Props) {
+  document.title = "Login | MIT ESP";
+
   const loggedIn = useLoggedIn();
 
   return (

@@ -2,6 +2,7 @@
 import React from "react";
 
 export default function Nextup() {
+  document.title = "Next up for espider";
   return (
     <div className="container content">
       <div className="has-text-centered pb-5">

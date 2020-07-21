@@ -6,6 +6,8 @@ import TeacherDashboard from "./TeacherDashboard";
 import { useAuth, useLoggedIn } from "../context/auth";
 
 function Dashboard(props: {}) {
+  document.title = "Dashboard | MIT ESP";
+
   const { username, isStudent, isTeacher } = useAuth();
   const loggedIn = useLoggedIn();
 

@@ -20,6 +20,10 @@ class SignupPage extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    document.title = "Sign up | MIT ESP";
+  }
+
   getButtonClass(signupType: SignupType) {
     return `button ${this.state.selectedSignupType === signupType ? "is-active" : ""}`;
   }

@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function Home() {
+  document.title = "MIT ESP";
   return (
     <div className="container content">
       <div className="columns">

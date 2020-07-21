@@ -21,6 +21,8 @@ type Props = {
 // component is functioning more like a "ProgramDashboard"
 
 function RegDashboard(props: Props) {
+  document.title = `${props.program} ${props.edition} | MIT ESP`;
+
   const { isStudent, isTeacher } = useAuth();
   const loggedIn = useLoggedIn();
 

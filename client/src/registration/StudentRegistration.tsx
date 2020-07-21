@@ -29,6 +29,8 @@ type Props = {
 
 // TODO: final confirmation state or page
 function StudentRegistration(props: Props) {
+  document.title = `${props.program} ${props.edition} Registration | MIT ESP`;
+
   // TODO: stateful "active" step selection based on progress on other steps
   // TODO: figure out general flow (can people go backwards?, etc)
   const [selectedStep, setSelectedStep] = useState(0);

@@ -1,6 +1,8 @@
 import React from "react";
 
 export default function AboutUs() {
+  document.title = "About us | MIT ESP";
+
   return (
     <div className="container content">
       <div className="columns">

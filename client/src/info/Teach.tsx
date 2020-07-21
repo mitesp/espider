@@ -1,6 +1,8 @@
 import React from "react";
 
 export default function Teach() {
+  document.title = "Teach | MIT ESP";
+
   return (
     <div className="container content">
       <div className="columns">
