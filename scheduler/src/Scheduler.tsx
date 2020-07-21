@@ -49,8 +49,14 @@ export default function Scheduler(props: Props) {
 
   function scheduleSection(id: number, classroom: string, timeslot: string) {
     const section = getSectionById(id);
-    section.scheduled = true;
-    setUnscheduledSections(sections.filter(section => section.scheduled !== true));
+    if (section.timeslot) {
+      section.timeslot = timeslot;
+      section.classroom = classroom;
+    } else {
+      section.timeslot = timeslot;
+      section.classroom = classroom;
+    }
+    setUnscheduledSections(sections.filter(section => section.timeslot === undefined));
     // TODO sort ^ by clazz
     // TODO send API call to actually schedule the section
     console.log(`Scheduled section ${id} in ${classroom} at ${timeslot}`);
@@ -87,7 +93,12 @@ export default function Scheduler(props: Props) {
                               key={`${timeslot}/${classroom}`}
                               timeslot={timeslot}
                               classroom={classroom}
-                              getSection={getSectionById}
+                              section={
+                                sections.filter(
+                                  section =>
+                                    section.timeslot === timeslot && section.classroom === classroom
+                                )[0]
+                              }
                               scheduleSection={scheduleSection}
                             />
                           );
@@ -131,11 +142,9 @@ export default function Scheduler(props: Props) {
           </div>
           <div className="column is-3 has-text-centered">
             <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
-            {unscheduledSections
-              .filter(section => !section.scheduled)
-              .map(section => (
-                <DisplayedClass key={section.id} section={section} />
-              ))}
+            {unscheduledSections.map(section => (
+              <DisplayedClass key={section.id} section={section} />
+            ))}
           </div>
         </div>
       </div>

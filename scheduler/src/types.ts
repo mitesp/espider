@@ -11,5 +11,6 @@ export type Section = {
   clazz: number;
   name: string;
   number: number;
-  scheduled?: boolean; //// will be replaced by scheduling information
+  timeslot: string; // TODO make this multi-block friendly
+  classroom: string;
 };

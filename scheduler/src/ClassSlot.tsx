@@ -1,24 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDrop, DropTargetMonitor } from "react-dnd";
 
 import { Section } from "./types";
+import ScheduledClass from "./ScheduledClass";
 
 type Props = {
   classroom: string;
   timeslot: string;
-  getSection: (id: number) => Section;
+  section: Section;
   scheduleSection: (id: number, classroom: string, timeslot: string) => void;
 };
 
 export default function SectionSlot(props: Props) {
-  const [section, setSection] = useState({} as Section);
-
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: "Section",
     drop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {
       // TODO figure out how to do this without using "any"
-      const newSection = props.getSection(item.id);
-      setSection(newSection);
       props.scheduleSection(item.id, props.classroom, props.timeslot);
     },
     collect: monitor => ({
@@ -37,7 +34,7 @@ export default function SectionSlot(props: Props) {
 
   return (
     <td className={backgroundClassName} ref={drop}>
-      {section.id && `class ${section.clazz} sec ${section.number}`}
+      {props.section && <ScheduledClass section={props.section} />}
     </td>
   );
 }
