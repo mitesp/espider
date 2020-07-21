@@ -1,3 +1,4 @@
+import { navigate } from "@reach/router";
 import React from "react";
 
 import LoginForm from "./LoginForm";
@@ -5,22 +6,28 @@ import LoginForm from "./LoginForm";
 import { useLoggedIn } from "../context/auth";
 
 type Props = {
-  username: string;
+  location: { state?: { referer: { pathname: string } } };
   setToken: (token: string) => void;
 };
 
 function LoginPage(props: Props) {
   const loggedIn = useLoggedIn();
 
+  // If there was no referer, default to the dashboard.
+  const referer = props.location.state?.referer.pathname || "/dashboard";
+
+  if (loggedIn) {
+    navigate(referer);
+  }
+
   return (
     <div className="container">
       <div className="columns">
         <div className="column is-6 is-offset-3">
-          {loggedIn ? <h3> Hi, {props.username}! </h3> : <LoginForm setToken={props.setToken} />}
+          <LoginForm setToken={props.setToken} referer={referer} />
         </div>
       </div>
     </div>
-    //TODO figure out how to get this to automatically change when logged in
   );
 }
 
