@@ -65,8 +65,8 @@ function App(props: {}) {
           {/* TODO: better page than homepage? Notification of logout success? */}
           <Home path="logout" />
           <PrivateRoute path="nextup" as={Nextup} />
-          <LoginPage path="login" username={userInfo.username} setToken={setToken} />
-          <SignupPage path="signup" username={userInfo.username} setToken={setToken} />
+          <LoginPage path="login" setToken={setToken} />
+          <SignupPage path="signup" setToken={setToken} />
 
           <Dashboard path="dashboard" />
           <AboutUs path="aboutus" />
