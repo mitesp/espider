@@ -19,6 +19,7 @@ export default function Scheduler(props: Props) {
   const [timeslots, setTimeslots] = useState([] as string[]);
   const [classrooms, setClassrooms] = useState([] as string[]);
   const [classes, setClasses] = useState([] as Class[]);
+  const [unscheduledClasses, setUnscheduledClasses] = useState([] as Class[]);
 
   useEffect(() => {
     // Set up timeslots
@@ -38,11 +39,20 @@ export default function Scheduler(props: Props) {
       .get(`/${props.programName}/${props.programEdition}/${classesEndpoint}`)
       .then(res => {
         setClasses(res.data);
+        setUnscheduledClasses(res.data);
       });
   }, [props.programEdition, props.programName]);
 
   function getClassById(id: number) {
     return classes.filter(clazz => clazz.id === id)[0];
+  }
+
+  function scheduleClass(id: number, classroom: string, timeslot: string) {
+    const clazz = getClassById(id);
+    clazz.scheduled = true;
+    setUnscheduledClasses(classes.filter(clazz => clazz.scheduled !== true));
+    // TODO send API call to actually schedule the class
+    console.log(`Scheduled class ${id} in ${classroom} at ${timeslot}`);
   }
 
   return (
@@ -77,6 +87,7 @@ export default function Scheduler(props: Props) {
                               timeslot={timeslot}
                               classroom={classroom}
                               getClass={getClassById}
+                              scheduleClass={scheduleClass}
                             />
                           );
                         })}
@@ -119,9 +130,11 @@ export default function Scheduler(props: Props) {
           </div>
           <div className="column is-3 has-text-centered">
             <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
-            {classes.map(clazz => (
-              <DisplayedClass key={clazz.id} clazz={clazz} />
-            ))}
+            {unscheduledClasses
+              .filter(clazz => !clazz.scheduled)
+              .map(clazz => (
+                <DisplayedClass key={clazz.id} clazz={clazz} />
+              ))}
           </div>
         </div>
       </div>

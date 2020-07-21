@@ -7,6 +7,7 @@ type Props = {
   classroom: string;
   timeslot: string;
   getClass: (id: number) => Class;
+  scheduleClass: (id: number, classroom: string, timeslot: string) => void;
 };
 
 export default function ClassSlot(props: Props) {
@@ -18,9 +19,7 @@ export default function ClassSlot(props: Props) {
       // TODO figure out how to do this without using "any"
       const newClazz = props.getClass(item.id);
       setClazz(newClazz);
-      if (item) {
-        console.log(`You moved ${item.id} to ${props.timeslot}/${props.classroom}.`);
-      }
+      props.scheduleClass(item.id, props.classroom, props.timeslot);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
