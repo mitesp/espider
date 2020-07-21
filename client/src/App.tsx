@@ -49,21 +49,17 @@ function App(props: {}) {
         });
       });
     }
-  }, [authToken]);
+  }, [authToken, props]);
 
   function setToken(accessToken: string) {
     setAuthToken(accessToken);
   }
-
-  // TODO (important): refactor login and logout logic out of the UI components
-  // where they currently live
 
   return (
     <AuthContext.Provider value={{ token: authToken, ...userInfo }}>
       <Nav setToken={setToken} />
       <main className="px-3 py-5">
         <Router>
-          {/* TODO: nest routes */}
           <Home path="/" />
           {/* TODO: better page than homepage? Notification of logout success? */}
           <Home path="logout" />
@@ -76,12 +72,12 @@ function App(props: {}) {
           <Learn path="learn" />
           <Nextup path="next" />
 
-          {/*TODO figure out how to move these routes elsewhere for better organization*/}
-
-          <RegDashboard path="/:program/:edition/*" />
           {programList.map(program => (
             <Program key={program} path={program} program={program} />
           ))}
+
+          <RegDashboard path=":program/:edition/*" />
+
           <NotFound default />
         </Router>
       </main>
