@@ -29,12 +29,12 @@ function Nav(props: Props) {
   function loggedOutView() {
     return (
       <div className="buttons">
-        <a className="button is-primary" href="/signup">
+        <Link className="button is-primary" to="/signup">
           <strong>Sign up</strong>
-        </a>
-        <a className="button is-light" href="/login">
+        </Link>
+        <Link className="button is-light" to="/login">
           Log In
-        </a>
+        </Link>
       </div>
     );
   }
@@ -42,23 +42,23 @@ function Nav(props: Props) {
   function loggedInView() {
     return (
       <div className="navbar-item has-dropdown is-hoverable">
-        <a className="navbar-link has-text-weight-bold" href="/dashboard">
+        <Link className="navbar-link has-text-weight-bold" to="/dashboard">
           {username}
-        </a>
+        </Link>
 
         <div className="navbar-dropdown is-right">
-          <a className="navbar-item" href="/dashboard">
+          <Link className="navbar-item" to="/dashboard">
             <span className="icon pr-3">
               <i className="fas fa-home"></i>
             </span>
             Dashboard
-          </a>
-          <a className="navbar-item" href="/profile">
+          </Link>
+          <Link className="navbar-item" to="/profile">
             <span className="icon pr-3">
               <i className="fas fa-user"></i>
             </span>
             Profile
-          </a>
+          </Link>
           <hr className="navbar-divider"></hr>
           <Link className="navbar-item" to="logout" onClick={handleLogout}>
             Log out
@@ -76,9 +76,9 @@ function Nav(props: Props) {
     >
       <div className="container">
         <div className="navbar-brand">
-          <a className="navbar-item has-text-weight-bold" href="/">
+          <Link className="navbar-item has-text-weight-bold" to="/">
             MIT ESP
-          </a>
+          </Link>
 
           <button
             type="button"
@@ -98,31 +98,31 @@ function Nav(props: Props) {
           {/* <div className="navbar-start"></div> */}
 
           <div className="navbar-end">
-            <a className="navbar-item has-text-weight-bold" href="/learn">
+            <Link className="navbar-item has-text-weight-bold" to="/learn">
               Learn
-            </a>
+            </Link>
 
-            <a className="navbar-item has-text-weight-bold" href="/teach">
+            <Link className="navbar-item has-text-weight-bold" to="/teach">
               Teach
-            </a>
+            </Link>
 
             <div className="navbar-item has-dropdown is-hoverable">
-              <a className="navbar-link has-text-weight-bold" href="/programs">
+              <Link className="navbar-link has-text-weight-bold" to="/programs">
                 Programs
-              </a>
+              </Link>
 
               <div className="navbar-dropdown">
                 {programList.map(program => (
-                  <a className="navbar-item" key={program} href={`/${program}`}>
+                  <Link className="navbar-item" key={program} to={`/${program}`}>
                     {canonicalizeProgramName(program)}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
 
-            <a className="navbar-item has-text-weight-bold" href="/aboutus">
+            <Link className="navbar-item has-text-weight-bold" to="/aboutus">
               About Us
-            </a>
+            </Link>
           </div>
           <div className="navbar-item">{loggedIn ? loggedInView() : loggedOutView()}</div>
         </div>

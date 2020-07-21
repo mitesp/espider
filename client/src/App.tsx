@@ -1,7 +1,7 @@
 // @ts-nocheck TODO: fix
 import "./App.sass";
 
-import { Router } from "@reach/router";
+import { Router, Link } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
 import LoginPage from "./accounts/LoginPage";
@@ -27,7 +27,7 @@ const NotFound = () =>
     <section className="pt-5 pb-5 container has-text-centered">
       <p>Invalid URL. Sorry, nothing here!</p>
       <p>
-        Return to the <a href="/">homepage</a>.
+      Return to the <Link to="/">homepage</Link>.
       </p>
     </section>
   );

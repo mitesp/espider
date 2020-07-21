@@ -1,3 +1,4 @@
+import { Link } from "@reach/router";
 import React from "react";
 
 function renderTextInSection(displayedText: string, centered = false) {
@@ -7,7 +8,7 @@ function renderTextInSection(displayedText: string, centered = false) {
 function renderLinkedText(displayedText: string, url: string) {
   return (
     <h3 className="is-size-5 has-text-centered">
-      <a href={url}>{displayedText}</a>
+      <Link to={url}>{displayedText}</Link>
     </h3>
   );
 }

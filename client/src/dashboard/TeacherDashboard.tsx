@@ -1,3 +1,4 @@
+import { Link } from "@reach/router";
 import React, { Component } from "react";
 
 import { teacherDashboardEndpoint } from "../apiEndpoints";
@@ -61,7 +62,7 @@ export default class TeacherDashboard extends Component<Props, State> {
             {this.state.programs.map((program, index) => {
               return (
                 <h3 className="is-size-5" key={index}>
-                  {program.name}: <a href={program.url}>Register</a>
+                  {program.name}: <Link to={program.url}>Register</Link>
                 </h3>
               );
             })}

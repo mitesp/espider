@@ -1,3 +1,4 @@
+import { Link } from "@reach/router";
 import React from "react";
 
 import { contentPage } from "../layout/Page";
@@ -51,9 +52,9 @@ export default function AboutUs() {
         make a difference in the community by sharing our knowledge and creativity with local high
         school students. Since then, we have grown to support well over three thousand students each
         year with the help of hundreds of MIT students. Our original
-        <a href="/hssp"> High School Studies Program (HSSP)</a> has been joined by many other
-        enrichment <a href="/programs">programs</a> over the years, and our agenda changes each year
-        to best suit the community’s needs.
+        <Link to="/hssp"> High School Studies Program (HSSP)</Link> has been joined by many other
+        enrichment <Link to="/programs">programs</Link> over the years, and our agenda changes each
+        year to best suit the community’s needs.
         <br /> <br />
         <b> More About ESP </b> <br />
         Through an extensive offering of academic and non-academic classes, ESP is dedicated to
