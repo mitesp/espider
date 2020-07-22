@@ -58,7 +58,7 @@ export default class StudentDashboard extends Component<Props, State> {
               return (
                 <h3 className="is-size-5" key={index}>
                   {program.name}:{" "}
-                  <Link to={`${program.url}/dashboard`}>
+                  <Link to={`/${program.url}/dashboard`}>
                     {program.registered ? "Go to Dashboard" : "Register!!"}
                   </Link>
                 </h3>
@@ -69,7 +69,7 @@ export default class StudentDashboard extends Component<Props, State> {
             {this.state.previousPrograms.map((program, index) => {
               return (
                 <h3 className="is-size-5" key={index}>
-                  {program.name}: <Link to={`${program.url}/dashboard`}>View</Link>
+                  {program.name}: <Link to={`/${program.url}/dashboard`}>View</Link>
                 </h3>
               );
             })}

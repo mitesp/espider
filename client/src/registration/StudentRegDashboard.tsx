@@ -138,7 +138,7 @@ function StudentRegDashboard(props: Props) {
       <div className="columns">
         <div className="column">
           <h2 className="has-text-centered is-size-3 mb-2">Register</h2>
-          <Link to="register">Registration steps</Link>
+          <Link to="../register">Registration steps</Link>
         </div>
         {renderClassStatus()}
       </div>
