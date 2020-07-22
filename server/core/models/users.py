@@ -26,7 +26,8 @@ class ESPUser(AbstractUser):
         return "{} ({})".format(self.username, self.id)
 
 
-# TODO: for all profiles choose real lengths and figure out what shouldn't be blank/null
+# TODO: for all profiles choose real lengths and figure out what shouldn't be blank/null,
+#       as well as actual default values
 class Profile(models.Model):
     phone_number = models.CharField(max_length=20, blank=True)  # TODO: use django-phonenumber-field
     pronouns = models.CharField(max_length=40, blank=True)  # TODO: use models.TextChoices
@@ -45,8 +46,8 @@ class StudentProfile(Profile):
     user = models.OneToOneField(
         ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="student_profile"
     )
-    date_of_birth = models.DateField(max_length=8, blank=True, null=True)
-    grad_year = models.IntegerField(blank=True, null=True)
+    date_of_birth = models.DateField(max_length=8, blank=True, auto_now_add=True)
+    grad_year = models.IntegerField(blank=True, default=0)
     school = models.CharField(max_length=200, blank=True)
 
 
