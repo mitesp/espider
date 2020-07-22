@@ -11,7 +11,7 @@ type PageProps = {
   title?: string;
 };
 
-function Page(props: PageProps) {
+function Page(props: PageProps): (renderChildren: React.ReactNode) => React.ReactNode {
   // NOTE: Current Page component only sets document title and returns a simple
   // layout. This could be extended with more useful functions in the future.
   if (props.title) {
@@ -22,13 +22,15 @@ function Page(props: PageProps) {
     window.scrollTo(0, 0);
   }, []);
 
-  return (renderChildren: React.ReactNode) => {
+  return renderChildren => {
     switch (props.style) {
       case "general":
         return <div className="container">{renderChildren}</div>;
       case "content":
         return <div className="container content">{renderChildren}</div>;
       case "fullWidth":
+        return renderChildren;
+      default:
         return renderChildren;
     }
   };
