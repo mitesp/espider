@@ -7,7 +7,7 @@ import { useLoggedIn } from "../context/auth";
 import { generalPage } from "../layout/Page";
 
 type Props = {
-  location: { state?: { referer: { pathname: string } } };
+  location: { state?: { referer?: { pathname: string } } };
   setToken: (token: string) => void;
 };
 
@@ -15,7 +15,7 @@ function LoginPage(props: Props) {
   const loggedIn = useLoggedIn();
 
   // If there was no referer, default to the dashboard.
-  const refererPath = props.location.state?.referer.pathname || "/dashboard";
+  const refererPath = props.location.state?.referer?.pathname || "/dashboard";
 
   if (loggedIn) {
     navigate(refererPath);
