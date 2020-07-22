@@ -8,7 +8,7 @@ from .constants import RegStatusOptions
 class Program(models.Model):
     name = models.SlugField(max_length=200)  # TODO maybe this should be a constant set
     season = models.SlugField(max_length=200, blank=True)
-    edition = models.SlugField(max_length=200)  # this is year
+    edition = models.SlugField(max_length=200)  # this is year - must be number
     student_reg_open = models.BooleanField(default=False)
     student_reg_status = models.CharField(
         max_length=20, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES

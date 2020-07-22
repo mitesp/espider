@@ -5,8 +5,8 @@ import { emergencyInfoEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 
 type Props = {
-  program: string;
-  edition: string;
+  programString: string;
+  programURL: string;
 };
 
 type State = {
@@ -21,7 +21,7 @@ class EmergencyInfoForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      endpoint: `/${this.props.program}/${this.props.edition}/${emergencyInfoEndpoint}`,
+      endpoint: `/${this.props.programURL}/${emergencyInfoEndpoint}`,
     };
   }
 
@@ -31,16 +31,9 @@ class EmergencyInfoForm extends Component<Props, State> {
 
   setupEmergencyInfo() {
     // TODO make this functional
-    axiosInstance
-      .get(this.state.endpoint, {
-        params: {
-          program: this.props.program,
-          edition: this.props.edition,
-        },
-      })
-      .then(res => {
-        this.setState({});
-      });
+    axiosInstance.get(this.state.endpoint).then(res => {
+      this.setState({});
+    });
   }
 
   handleChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -59,8 +52,7 @@ class EmergencyInfoForm extends Component<Props, State> {
     e.preventDefault();
     axiosInstance
       .post(this.state.endpoint, {
-        program: this.props.program,
-        edition: this.props.edition,
+        // TODO have actual data to submit
       })
       .then(result => {
         /*TODO check validity of submitted data*/

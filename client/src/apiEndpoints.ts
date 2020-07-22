@@ -27,6 +27,7 @@ const medicalLiabilityEndpoint = "student/medliab/";
 const liabilityWaiverEndpoint = "student/waiver/";
 const studentAvailabilityEndpoint = "student/availability/";
 const studentScheduleEndpoint = "student/schedule/";
+const programStudentProfileEndpoint = "student/profile/";
 
 export {
   programsEndpoint,
@@ -45,4 +46,5 @@ export {
   studentAvailabilityEndpoint,
   studentScheduleEndpoint,
   studentRemoveClassesEndpoint,
+  programStudentProfileEndpoint,
 };

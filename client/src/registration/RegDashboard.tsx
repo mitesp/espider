@@ -22,12 +22,20 @@ type Props = {
 // TODO: restructure this per-program "dashboard" concept, if anything, this
 // component is functioning more like a "ProgramDashboard"
 
+function getProgramURL(name: string, season: string | undefined, edition: string) {
+  if (season) {
+    return `${name}/${season}/${edition}`;
+  } else {
+    return `${name}/${edition}`;
+  }
+}
+
 function RegDashboard(props: Props) {
   const { isStudent, isTeacher } = useAuth();
   const loggedIn = useLoggedIn();
   const programString =
     (props.season ? `${props.season} ` : "") + `${props.program} ${props.edition}`;
-  const programURL = `${props.program}/${props.season}/${props.edition}`;
+  const programURL = getProgramURL(props.program, props.season, props.edition);
 
   const [regChecks, setRegChecks] = useState({
     availabilityCheck: false,
@@ -65,21 +73,21 @@ function RegDashboard(props: Props) {
               path="dashboard"
               checks={regChecks}
               regStatus={regStatus}
-              program={props.program}
-              edition={props.edition}
+              programString={programString}
+              programURL={programURL}
             />
+            {/* @ts-ignore TODO: reach-router path fix */}
             <StudentRegistration
-              // @ts-ignore TODO: reach-router path fix
               path="register"
               checks={regChecks}
-              program={props.program}
-              edition={props.edition}
+              programString={programString}
+              programURL={programURL}
             />
+            {/* @ts-ignore TODO: reach-router path fix */}
             <ChangeClassesDashboard
-              // @ts-ignore TODO: reach-router path fix
               path="changeclasses"
-              program={props.program}
-              edition={props.edition}
+              programString={programString}
+              programURL={programURL}
             />
           </Router>
         )}

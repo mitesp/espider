@@ -4,9 +4,9 @@ import React, { Component } from "react";
 import axiosInstance from "../axiosAPI";
 
 type Props = {
-  edition: string;
   formName: string;
-  program: string;
+  programString: string;
+  programURL: string;
   url: string;
 };
 
@@ -21,20 +21,15 @@ class DummyForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      endpoint: `/${this.props.program}/${this.props.edition}/${this.props.url}`,
+      endpoint: `/${this.props.programURL}/${this.props.url}`,
     };
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axiosInstance
-      .post(this.state.endpoint, {
-        program: this.props.program,
-        edition: this.props.edition,
-      })
-      .then(result => {
-        navigate("dashboard");
-      });
+    axiosInstance.post(this.state.endpoint).then(result => {
+      navigate("dashboard");
+    });
   };
 
   render() {

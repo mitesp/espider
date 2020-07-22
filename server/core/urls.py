@@ -32,6 +32,7 @@ urlpatterns = [
                             path("classes/remove/", views.student_remove_section),
                             path("emergency_info/", views.EmergencyInfo.as_view()),
                             path("medliab/", views.MedicalLiability.as_view()),
+                            path("profile/", views.Profile.as_view()),
                             path("schedule/", views.StudentProgramClasses.as_view()),
                             path("waiver/", views.LiabilityWaiver.as_view()),
                         ]

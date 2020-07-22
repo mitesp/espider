@@ -95,7 +95,7 @@ class Profile(APIView):
 
     permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, format=None):
+    def get(self, request, program="", season="", edition="", format=None):
         user = request.user
         profile = user.profile
         data = {
@@ -108,7 +108,7 @@ class Profile(APIView):
         return Response(data)
 
     @transaction.atomic
-    def post(self, request, format=None):
+    def post(self, request, program="", season="", edition="", format=None):
         """
         TODO: validate:
             ensure email is in email format
@@ -122,7 +122,7 @@ class Profile(APIView):
         data = request.data
 
         self.update_profile(user, data)
-        self.update_profile_check(user, data)
+        self.update_profile_check(user, data, program, season, edition)
 
         return Response({"message": "Success!"})
 
@@ -142,11 +142,9 @@ class Profile(APIView):
             profile.school = data.get("school")
             profile.save()
 
-    def update_profile_check(self, user, data):
-        if "update_profile" in data and data["update_profile"]:
-            program = Program.objects.get(
-                name=data.get("program"), season=data.get("season"), edition=data.get("edition")
-            )
+    def update_profile_check(self, user, data, program, season, edition):
+        if "update_profile" in data and data["update_profile"] and program != "":
+            program = Program.objects.get(name=program, season=season, edition=edition)
             studentreg = StudentRegistration.objects.get(student=user, program=program)
             studentreg.update_profile_check = True
             studentreg.save()
@@ -174,7 +172,7 @@ class EmergencyInfo(APIView):
         return Response({})
 
     def post(self, request, program, edition, season=None, format=None):
-        studentreg = self.get_object(program, edition)
+        studentreg = self.get_object(program, edition, season)
         # submit emergency info
 
         studentreg.emergency_info_check = True
