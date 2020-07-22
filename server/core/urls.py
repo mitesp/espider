@@ -17,8 +17,8 @@ urlpatterns = [
     # Profile
     path("api/profile/student/", views.Profile.as_view()),
     # program-specific
-    path(
-        "api/<program>/<edition>/",
+    re_path(
+        r"^api/(?P<program>\w+)/((?P<season>\w+)/)?(?P<edition>[0-9]+)/",  # ((?P<season>\w+)/)?
         include(
             [
                 path("catalog/", views.ClassCatalog.as_view()),

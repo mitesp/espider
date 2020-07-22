@@ -15,6 +15,7 @@ import { generalPage } from "../layout/Page";
 
 type Props = {
   program: string;
+  season?: string;
   edition: string;
 };
 
@@ -24,6 +25,9 @@ type Props = {
 function RegDashboard(props: Props) {
   const { isStudent, isTeacher } = useAuth();
   const loggedIn = useLoggedIn();
+  const programString =
+    (props.season ? `${props.season} ` : "") + `${props.program} ${props.edition}`;
+  const programURL = `${props.program}/${props.season}/${props.edition}`;
 
   const [regChecks, setRegChecks] = useState({
     availabilityCheck: false,
@@ -36,7 +40,7 @@ function RegDashboard(props: Props) {
 
   useEffect(() => {
     // Set up student reg
-    axiosInstance.get(`/${props.program}/${props.edition}/${studentRegEndpoint}`).then(res => {
+    axiosInstance.get(`/${programURL}/${studentRegEndpoint}`).then(res => {
       setRegChecks({
         availabilityCheck: res.data.availability_check,
         emergencyInfoCheck: res.data.emergency_info_check,
@@ -46,10 +50,10 @@ function RegDashboard(props: Props) {
       });
       setRegStatus(res.data.reg_status);
     });
-  }, [props.edition, props.program]);
+  }, [programURL]);
 
   if (loggedIn) {
-    return generalPage(`${props.program} ${props.edition} | MIT ESP`)(
+    return generalPage(`${programString} | MIT ESP`)(
       // TODO: create program-specific context and provider to subsequent components
       <React.Fragment>
         {isStudent && (

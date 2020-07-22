@@ -98,14 +98,26 @@ function App(props: {}) {
             <Program key={program} path={program} program={program} />
           ))}
 
+          {/*<RegDashboard path=":program/:edition/*" />
+          <RegDashboard path=":program/:edition/:season/*" />*/}
+
           {programs.map((program, index) => (
-            <RegDashboard
-              key={index}
-              // @ts-ignore TODO: reach-router path fix
-              path={`${program.name}/${program.edition}/*`}
-              program={program.name}
-              edition={program.edition}
-            />
+            program.season === "" ? 
+              <RegDashboard
+                key={index}
+                // @ts-ignore TODO: reach-router path fix
+                path={`${program.name}/${program.edition}/*`}
+                program={program.name}
+                edition={program.edition}
+              />
+            : <RegDashboard
+                key={index}
+                // @ts-ignore TODO: reach-router path fix
+                path={`${program.name}/${program.season}/${program.edition}/*`}
+                program={program.name}
+                season={program.season}
+                edition={program.edition}
+              />
             // TODO do something about the half-second it takes to render the page (maybe just caching)
           ))}
           {/* @ts-ignore TODO: reach-router path fix */}

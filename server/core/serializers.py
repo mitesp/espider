@@ -51,7 +51,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
-        fields = ("name", "edition")
+        fields = ("name", "season", "edition")
 
 
 class StudentRegSerializer(serializers.ModelSerializer):
