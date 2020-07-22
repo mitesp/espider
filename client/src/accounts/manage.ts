@@ -48,7 +48,7 @@ async function signupStudent(
         axiosInstance.defaults.headers["Authorization"] = "JWT " + result.data.tokens.access;
         localStorage.setItem("token", result.data.tokens.access);
         localStorage.setItem("refresh", result.data.tokens.refresh);
-        return { success: true, info: result.data.access };
+        return { success: true, info: result.data.tokens.access };
       } else {
         return { success: false, info: `return bad status ${result.status}` };
       }
