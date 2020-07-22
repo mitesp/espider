@@ -49,13 +49,8 @@ export default function Scheduler(props: Props) {
 
   function scheduleSection(id: number, classroom: string, timeslot: string) {
     const section = getSectionById(id);
-    if (section.timeslot) {
-      section.timeslot = timeslot;
-      section.classroom = classroom;
-    } else {
-      section.timeslot = timeslot;
-      section.classroom = classroom;
-    }
+    section.timeslot = timeslot;
+    section.classroom = classroom;
     setUnscheduledSections(sections.filter(section => section.timeslot === undefined));
     // TODO sort ^ by clazz
     // TODO send API call to actually schedule the section
@@ -118,23 +113,6 @@ export default function Scheduler(props: Props) {
                     effect="solid"
                   >
                     <span>Show {classroom} information</span>
-                  </ReactTooltip>
-                );
-              })}
-              {sections.map((section, index) => {
-                return (
-                  <ReactTooltip
-                    id={"classData-" + section.id}
-                    key={"classData-" + section.id}
-                    place="right"
-                    type="info"
-                    effect="solid"
-                  >
-                    <span>
-                      {section.name}
-                      <br />
-                      Show class information here
-                    </span>
                   </ReactTooltip>
                 );
               })}
