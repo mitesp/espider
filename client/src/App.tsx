@@ -18,8 +18,8 @@ import Program, { programList } from "./info/Program";
 import Teach from "./info/Teach";
 import Footer from "./layout/Footer";
 import Nav from "./layout/Nav";
-import PrivateRoute from "./PrivateRoute";
 import { contentPage } from "./layout/Page";
+import PrivateRoute from "./PrivateRoute";
 import RegDashboard from "./registration/RegDashboard";
 
 const NotFound = () =>
@@ -27,7 +27,7 @@ const NotFound = () =>
     <section className="pt-5 pb-5 container has-text-centered">
       <p>Invalid URL. Sorry, nothing here!</p>
       <p>
-      Return to the <Link to="/">homepage</Link>.
+        Return to the <Link to="/">homepage</Link>.
       </p>
     </section>
   );
@@ -62,7 +62,8 @@ function App(props: {}) {
     <AuthContext.Provider value={{ token: authToken, ...userInfo }}>
       <Nav setToken={setToken} />
       <main className="px-3 py-5">
-        <Router>
+        {/* NOTE: primary=false causes the scroll position on the new "page" to be the top of the page instead of the top of the component. */}
+        <Router primary={false}>
           <Home path="/" />
           {/* TODO: better page than homepage? Notification of logout success? */}
           <Home path="logout" />

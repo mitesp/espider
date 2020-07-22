@@ -54,7 +54,7 @@ function RegDashboard(props: Props) {
       <React.Fragment>
         {isStudent && (
           // TODO: overarching application routing organization in one place
-          <Router>
+          <Router primary={false}>
             <Redirect from="/" to="dashboard" noThrow />
             <StudentRegDashboard
               /* @ts-ignore TODO: thanks reach router */
