@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -46,7 +48,7 @@ class StudentProfile(Profile):
     user = models.OneToOneField(
         ESPUser, on_delete=models.CASCADE, primary_key=True, related_name="student_profile"
     )
-    date_of_birth = models.DateField(max_length=8, blank=True, auto_now_add=True)
+    date_of_birth = models.DateField(max_length=8, blank=True, default=date.today)
     grad_year = models.IntegerField(blank=True, default=0)
     school = models.CharField(max_length=200, blank=True)
 
