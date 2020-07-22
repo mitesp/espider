@@ -4,6 +4,7 @@ import React from "react";
 import LoginForm from "./LoginForm";
 
 import { useLoggedIn } from "../context/auth";
+import { generalPage } from "../layout/Page";
 
 type Props = {
   location: { state?: { referer: { pathname: string } } };
@@ -20,12 +21,10 @@ function LoginPage(props: Props) {
     navigate(refererPath);
   }
 
-  return (
-    <div className="container">
-      <div className="columns">
-        <div className="column is-6 is-offset-3">
-          <LoginForm setToken={props.setToken} refererPath={refererPath} />
-        </div>
+  return generalPage("Login | MIT ESP")(
+    <div className="columns">
+      <div className="column is-6 is-offset-3">
+        <LoginForm setToken={props.setToken} refererPath={refererPath} />
       </div>
     </div>
   );

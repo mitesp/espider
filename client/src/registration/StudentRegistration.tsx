@@ -12,8 +12,7 @@ import {
   medicalLiabilityEndpoint,
   studentAvailabilityEndpoint,
 } from "../apiEndpoints";
-
-// import { useAuth } from "../context/auth";
+import { generalPage } from "../layout/Page";
 
 type Props = {
   program: string;
@@ -79,14 +78,13 @@ function StudentRegistration(props: Props) {
       </li>
     );
   }
-
-  return (
-    <div className="container">
+  return generalPage(`${props.program} ${props.edition} Registration | MIT ESP`)(
+    <React.Fragment>
       <ul className="steps has-content-centered">
         {steps.map((step, index) => generateStep(step.name, step.text, index))}
       </ul>
       {steps[selectedStep].component}
-    </div>
+    </React.Fragment>
   );
 }
 

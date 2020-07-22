@@ -1,5 +1,7 @@
 import React from "react";
 
+import { contentPage } from "../layout/Page";
+
 export function canonicalizeProgramName(program: string) {
   return program === "hssp"
     ? program.toUpperCase()
@@ -11,8 +13,9 @@ export const programList = ["splash", "spark", "hssp", "cascade", "firestorm"];
 //TODO: we could write this stuff in md format or something and generate it
 export default function Program(props: { program: string }) {
   const program = canonicalizeProgramName(props.program);
-  return (
-    <div className="container content">
+
+  return contentPage(`${program} | MIT ESP`)(
+    <React.Fragment>
       <h1 className="is-size-1 has-text-weight-bold">{program}</h1>
       <div className="columns">
         <div className="column">
@@ -39,6 +42,6 @@ export default function Program(props: { program: string }) {
           finibus, eget tincidunt erat feugiat.
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
