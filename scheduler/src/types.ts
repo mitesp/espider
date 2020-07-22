@@ -11,6 +11,6 @@ export type Section = {
   clazz: number;
   name: string;
   number: number;
-  timeslot: string; // TODO make this multi-block friendly
-  classroom: string;
+  timeslot?: string; // TODO make this multi-block friendly
+  classroom?: string;
 };

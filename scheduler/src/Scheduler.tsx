@@ -3,7 +3,7 @@ import ReactTooltip from "react-tooltip";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import DisplayedClass from "./DisplayedClass";
+import ClassList from "./ClassList";
 import ClassSlot from "./ClassSlot";
 
 import axiosInstance from "./axiosAPI";
@@ -55,6 +55,16 @@ export default function Scheduler(props: Props) {
     // TODO sort ^ by clazz
     // TODO send API call to actually schedule the section
     console.log(`Scheduled section ${id} in ${classroom} at ${timeslot}`);
+  }
+
+  function unscheduleSection(id: number) {
+    const section = getSectionById(id);
+    section.timeslot = undefined;
+    section.classroom = undefined;
+    setUnscheduledSections(sections.filter(section => section.timeslot === undefined));
+    // TODO sort ^ by clazz
+    // TODO send API call to actually schedule the section
+    console.log(`Uncheduled section ${id}`);
   }
 
   return (
@@ -118,12 +128,7 @@ export default function Scheduler(props: Props) {
               })}
             </div>
           </div>
-          <div className="column is-3 has-text-centered">
-            <p>Filter options here (maybe based on whatever the new equivalent of tags is)</p>
-            {unscheduledSections.map(section => (
-              <DisplayedClass key={section.id} section={section} />
-            ))}
-          </div>
+          <ClassList sections={unscheduledSections} unscheduleSection={unscheduleSection} />
         </div>
       </div>
     </DndProvider>
