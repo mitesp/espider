@@ -14,13 +14,18 @@ type Props = {
 export default function SectionSlot(props: Props) {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: "Section",
+    canDrop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {
+      // TODO figure out how to do this without using "any"
+      return !props.section;
+      // TODO add in based on availability
+    },
     drop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {
       // TODO figure out how to do this without using "any"
       props.scheduleSection(item.id, props.classroom, props.timeslot);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(), // TODO this should be based on availability
+      canDrop: monitor.canDrop(),
     }),
   });
 
