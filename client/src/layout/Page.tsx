@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 type PageStyle = "general" | "content" | "fullWidth";
 
@@ -17,6 +17,10 @@ function Page(props: PageProps) {
   if (props.title) {
     document.title = props.title;
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (renderChildren: React.ReactNode) => {
     switch (props.style) {
