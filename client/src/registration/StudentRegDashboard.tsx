@@ -1,3 +1,4 @@
+import { Link } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
 import { RegStatusOption, ScheduleItem } from "./types";
@@ -137,7 +138,7 @@ function StudentRegDashboard(props: Props) {
       <div className="columns">
         <div className="column">
           <h2 className="has-text-centered is-size-3 mb-2">Register</h2>
-          <a href="register">Registration steps</a>
+          <Link to="register">Registration steps</Link>
         </div>
         {renderClassStatus()}
       </div>

@@ -1,3 +1,4 @@
+import { Link } from "@reach/router";
 import React from "react";
 
 import { contentPage } from "../layout/Page";
@@ -15,14 +16,14 @@ export default function Teach() {
       <div className="column">
         Teaching for ESP can be an extremely rewarding and educational experience. It can also be as
         much or as little commitment as you like. If you would like to teach a one-time class,{" "}
-        <a href="/splash">Splash</a> (in November) and <a href="/spark">Spark</a> (in early March)
-        are great opportunities to teach about anything you want!
-        <a href="/hssp"> HSSP</a> (spring and summer) is a 6–10 week program that gives you the
+        <Link to="/splash">Splash</Link> (in November) and <Link to="/spark">Spark</Link> (in early
+        March) are great opportunities to teach about anything you want!
+        <Link to="/hssp"> HSSP</Link> (spring and summer) is a 6–10 week program that gives you the
         opportunity to go more in-depth.
         <br /> <br />
         Moreover, we believe that teaching should be fun for you, as well as the students taking
         your classes. Our motto is{" "}
-        <a href="/aboutus">“teach anything, learn anything, do anything”</a>
+        <Link to="/aboutus">“teach anything, learn anything, do anything”</Link>
         , and we hope our programs allow you to teach the subjects (academic or non-academic) that
         you’re passionate about.
         <br /> <br />

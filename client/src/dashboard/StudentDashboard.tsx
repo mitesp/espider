@@ -1,3 +1,4 @@
+import { Link } from "@reach/router";
 import React, { Component } from "react";
 
 import { studentDashboardEndpoint } from "../apiEndpoints";
@@ -57,9 +58,9 @@ export default class StudentDashboard extends Component<Props, State> {
               return (
                 <h3 className="is-size-5" key={index}>
                   {program.name}:{" "}
-                  <a href={program.url + "/dashboard"}>
+                  <Link to={`${program.url}/dashboard`}>
                     {program.registered ? "Go to Dashboard" : "Register!!"}
-                  </a>
+                  </Link>
                 </h3>
               );
             })}
@@ -68,7 +69,7 @@ export default class StudentDashboard extends Component<Props, State> {
             {this.state.previousPrograms.map((program, index) => {
               return (
                 <h3 className="is-size-5" key={index}>
-                  {program.name}: <a href={`${program.url}/dashboard`}>View</a>
+                  {program.name}: <Link to={`${program.url}/dashboard`}>View</Link>
                 </h3>
               );
             })}

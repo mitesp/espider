@@ -1,9 +1,10 @@
+import { Link } from "@reach/router";
 import React from "react";
 
 const generateLink = (href: string, text: string) => (
-  <a className="has-text-link-dark" href={href}>
+  <Link className="has-text-link-dark" to={href}>
     {text}
-  </a>
+  </Link>
 );
 
 const generateLinksList = (linksInfo: string[][]) => (
