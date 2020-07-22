@@ -98,9 +98,6 @@ function App(props: {}) {
             <Program key={program} path={program} program={program} />
           ))}
 
-          {/*<RegDashboard path=":program/:edition/*" />
-          <RegDashboard path=":program/:edition/:season/*" />*/}
-
           {programs.map((program, index) => (
             program.season === "" ? 
               <RegDashboard

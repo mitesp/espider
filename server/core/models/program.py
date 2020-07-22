@@ -21,7 +21,7 @@ class Program(models.Model):
         if self.season == "":
             return self.name + "/" + self.edition
         else:
-            return self.name + "/" + self.edition + "/" + self.season
+            return self.name + "/" + self.season + "/" + self.edition
 
     def __str__(self):
         if self.season == "":
