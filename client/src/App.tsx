@@ -1,4 +1,3 @@
-// @ts-nocheck TODO: fix
 import "./App.sass";
 
 import { Router, Link } from "@reach/router";
@@ -64,25 +63,36 @@ function App(props: {}) {
       <main className="px-3 py-5">
         {/* NOTE: primary=false causes the scroll position on the new "page" to be the top of the page instead of the top of the component. */}
         <Router primary={false}>
+          {/* @ts-ignore TODO: reach-router path fix */}
           <Home path="/" />
           {/* TODO: better page than homepage? Notification of logout success? */}
+          {/* @ts-ignore TODO: reach-router path fix */}
           <Home path="logout" />
           <PrivateRoute path="nextup" as={Nextup} />
+          {/* @ts-ignore TODO: reach-router path fix */}
           <LoginPage path="login" setToken={setToken} />
+          {/* @ts-ignore TODO: reach-router path fix */}
           <SignupPage path="signup" setToken={setToken} />
 
+          {/* @ts-ignore TODO: reach-router path fix */}
           <Dashboard path="dashboard" />
+          {/* @ts-ignore TODO: reach-router path fix */}
           <AboutUs path="aboutus" />
+          {/* @ts-ignore TODO: reach-router path fix */}
           <Teach path="teach" />
+          {/* @ts-ignore TODO: reach-router path fix */}
           <Learn path="learn" />
+          {/* @ts-ignore TODO: reach-router path fix */}
           <Nextup path="next" />
 
           {programList.map(program => (
+            //  @ts-ignore TODO: reach-router path fix
             <Program key={program} path={program} program={program} />
           ))}
 
+          {/* @ts-ignore TODO: reach-router path fix */}
           <RegDashboard path=":program/:edition/*" />
-
+          {/* @ts-ignore TODO: reach-router path fix */}
           <NotFound default />
         </Router>
       </main>

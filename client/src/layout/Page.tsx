@@ -11,7 +11,7 @@ type PageProps = {
   title?: string;
 };
 
-function Page(props: PageProps): (renderChildren: React.ReactNode) => React.ReactNode {
+function Page(props: PageProps): (renderChildren: JSX.Element) => JSX.Element {
   // NOTE: Current Page component only sets document title and returns a simple
   // layout. This could be extended with more useful functions in the future.
   if (props.title) {

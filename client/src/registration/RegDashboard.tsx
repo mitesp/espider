@@ -57,16 +57,16 @@ function RegDashboard(props: Props) {
           <Router primary={false}>
             <Redirect from="/" to="dashboard" noThrow />
             <StudentRegDashboard
-              /* @ts-ignore TODO: thanks reach router */
+              /* @ts-ignore TODO: reach-router path fix */
               path="dashboard"
               checks={regChecks}
               regStatus={regStatus}
               program={props.program}
               edition={props.edition}
             />
-            {/* @ts-ignore TODO: thanks reach router */}
+            {/* @ts-ignore TODO: reach-router path fix */}
             <StudentRegistration path="register" checks={regChecks} />
-            {/* @ts-ignore TODO: thanks reach router */}
+            {/* @ts-ignore TODO: reach-router path fix */}
             <ChangeClassesDashboard path="changeclasses" />
           </Router>
         )}
