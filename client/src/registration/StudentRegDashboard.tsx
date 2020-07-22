@@ -28,11 +28,27 @@ function StudentRegDashboard(props: Props) {
   const [schedule, setSchedule] = useState([] as ScheduleItem[]);
 
   useEffect(() => {
-    // Set up student classes
-    axiosInstance.get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`).then(res => {
-      setSchedule(res.data);
-    });
-  }, [props.edition, props.program]);
+    switch (props.regStatus) {
+      case RegStatusOption.ClassPreferences:
+        // TODO set up class preferences
+        break;
+
+      case RegStatusOption.ChangeClasses ||
+        RegStatusOption.PreProgram ||
+        RegStatusOption.DayOf ||
+        RegStatusOption.PostProgram:
+        // Set up student classes
+        axiosInstance
+          .get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`)
+          .then(res => {
+            setSchedule(res.data);
+          });
+        break;
+
+      default:
+        console.log("Something broke :(");
+    }
+  }, [props.edition, props.program, props.regStatus]);
 
   function renderClassPrefs(editsAllowed: boolean = false) {
     return (
