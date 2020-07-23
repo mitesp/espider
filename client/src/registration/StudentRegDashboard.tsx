@@ -70,7 +70,7 @@ function StudentRegDashboard(props: Props) {
             })}
           </tbody>
         </table>
-        {editsAllowed && renderLinkedText("Edit class schedule", "changeclasses")}
+        {editsAllowed && renderLinkedText("Edit class schedule", "../changeclasses")}
       </div>
     );
   }

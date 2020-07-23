@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Class, ScheduleItem, Section } from "./types";
 
@@ -26,49 +26,38 @@ type State = {
   schedule: ScheduleItem[];
 };
 
-class ClassChangesDashboard extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      catalog: [],
-      classSearchQuery: "",
-      displayedCatalog: [],
-      displayOnlyOpenClasses: true,
-      schedule: [],
-    };
-  }
+function ClassChangesDashboard(props: Props) {
+  const [schedule, setSchedule] = useState([] as ScheduleItem[]);
 
-  componentDidMount() {
-    this.setupStudentClasses();
-    this.setupClassCatalog();
-  }
+  const [catalog, setCatalog] = useState([] as Class[]);
+  const [displayedCatalog, setDisplayedCatalog] = useState([] as Class[]);
 
-  setupStudentClasses() {
+  const [classSearchQuery, setClassSearchQuery] = useState("");
+  const [displayOnlyOpenClasses, setDisplayOnlyOpenClasses] = useState(false);
+
+  const setupStudentClasses = useCallback(() => {
     axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${studentScheduleEndpoint}`, {
+      .get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`, {
         params: {
           include_empty_timeslots: true,
         },
       })
       .then(res => {
-        this.setState({
-          schedule: res.data,
-        });
+        setSchedule(res.data);
       });
-  }
+  }, [props.edition, props.program]);
 
-  setupClassCatalog() {
-    axiosInstance
-      .get(`/${this.props.program}/${this.props.edition}/${classCatalogEndpoint}`)
-      .then(res => {
-        this.setState({
-          catalog: res.data,
-          displayedCatalog: res.data,
-        });
-      });
-  }
+  useEffect(() => {
+    // set up student schedule
+    setupStudentClasses();
+    // set up class catalog
+    axiosInstance.get(`/${props.program}/${props.edition}/${classCatalogEndpoint}`).then(res => {
+      setCatalog(res.data);
+      setDisplayedCatalog(res.data);
+    });
+  }, [props.edition, props.program, setupStudentClasses]);
 
-  renderClassSchedule() {
+  function renderClassSchedule() {
     return (
       <div className="column is-6">
         <h2 className="has-text-centered is-size-3">Classes</h2>
@@ -82,7 +71,7 @@ class ClassChangesDashboard extends Component<Props, State> {
               </tr>
             </thead>
             <tbody>
-              {this.state.schedule.map((scheduleItem, index) => {
+              {schedule.map((scheduleItem, index) => {
                 return (
                   <tr key={index}>
                     <th>{scheduleItem.timeslot}</th>
@@ -90,7 +79,7 @@ class ClassChangesDashboard extends Component<Props, State> {
                     <td>
                       {scheduleItem.section && (
                         <button
-                          onClick={e => this.removeSection(e, scheduleItem.section)}
+                          onClick={e => removeSection(e, scheduleItem.section)}
                           className="delete is-centered"
                         ></button>
                       )}
@@ -101,52 +90,47 @@ class ClassChangesDashboard extends Component<Props, State> {
             </tbody>
           </table>
         </div>
-        {renderLinkedText("Back to Dashboard", "dashboard")}
+        {renderLinkedText("Back to Dashboard", "../dashboard")}
       </div>
     );
   }
 
-  enrolledInClass(clazz: Class) {
-    return false;
-    // TODO will compare internal list of classes and catalog
-  }
-
-  addClass(e: React.MouseEvent, clazz: Class) {
+  function addClass(e: React.MouseEvent, clazz: Class) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     console.log("Adding " + clazz.title);
     // TODO make this functional
   }
 
-  addWaitlistClass(e: React.MouseEvent, clazz: Class) {
+  function addWaitlistClass(e: React.MouseEvent, clazz: Class) {
     e.preventDefault();
     console.log("Adding to waitlist " + clazz.title);
     // TODO make this functional
   }
 
-  removeSection(e: React.MouseEvent, section: Section) {
+  function removeSection(e: React.MouseEvent, section: Section) {
     // TODO add some kind of "Are you sure?" message
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     if (section) {
       axiosInstance
-        .post(`/${this.props.program}/${this.props.edition}/${studentRemoveClassesEndpoint}`, {
+        .post(`/${props.program}/${props.edition}/${studentRemoveClassesEndpoint}`, {
           class: section.clazz,
           section: section.number,
         })
         .then(res => {
           // TODO error handling
-          this.setupStudentClasses();
+          setupStudentClasses();
         });
       // TODO refresh catalog (if catalog doesn't include classes that the student is in)
     }
   }
 
-  toggleClassDescription(e: React.MouseEvent) {
+  function toggleClassDescription(e: React.MouseEvent) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     e!.currentTarget!.parentElement!.nextElementSibling!.classList.toggle("is-hidden");
     // TODO do this in a better way than DOM manipulation
   }
 
-  renderClass = (clazz: Class) => {
+  function renderClass(clazz: Class) {
     const classHasSpace = clazz.capacity - clazz.sections[0].num_students > 0;
     // TODO replace this with something that actually checks this once sections have been
     // properly implemented
@@ -157,7 +141,7 @@ class ClassChangesDashboard extends Component<Props, State> {
             href="#void"
             className="card-header-title"
             role="button"
-            onClick={this.toggleClassDescription}
+            onClick={toggleClassDescription}
           >
             {clazz.title}
           </a>
@@ -165,7 +149,7 @@ class ClassChangesDashboard extends Component<Props, State> {
             href="#void"
             className="card-header-icon card-toggle"
             role="button"
-            onClick={this.toggleClassDescription}
+            onClick={toggleClassDescription}
           >
             <span className="icon">
               <i className="fas fa-angle-down"></i>
@@ -186,7 +170,7 @@ class ClassChangesDashboard extends Component<Props, State> {
               href="#void"
               className="card-footer-item"
               role="button"
-              onClick={e => this.addClass(e, clazz)}
+              onClick={e => addClass(e, clazz)}
             >
               Add Class
             </a>
@@ -195,7 +179,7 @@ class ClassChangesDashboard extends Component<Props, State> {
               href="#void"
               className="card-footer-item"
               role="button"
-              onClick={e => this.addWaitlistClass(e, clazz)}
+              onClick={e => addWaitlistClass(e, clazz)}
             >
               Join waitlist
             </a>
@@ -209,46 +193,36 @@ class ClassChangesDashboard extends Component<Props, State> {
         </div>
       </div>
     );
-  };
+  }
 
-  handleSearchChange = (e: React.FormEvent<HTMLInputElement>) => {
-    this.setState({
-      classSearchQuery: e.currentTarget.value,
-    });
-  };
+  function handleSearchChange(e: React.FormEvent<HTMLInputElement>) {
+    setClassSearchQuery(e.currentTarget.value);
+  }
 
-  textContainsQuery = (text: string, query: string) => {
+  function textContainsQuery(text: string, query: string) {
     return text.toLowerCase().indexOf(query.toLowerCase()) >= 0;
-  };
+  }
 
-  classContainsQuery = (clazz: Class, query: string) => {
-    return (
-      this.textContainsQuery(clazz.title, query) || this.textContainsQuery(clazz.description, query)
-    );
-  };
+  function classContainsQuery(clazz: Class, query: string) {
+    return textContainsQuery(clazz.title, query) || textContainsQuery(clazz.description, query);
+  }
 
-  submitSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.setState({
-      displayedCatalog: this.state.catalog.filter(clazz =>
-        this.classContainsQuery(clazz, this.state.classSearchQuery)
-      ),
-    });
+  function submitSearch(e: React.MouseEvent<HTMLButtonElement>) {
+    setDisplayedCatalog(catalog.filter(clazz => classContainsQuery(clazz, classSearchQuery)));
     // TODO make search functionality better/more useful
     // TODO consider doing this on edit/removing the button
-  };
+  }
 
-  filterOpenClasses = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.state.displayOnlyOpenClasses // previous state
+  function filterOpenClasses(e: React.MouseEvent<HTMLButtonElement>) {
+    displayOnlyOpenClasses // previous state
       ? console.log("Open class filter off")
       : console.log("Open class filter on");
     // TODO make this functional
     e!.currentTarget!.classList.toggle("is-success");
-    this.setState({
-      displayOnlyOpenClasses: !this.state.displayOnlyOpenClasses,
-    });
-  };
+    setDisplayOnlyOpenClasses(!displayOnlyOpenClasses);
+  }
 
-  renderClassCatalog() {
+  function renderClassCatalog() {
     return (
       <div className="column">
         <h2 className="has-text-centered is-size-3">Class Catalog</h2>
@@ -257,46 +231,44 @@ class ClassChangesDashboard extends Component<Props, State> {
             <div className="field">
               <div className="control is-expanded">
                 {renderCustomInput(
-                  this.handleSearchChange,
+                  handleSearchChange,
                   "Search for Class",
                   "search",
-                  this.state.classSearchQuery,
+                  classSearchQuery,
                   "text",
                   "search"
                 )}
               </div>
             </div>
-            <button className="button is-info" onClick={this.submitSearch}>
+            <button className="button is-info" onClick={submitSearch}>
               Search
             </button>
           </div>
         </div>
-        <button className="button mb-4 is-success" onClick={this.filterOpenClasses}>
+        <button className="button mb-4 is-success" onClick={filterOpenClasses}>
           Only open classes
         </button>
         {/*TODO add more filters*/}
-        {this.state.displayedCatalog.length > 0
-          ? this.state.displayedCatalog.map(this.renderClass)
+        {displayedCatalog.length > 0
+          ? displayedCatalog.map(renderClass)
           : renderTextInSection("No classes match your search filters.", true)}
       </div>
     );
   }
 
-  render() {
-    //TODO block view if studentreg isn't open (or something)
-    return generalPage("Class changes dashboard | MIT ESP")(
-      <React.Fragment>
-        <h1 className="has-text-centered is-size-2">
-          {this.props.program} {this.props.edition}: Change Classes
-        </h1>
-        <br />
-        <div className="columns">
-          {this.renderClassSchedule()}
-          {this.renderClassCatalog()}
-        </div>
-      </React.Fragment>
-    );
-  }
+  //TODO block view if studentreg isn't open (or something)
+  return generalPage(`${props.program} ${props.edition} Class Changes Dashboard | MIT ESP`)(
+    <React.Fragment>
+      <h1 className="has-text-centered is-size-2">
+        {props.program} {props.edition}: Change Classes
+      </h1>
+      <br />
+      <div className="columns">
+        {renderClassSchedule()}
+        {renderClassCatalog()}
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default ClassChangesDashboard;
