@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 
 import LoginPage from "./accounts/LoginPage";
 import SignupPage from "./accounts/SignupPage";
-import { userDataEndpoint } from "./apiEndpoints";
+import { userDataEndpoint, programsEndpoint } from "./apiEndpoints";
 import axiosInstance from "./axiosAPI";
 import { AuthContext } from "./context/auth";
 import Dashboard from "./dashboard/Dashboard";
@@ -13,13 +13,14 @@ import AboutUs from "./info/AboutUs";
 import Home from "./info/Home";
 import Learn from "./info/Learn";
 import Nextup from "./info/Nextup";
-import Program, { programList } from "./info/Program";
+import ProgramStatic, { programList } from "./info/Program";
 import Teach from "./info/Teach";
 import Footer from "./layout/Footer";
 import Nav from "./layout/Nav";
 import { contentPage } from "./layout/Page";
 import PrivateRoute from "./PrivateRoute";
 import RegDashboard from "./registration/RegDashboard";
+import { Program } from "./types";
 
 const NotFound = () =>
   contentPage("404 Not found")(
@@ -40,6 +41,7 @@ function App(props: {}) {
 
   const existingToken = localStorage.getItem("token") || "";
   const [authToken, setAuthToken] = useState(existingToken);
+  const [programs, setPrograms] = useState([] as Program[]);
 
   useEffect(() => {
     if (authToken) {
@@ -51,6 +53,9 @@ function App(props: {}) {
         });
       });
     }
+    axiosInstance.get(programsEndpoint).then(result => {
+      setPrograms(result.data);
+    });
   }, [authToken, props]);
 
   function setToken(accessToken: string) {
@@ -87,11 +92,19 @@ function App(props: {}) {
 
           {programList.map(program => (
             //  @ts-ignore TODO: reach-router path fix
-            <Program key={program} path={program} program={program} />
+            <ProgramStatic key={program} path={program} program={program} />
           ))}
 
           {/* @ts-ignore TODO: reach-router path fix */}
-          <RegDashboard path=":program/:edition/*" />
+          {programs.map((program, index) => (
+            <RegDashboard
+              key={index}
+              path={`${program.name}/${program.edition}/*`}
+              program={program.name}
+              edition={program.edition}
+            />
+            // TODO do something about the half-second it takes to render the page (maybe just caching)
+          ))}
           {/* @ts-ignore TODO: reach-router path fix */}
           <NotFound default />
         </Router>

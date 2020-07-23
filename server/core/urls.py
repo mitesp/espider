@@ -40,6 +40,7 @@ urlpatterns = [
             ]
         ),
     ),
+    path("api/programs/", views.get_all_programs),
     # auth API calls
     path("api/account/student/", views.StudentAccount.as_view()),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),

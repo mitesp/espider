@@ -1,3 +1,6 @@
+// Overall
+const programsEndpoint = "/programs/";
+
 // Accounts
 const loginEndpoint = "/token/";
 const tokenRefreshEndpoint = "/token/refresh/";
@@ -26,6 +29,7 @@ const studentAvailabilityEndpoint = "student/availability/";
 const studentScheduleEndpoint = "student/schedule/";
 
 export {
+  programsEndpoint,
   loginEndpoint,
   tokenRefreshEndpoint,
   userDataEndpoint,
