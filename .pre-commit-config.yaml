@@ -52,3 +52,9 @@ repos:
         types: [file]
         exclude: ^server # prettier doesn't like Django templates
         args: ["--write", "--print-width=100", "--arrow-parens=avoid"]
+  # - repo: local
+  #   hooks:
+  #   -   id: tests
+  #       name: run tests
+  #       entry: sudo docker-compose exec server python3 manage.py test
+  #       language: python
