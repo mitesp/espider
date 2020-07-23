@@ -1,4 +1,4 @@
-export type Program = {
+export type ProgramModel = {
   name: string;
   edition: string;
 };

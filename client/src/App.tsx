@@ -13,14 +13,14 @@ import AboutUs from "./info/AboutUs";
 import Home from "./info/Home";
 import Learn from "./info/Learn";
 import Nextup from "./info/Nextup";
-import ProgramStatic, { programList } from "./info/Program";
+import Program, { programList } from "./info/Program";
 import Teach from "./info/Teach";
 import Footer from "./layout/Footer";
 import Nav from "./layout/Nav";
 import { contentPage } from "./layout/Page";
 import PrivateRoute from "./PrivateRoute";
 import RegDashboard from "./registration/RegDashboard";
-import { Program } from "./types";
+import { ProgramModel } from "./types";
 
 const NotFound = () =>
   contentPage("404 Not found")(
@@ -41,7 +41,7 @@ function App(props: {}) {
 
   const existingToken = localStorage.getItem("token") || "";
   const [authToken, setAuthToken] = useState(existingToken);
-  const [programs, setPrograms] = useState([] as Program[]);
+  const [programs, setPrograms] = useState([] as ProgramModel[]);
 
   useEffect(() => {
     if (authToken) {
@@ -53,10 +53,13 @@ function App(props: {}) {
         });
       });
     }
+  }, [authToken, props]);
+
+  useEffect(() => {
     axiosInstance.get(programsEndpoint).then(result => {
       setPrograms(result.data);
     });
-  }, [authToken, props]);
+  });
 
   function setToken(accessToken: string) {
     setAuthToken(accessToken);
@@ -92,13 +95,13 @@ function App(props: {}) {
 
           {programList.map(program => (
             //  @ts-ignore TODO: reach-router path fix
-            <ProgramStatic key={program} path={program} program={program} />
+            <Program key={program} path={program} program={program} />
           ))}
 
-          {/* @ts-ignore TODO: reach-router path fix */}
           {programs.map((program, index) => (
             <RegDashboard
               key={index}
+              // @ts-ignore TODO: reach-router path fix
               path={`${program.name}/${program.edition}/*`}
               program={program.name}
               edition={program.edition}

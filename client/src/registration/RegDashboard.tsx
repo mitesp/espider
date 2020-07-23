@@ -14,7 +14,6 @@ import { generalPage } from "../layout/Page";
 // import TeacherDashboard from "./TeacherRegDashboard";
 
 type Props = {
-  path?: string; // Typescript was complaining
   program: string;
   edition: string;
 };
@@ -65,15 +64,15 @@ function RegDashboard(props: Props) {
               program={props.program}
               edition={props.edition}
             />
-            {/* @ts-ignore TODO: reach-router path fix */}
             <StudentRegistration
+              // @ts-ignore TODO: reach-router path fix
               path="register"
               checks={regChecks}
               program={props.program}
               edition={props.edition}
             />
-            {/* @ts-ignore TODO: reach-router path fix */}
             <ChangeClassesDashboard
+              // @ts-ignore TODO: reach-router path fix
               path="changeclasses"
               program={props.program}
               edition={props.edition}
