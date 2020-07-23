@@ -16,13 +16,13 @@ import { generalPage } from "../layout/Page";
 type Props = {
   program: string;
   season?: string;
-  edition: string;
+  edition: number;
 };
 
 // TODO: restructure this per-program "dashboard" concept, if anything, this
 // component is functioning more like a "ProgramDashboard"
 
-function getProgramURL(name: string, season: string | undefined, edition: string) {
+function getProgramURL(name: string, season: string | undefined, edition: number) {
   if (season) {
     return `${name}/${season}/${edition}`;
   } else {
