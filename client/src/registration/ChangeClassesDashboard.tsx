@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import { Class, ScheduleItem, Section } from "./types";
+import { dashboardURL } from "./urls";
 
 import {
   studentScheduleEndpoint,
@@ -90,7 +91,7 @@ function ClassChangesDashboard(props: Props) {
             </tbody>
           </table>
         </div>
-        {renderLinkedText("Back to Dashboard", "../dashboard")}
+        {renderLinkedText("Back to Dashboard", `../${dashboardURL}`)}
       </div>
     );
   }

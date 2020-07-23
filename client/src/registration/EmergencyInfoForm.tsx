@@ -1,6 +1,8 @@
 import { navigate } from "@reach/router";
 import React, { Component } from "react";
 
+import { dashboardURL } from "./urls";
+
 import { emergencyInfoEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 
@@ -64,7 +66,7 @@ class EmergencyInfoForm extends Component<Props, State> {
       })
       .then(result => {
         /*TODO check validity of submitted data*/
-        navigate("dashboard");
+        navigate(dashboardURL);
       });
   };
 

@@ -1,6 +1,8 @@
 import { navigate } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
+import { dashboardURL } from "./urls";
+
 import { studentProfileEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 import {
@@ -87,7 +89,7 @@ function UpdateProfileForm(props: Props) {
       })
       .then(result => {
         /*TODO check validity of submitted data*/
-        navigate("dashboard");
+        navigate(dashboardURL);
       });
   }
 
