@@ -1,7 +1,7 @@
 import { navigate } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
-import { studentProfileEndpoint } from "../apiEndpoints";
+import { programStudentProfileEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 import {
   renderFirstLastName,
@@ -10,8 +10,8 @@ import {
 } from "../forms/helpers";
 
 type Props = {
-  edition: string;
-  program: string;
+  programString: string;
+  programURL: string;
 };
 
 /**************************************************************************
@@ -35,11 +35,7 @@ function UpdateProfileForm(props: Props) {
   });
 
   useEffect(() => {
-    setupProfileInfo();
-  }, []);
-
-  function setupProfileInfo() {
-    axiosInstance.get(studentProfileEndpoint).then(res => {
+    axiosInstance.get(`/${props.programURL}/${programStudentProfileEndpoint}`).then(res => {
       setFields({
         affiliation: res.data.affiliation,
         city: res.data.city,
@@ -55,7 +51,7 @@ function UpdateProfileForm(props: Props) {
         state: res.data.state,
       });
     });
-  }
+  }, [props.programURL]);
 
   function handleChange(e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLSelectElement>) {
     const { name, value } = e.currentTarget;
@@ -70,16 +66,14 @@ function UpdateProfileForm(props: Props) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     axiosInstance
-      .post(studentProfileEndpoint, {
+      .post(`/${props.programURL}/${programStudentProfileEndpoint}`, {
         affiliation: fields.affiliation,
         city: fields.city,
         country: fields.country,
-        edition: props.edition,
         first_name: fields.firstName,
         last_name: fields.lastName,
         email: fields.email,
         phone_number: fields.phoneNumber,
-        program: props.program,
         pronouns: fields.pronouns,
         state: fields.state,
         school: fields.school,

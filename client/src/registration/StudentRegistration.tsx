@@ -15,8 +15,6 @@ import {
 import { generalPage } from "../layout/Page";
 
 type Props = {
-  program: string;
-  edition: string;
   checks: {
     availabilityCheck: boolean;
     emergencyInfoCheck: boolean;
@@ -24,6 +22,8 @@ type Props = {
     medliabCheck: boolean;
     updateProfileCheck: boolean;
   };
+  programString: string;
+  programURL: string;
 };
 
 // TODO: final confirmation state or page
@@ -78,7 +78,7 @@ function StudentRegistration(props: Props) {
       </li>
     );
   }
-  return generalPage(`${props.program} ${props.edition} Registration | MIT ESP`)(
+  return generalPage(`${props.programString} Registration | MIT ESP`)(
     <React.Fragment>
       <ul className="steps has-content-centered">
         {steps.map((step, index) => generateStep(step.name, step.text, index))}

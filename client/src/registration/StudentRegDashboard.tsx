@@ -9,8 +9,6 @@ import { useAuth } from "../context/auth";
 import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 
 type Props = {
-  program: string;
-  edition: string;
   checks: {
     availabilityCheck: boolean;
     emergencyInfoCheck: boolean;
@@ -18,6 +16,8 @@ type Props = {
     medliabCheck: boolean;
     updateProfileCheck: boolean;
   };
+  programString: string;
+  programURL: string;
   regStatus: RegStatusOption;
 };
 
@@ -30,10 +30,10 @@ function StudentRegDashboard(props: Props) {
 
   useEffect(() => {
     // Set up student classes
-    axiosInstance.get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`).then(res => {
+    axiosInstance.get(`/${props.programURL}/${studentScheduleEndpoint}`).then(res => {
       setSchedule(res.data);
     });
-  }, [props.edition, props.program]);
+  }, [props.programURL]);
 
   function renderClassPrefs(editsAllowed: boolean = false) {
     return (
@@ -132,7 +132,7 @@ function StudentRegDashboard(props: Props) {
   return (
     <div className="container">
       <h1 className="has-text-centered is-size-2">
-        {props.program} {props.edition} Dashboard for {username}
+        {props.programString} Dashboard for {username}
       </h1>
       <br />
       <div className="columns">

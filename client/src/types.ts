@@ -1,4 +1,5 @@
 export type ProgramModel = {
   name: string;
-  edition: string;
+  season: string; // equals "" if empty
+  edition: number;
 };

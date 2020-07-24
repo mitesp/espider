@@ -19,10 +19,12 @@ class StudentRegAPI(APIView):
 
     permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, program, edition, format=None):
+    def get(self, request, program, edition, season=None, format=None):
         user = request.user
+        if season is None:
+            season = ""
 
-        prog = Program.objects.get(name=program, edition=edition)
+        prog = Program.objects.get(name=program, season=season, edition=edition)
 
         studentreg, _ = StudentRegistration.objects.get_or_create(student=user, program=prog)
         # TODO figure out how to change the default regstatus based on the program's status
@@ -37,11 +39,13 @@ class StudentProgramClasses(APIView):
 
     permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, program, edition, format=None):
+    def get(self, request, program, edition, season=None, format=None):
         user = request.user
         params = request.GET
+        if season is None:
+            season = ""
 
-        prog = Program.objects.get(name=program, edition=edition)
+        prog = Program.objects.get(name=program, season=season, edition=edition)
         studentreg = StudentRegistration.objects.get(student=user, program=prog)
         include_empty_timeslots = params.get("include_empty_timeslots", False)
         schedule = studentreg.get_schedule(include_empty_timeslots=include_empty_timeslots)
@@ -61,14 +65,16 @@ class StudentProgramClasses(APIView):
 
 @api_view(["POST"])
 @permission_classes([custom_permissions.IsStudent])
-def student_remove_section(request, program, edition):
+def student_remove_section(request, program, edition, season=None):
     """
     Remove a section from a student's enrolled sections.
     """
     data = request.data
     user = request.user
+    if season is None:
+        season = ""
 
-    prog = Program.objects.get(name=program, edition=edition)
+    prog = Program.objects.get(name=program, season=season, edition=edition)
     studentreg = StudentRegistration.objects.get(student=user, program=prog)
 
     clazz = Class.objects.get(id=data["class"])
@@ -89,7 +95,7 @@ class Profile(APIView):
 
     permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, format=None):
+    def get(self, request, program="", season="", edition="", format=None):
         user = request.user
         profile = user.profile
         data = {
@@ -102,7 +108,7 @@ class Profile(APIView):
         return Response(data)
 
     @transaction.atomic
-    def post(self, request, format=None):
+    def post(self, request, program="", season="", edition="", format=None):
         """
         TODO: validate:
             ensure email is in email format
@@ -116,7 +122,7 @@ class Profile(APIView):
         data = request.data
 
         self.update_profile(user, data)
-        self.update_profile_check(user, data)
+        self.update_profile_check(user, data, program, season, edition)
 
         return Response({"message": "Success!"})
 
@@ -136,9 +142,9 @@ class Profile(APIView):
             profile.school = data.get("school")
             profile.save()
 
-    def update_profile_check(self, user, data):
-        if "update_profile" in data and data["update_profile"]:
-            program = Program.objects.get(name=data.get("program"), edition=data.get("edition"))
+    def update_profile_check(self, user, data, program, season, edition):
+        if "update_profile" in data and data["update_profile"] and program != "":
+            program = Program.objects.get(name=program, season=season, edition=edition)
             studentreg = StudentRegistration.objects.get(student=user, program=program)
             studentreg.update_profile_check = True
             studentreg.save()
@@ -153,7 +159,7 @@ class EmergencyInfo(APIView):
 
     permission_classes = (custom_permissions.IsStudent,)
 
-    def get(self, request, program, edition, format=None):
+    def get(self, request, program, edition, season=None, format=None):
         # user = request.user
         # params = request.GET
 
@@ -165,8 +171,8 @@ class EmergencyInfo(APIView):
 
         return Response({})
 
-    def post(self, request, program, edition, format=None):
-        studentreg = self.get_object(program, edition)
+    def post(self, request, program, edition, season=None, format=None):
+        studentreg = self.get_object(program, edition, season)
         # submit emergency info
 
         studentreg.emergency_info_check = True
@@ -175,9 +181,11 @@ class EmergencyInfo(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program, edition):
+    def get_object(self, program, edition, season):
         user = self.request.user
-        program = Program.objects.get(name=program, edition=edition)
+        if season is None:
+            season = ""
+        program = Program.objects.get(name=program, season=season, edition=edition)
         # TODO add check for if studentreg object exists
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
@@ -193,8 +201,8 @@ class MedicalLiability(APIView):
 
     permission_classes = (custom_permissions.IsStudent, custom_permissions.NoMedliabCheck)
 
-    def post(self, request, program, edition, format=None):
-        studentreg = self.get_object(program, edition)
+    def post(self, request, program, edition, season=None, format=None):
+        studentreg = self.get_object(program, edition, season)
 
         # TODO maybe add other permissions to this so you can't accidentally do this?
         # Like something from formstack
@@ -205,9 +213,11 @@ class MedicalLiability(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program, edition):
+    def get_object(self, program, edition, season):
         user = self.request.user
-        program = Program.objects.get(name=program, edition=edition)
+        if season is None:
+            season = ""
+        program = Program.objects.get(name=program, season=season, edition=edition)
         # TODO add check for if studentreg object exists
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
@@ -223,8 +233,8 @@ class LiabilityWaiver(APIView):
 
     permission_classes = (custom_permissions.IsStudent, custom_permissions.NoLiabilityCheck)
 
-    def post(self, request, program, edition, format=None):
-        studentreg = self.get_object(program, edition)
+    def post(self, request, program, edition, season=None, format=None):
+        studentreg = self.get_object(program, edition, season)
 
         # TODO maybe add other permissions to this so you can't accidentally do this?
 
@@ -234,9 +244,11 @@ class LiabilityWaiver(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program, edition):
+    def get_object(self, program, edition, season):
         user = self.request.user
-        program = Program.objects.get(name=program, edition=edition)
+        if season is None:
+            season = ""
+        program = Program.objects.get(name=program, season=season, edition=edition)
         # TODO add check for if studentreg object exists
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 
@@ -254,8 +266,8 @@ class Availability(APIView):
 
     # TODO incorporate teacher stuff here too
 
-    def post(self, request, program, edition, format=None):
-        studentreg = self.get_object(program, edition)
+    def post(self, request, program, edition, season=None, format=None):
+        studentreg = self.get_object(program, edition, season)
 
         studentreg.availability_check = True
         studentreg.save()
@@ -263,9 +275,11 @@ class Availability(APIView):
         # TODO add correction checks
         return Response({"message": "Success!"})
 
-    def get_object(self, program, edition):
+    def get_object(self, program, edition, season):
         user = self.request.user
-        program = Program.objects.get(name=program, edition=edition)
+        if season is None:
+            season = ""
+        program = Program.objects.get(name=program, season=season, edition=edition)
         # TODO add check for if studentreg object exists
         studentreg = StudentRegistration.objects.get(student=user, program=program)
 

@@ -26,7 +26,8 @@ from .users import *  # noqa
 class ProgramAdmin(admin.ModelAdmin):
     list_display = ("__str__", "student_reg_open", "student_reg_status", "teacher_reg_open")
     inlines = [TimeslotInline]
-    search_fields = ("program", "edition")
+    search_fields = ("program", "season", "edition")
+    save_on_top = True
 
     def save_model(self, request, obj, form, change):
         if "student_reg_status" in form.changed_data:
@@ -36,13 +37,13 @@ class ProgramAdmin(admin.ModelAdmin):
 
     def add_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        self.fields = (("name", "edition"),)
+        self.fields = (("name", "season", "edition"),)
         return super(ProgramAdmin, self).add_view(request, extra_context=extra_context)
 
     def change_view(self, request, object_id, extra_context=None):
         extra_context = extra_context or {}
         self.fields = (
-            ("name", "edition"),
+            ("name", "season", "edition"),
             "student_reg_open",
             "student_reg_status",
             "teacher_reg_open",

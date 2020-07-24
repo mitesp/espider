@@ -14,9 +14,11 @@ import { generalPage } from "../layout/Page";
 // import TeacherDashboard from "./TeacherRegDashboard";
 
 type Props = {
-  program: string;
-  edition: string;
+  programString: string;
+  programURL: string;
 };
+
+// TODO add programString and programURL to a context
 
 // TODO: restructure this per-program "dashboard" concept, if anything, this
 // component is functioning more like a "ProgramDashboard"
@@ -36,7 +38,7 @@ function RegDashboard(props: Props) {
 
   useEffect(() => {
     // Set up student reg
-    axiosInstance.get(`/${props.program}/${props.edition}/${studentRegEndpoint}`).then(res => {
+    axiosInstance.get(`/${props.programURL}/${studentRegEndpoint}`).then(res => {
       setRegChecks({
         availabilityCheck: res.data.availability_check,
         emergencyInfoCheck: res.data.emergency_info_check,
@@ -46,10 +48,10 @@ function RegDashboard(props: Props) {
       });
       setRegStatus(res.data.reg_status);
     });
-  }, [props.edition, props.program]);
+  }, [props.programURL]);
 
   if (loggedIn) {
-    return generalPage(`${props.program} ${props.edition} | MIT ESP`)(
+    return generalPage(`${props.programString} | MIT ESP`)(
       // TODO: create program-specific context and provider to subsequent components
       <React.Fragment>
         {isStudent && (
@@ -61,21 +63,22 @@ function RegDashboard(props: Props) {
               path="dashboard"
               checks={regChecks}
               regStatus={regStatus}
-              program={props.program}
-              edition={props.edition}
+              programString={props.programString}
+              programURL={props.programURL}
             />
+            {/* @ts-ignore TODO: figure out what the complaint about StudentRegistration is */}
             <StudentRegistration
               // @ts-ignore TODO: reach-router path fix
               path="register"
               checks={regChecks}
-              program={props.program}
-              edition={props.edition}
+              programString={props.programString}
+              programURL={props.programURL}
             />
             <ChangeClassesDashboard
               // @ts-ignore TODO: reach-router path fix
               path="changeclasses"
-              program={props.program}
-              edition={props.edition}
+              programString={props.programString}
+              programURL={props.programURL}
             />
           </Router>
         )}

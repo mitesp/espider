@@ -13,9 +13,8 @@ import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 import { generalPage } from "../layout/Page";
 
 type Props = {
-  username: string;
-  program: string;
-  edition: string;
+  programString: string;
+  programURL: string;
 };
 
 type State = {
@@ -37,7 +36,7 @@ function ClassChangesDashboard(props: Props) {
 
   const setupStudentClasses = useCallback(() => {
     axiosInstance
-      .get(`/${props.program}/${props.edition}/${studentScheduleEndpoint}`, {
+      .get(`/${props.programURL}/${studentScheduleEndpoint}`, {
         params: {
           include_empty_timeslots: true,
         },
@@ -45,17 +44,17 @@ function ClassChangesDashboard(props: Props) {
       .then(res => {
         setSchedule(res.data);
       });
-  }, [props.edition, props.program]);
+  }, [props.programURL]);
 
   useEffect(() => {
     // set up student schedule
     setupStudentClasses();
     // set up class catalog
-    axiosInstance.get(`/${props.program}/${props.edition}/${classCatalogEndpoint}`).then(res => {
+    axiosInstance.get(`/${props.programURL}/${classCatalogEndpoint}`).then(res => {
       setCatalog(res.data);
       setDisplayedCatalog(res.data);
     });
-  }, [props.edition, props.program, setupStudentClasses]);
+  }, [props.programURL, setupStudentClasses]);
 
   function renderClassSchedule() {
     return (
@@ -112,7 +111,7 @@ function ClassChangesDashboard(props: Props) {
     e.preventDefault(); // TODO use button instead of anchor so this isn't needed
     if (section) {
       axiosInstance
-        .post(`/${props.program}/${props.edition}/${studentRemoveClassesEndpoint}`, {
+        .post(`/${props.programURL}/${studentRemoveClassesEndpoint}`, {
           class: section.clazz,
           section: section.number,
         })
@@ -257,11 +256,9 @@ function ClassChangesDashboard(props: Props) {
   }
 
   //TODO block view if studentreg isn't open (or something)
-  return generalPage(`${props.program} ${props.edition} Class Changes Dashboard | MIT ESP`)(
+  return generalPage(`${props.programString} Class Changes Dashboard | MIT ESP`)(
     <React.Fragment>
-      <h1 className="has-text-centered is-size-2">
-        {props.program} {props.edition}: Change Classes
-      </h1>
+      <h1 className="has-text-centered is-size-2">{props.programString}: Change Classes</h1>
       <br />
       <div className="columns">
         {renderClassSchedule()}

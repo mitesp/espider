@@ -28,6 +28,6 @@ class ClassCatalog(APIView):
     # TODO have some publicly accessible version of this API
     """
 
-    def get(self, request, program, edition, format=None):
-        classes = Program.objects.get(name=program, edition=edition).classes.all()
+    def get(self, request, program, edition, season="", format=None):
+        classes = Program.objects.get(name=program, season=season, edition=edition).classes.all()
         return Response([ClassSerializer(clazz).data for clazz in classes])
