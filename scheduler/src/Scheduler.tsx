@@ -45,7 +45,7 @@ export default function Scheduler(props: Props) {
       .get(`/${props.programName}/${props.programEdition}/${sectionsEndpoint}`)
       .then(res => {
         setSections(res.data);
-        setUnscheduledSections(res.data);
+        setUnscheduledSections((res.data as Section[]).filter(section => !section.timeslot));
       });
   }, [props.programEdition, props.programName]);
 
@@ -57,7 +57,7 @@ export default function Scheduler(props: Props) {
     const section = getSectionById(id);
     section.timeslot = timeslot;
     section.classroom = classroom;
-    setUnscheduledSections(sections.filter(section => section.timeslot === undefined));
+    setUnscheduledSections(sections.filter(section => !section.timeslot));
     // TODO sort ^ by clazz
     axiosInstance
       .post(`/${props.programName}/${props.programEdition}/${scheduleSectionEndpoint}/${id}/`, {
@@ -74,7 +74,7 @@ export default function Scheduler(props: Props) {
     const section = getSectionById(id);
     section.timeslot = undefined;
     section.classroom = undefined;
-    setUnscheduledSections(sections.filter(section => section.timeslot === undefined));
+    setUnscheduledSections(sections.filter(section => !section.timeslot));
     // TODO sort ^ by clazz
     axiosInstance
       .post(`/${props.programName}/${props.programEdition}/${unscheduleSectionEndpoint}/${id}/`)
@@ -118,7 +118,9 @@ export default function Scheduler(props: Props) {
                               section={
                                 sections.filter(
                                   section =>
-                                    section.timeslot === timeslot && section.classroom === classroom
+                                    section.timeslot &&
+                                    section.timeslot.id === timeslot.id &&
+                                    section.classroom === classroom
                                 )[0]
                               }
                               scheduleSection={scheduleSection}

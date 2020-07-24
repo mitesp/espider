@@ -67,13 +67,38 @@ class StudentRegSerializer(serializers.ModelSerializer):
 class SectionSerializer(serializers.ModelSerializer):
     scheduled_blocks = serializers.StringRelatedField(many=True)
     name = serializers.SerializerMethodField()
+    timeslot = serializers.SerializerMethodField()
+    classroom = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
-        fields = ("id", "clazz", "name", "number", "num_students", "scheduled_blocks")
+        fields = (
+            "id",
+            "clazz",
+            "name",
+            "number",
+            "num_students",
+            "scheduled_blocks",
+            "timeslot",
+            "classroom",
+        )
 
     def get_name(self, section):
         return str(section)
+
+    def get_classroom(self, section):
+        # TODO make this multi-block supported
+        if section.scheduled_blocks.count() > 0:
+            return section.scheduled_blocks.all()[0].classroom.name
+        else:  # unscheduled
+            return None
+
+    def get_timeslot(self, section):
+        # TODO make this multi-block supported
+        if section.scheduled_blocks.count() > 0:
+            return TimeslotSerializer(section.scheduled_blocks.all()[0].timeslot).data
+        else:  # unscheduled
+            return None
 
 
 class ClassSerializer(serializers.ModelSerializer):
