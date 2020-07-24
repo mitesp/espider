@@ -5,6 +5,7 @@ import ChangeClassesDashboard from "./ChangeClassesDashboard";
 import StudentRegDashboard from "./StudentRegDashboard";
 import StudentRegistration from "./StudentRegistration";
 import { RegStatusOption } from "./types";
+import { dashboardURL, registerURL, classChangesURL } from "./urls";
 
 import { studentRegEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
@@ -55,19 +56,19 @@ function RegDashboard(props: Props) {
         {isStudent && (
           // TODO: overarching application routing organization in one place
           <Router primary={false}>
-            <Redirect from="/" to="dashboard" noThrow />
+            <Redirect from="/" to={dashboardURL} noThrow />
             <StudentRegDashboard
               /* @ts-ignore TODO: reach-router path fix */
-              path="dashboard"
+              path={dashboardURL}
               checks={regChecks}
               regStatus={regStatus}
               program={props.program}
               edition={props.edition}
             />
             {/* @ts-ignore TODO: reach-router path fix */}
-            <StudentRegistration path="register" checks={regChecks} />
+            <StudentRegistration path={registerURL} checks={regChecks} />
             {/* @ts-ignore TODO: reach-router path fix */}
-            <ChangeClassesDashboard path="changeclasses" />
+            <ChangeClassesDashboard path={classChangesURL} />
           </Router>
         )}
 

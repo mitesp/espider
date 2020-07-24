@@ -1,6 +1,8 @@
 import { navigate } from "@reach/router";
 import React, { Component } from "react";
 
+import { dashboardURL } from "./urls";
+
 import axiosInstance from "../axiosAPI";
 
 type Props = {
@@ -33,7 +35,7 @@ class DummyForm extends Component<Props, State> {
         edition: this.props.edition,
       })
       .then(result => {
-        navigate("dashboard");
+        navigate(dashboardURL);
       });
   };
 

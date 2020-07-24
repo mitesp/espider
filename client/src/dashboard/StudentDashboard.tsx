@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import { studentDashboardEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 import { generalPage } from "../layout/Page";
+import { dashboardURL } from "../registration/urls";
 
 type CurrentProgram = {
   name: string;
@@ -59,7 +60,7 @@ export default class StudentDashboard extends Component<Props, State> {
               return (
                 <h3 className="is-size-5" key={index}>
                   {program.name}:{" "}
-                  <Link to={`/${program.url}/dashboard`}>
+                  <Link to={`/${program.url}/${dashboardURL}`}>
                     {program.registered ? "Go to Dashboard" : "Register!!"}
                   </Link>
                 </h3>
@@ -70,7 +71,7 @@ export default class StudentDashboard extends Component<Props, State> {
             {this.state.previousPrograms.map((program, index) => {
               return (
                 <h3 className="is-size-5" key={index}>
-                  {program.name}: <Link to={`/${program.url}/dashboard`}>View</Link>
+                  {program.name}: <Link to={`/${program.url}/${dashboardURL}`}>View</Link>
                 </h3>
               );
             })}

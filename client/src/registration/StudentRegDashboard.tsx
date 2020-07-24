@@ -2,6 +2,7 @@ import { Link } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
 import { RegStatusOption, ScheduleItem } from "./types";
+import { registerURL, classChangesURL } from "./urls";
 
 import { studentScheduleEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
@@ -70,7 +71,7 @@ function StudentRegDashboard(props: Props) {
             })}
           </tbody>
         </table>
-        {editsAllowed && renderLinkedText("Edit class schedule", "../changeclasses")}
+        {editsAllowed && renderLinkedText("Edit class schedule", `../${classChangesURL}`)}
       </div>
     );
   }
@@ -138,7 +139,7 @@ function StudentRegDashboard(props: Props) {
       <div className="columns">
         <div className="column">
           <h2 className="has-text-centered is-size-3 mb-2">Register</h2>
-          <Link to="../register">Registration steps</Link>
+          <Link to={`../${registerURL}`}>Registration steps</Link>
         </div>
         {renderClassStatus()}
       </div>
