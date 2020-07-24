@@ -6,3 +6,6 @@ export const tokenRefreshEndpoint = "/token/refresh/";
 export const timeslotEndpoint = "timeslots/";
 export const classroomEndpoint = "classrooms/";
 export const sectionsEndpoint = "sections/";
+
+// scheduling endpoints
+export const scheduleSectionEndpoint = "schedule";

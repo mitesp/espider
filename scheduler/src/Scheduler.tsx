@@ -7,7 +7,12 @@ import ClassList from "./ClassList";
 import ClassSlot from "./ClassSlot";
 
 import axiosInstance from "./axiosAPI";
-import { timeslotEndpoint, classroomEndpoint, sectionsEndpoint } from "./apiEndpoints";
+import {
+  timeslotEndpoint,
+  classroomEndpoint,
+  sectionsEndpoint,
+  scheduleSectionEndpoint,
+} from "./apiEndpoints";
 import { Section, Timeslot } from "./types";
 
 type Props = {
@@ -53,7 +58,14 @@ export default function Scheduler(props: Props) {
     section.classroom = classroom;
     setUnscheduledSections(sections.filter(section => section.timeslot === undefined));
     // TODO sort ^ by clazz
-    // TODO send API call to actually schedule the section
+    axiosInstance
+      .post(`/${props.programName}/${props.programEdition}/${scheduleSectionEndpoint}/${id}/`, {
+        timeslot: timeslot.id,
+        classroom: classroom,
+      })
+      .then(res => {
+        // TODO check if success or error
+      });
     console.log(`Scheduled section ${id} in ${classroom} at ${timeslot}`);
   }
 

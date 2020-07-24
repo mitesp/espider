@@ -95,3 +95,6 @@ class Classroom(models.Model):
     )
     # TODO think about what this model actually needs
     # it at least needs a name, so that's what's there for now
+
+    class Meta:
+        unique_together = (("name", "program"),)
