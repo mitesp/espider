@@ -4,12 +4,13 @@ import React, { Component } from "react";
 import { teacherDashboardEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
 
-type JSONProgram = {
+type CurrentProgram = {
   name: string;
-  edition: string;
+  url: string;
+  registered: boolean;
 };
 
-type Program = {
+type PastProgram = {
   name: string;
   url: string;
 };
@@ -19,7 +20,8 @@ type Props = {
 };
 
 type State = {
-  programs: Program[];
+  programs: CurrentProgram[];
+  previousPrograms: PastProgram[];
 };
 
 export default class TeacherDashboard extends Component<Props, State> {
@@ -27,6 +29,7 @@ export default class TeacherDashboard extends Component<Props, State> {
     super(props);
     this.state = {
       programs: [],
+      previousPrograms: [],
     };
   }
 
@@ -34,25 +37,18 @@ export default class TeacherDashboard extends Component<Props, State> {
     this.setupPrograms();
   }
 
-  generateProgramList(results: Array<JSONProgram>) {
-    const programs = Array<Program>(results.length);
-    for (let i = 0; i < results.length; i++) {
-      const r = results[i];
-      const name = r.name + " " + r.edition;
-      const url = r.name + "/" + r.edition + "/dashboard";
-      let p: Program = { name: name, url: url };
-      programs[i] = p;
-    }
-    return programs;
-  }
-
   setupPrograms() {
     axiosInstance.get(teacherDashboardEndpoint).then(res => {
-      this.setState({ programs: this.generateProgramList(res.data.results) });
+      console.log(res.data);
+      this.setState({
+        programs: res.data.current,
+        previousPrograms: res.data.previous,
+      });
     });
   }
 
   render() {
+    // TODO add announcements/dates section
     return (
       <div className="container">
         <h1 className="has-text-centered is-size-2">Teacher Dashboard for {this.props.username}</h1>
@@ -62,13 +58,22 @@ export default class TeacherDashboard extends Component<Props, State> {
             {this.state.programs.map((program, index) => {
               return (
                 <h3 className="is-size-5" key={index}>
-                  {program.name}: <Link to={program.url}>Register</Link>
+                  {program.name}:{" "}
+                  <Link to={`/${program.url}/dashboard`}>
+                    {program.registered ? "Go to Dashboard" : "Register!!"}
+                  </Link>
                 </h3>
               );
             })}
             <br />
             <h2 className="has-text-centered is-size-3">Previous Programs</h2>
-            <h3 className="is-size-5"> None </h3>
+            {this.state.previousPrograms.map((program, index) => {
+              return (
+                <h3 className="is-size-5" key={index}>
+                  {program.name}: <Link to={`/${program.url}/dashboard`}>View</Link>
+                </h3>
+              );
+            })}
           </div>
         </div>
       </div>

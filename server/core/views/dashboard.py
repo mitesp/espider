@@ -1,23 +1,31 @@
 import core.permissions as custom_permissions
 from core.models import Program, StudentRegistration
-from core.serializers import ProgramSerializer
-from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 # Dashboard API calls
 
 
-class TeacherProgramViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows programs with open teacherreg to be viewed.
-    Permissions: authenticated+teacher
-    """
+@api_view(["GET"])
+@permission_classes([custom_permissions.IsTeacher])
+def get_teacher_dashboard(request):
+    # TODO redo this function when we have a better understanding of teacher registration
+    user = request.user
 
-    permission_classes = (custom_permissions.IsTeacher,)
-    # TODO(mvadari): let's move this to a get_active_programs() in a Program Manager
-    queryset = Program.objects.all().filter(teacher_reg_open=True).order_by("edition", "name")
-    serializer_class = ProgramSerializer
+    previous_program_ids = user.teacherregs.all().values_list("program", flat=True)
+    previous_programs = Program.objects.filter(id__in=previous_program_ids)
+    previous_json = [{"name": str(p), "url": p.url} for p in previous_programs]
+
+    open_programs = Program.get_open_teacher_programs()
+    # TODO add grade checks
+
+    current_json = [
+        {"name": str(p), "url": p.url, "registered": p.teacherregs.filter(teacher=user).exists()}
+        for p in open_programs
+    ]
+    current_json.sort(key=lambda p: p["name"])  # TODO edit to be better
+
+    return Response({"previous": previous_json, "current": current_json})
 
 
 @api_view(["GET"])
