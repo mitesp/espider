@@ -64,10 +64,19 @@ function RegDashboard(props: Props) {
               program={props.program}
               edition={props.edition}
             />
-            {/* @ts-ignore TODO: reach-router path fix */}
-            <StudentRegistration path="register" checks={regChecks} />
-            {/* @ts-ignore TODO: reach-router path fix */}
-            <ChangeClassesDashboard path="changeclasses" />
+            <StudentRegistration
+              // @ts-ignore TODO: reach-router path fix
+              path="register"
+              checks={regChecks}
+              program={props.program}
+              edition={props.edition}
+            />
+            <ChangeClassesDashboard
+              // @ts-ignore TODO: reach-router path fix
+              path="changeclasses"
+              program={props.program}
+              edition={props.edition}
+            />
           </Router>
         )}
 

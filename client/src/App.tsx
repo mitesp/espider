@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 
 import LoginPage from "./accounts/LoginPage";
 import SignupPage from "./accounts/SignupPage";
-import { userDataEndpoint } from "./apiEndpoints";
+import { userDataEndpoint, programsEndpoint } from "./apiEndpoints";
 import axiosInstance from "./axiosAPI";
 import { AuthContext } from "./context/auth";
 import Dashboard from "./dashboard/Dashboard";
@@ -20,6 +20,7 @@ import Nav from "./layout/Nav";
 import { contentPage } from "./layout/Page";
 import PrivateRoute from "./PrivateRoute";
 import RegDashboard from "./registration/RegDashboard";
+import { ProgramModel } from "./types";
 
 const NotFound = () =>
   contentPage("404 Not found")(
@@ -40,6 +41,7 @@ function App(props: {}) {
 
   const existingToken = localStorage.getItem("token") || "";
   const [authToken, setAuthToken] = useState(existingToken);
+  const [programs, setPrograms] = useState([] as ProgramModel[]);
 
   useEffect(() => {
     if (authToken) {
@@ -52,6 +54,12 @@ function App(props: {}) {
       });
     }
   }, [authToken, props]);
+
+  useEffect(() => {
+    axiosInstance.get(programsEndpoint).then(result => {
+      setPrograms(result.data);
+    });
+  }, []);
 
   function setToken(accessToken: string) {
     setAuthToken(accessToken);
@@ -90,8 +98,16 @@ function App(props: {}) {
             <Program key={program} path={program} program={program} />
           ))}
 
-          {/* @ts-ignore TODO: reach-router path fix */}
-          <RegDashboard path=":program/:edition/*" />
+          {programs.map((program, index) => (
+            <RegDashboard
+              key={index}
+              // @ts-ignore TODO: reach-router path fix
+              path={`${program.name}/${program.edition}/*`}
+              program={program.name}
+              edition={program.edition}
+            />
+            // TODO do something about the half-second it takes to render the page (maybe just caching)
+          ))}
           {/* @ts-ignore TODO: reach-router path fix */}
           <NotFound default />
         </Router>
