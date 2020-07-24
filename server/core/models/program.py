@@ -27,6 +27,10 @@ class Program(models.Model):
         return Program.objects.filter(student_reg_open=True)
 
     @staticmethod
+    def get_open_teacher_programs():
+        return Program.objects.filter(teacher_reg_open=True)
+
+    @staticmethod
     def get_active_programs():
         # TODO figure out what actually defines an "active" program
         return Program.objects.exclude(student_reg_status=RegStatusOptions.POST_PROGRAM)

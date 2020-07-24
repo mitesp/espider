@@ -6,14 +6,13 @@ from rest_framework_simplejwt import views as jwt_views
 from . import views
 
 router = routers.DefaultRouter()
-# TODO: This is currently broken -- will get fixed when we do teacher stuff
-router.register("dashboard/teacher/", views.TeacherProgramViewSet)
 
 app_name = "core"
 urlpatterns = [
     path("api/", include(router.urls)),
     # Dashboard
     path("api/dashboard/student/", views.get_student_dashboard),
+    path("api/dashboard/teacher/", views.get_teacher_dashboard),
     # Profile
     path("api/profile/student/", views.Profile.as_view()),
     # program-specific
