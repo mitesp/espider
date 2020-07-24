@@ -104,8 +104,8 @@ function UpdateProfileForm(props: Props) {
             {renderStandardFormField("city", handleChange, fields.city)}
             {renderStandardFormField("state", handleChange, fields.state)}
             {renderStandardFormField("country", handleChange, fields.country)}
-            {renderStandardFormField("dob", handleChange, fields.dateOfBirth)}
-            {renderStandardFormField("gradyear", handleChange, fields.gradYear)}
+            {/* renderStandardFormField("dob", handleChange, fields.dateOfBirth)}
+            {renderStandardFormField("gradyear", handleChange, fields.gradYear) */}
             {renderStandardFormField("school", handleChange, fields.school)}
             <div className="field">
               <div className="control">
