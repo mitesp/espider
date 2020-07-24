@@ -59,7 +59,7 @@ function App(props: {}) {
     axiosInstance.get(programsEndpoint).then(result => {
       setPrograms(result.data);
     });
-  });
+  }, []);
 
   function setToken(accessToken: string) {
     setAuthToken(accessToken);
