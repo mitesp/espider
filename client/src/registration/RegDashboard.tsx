@@ -76,15 +76,16 @@ function RegDashboard(props: Props) {
               programString={programString}
               programURL={programURL}
             />
-            {/* @ts-ignore TODO: reach-router path fix */}
+            {/* @ts-ignore TODO: figure out what the complaint about StudentRegistration is */}
             <StudentRegistration
+              // @ts-ignore TODO: reach-router path fix
               path="register"
               checks={regChecks}
               programString={programString}
               programURL={programURL}
             />
-            {/* @ts-ignore TODO: reach-router path fix */}
             <ChangeClassesDashboard
+              // @ts-ignore TODO: reach-router path fix
               path="changeclasses"
               programString={programString}
               programURL={programURL}

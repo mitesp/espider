@@ -13,7 +13,6 @@ import { renderLinkedText, renderTextInSection } from "../helperTextFunctions";
 import { generalPage } from "../layout/Page";
 
 type Props = {
-  path?: string;
   programString: string;
   programURL: string;
 };
@@ -259,9 +258,7 @@ function ClassChangesDashboard(props: Props) {
   //TODO block view if studentreg isn't open (or something)
   return generalPage(`${props.programString} Class Changes Dashboard | MIT ESP`)(
     <React.Fragment>
-      <h1 className="has-text-centered is-size-2">
-        {props.programString}: Change Classes
-      </h1>
+      <h1 className="has-text-centered is-size-2">{props.programString}: Change Classes</h1>
       <br />
       <div className="columns">
         {renderClassSchedule()}

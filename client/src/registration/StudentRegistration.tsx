@@ -22,7 +22,6 @@ type Props = {
     medliabCheck: boolean;
     updateProfileCheck: boolean;
   };
-  path?: string;
   programString: string;
   programURL: string;
 };
