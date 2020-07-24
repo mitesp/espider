@@ -86,3 +86,12 @@ class Timeslot(models.Model):
             + " to "
             + self.end.strftime(time_format)
         )
+
+
+class Classroom(models.Model):
+    name = models.CharField(max_length=200)
+    program = models.ForeignKey(
+        Program, on_delete=models.CASCADE, related_name="classrooms", related_query_name="classroom"
+    )
+    # TODO think about what this model actually needs
+    # it at least needs a name, so that's what's there for now

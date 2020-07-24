@@ -14,7 +14,7 @@ def get_program_timeslots(request, program, edition):
 @api_view(["GET"])
 def get_program_classrooms(request, program, edition):
     program = Program.objects.get(name=program, edition=edition)
-    classrooms = ["32-123", "26-100", "36-153", "10-250", "66-168"]
+    classrooms = [classroom.name for classroom in program.classrooms.all()]
     return Response(classrooms)
 
 

@@ -1,6 +1,6 @@
 from django.db import models
 
-from .program import Program, Timeslot
+from .program import Classroom, Program, Timeslot
 from .users import ESPUser
 
 
@@ -73,9 +73,17 @@ class ScheduledBlock(models.Model):
         related_name="scheduled_blocks",
         related_query_name="scheduled_block",
     )
+    classroom = models.ForeignKey(
+        Classroom,
+        on_delete=models.CASCADE,
+        related_name="scheduled_blocks",
+        related_query_name="scheduled_block",
+    )
 
     class Meta:
-        unique_together = (("section", "timeslot"),)
+        unique_together = (("section", "timeslot"), ("timeslot", "classroom"))
+        # only one classroom a section can be during a timeslot
+        # only one section in a classroom during a timeslot
 
     @property
     def program(self):

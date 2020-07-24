@@ -11,6 +11,7 @@ django.setup()  # isort:skip  # NOQA
 # isort:imports-firstparty
 from core.models import (  # NOQA
     Class,
+    Classroom,
     ESPUser,
     Program,
     ScheduledBlock,
@@ -31,6 +32,7 @@ program_models = [
     Program,
     Class,
     Timeslot,
+    Classroom,
     Section,
     ScheduledBlock,
     StudentRegistration,
