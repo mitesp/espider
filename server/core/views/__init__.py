@@ -1,7 +1,7 @@
 from core.models import Program
 from core.serializers import ClassSerializer, ProgramSerializer
 from rest_framework import permissions
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -16,6 +16,7 @@ from .studentreg import *  # noqa
 @permission_classes(
     [permissions.AllowAny,]
 )
+@authentication_classes([])
 def get_all_programs(request):
     programs = Program.objects.all()
     return Response([ProgramSerializer(program).data for program in programs])
