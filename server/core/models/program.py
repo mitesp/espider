@@ -8,7 +8,7 @@ from .constants import RegStatusOptions
 class Program(models.Model):
     name = models.SlugField(max_length=200)  # TODO maybe this should be a constant set
     season = models.SlugField(max_length=200, blank=True)
-    edition = models.SlugField(max_length=200)  # this is year - must be number
+    edition = models.PositiveIntegerField()  # TODO(constraint): this must be a 4-digit year
     student_reg_open = models.BooleanField(default=False)
     student_reg_status = models.CharField(
         max_length=20, choices=RegStatusOptions.choices, default=RegStatusOptions.CLASS_PREFERENCES
@@ -19,15 +19,15 @@ class Program(models.Model):
     @property
     def url(self):
         if self.season == "":
-            return self.name + "/" + self.edition
+            return self.name + "/" + str(self.edition)
         else:
-            return self.name + "/" + self.season + "/" + self.edition
+            return self.name + "/" + self.season + "/" + str(self.edition)
 
     def __str__(self):
         if self.season == "":
-            return self.name + " " + self.edition
+            return self.name + " " + str(self.edition)
         else:
-            return self.season + " " + self.name + " " + self.edition
+            return self.season + " " + self.name + " " + str(self.edition)
 
     @staticmethod
     def get_open_student_programs():
