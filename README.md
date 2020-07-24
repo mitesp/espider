@@ -1,5 +1,19 @@
 # espider
 
+## Table of Contents
+- [Set Up](#set-up)
+- [Making Changes](#making-changes)
+- [Committing & Pushing Changes](#committing--pushing-changes)
+  * [Setting up Linters](#setting-up-linters)
+  * [Pull Requests](#pull-requests)
+    + [Pull Request Message](#pull-request-message)
+- [Deploying](#deploying)
+- [Dev Guide (a.k.a. Help! What's going on?)](#dev-guide-aka-help-whats-going-on)
+- [Troubleshooting](#troubleshooting)
+- [Useful tidbits](#useful-tidbits)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 # Set Up
 
 1. Install `docker`, and `docker-compose`.
