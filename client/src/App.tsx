@@ -32,6 +32,22 @@ const NotFound = () =>
     </section>
   );
 
+function getProgramURL(program: ProgramModel) {
+  if (program.season === "") {
+    return `${program.name}/${program.edition}`;
+  } else {
+    return `${program.name}/${program.season}/${program.edition}`;
+  }
+}
+
+function getProgramString(program: ProgramModel) {
+  if (program.season === "") {
+    return `${program.name} ${program.edition}`;
+  } else {
+    return `${program.season} ${program.name} ${program.edition}`;
+  }
+}
+
 function App(props: {}) {
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -99,22 +115,13 @@ function App(props: {}) {
           ))}
 
           {programs.map((program, index) => (
-            program.season === "" ? 
-              <RegDashboard
-                key={index}
-                // @ts-ignore TODO: reach-router path fix
-                path={`${program.name}/${program.edition}/*`}
-                program={program.name}
-                edition={program.edition}
-              />
-            : <RegDashboard
-                key={index}
-                // @ts-ignore TODO: reach-router path fix
-                path={`${program.name}/${program.season}/${program.edition}/*`}
-                program={program.name}
-                season={program.season}
-                edition={program.edition}
-              />
+            <RegDashboard
+              key={index}
+              // @ts-ignore TODO: reach-router path fix
+              path={`${getProgramURL(program)}/*`}
+              programURL={getProgramURL(program)}
+              programString={getProgramString(program)}
+            />
             // TODO do something about the half-second it takes to render the page (maybe just caching)
           ))}
           {/* @ts-ignore TODO: reach-router path fix */}

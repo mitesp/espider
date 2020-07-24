@@ -14,28 +14,18 @@ import { generalPage } from "../layout/Page";
 // import TeacherDashboard from "./TeacherRegDashboard";
 
 type Props = {
-  program: string;
-  season?: string;
-  edition: number;
+  programString: string;
+  programURL: string;
 };
+
+// TODO add programString and programURL to a context
 
 // TODO: restructure this per-program "dashboard" concept, if anything, this
 // component is functioning more like a "ProgramDashboard"
 
-function getProgramURL(name: string, season: string | undefined, edition: number) {
-  if (season) {
-    return `${name}/${season}/${edition}`;
-  } else {
-    return `${name}/${edition}`;
-  }
-}
-
 function RegDashboard(props: Props) {
   const { isStudent, isTeacher } = useAuth();
   const loggedIn = useLoggedIn();
-  const programString =
-    (props.season ? `${props.season} ` : "") + `${props.program} ${props.edition}`;
-  const programURL = getProgramURL(props.program, props.season, props.edition);
 
   const [regChecks, setRegChecks] = useState({
     availabilityCheck: false,
@@ -48,7 +38,7 @@ function RegDashboard(props: Props) {
 
   useEffect(() => {
     // Set up student reg
-    axiosInstance.get(`/${programURL}/${studentRegEndpoint}`).then(res => {
+    axiosInstance.get(`/${props.programURL}/${studentRegEndpoint}`).then(res => {
       setRegChecks({
         availabilityCheck: res.data.availability_check,
         emergencyInfoCheck: res.data.emergency_info_check,
@@ -58,10 +48,10 @@ function RegDashboard(props: Props) {
       });
       setRegStatus(res.data.reg_status);
     });
-  }, [programURL]);
+  }, [props.programURL]);
 
   if (loggedIn) {
-    return generalPage(`${programString} | MIT ESP`)(
+    return generalPage(`${props.programString} | MIT ESP`)(
       // TODO: create program-specific context and provider to subsequent components
       <React.Fragment>
         {isStudent && (
@@ -73,22 +63,22 @@ function RegDashboard(props: Props) {
               path="dashboard"
               checks={regChecks}
               regStatus={regStatus}
-              programString={programString}
-              programURL={programURL}
+              programString={props.programString}
+              programURL={props.programURL}
             />
             {/* @ts-ignore TODO: figure out what the complaint about StudentRegistration is */}
             <StudentRegistration
               // @ts-ignore TODO: reach-router path fix
               path="register"
               checks={regChecks}
-              programString={programString}
-              programURL={programURL}
+              programString={props.programString}
+              programURL={props.programURL}
             />
             <ChangeClassesDashboard
               // @ts-ignore TODO: reach-router path fix
               path="changeclasses"
-              programString={programString}
-              programURL={programURL}
+              programString={props.programString}
+              programURL={props.programURL}
             />
           </Router>
         )}
