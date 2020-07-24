@@ -8,7 +8,7 @@ import ClassSlot from "./ClassSlot";
 
 import axiosInstance from "./axiosAPI";
 import { timeslotEndpoint, classroomEndpoint, sectionsEndpoint } from "./apiEndpoints";
-import { Section } from "./types";
+import { Section, Timeslot } from "./types";
 
 type Props = {
   programName: string;
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default function Scheduler(props: Props) {
-  const [timeslots, setTimeslots] = useState([] as string[]);
+  const [timeslots, setTimeslots] = useState([] as Timeslot[]);
   const [classrooms, setClassrooms] = useState([] as string[]);
   const [sections, setSections] = useState([] as Section[]);
   const [unscheduledSections, setUnscheduledSections] = useState([] as Section[]);
@@ -47,7 +47,7 @@ export default function Scheduler(props: Props) {
     return sections.filter(section => section.id === id)[0];
   }
 
-  function scheduleSection(id: number, classroom: string, timeslot: string) {
+  function scheduleSection(id: number, classroom: string, timeslot: Timeslot) {
     const section = getSectionById(id);
     section.timeslot = timeslot;
     section.classroom = classroom;
@@ -81,7 +81,7 @@ export default function Scheduler(props: Props) {
                   <tr>
                     <th></th>
                     {timeslots.map((timeslot, index) => {
-                      return <th key={"timeslot" + index}>{timeslot}</th>;
+                      return <th key={`timeslot${timeslot.id}`}>{timeslot.string}</th>;
                     })}
                   </tr>
                 </thead>
@@ -95,7 +95,7 @@ export default function Scheduler(props: Props) {
                         {timeslots.map((timeslot, index) => {
                           return (
                             <ClassSlot
-                              key={`${timeslot}/${classroom}`}
+                              key={`${timeslot.id}/${classroom}`}
                               timeslot={timeslot}
                               classroom={classroom}
                               section={

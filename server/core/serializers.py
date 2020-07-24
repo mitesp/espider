@@ -86,6 +86,11 @@ class ClassSerializer(serializers.ModelSerializer):
 
 
 class TimeslotSerializer(serializers.ModelSerializer):
+    string = serializers.SerializerMethodField()
+
     class Meta:
         model = Timeslot
-        fields = "__all__"
+        fields = ("id", "string")
+
+    def get_string(self, timeslot):
+        return timeslot.date_time_str

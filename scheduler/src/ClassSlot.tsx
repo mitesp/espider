@@ -1,14 +1,14 @@
 import React from "react";
 import { useDrop, DropTargetMonitor } from "react-dnd";
 
-import { Section } from "./types";
+import { Section, Timeslot } from "./types";
 import ScheduledClass from "./ScheduledClass";
 
 type Props = {
   classroom: string;
-  timeslot: string;
+  timeslot: Timeslot;
   section: Section;
-  scheduleSection: (id: number, classroom: string, timeslot: string) => void;
+  scheduleSection: (id: number, classroom: string, timeslot: Timeslot) => void;
 };
 
 export default function SectionSlot(props: Props) {
