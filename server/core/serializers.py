@@ -2,6 +2,7 @@ from core.models import (
     Class,
     ESPUser,
     Program,
+    ScheduledBlock,
     Section,
     StudentProfile,
     StudentRegistration,
@@ -64,52 +65,6 @@ class StudentRegSerializer(serializers.ModelSerializer):
         fields = "__all__"  # ("student_reg_open",)
 
 
-class SectionSerializer(serializers.ModelSerializer):
-    scheduled_blocks = serializers.StringRelatedField(many=True)
-    name = serializers.SerializerMethodField()
-    timeslot = serializers.SerializerMethodField()
-    classroom = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Section
-        fields = (
-            "id",
-            "clazz",
-            "name",
-            "number",
-            "num_students",
-            "scheduled_blocks",
-            "timeslot",
-            "classroom",
-        )
-
-    def get_name(self, section):
-        return str(section)
-
-    def get_classroom(self, section):
-        # TODO make this multi-block supported
-        if section.scheduled_blocks.count() > 0:
-            return section.scheduled_blocks.all()[0].classroom.name
-        else:  # unscheduled
-            return None
-
-    def get_timeslot(self, section):
-        # TODO make this multi-block supported
-        if section.scheduled_blocks.count() > 0:
-            return TimeslotSerializer(section.scheduled_blocks.all()[0].timeslot).data
-        else:  # unscheduled
-            return None
-
-
-class ClassSerializer(serializers.ModelSerializer):
-    sections = SectionSerializer(many=True)
-    # TODO figure out how to make this ordered
-
-    class Meta:
-        model = Class
-        fields = ("id", "title", "description", "teachers", "capacity", "sections")
-
-
 class TimeslotSerializer(serializers.ModelSerializer):
     string = serializers.SerializerMethodField()
 
@@ -119,3 +74,48 @@ class TimeslotSerializer(serializers.ModelSerializer):
 
     def get_string(self, timeslot):
         return timeslot.date_time_str
+
+
+class ScheduledBlockSerializer(serializers.ModelSerializer):
+    timeslot = TimeslotSerializer()
+    classroom = serializers.SerializerMethodField()
+    string = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ScheduledBlock
+        fields = ("section", "timeslot", "classroom", "string")
+
+    def get_classroom(self, scheduled_block):
+        return scheduled_block.classroom.name
+
+    def get_string(self, scheduled_block):
+        return str(scheduled_block)
+
+
+class SectionSerializer(serializers.ModelSerializer):
+    scheduled_blocks = ScheduledBlockSerializer(many=True)
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Section
+        fields = (
+            "id",
+            "clazz",
+            "length",
+            "name",
+            "number",
+            "num_students",
+            "scheduled_blocks",
+        )
+
+    def get_name(self, section):
+        return str(section)
+
+
+class ClassSerializer(serializers.ModelSerializer):
+    sections = SectionSerializer(many=True)
+    # TODO figure out how to make this ordered
+
+    class Meta:
+        model = Class
+        fields = ("id", "title", "description", "teachers", "capacity", "sections")

@@ -41,7 +41,9 @@ export default function Scheduler(props: Props) {
     // Set up sections
     axiosInstance.get(`/${programURL}/${sectionsEndpoint}`).then(res => {
       setSections(res.data);
-      setUnscheduledSections((res.data as Section[]).filter(section => !section.timeslot));
+      setUnscheduledSections(
+        (res.data as Section[]).filter(section => section.scheduled_blocks.length === 0)
+      );
     });
   }, [programURL, props.programEdition, props.programName]);
 
@@ -51,9 +53,9 @@ export default function Scheduler(props: Props) {
 
   function scheduleSection(id: number, classroom: string, timeslot: Timeslot) {
     const section = getSectionById(id);
-    section.timeslot = timeslot;
-    section.classroom = classroom;
-    setUnscheduledSections(sections.filter(section => !section.timeslot));
+    const scheduledBlock = { section: id, classroom: classroom, timeslot: timeslot };
+    section.scheduled_blocks = [scheduledBlock];
+    setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
     // TODO sort ^ by clazz
     axiosInstance
       .post(`/${programURL}/${scheduleSectionEndpoint}/${id}/`, {
@@ -68,9 +70,8 @@ export default function Scheduler(props: Props) {
 
   function unscheduleSection(id: number) {
     const section = getSectionById(id);
-    section.timeslot = undefined;
-    section.classroom = undefined;
-    setUnscheduledSections(sections.filter(section => !section.timeslot));
+    section.scheduled_blocks = [];
+    setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
     // TODO sort ^ by clazz
     axiosInstance.post(`/${programURL}/${unscheduleSectionEndpoint}/${id}/`).then(res => {
       console.log(`Uncheduled section ${id}`);
@@ -112,9 +113,12 @@ export default function Scheduler(props: Props) {
                               section={
                                 sections.filter(
                                   section =>
-                                    section.timeslot &&
-                                    section.timeslot.id === timeslot.id &&
-                                    section.classroom === classroom
+                                    section.scheduled_blocks.length > 0 &&
+                                    section.scheduled_blocks.filter(
+                                      scheduledBlock =>
+                                        scheduledBlock.timeslot.id === timeslot.id &&
+                                        scheduledBlock.classroom === classroom
+                                    ).length > 0
                                 )[0]
                               }
                               scheduleSection={scheduleSection}

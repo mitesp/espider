@@ -11,11 +11,16 @@ export type Section = {
   clazz: number;
   name: string;
   number: number;
-  timeslot?: Timeslot; // TODO make this multi-block friendly
-  classroom?: string;
+  scheduled_blocks: ScheduledBlock[];
 };
 
 export type Timeslot = {
   id: number;
   string: string;
+};
+
+export type ScheduledBlock = {
+  section: number;
+  timeslot: Timeslot;
+  classroom: string;
 };
