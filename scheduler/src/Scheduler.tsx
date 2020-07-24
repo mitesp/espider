@@ -27,27 +27,23 @@ export default function Scheduler(props: Props) {
   const [sections, setSections] = useState([] as Section[]);
   const [unscheduledSections, setUnscheduledSections] = useState([] as Section[]);
 
+  const programURL = `${props.programName}/${props.programEdition}`;
+
   useEffect(() => {
     // Set up timeslots
-    axiosInstance
-      .get(`/${props.programName}/${props.programEdition}/${timeslotEndpoint}`)
-      .then(res => {
-        setTimeslots(res.data);
-      });
+    axiosInstance.get(`/${programURL}/${timeslotEndpoint}`).then(res => {
+      setTimeslots(res.data);
+    });
     // Set up classrooms
-    axiosInstance
-      .get(`/${props.programName}/${props.programEdition}/${classroomEndpoint}`)
-      .then(res => {
-        setClassrooms(res.data);
-      });
+    axiosInstance.get(`/${programURL}/${classroomEndpoint}`).then(res => {
+      setClassrooms(res.data);
+    });
     // Set up sections
-    axiosInstance
-      .get(`/${props.programName}/${props.programEdition}/${sectionsEndpoint}`)
-      .then(res => {
-        setSections(res.data);
-        setUnscheduledSections((res.data as Section[]).filter(section => !section.timeslot));
-      });
-  }, [props.programEdition, props.programName]);
+    axiosInstance.get(`/${programURL}/${sectionsEndpoint}`).then(res => {
+      setSections(res.data);
+      setUnscheduledSections((res.data as Section[]).filter(section => !section.timeslot));
+    });
+  }, [programURL, props.programEdition, props.programName]);
 
   function getSectionById(id: number) {
     return sections.filter(section => section.id === id)[0];
@@ -60,7 +56,7 @@ export default function Scheduler(props: Props) {
     setUnscheduledSections(sections.filter(section => !section.timeslot));
     // TODO sort ^ by clazz
     axiosInstance
-      .post(`/${props.programName}/${props.programEdition}/${scheduleSectionEndpoint}/${id}/`, {
+      .post(`/${programURL}/${scheduleSectionEndpoint}/${id}/`, {
         timeslot: timeslot.id,
         classroom: classroom,
       })
@@ -76,12 +72,10 @@ export default function Scheduler(props: Props) {
     section.classroom = undefined;
     setUnscheduledSections(sections.filter(section => !section.timeslot));
     // TODO sort ^ by clazz
-    axiosInstance
-      .post(`/${props.programName}/${props.programEdition}/${unscheduleSectionEndpoint}/${id}/`)
-      .then(res => {
-        console.log(`Uncheduled section ${id}`);
-        // TODO check if success or error
-      });
+    axiosInstance.post(`/${programURL}/${unscheduleSectionEndpoint}/${id}/`).then(res => {
+      console.log(`Uncheduled section ${id}`);
+      // TODO check if success or error
+    });
   }
 
   return (
