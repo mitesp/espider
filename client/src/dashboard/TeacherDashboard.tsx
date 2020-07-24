@@ -3,6 +3,7 @@ import React, { Component } from "react";
 
 import { teacherDashboardEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
+import { generalPage } from "../layout/Page";
 
 type JSONProgram = {
   name: string;
@@ -53,7 +54,7 @@ export default class TeacherDashboard extends Component<Props, State> {
   }
 
   render() {
-    return (
+    return generalPage(`Dashboard | MIT ESP`)(
       <div className="container">
         <h1 className="has-text-centered is-size-2">Teacher Dashboard for {this.props.username}</h1>
         <div className="columns">

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 
 import { studentDashboardEndpoint } from "../apiEndpoints";
 import axiosInstance from "../axiosAPI";
+import { generalPage } from "../layout/Page";
 
 type CurrentProgram = {
   name: string;
@@ -48,7 +49,7 @@ export default class StudentDashboard extends Component<Props, State> {
 
   render() {
     // TODO add announcements/dates section
-    return (
+    return generalPage(`Dashboard | MIT ESP`)(
       <div className="container">
         <h1 className="has-text-centered is-size-2">Student Dashboard for {this.props.username}</h1>
         <div className="columns">
