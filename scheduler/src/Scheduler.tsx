@@ -12,6 +12,7 @@ import {
   classroomEndpoint,
   sectionsEndpoint,
   scheduleSectionEndpoint,
+  unscheduleSectionEndpoint,
 } from "./apiEndpoints";
 import { Section, Timeslot } from "./types";
 
@@ -64,9 +65,9 @@ export default function Scheduler(props: Props) {
         classroom: classroom,
       })
       .then(res => {
+        console.log(`Scheduled section ${id} in ${classroom} at ${timeslot.string}`);
         // TODO check if success or error
       });
-    console.log(`Scheduled section ${id} in ${classroom} at ${timeslot}`);
   }
 
   function unscheduleSection(id: number) {
@@ -75,8 +76,12 @@ export default function Scheduler(props: Props) {
     section.classroom = undefined;
     setUnscheduledSections(sections.filter(section => section.timeslot === undefined));
     // TODO sort ^ by clazz
-    // TODO send API call to actually schedule the section
-    console.log(`Uncheduled section ${id}`);
+    axiosInstance
+      .post(`/${props.programName}/${props.programEdition}/${unscheduleSectionEndpoint}/${id}/`)
+      .then(res => {
+        console.log(`Uncheduled section ${id}`);
+        // TODO check if success or error
+      });
   }
 
   return (

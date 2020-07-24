@@ -45,3 +45,16 @@ def schedule_section(request, program, edition, section_id):
     scheduled_block.save()
 
     return Response({"message": "Success!"})
+
+
+@api_view(["POST"])
+def unschedule_section(request, program, edition, section_id):
+    program = Program.objects.get(name=program, edition=edition)
+    section = Section.objects.get(id=section_id)
+    if section.program != program:
+        pass  # TODO return error or something here
+
+    scheduled_blocks = ScheduledBlock.objects.filter(section=section)
+    scheduled_blocks.delete()
+
+    return Response({"message": "Success!"})

@@ -41,6 +41,7 @@ urlpatterns = [
                 path("schedule/<section_id>/", views.schedule_section),
                 path("sections/", views.get_program_sections),
                 path("timeslots/", views.get_program_timeslots),
+                path("unschedule/<section_id>/", views.unschedule_section),
             ]
         ),
     ),
