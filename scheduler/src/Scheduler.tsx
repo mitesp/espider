@@ -26,6 +26,7 @@ export default function Scheduler(props: Props) {
   const [classrooms, setClassrooms] = useState([] as string[]);
   const [sections, setSections] = useState([] as Section[]);
   const [unscheduledSections, setUnscheduledSections] = useState([] as Section[]);
+  const [slots, setSlots] = useState([] as ScheduleSlot[][]);
 
   const programURL = `${props.programName}/${props.programEdition}`;
 
@@ -48,6 +49,19 @@ export default function Scheduler(props: Props) {
     });
   }, [programURL, props.programEdition, props.programName]);
 
+  useEffect(() => {
+    const newSlots = [] as ScheduleSlot[][];
+    for (let i = 0; i < classrooms.length; i++) {
+      const classroomSlots = [] as ScheduleSlot[];
+      for (let j = 0; j < timeslots.length; j++) {
+        const slot = { classroom: classrooms[i], timeslot: timeslots[j] };
+        classroomSlots.push(slot);
+      }
+      newSlots[i] = classroomSlots;
+    }
+    setSlots(newSlots);
+  }, [timeslots, classrooms]);
+
   function getSectionById(id: number) {
     return sections.filter(section => section.id === id)[0];
   }
@@ -63,19 +77,34 @@ export default function Scheduler(props: Props) {
     )[0];
   }
 
-  function canSchedule(sectionId: number, slot: ScheduleSlot) {
+  function canSchedule(sectionId: number, timeslot: Timeslot, classroom: string) {
     const section = getSectionById(sectionId);
-    const timeslotIndex = timeslots.indexOf(slot.timeslot);
+    const timeslotIndex = timeslots.indexOf(timeslot);
     if (timeslotIndex + section.length > timeslots.length) {
       return false;
     }
     for (let i = 0; i < section.length; i++) {
       const blockTimeslot = timeslots[timeslotIndex + i];
-      if (getScheduledSectionInSlot(blockTimeslot, slot.classroom)) {
+      if (getScheduledSectionInSlot(blockTimeslot, classroom)) {
         return false;
       }
     }
     return true;
+  }
+
+  function canScheduleOverall(sectionId: number, slot: ScheduleSlot) {
+    const section = getSectionById(sectionId);
+    const timeslotIndex = timeslots.indexOf(slot.timeslot);
+    for (let i = 0; i < section.length; i++) {
+      const startingTimeslotIndex = timeslotIndex - i;
+      if (startingTimeslotIndex >= 0) {
+        const timeslot = timeslots[startingTimeslotIndex];
+        if (canSchedule(sectionId, timeslot, slot.classroom)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   function scheduleSection(id: number, slot: ScheduleSlot) {
@@ -136,22 +165,30 @@ export default function Scheduler(props: Props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {classrooms.map((classroom, index) => {
+                  {classrooms.map((classroom, classroomIndex) => {
                     return (
-                      <tr key={"classroom" + index}>
+                      <tr key={"classroom" + classroomIndex}>
                         <th data-tip data-for={"classroomData-" + classroom}>
                           {classroom}
                         </th>
-                        {timeslots.map((timeslot, index) => {
-                          return (
-                            <ClassSlot
-                              key={`${timeslot.id}/${classroom}`}
-                              canSchedule={canSchedule}
-                              slot={{ classroom: classroom, timeslot: timeslot }}
-                              scheduleSection={scheduleSection}
-                              section={getScheduledSectionInSlot(timeslot, classroom)}
-                            />
-                          );
+                        {timeslots.map((timeslot, timeslotIndex) => {
+                          const section = getScheduledSectionInSlot(timeslot, classroom);
+                          const slot =
+                            slots.length > 0 ? slots[classroomIndex][timeslotIndex] : undefined;
+                          if (slot) {
+                            return (
+                              <ClassSlot
+                                key={`${timeslot.id}/${classroom}`}
+                                canSchedule={canSchedule}
+                                markAsSchedulable={canScheduleOverall}
+                                slot={slot}
+                                scheduleSection={scheduleSection}
+                                section={section}
+                              />
+                            );
+                          } else {
+                            return <td key={`${timeslot.id}/${classroom}`} />;
+                          }
                         })}
                       </tr>
                     );
