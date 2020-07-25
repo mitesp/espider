@@ -44,7 +44,11 @@ export default function SectionSlot(props: Props) {
   // TODO consider colorblindness in color selections
 
   return (
-    <td className={backgroundClassName} ref={drop}>
+    <td
+      className={backgroundClassName}
+      ref={drop}
+      colSpan={props.section ? props.section.length : 1}
+    >
       {props.section && <ScheduledClass section={props.section} />}
     </td>
   );

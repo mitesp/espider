@@ -41,7 +41,6 @@ export default function Scheduler(props: Props) {
     });
     // Set up sections
     axiosInstance.get(`/${programURL}/${sectionsEndpoint}`).then(res => {
-      console.log(res.data);
       setSections(res.data);
       setUnscheduledSections(
         (res.data as Section[]).filter(section => section.scheduled_blocks.length === 0)
@@ -146,6 +145,14 @@ export default function Scheduler(props: Props) {
     });
   }
 
+  function getScheduledBlockIndex(section: Section, timeslot: Timeslot) {
+    if (!section) {
+      return -1;
+    }
+    const sectionBlocks = section.scheduled_blocks;
+    return sectionBlocks.map(block => block.timeslot.id).indexOf(timeslot.id);
+  }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="container content">
@@ -175,7 +182,8 @@ export default function Scheduler(props: Props) {
                           const section = getScheduledSectionInSlot(timeslot, classroom);
                           const slot =
                             slots.length > 0 ? slots[classroomIndex][timeslotIndex] : undefined;
-                          if (slot) {
+                          const blockIndex = getScheduledBlockIndex(section, timeslot);
+                          if (slot && (!section || blockIndex === 0)) {
                             return (
                               <ClassSlot
                                 key={`${timeslot.id}/${classroom}`}
@@ -187,7 +195,7 @@ export default function Scheduler(props: Props) {
                               />
                             );
                           } else {
-                            return <td key={`${timeslot.id}/${classroom}`} />;
+                            return null;
                           }
                         })}
                       </tr>
