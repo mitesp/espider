@@ -137,12 +137,14 @@ export default function Scheduler(props: Props) {
   function unscheduleSection(id: number) {
     const section = getSectionById(id);
     // TODO sort ^ by clazz
-    axiosInstance.post(`/${programURL}/${unscheduleSectionEndpoint}/${id}/`).then(res => {
-      console.log(`Uncheduled section ${id}`);
-      // TODO check if success or error
-      section.scheduled_blocks = [];
-      setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
-    });
+    if (section.scheduled_blocks.length > 0) {
+      axiosInstance.post(`/${programURL}/${unscheduleSectionEndpoint}/${id}/`).then(res => {
+        console.log(`Uncheduled section ${id}`);
+        // TODO check if success or error
+        section.scheduled_blocks = [];
+        setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
+      });
+    }
   }
 
   function getScheduledBlockIndex(section: Section, timeslot: Timeslot) {
