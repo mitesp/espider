@@ -9,6 +9,7 @@ export type Class = {
 export type Section = {
   id: number;
   clazz: number;
+  length: number;
   name: string;
   number: number;
   scheduled_blocks: ScheduledBlock[];
@@ -20,7 +21,7 @@ export type Timeslot = {
 };
 
 export type ScheduledBlock = {
+  classroom: string;
   section: number;
   timeslot: Timeslot;
-  classroom: string;
 };

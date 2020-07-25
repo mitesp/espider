@@ -57,7 +57,7 @@ class ClassAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "program", "capacity")
     search_fields = ("title", "id")
     readonly_fields = ("id",)
-    fields = ("id", "title", "capacity", "program", "description")
+    fields = ("id", "title", "capacity", "program", "description", "length")
     list_filter = (ActiveProgramFilter,)
     inlines = [TeacherClassRegistrationInline, SectionInline]
     save_on_top = True

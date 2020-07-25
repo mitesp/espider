@@ -8,6 +8,7 @@ class Class(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     capacity = models.PositiveIntegerField()
+    length = models.PositiveIntegerField()  # measured in Timeslot-lengths
     program = models.ForeignKey(
         Program, on_delete=models.CASCADE, related_name="classes", related_query_name="class"
     )
@@ -39,6 +40,10 @@ class Section(models.Model):
     @property
     def program(self):
         return self.clazz.program
+
+    @property
+    def length(self):
+        return self.clazz.length
 
     @property
     def num_students(self):

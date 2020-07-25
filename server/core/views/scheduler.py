@@ -36,13 +36,15 @@ def schedule_section(request, program, edition, section_id):
     section = Section.objects.get(id=section_id)
     if section.program != program:
         pass  # TODO return error or something here
-    timeslot_id = data["timeslot"]
-    timeslot = Timeslot.objects.get(id=timeslot_id)
-    classroom_name = data["classroom"]
-    classroom = program.classrooms.get(name=classroom_name)
 
-    scheduled_block = ScheduledBlock(section=section, timeslot=timeslot, classroom=classroom)
-    scheduled_block.save()
+    for block in data["scheduled_blocks"]:
+        timeslot_id = block["timeslot"]["id"]
+        timeslot = Timeslot.objects.get(id=timeslot_id)
+        classroom_name = block["classroom"]
+        classroom = program.classrooms.get(name=classroom_name)
+
+        scheduled_block = ScheduledBlock(section=section, timeslot=timeslot, classroom=classroom)
+        scheduled_block.save()
 
     return Response({"message": "Success!"})
 

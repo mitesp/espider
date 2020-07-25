@@ -14,7 +14,7 @@ import {
   scheduleSectionEndpoint,
   unscheduleSectionEndpoint,
 } from "./apiEndpoints";
-import { Section, Timeslot } from "./types";
+import { Section, Timeslot, ScheduledBlock } from "./types";
 
 type Props = {
   programName: string;
@@ -32,7 +32,7 @@ export default function Scheduler(props: Props) {
   useEffect(() => {
     // Set up timeslots
     axiosInstance.get(`/${programURL}/${timeslotEndpoint}`).then(res => {
-      setTimeslots(res.data);
+      setTimeslots(res.data); // TODO assumed to be in chronological order
     });
     // Set up classrooms
     axiosInstance.get(`/${programURL}/${classroomEndpoint}`).then(res => {
@@ -40,6 +40,7 @@ export default function Scheduler(props: Props) {
     });
     // Set up sections
     axiosInstance.get(`/${programURL}/${sectionsEndpoint}`).then(res => {
+      console.log(res.data);
       setSections(res.data);
       setUnscheduledSections(
         (res.data as Section[]).filter(section => section.scheduled_blocks.length === 0)
@@ -53,29 +54,37 @@ export default function Scheduler(props: Props) {
 
   function scheduleSection(id: number, classroom: string, timeslot: Timeslot) {
     const section = getSectionById(id);
-    const scheduledBlock = { section: id, classroom: classroom, timeslot: timeslot };
-    section.scheduled_blocks = [scheduledBlock];
-    setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
+    const scheduledBlocks = [] as ScheduledBlock[];
+    const timeslotIndex = timeslots.indexOf(timeslot);
+    for (let i = 0; i < section.length; i++) {
+      const scheduledBlock = {
+        section: id,
+        classroom: classroom,
+        timeslot: timeslots[timeslotIndex + i],
+      };
+      scheduledBlocks.push(scheduledBlock);
+    }
     // TODO sort ^ by clazz
     axiosInstance
       .post(`/${programURL}/${scheduleSectionEndpoint}/${id}/`, {
-        timeslot: timeslot.id,
-        classroom: classroom,
+        scheduled_blocks: scheduledBlocks,
       })
       .then(res => {
         console.log(`Scheduled section ${id} in ${classroom} at ${timeslot.string}`);
         // TODO check if success or error
+        section.scheduled_blocks = scheduledBlocks;
+        setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
       });
   }
 
   function unscheduleSection(id: number) {
     const section = getSectionById(id);
-    section.scheduled_blocks = [];
-    setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
     // TODO sort ^ by clazz
     axiosInstance.post(`/${programURL}/${unscheduleSectionEndpoint}/${id}/`).then(res => {
       console.log(`Uncheduled section ${id}`);
       // TODO check if success or error
+      section.scheduled_blocks = [];
+      setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
     });
   }
 
