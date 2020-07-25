@@ -5,6 +5,7 @@ import { Section, Timeslot } from "./types";
 import ScheduledClass from "./ScheduledClass";
 
 type Props = {
+  canSchedule: (sectionId: number, classroom: string, initialTimeslot: Timeslot) => boolean;
   classroom: string;
   timeslot: Timeslot;
   section: Section;
@@ -16,7 +17,7 @@ export default function SectionSlot(props: Props) {
     accept: "Section",
     canDrop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {
       // TODO figure out how to do this without using "any"
-      return !props.section;
+      return item && !props.section && props.canSchedule(item.id, props.classroom, props.timeslot);
       // TODO add in based on availability
     },
     drop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {

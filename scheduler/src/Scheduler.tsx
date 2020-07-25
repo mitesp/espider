@@ -52,10 +52,39 @@ export default function Scheduler(props: Props) {
     return sections.filter(section => section.id === id)[0];
   }
 
+  function getScheduledSectionInSlot(timeslot: Timeslot, classroom: string) {
+    return sections.filter(
+      section =>
+        section.scheduled_blocks.length > 0 &&
+        section.scheduled_blocks.filter(
+          scheduledBlock =>
+            scheduledBlock.timeslot.id === timeslot.id && scheduledBlock.classroom === classroom
+        ).length > 0
+    )[0];
+  }
+
+  function canSchedule(sectionId: number, classroom: string, initialTimeslot: Timeslot) {
+    const section = getSectionById(sectionId);
+    const timeslotIndex = timeslots.indexOf(initialTimeslot);
+    if (timeslotIndex + section.length > timeslots.length) {
+      return false;
+    }
+    for (let i = 0; i < section.length; i++) {
+      const blockTimeslot = timeslots[timeslotIndex + i];
+      if (getScheduledSectionInSlot(blockTimeslot, classroom)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   function scheduleSection(id: number, classroom: string, timeslot: Timeslot) {
     const section = getSectionById(id);
     const scheduledBlocks = [] as ScheduledBlock[];
     const timeslotIndex = timeslots.indexOf(timeslot);
+    if (timeslotIndex + section.length > timeslots.length) {
+      return;
+    }
     for (let i = 0; i < section.length; i++) {
       const scheduledBlock = {
         section: id,
@@ -117,20 +146,11 @@ export default function Scheduler(props: Props) {
                           return (
                             <ClassSlot
                               key={`${timeslot.id}/${classroom}`}
-                              timeslot={timeslot}
+                              canSchedule={canSchedule}
                               classroom={classroom}
-                              section={
-                                sections.filter(
-                                  section =>
-                                    section.scheduled_blocks.length > 0 &&
-                                    section.scheduled_blocks.filter(
-                                      scheduledBlock =>
-                                        scheduledBlock.timeslot.id === timeslot.id &&
-                                        scheduledBlock.classroom === classroom
-                                    ).length > 0
-                                )[0]
-                              }
+                              timeslot={timeslot}
                               scheduleSection={scheduleSection}
+                              section={getScheduledSectionInSlot(timeslot, classroom)}
                             />
                           );
                         })}
