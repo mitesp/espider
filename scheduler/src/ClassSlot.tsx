@@ -1,15 +1,14 @@
 import React from "react";
 import { useDrop, DropTargetMonitor } from "react-dnd";
 
-import { Section, Timeslot } from "./types";
+import { Section, ScheduleSlot } from "./types";
 import ScheduledClass from "./ScheduledClass";
 
 type Props = {
-  canSchedule: (sectionId: number, classroom: string, initialTimeslot: Timeslot) => boolean;
-  classroom: string;
-  timeslot: Timeslot;
+  canSchedule: (sectionId: number, slot: ScheduleSlot) => boolean;
+  slot: ScheduleSlot;
   section: Section;
-  scheduleSection: (id: number, classroom: string, timeslot: Timeslot) => void;
+  scheduleSection: (id: number, slot: ScheduleSlot) => void;
 };
 
 export default function SectionSlot(props: Props) {
@@ -17,12 +16,12 @@ export default function SectionSlot(props: Props) {
     accept: "Section",
     canDrop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {
       // TODO figure out how to do this without using "any"
-      return item && !props.section && props.canSchedule(item.id, props.classroom, props.timeslot);
+      return item && !props.section && props.canSchedule(item.id, props.slot);
       // TODO add in based on availability
     },
     drop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {
       // TODO figure out how to do this without using "any"
-      props.scheduleSection(item.id, props.classroom, props.timeslot);
+      props.scheduleSection(item.id, props.slot);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),

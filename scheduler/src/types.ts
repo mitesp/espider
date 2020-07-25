@@ -25,3 +25,8 @@ export type ScheduledBlock = {
   section: number;
   timeslot: Timeslot;
 };
+
+export type ScheduleSlot = {
+  classroom: string;
+  timeslot: Timeslot;
+};

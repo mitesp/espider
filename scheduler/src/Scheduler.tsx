@@ -14,7 +14,7 @@ import {
   scheduleSectionEndpoint,
   unscheduleSectionEndpoint,
 } from "./apiEndpoints";
-import { Section, Timeslot, ScheduledBlock } from "./types";
+import { Section, Timeslot, ScheduledBlock, ScheduleSlot } from "./types";
 
 type Props = {
   programName: string;
@@ -63,32 +63,32 @@ export default function Scheduler(props: Props) {
     )[0];
   }
 
-  function canSchedule(sectionId: number, classroom: string, initialTimeslot: Timeslot) {
+  function canSchedule(sectionId: number, slot: ScheduleSlot) {
     const section = getSectionById(sectionId);
-    const timeslotIndex = timeslots.indexOf(initialTimeslot);
+    const timeslotIndex = timeslots.indexOf(slot.timeslot);
     if (timeslotIndex + section.length > timeslots.length) {
       return false;
     }
     for (let i = 0; i < section.length; i++) {
       const blockTimeslot = timeslots[timeslotIndex + i];
-      if (getScheduledSectionInSlot(blockTimeslot, classroom)) {
+      if (getScheduledSectionInSlot(blockTimeslot, slot.classroom)) {
         return false;
       }
     }
     return true;
   }
 
-  function scheduleSection(id: number, classroom: string, timeslot: Timeslot) {
+  function scheduleSection(id: number, slot: ScheduleSlot) {
     const section = getSectionById(id);
     const scheduledBlocks = [] as ScheduledBlock[];
-    const timeslotIndex = timeslots.indexOf(timeslot);
+    const timeslotIndex = timeslots.indexOf(slot.timeslot);
     if (timeslotIndex + section.length > timeslots.length) {
       return;
     }
     for (let i = 0; i < section.length; i++) {
       const scheduledBlock = {
         section: id,
-        classroom: classroom,
+        classroom: slot.classroom,
         timeslot: timeslots[timeslotIndex + i],
       };
       scheduledBlocks.push(scheduledBlock);
@@ -99,7 +99,7 @@ export default function Scheduler(props: Props) {
         scheduled_blocks: scheduledBlocks,
       })
       .then(res => {
-        console.log(`Scheduled section ${id} in ${classroom} at ${timeslot.string}`);
+        console.log(`Scheduled section ${id} in ${slot.classroom} at ${slot.timeslot.string}`);
         // TODO check if success or error
         section.scheduled_blocks = scheduledBlocks;
         setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
@@ -147,8 +147,7 @@ export default function Scheduler(props: Props) {
                             <ClassSlot
                               key={`${timeslot.id}/${classroom}`}
                               canSchedule={canSchedule}
-                              classroom={classroom}
-                              timeslot={timeslot}
+                              slot={{ classroom: classroom, timeslot: timeslot }}
                               scheduleSection={scheduleSection}
                               section={getScheduledSectionInSlot(timeslot, classroom)}
                             />
