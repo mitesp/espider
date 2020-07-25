@@ -36,10 +36,14 @@ export default function SectionSlot(props: Props) {
   });
 
   let backgroundClassName = "";
-  if (draggingItem && canDrop && isOver) {
+  if (props.section) {
+    backgroundClassName = "has-background-grey-lighter";
+  } else if (draggingItem && canDrop && isOver) {
     backgroundClassName = "has-background-success";
   } else if (draggingItem && props.markAsSchedulable(draggingItem.id, props.slot)) {
     backgroundClassName = "has-background-info";
+  } else if (draggingItem) {
+    backgroundClassName = "has-background-grey-light";
   }
   // TODO consider colorblindness in color selections
 
