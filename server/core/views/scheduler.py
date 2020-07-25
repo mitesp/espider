@@ -1,5 +1,6 @@
 from core.models import Program, ScheduledBlock, Section, Timeslot
 from core.serializers import SectionSerializer, TimeslotSerializer
+from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -29,6 +30,7 @@ def get_program_sections(request, program, edition):
 
 
 @api_view(["POST"])
+@transaction.atomic
 def schedule_section(request, program, edition, section_id):
     data = request.data
 
@@ -36,6 +38,9 @@ def schedule_section(request, program, edition, section_id):
     section = Section.objects.get(id=section_id)
     if section.program != program:
         pass  # TODO return error or something here
+
+    scheduled_blocks = ScheduledBlock.objects.filter(section=section)
+    scheduled_blocks.delete()
 
     for block in data["scheduled_blocks"]:
         timeslot_id = block["timeslot"]["id"]
