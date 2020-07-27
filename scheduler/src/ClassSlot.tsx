@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDrop, DropTargetMonitor } from "react-dnd";
 
 import { Section, ScheduleSlot, Timeslot } from "./types";
@@ -7,13 +7,15 @@ import ScheduledClass from "./ScheduledClass";
 type Props = {
   canSchedule: (sectionId: number, timeslot: Timeslot, classroom: string) => boolean;
   markAsSchedulable: (sectionId: number, slot: ScheduleSlot) => boolean;
+  resetIsOver: () => void;
   scheduleSection: (id: number, slot: ScheduleSlot) => void;
   section: Section;
   slot: ScheduleSlot;
+  updateNeighbors: (sectionId: number, slot: ScheduleSlot, isOver: boolean) => void;
 };
 
 export default function SectionSlot(props: Props) {
-  const [{ canDrop, isOver, draggingItem }, drop] = useDrop({
+  const [{ isOver, draggingItem }, drop] = useDrop({
     accept: "Section",
     canDrop: (item: { id: number } | undefined | any, monitor: DropTargetMonitor) => {
       // TODO figure out how to do this without using "any"
@@ -30,17 +32,36 @@ export default function SectionSlot(props: Props) {
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
       draggingItem: monitor.getItem(),
     }),
   });
 
+  const updateNeighbors = useCallback(() => {
+    if (draggingItem && isOver) {
+      props.updateNeighbors(draggingItem.id, props.slot, isOver);
+    }
+  }, [isOver, draggingItem, props]);
+
+  const resetIsOver = useCallback(() => {
+    if (!draggingItem) {
+      props.resetIsOver();
+    }
+  }, [draggingItem, props]);
+
+  useEffect(updateNeighbors, [isOver]);
+
+  useEffect(resetIsOver, [draggingItem]);
+
+  const markAsSchedulable = draggingItem
+    ? props.markAsSchedulable(draggingItem.id, props.slot)
+    : false;
+
   let backgroundClassName = "";
   if (props.section) {
     backgroundClassName = "has-background-grey-lighter";
-  } else if (draggingItem && canDrop && isOver) {
+  } else if (draggingItem && props.slot.isOver) {
     backgroundClassName = "has-background-success";
-  } else if (draggingItem && props.markAsSchedulable(draggingItem.id, props.slot)) {
+  } else if (markAsSchedulable) {
     backgroundClassName = "has-background-info";
   } else if (draggingItem) {
     backgroundClassName = "has-background-grey-light";

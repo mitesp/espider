@@ -29,4 +29,5 @@ export type ScheduledBlock = {
 export type ScheduleSlot = {
   classroom: string;
   timeslot: Timeslot;
+  isOver: boolean;
 };

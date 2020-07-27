@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ReactTooltip from "react-tooltip";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -30,6 +30,33 @@ export default function Scheduler(props: Props) {
 
   const programURL = `${props.programName}/${props.programEdition}`;
 
+  function getSlotsCopy() {
+    const newSlots = [];
+    for (let i = 0; i < slots.length; i++) {
+      const row = slots[i];
+      const newRow = [];
+      for (let j = 0; j < row.length; j++) {
+        newRow.push({ ...row[j], isOver: false });
+      }
+      newSlots.push(newRow);
+    }
+    return newSlots;
+  }
+
+  function resetIsOver() {
+    const newSlots = getSlotsCopy();
+    setSlots(newSlots);
+  }
+
+  const resetSections = useCallback(() => {
+    axiosInstance.get(`/${programURL}/${sectionsEndpoint}`).then(res => {
+      setSections(res.data);
+      setUnscheduledSections(
+        (res.data as Section[]).filter(section => section.scheduled_blocks.length === 0)
+      );
+    });
+  }, [programURL]);
+
   useEffect(() => {
     // Set up timeslots
     axiosInstance.get(`/${programURL}/${timeslotEndpoint}`).then(res => {
@@ -40,20 +67,15 @@ export default function Scheduler(props: Props) {
       setClassrooms(res.data);
     });
     // Set up sections
-    axiosInstance.get(`/${programURL}/${sectionsEndpoint}`).then(res => {
-      setSections(res.data);
-      setUnscheduledSections(
-        (res.data as Section[]).filter(section => section.scheduled_blocks.length === 0)
-      );
-    });
-  }, [programURL, props.programEdition, props.programName]);
+    resetSections();
+  }, [programURL, props.programEdition, props.programName, resetSections]);
 
   useEffect(() => {
     const newSlots = [] as ScheduleSlot[][];
     for (let i = 0; i < classrooms.length; i++) {
       const classroomSlots = [] as ScheduleSlot[];
       for (let j = 0; j < timeslots.length; j++) {
-        const slot = { classroom: classrooms[i], timeslot: timeslots[j] };
+        const slot = { classroom: classrooms[i], timeslot: timeslots[j], isOver: false };
         classroomSlots.push(slot);
       }
       newSlots[i] = classroomSlots;
@@ -106,6 +128,25 @@ export default function Scheduler(props: Props) {
     return false;
   }
 
+  function updateNeighbors(sectionId: number, slot: ScheduleSlot, isOver: boolean) {
+    const newSlots = getSlotsCopy();
+    const section = getSectionById(sectionId);
+    const timeslotIndex = timeslots.indexOf(slot.timeslot);
+    const classroomIndex = classrooms.indexOf(slot.classroom);
+    if (!canSchedule(sectionId, slot.timeslot, slot.classroom)) {
+      setSlots(newSlots);
+      return;
+    }
+    for (let i = 0; i < section.length; i++) {
+      const laterTimeslotIndex = timeslotIndex + i;
+      if (laterTimeslotIndex < timeslots.length) {
+        const laterSlot = newSlots[classroomIndex][laterTimeslotIndex];
+        laterSlot.isOver = canScheduleOverall(sectionId, laterSlot) && (laterSlot.isOver || isOver);
+      }
+    }
+    setSlots(newSlots);
+  }
+
   function scheduleSection(id: number, slot: ScheduleSlot) {
     const section = getSectionById(id);
     const scheduledBlocks = [] as ScheduledBlock[];
@@ -129,8 +170,7 @@ export default function Scheduler(props: Props) {
       .then(res => {
         console.log(`Scheduled section ${id} in ${slot.classroom} at ${slot.timeslot.string}`);
         // TODO check if success or error
-        section.scheduled_blocks = scheduledBlocks;
-        setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
+        resetSections();
       });
   }
 
@@ -141,8 +181,7 @@ export default function Scheduler(props: Props) {
       axiosInstance.post(`/${programURL}/${unscheduleSectionEndpoint}/${id}/`).then(res => {
         console.log(`Uncheduled section ${id}`);
         // TODO check if success or error
-        section.scheduled_blocks = [];
-        setUnscheduledSections(sections.filter(section => section.scheduled_blocks.length === 0));
+        resetSections();
       });
     }
   }
@@ -191,9 +230,11 @@ export default function Scheduler(props: Props) {
                                 key={`${timeslot.id}/${classroom}`}
                                 canSchedule={canSchedule}
                                 markAsSchedulable={canScheduleOverall}
+                                resetIsOver={resetIsOver}
                                 slot={slot}
                                 scheduleSection={scheduleSection}
                                 section={section}
+                                updateNeighbors={updateNeighbors}
                               />
                             );
                           } else {
