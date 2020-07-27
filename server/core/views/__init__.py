@@ -1,5 +1,7 @@
 from core.models import Program
-from core.serializers import ClassSerializer
+from core.serializers import ClassSerializer, ProgramSerializer
+from rest_framework import permissions
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,6 +10,16 @@ from .dashboard import *  # noqa
 from .studentreg import *  # noqa
 
 # TODO figure out object permissions for all API calls
+
+
+@api_view(["GET"])
+@permission_classes(
+    [permissions.AllowAny,]
+)
+@authentication_classes([])
+def get_all_programs(request):
+    programs = Program.objects.all()
+    return Response([ProgramSerializer(program).data for program in programs])
 
 
 class ClassCatalog(APIView):
