@@ -1,4 +1,4 @@
-from core.models import Program, ScheduledBlock, Section, Timeslot
+from core.models import Program, Section
 from core.serializers import SectionSerializer, TimeslotSerializer
 from django.db import transaction
 from rest_framework.decorators import api_view
@@ -39,17 +39,7 @@ def schedule_section(request, program, edition, section_id):
     if section.program != program:
         pass  # TODO return error or something here
 
-    scheduled_blocks = ScheduledBlock.objects.filter(section=section)
-    scheduled_blocks.delete()
-
-    for block in data["scheduled_blocks"]:
-        timeslot_id = block["timeslot"]["id"]
-        timeslot = Timeslot.objects.get(id=timeslot_id)
-        classroom_name = block["classroom"]
-        classroom = program.classrooms.get(name=classroom_name)
-
-        scheduled_block = ScheduledBlock(section=section, timeslot=timeslot, classroom=classroom)
-        scheduled_block.save()
+    section.schedule(data["scheduled_blocks"])
 
     return Response({"message": "Success!"})
 
@@ -61,7 +51,6 @@ def unschedule_section(request, program, edition, section_id):
     if section.program != program:
         pass  # TODO return error or something here
 
-    scheduled_blocks = ScheduledBlock.objects.filter(section=section)
-    scheduled_blocks.delete()
+    section.unschedule()
 
     return Response({"message": "Success!"})

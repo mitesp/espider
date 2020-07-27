@@ -52,6 +52,24 @@ class Section(models.Model):
     def __str__(self):
         return str(self.clazz) + " sec. " + str(self.number)
 
+    def schedule(self, scheduled_blocks):
+        # scheduled_blocks is a JSON dictionary
+        # TODO make this not require a JSON
+        self.unschedule()
+
+        for block in scheduled_blocks:
+            timeslot_id = block["timeslot"]["id"]
+            timeslot = Timeslot.objects.get(id=timeslot_id)
+            classroom_name = block["classroom"]
+            classroom = self.program.classrooms.get(name=classroom_name)
+
+            scheduled_block = ScheduledBlock(section=self, timeslot=timeslot, classroom=classroom)
+            scheduled_block.save()
+
+    def unschedule(self):
+        scheduled_blocks = ScheduledBlock.objects.filter(section=self)
+        scheduled_blocks.delete()
+
 
 class ScheduledBlock(models.Model):
     """
