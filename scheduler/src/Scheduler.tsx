@@ -106,7 +106,8 @@ export default function Scheduler(props: Props) {
     }
     for (let i = 0; i < section.length; i++) {
       const blockTimeslot = timeslots[timeslotIndex + i];
-      if (getScheduledSectionInSlot(blockTimeslot, classroom)) {
+      const scheduledSection = getScheduledSectionInSlot(blockTimeslot, classroom);
+      if (scheduledSection && scheduledSection !== section) {
         return false;
       }
     }
@@ -235,6 +236,7 @@ export default function Scheduler(props: Props) {
                                 scheduleSection={scheduleSection}
                                 section={section}
                                 updateNeighbors={updateNeighbors}
+                                unscheduleSection={unscheduleSection}
                               />
                             );
                           } else {

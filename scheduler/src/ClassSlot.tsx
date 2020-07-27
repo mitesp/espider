@@ -11,6 +11,7 @@ type Props = {
   scheduleSection: (id: number, slot: ScheduleSlot) => void;
   section: Section;
   slot: ScheduleSlot;
+  unscheduleSection: (sectionId: number) => void;
   updateNeighbors: (sectionId: number, slot: ScheduleSlot, isOver: boolean) => void;
 };
 
@@ -74,7 +75,9 @@ export default function SectionSlot(props: Props) {
       ref={drop}
       colSpan={props.section ? props.section.length : 1}
     >
-      {props.section && <ScheduledClass section={props.section} />}
+      {props.section && (
+        <ScheduledClass section={props.section} unscheduleSection={props.unscheduleSection} />
+      )}
     </td>
   );
 }

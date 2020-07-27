@@ -1,16 +1,21 @@
 import React from "react";
 import ReactTooltip from "react-tooltip";
-import { useDrag } from "react-dnd";
+import { useDrag, DragSourceMonitor } from "react-dnd";
 
 import { Section } from "./types";
 
 type Props = {
   section: Section;
+  unscheduleSection: (sectionId: number) => void;
 };
 
 export default function ScheduledClass(props: Props) {
   const [, drag] = useDrag({
     item: { id: props.section.id, type: "Section" },
+    begin: (monitor: DragSourceMonitor) => {
+      // TODO figure out how to do this without using "any"
+      props.unscheduleSection(props.section.id);
+    },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
