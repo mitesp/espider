@@ -19,6 +19,7 @@ import Footer from "./layout/Footer";
 import Nav from "./layout/Nav";
 import { contentPage } from "./layout/Page";
 import PrivateRoute from "./PrivateRoute";
+import ProgramPage from "./program/ProgramPage";
 import RegDashboard from "./registration/RegDashboard";
 
 const NotFound = () =>
@@ -92,6 +93,8 @@ function App(props: {}) {
 
           {/* @ts-ignore TODO: reach-router path fix */}
           <RegDashboard path=":program/:edition/*" />
+          {/* @ts-ignore TODO: reach-router path fix */}
+          <ProgramPage path="beta/:program/:edition/*" />
           {/* @ts-ignore TODO: reach-router path fix */}
           <NotFound default />
         </Router>
