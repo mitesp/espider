@@ -261,6 +261,9 @@ export default function Scheduler(props: Props) {
             <h1>
               Scheduler for {props.programName} {props.programEdition}
             </h1>
+            <p>
+              Filter options for classrooms and timeslots here (makes things faster to load/process)
+            </p>
             <div className="table-container">
               <table className="table is-fullwidth is-striped is-hoverable is-bordered is-narrow is-scrollable">
                 <thead>
