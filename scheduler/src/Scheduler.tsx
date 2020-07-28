@@ -71,13 +71,17 @@ export default function Scheduler(props: Props) {
       // TODO process message
       console.log("RECIEVED MESSAGE");
       console.log(message);
+      if (message.message === "Update your sections") {
+        console.log("Updating");
+        resetSections();
+      }
     };
 
     ws.onclose = () => {
       console.log("disconnected");
       // automatically try to reconnect on connection loss
     };
-  }, [ws]);
+  }, [resetSections, ws.onclose, ws.onmessage, ws.onopen]);
 
   useEffect(setupWebSocket, [programURL]);
 
@@ -204,7 +208,6 @@ export default function Scheduler(props: Props) {
       .then(res => {
         console.log(`Scheduled section ${id} in ${slot.classroom} at ${slot.timeslot.string}`);
         // TODO check if success or error
-        resetSections();
         sendMessage("schedule");
       });
   }
@@ -216,7 +219,7 @@ export default function Scheduler(props: Props) {
       axiosInstance.post(`/${programURL}/${unscheduleSectionEndpoint}/${id}/`).then(res => {
         console.log(`Uncheduled section ${id}`);
         // TODO check if success or error
-        resetSections();
+        sendMessage("unschedule");
       });
     }
   }

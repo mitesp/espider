@@ -42,4 +42,4 @@ class AdminConsumer(BaseConsumer):
         self.group_send(self.program, {"message": "update", "type": "update"})
 
     def update(self, event):
-        self.send_json({"message": "HI THIS IS A TEST"})
+        self.send_json({"message": "Update your sections"})
