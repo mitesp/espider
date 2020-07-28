@@ -67,13 +67,26 @@ class Timeslot(models.Model):
     @property
     def date_time_str(self):
         date_format = "%a"  # day of week
-        time_format = "%-I:%M %p"  # 12hr HH:MM am/pm
+
+        start_minutes = int(self.start.strftime("%-M"))
+        end_minutes = int(self.end.strftime("%-M"))
+
+        if start_minutes == 0:
+            start_time_format = "%-I %p"  # 12hr HH am/pm
+        else:
+            start_time_format = "%-I:%M %p"  # 12hr HH:MM am/pm
+
+        if end_minutes == 0:
+            end_time_format = "%-I %p"  # 12hr HH am/pm
+        else:
+            end_time_format = "%-I:%M %p"  # 12hr HH:MM am/pm
+
         return (
             self.start.strftime(date_format)
             + " "
-            + self.start.strftime(time_format)
+            + self.start.strftime(start_time_format)
             + "-"
-            + self.end.strftime(time_format)
+            + self.end.strftime(end_time_format)
         )
 
     def __str__(self):

@@ -27,29 +27,29 @@ export default function Scheduler(props: Props) {
   const [classrooms, setClassrooms] = useState([] as string[]);
   const [sections, setSections] = useState([] as Section[]);
   const [unscheduledSections, setUnscheduledSections] = useState([] as Section[]);
-  const [slots, setSlots] = useState([] as ScheduleSlot[][]);
+  // const [slots, setSlots] = useState([] as ScheduleSlot[][]);
 
   const programURL = `${props.programName}/${props.programEdition}`;
 
   const ws = new WebSocket(`ws://localhost:8000/ws/${programURL}/scheduler`);
 
-  function getSlotsCopy() {
-    const newSlots = [];
-    for (let i = 0; i < slots.length; i++) {
-      const row = slots[i];
-      const newRow = [];
-      for (let j = 0; j < row.length; j++) {
-        newRow.push({ ...row[j], isOver: false });
-      }
-      newSlots.push(newRow);
-    }
-    return newSlots;
-  }
+  // function getSlotsCopy() {
+  //   const newSlots = [];
+  //   for (let i = 0; i < slots.length; i++) {
+  //     const row = slots[i];
+  //     const newRow = [];
+  //     for (let j = 0; j < row.length; j++) {
+  //       newRow.push({ ...row[j], isOver: false });
+  //     }
+  //     newSlots.push(newRow);
+  //   }
+  //   return newSlots;
+  // }
 
-  function resetIsOver() {
-    const newSlots = getSlotsCopy();
-    setSlots(newSlots);
-  }
+  // function resetIsOver() {
+  //   const newSlots = getSlotsCopy();
+  //   setSlots(newSlots);
+  // }
 
   const resetSections = useCallback(() => {
     axiosInstance.get(`/${programURL}/${sectionsEndpoint}`).then(res => {
@@ -125,18 +125,18 @@ export default function Scheduler(props: Props) {
     resetSections();
   }, [programURL, props.programEdition, props.programName, resetSections]);
 
-  useEffect(() => {
-    const newSlots = [] as ScheduleSlot[][];
-    for (let i = 0; i < classrooms.length; i++) {
-      const classroomSlots = [] as ScheduleSlot[];
-      for (let j = 0; j < timeslots.length; j++) {
-        const slot = { classroom: classrooms[i], timeslot: timeslots[j], isOver: false };
-        classroomSlots.push(slot);
-      }
-      newSlots[i] = classroomSlots;
-    }
-    setSlots(newSlots);
-  }, [timeslots, classrooms]);
+  // useEffect(() => {
+  //   const newSlots = [] as ScheduleSlot[][];
+  //   for (let i = 0; i < classrooms.length; i++) {
+  //     const classroomSlots = [] as ScheduleSlot[];
+  //     for (let j = 0; j < timeslots.length; j++) {
+  //       const slot = { classroom: classrooms[i], timeslot: timeslots[j], isOver: false };
+  //       classroomSlots.push(slot);
+  //     }
+  //     newSlots[i] = classroomSlots;
+  //   }
+  //   setSlots(newSlots);
+  // }, [timeslots, classrooms]);
 
   function getSectionById(id: number) {
     return sections.filter(section => section.id === id)[0];
@@ -171,6 +171,9 @@ export default function Scheduler(props: Props) {
 
   function canScheduleOverall(sectionId: number, slot: ScheduleSlot) {
     const section = getSectionById(sectionId);
+    if (section.length === 1) {
+      return !getScheduledSectionInSlot(slot.timeslot, slot.classroom);
+    }
     const timeslotIndex = timeslots.indexOf(slot.timeslot);
     for (let i = 0; i < section.length; i++) {
       const startingTimeslotIndex = timeslotIndex - i;
@@ -184,24 +187,24 @@ export default function Scheduler(props: Props) {
     return false;
   }
 
-  function updateNeighbors(sectionId: number, slot: ScheduleSlot, isOver: boolean) {
-    const newSlots = getSlotsCopy();
-    const section = getSectionById(sectionId);
-    const timeslotIndex = timeslots.indexOf(slot.timeslot);
-    const classroomIndex = classrooms.indexOf(slot.classroom);
-    if (!canSchedule(sectionId, slot.timeslot, slot.classroom)) {
-      setSlots(newSlots);
-      return;
-    }
-    for (let i = 0; i < section.length; i++) {
-      const laterTimeslotIndex = timeslotIndex + i;
-      if (laterTimeslotIndex < timeslots.length) {
-        const laterSlot = newSlots[classroomIndex][laterTimeslotIndex];
-        laterSlot.isOver = canScheduleOverall(sectionId, laterSlot) && (laterSlot.isOver || isOver);
-      }
-    }
-    setSlots(newSlots);
-  }
+  // function updateNeighbors(sectionId: number, slot: ScheduleSlot, isOver: boolean) {
+  //   const newSlots = getSlotsCopy();
+  //   const section = getSectionById(sectionId);
+  //   const timeslotIndex = timeslots.indexOf(slot.timeslot);
+  //   const classroomIndex = classrooms.indexOf(slot.classroom);
+  //   if (!canSchedule(sectionId, slot.timeslot, slot.classroom)) {
+  //     setSlots(newSlots);
+  //     return;
+  //   }
+  //   for (let i = 0; i < section.length; i++) {
+  //     const laterTimeslotIndex = timeslotIndex + i;
+  //     if (laterTimeslotIndex < timeslots.length) {
+  //       const laterSlot = newSlots[classroomIndex][laterTimeslotIndex];
+  //       laterSlot.isOver = canScheduleOverall(sectionId, laterSlot) && (laterSlot.isOver || isOver);
+  //     }
+  //   }
+  //   setSlots(newSlots);
+  // }
 
   function scheduleSection(id: number, slot: ScheduleSlot) {
     const section = getSectionById(id);
@@ -281,8 +284,7 @@ export default function Scheduler(props: Props) {
                         </th>
                         {timeslots.map((timeslot, timeslotIndex) => {
                           const section = getScheduledSectionInSlot(timeslot, classroom);
-                          const slot =
-                            slots.length > 0 ? slots[classroomIndex][timeslotIndex] : undefined;
+                          const slot = { classroom: classroom, timeslot: timeslot, isOver: false };
                           const blockIndex = getScheduledBlockIndex(section, timeslot);
                           if (slot && (!section || blockIndex === 0)) {
                             return (
@@ -290,11 +292,11 @@ export default function Scheduler(props: Props) {
                                 key={`${timeslot.id}/${classroom}`}
                                 canSchedule={canSchedule}
                                 markAsSchedulable={canScheduleOverall}
-                                resetIsOver={resetIsOver}
+                                // resetIsOver={resetIsOver}
                                 slot={slot}
                                 scheduleSection={scheduleSection}
                                 section={section}
-                                updateNeighbors={updateNeighbors}
+                                // updateNeighbors={updateNeighbors}
                                 unscheduleSection={unscheduleSection}
                               />
                             );
