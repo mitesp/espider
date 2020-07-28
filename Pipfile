@@ -16,6 +16,9 @@ django-filter = "*"
 djangorestframework-jwt = "*"
 django-cors-headers = "*"
 djangorestframework-simplejwt = "*"
+channels = "*"
+channels-redis = "*"
+asgiref = "*"
 
 [requires]
 python_version = "3.8"

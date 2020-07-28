@@ -30,6 +30,8 @@ export default function Scheduler(props: Props) {
 
   const programURL = `${props.programName}/${props.programEdition}`;
 
+  const ws = new WebSocket(`ws://localhost:8000/ws/${programURL}/scheduler`);
+
   function getSlotsCopy() {
     const newSlots = [];
     for (let i = 0; i < slots.length; i++) {
@@ -56,6 +58,37 @@ export default function Scheduler(props: Props) {
       );
     });
   }, [programURL]);
+
+  const setupWebSocket = useCallback(() => {
+    ws.onopen = () => {
+      // on connecting, do nothing but log it to the console
+      console.log("connected");
+    };
+
+    ws.onmessage = evt => {
+      // listen to data sent from the websocket server
+      const message = JSON.parse(evt.data);
+      // TODO process message
+      console.log("RECIEVED MESSAGE");
+      console.log(message);
+    };
+
+    ws.onclose = () => {
+      console.log("disconnected");
+      // automatically try to reconnect on connection loss
+    };
+  }, [ws]);
+
+  useEffect(setupWebSocket, [programURL]);
+
+  function sendMessage(message: string) {
+    try {
+      console.log("sending message " + message);
+      ws.send(JSON.stringify({ message: message, type: "update" })); //send data to the server
+    } catch (error) {
+      console.log(error); // catch error
+    }
+  }
 
   useEffect(() => {
     // Set up timeslots
@@ -172,6 +205,7 @@ export default function Scheduler(props: Props) {
         console.log(`Scheduled section ${id} in ${slot.classroom} at ${slot.timeslot.string}`);
         // TODO check if success or error
         resetSections();
+        sendMessage("schedule");
       });
   }
 

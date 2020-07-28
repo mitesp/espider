@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "channels",
     "rest_framework",
     "corsheaders",
 ]
@@ -47,6 +48,8 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = "core.routing.application"
+
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
@@ -56,6 +59,13 @@ DATABASES = {
         "HOST": "db",
         "PORT": 5432,
     }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": ["redis://redis:6379/0"]},
+    },
 }
 
 AUTH_USER_MODEL = "core.ESPUser"
