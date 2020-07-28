@@ -23,7 +23,12 @@ export default function ScheduledClass(props: Props) {
 
   return (
     <div>
-      <span ref={drag} data-tip data-for={"classData-" + props.section.id}>
+      <span
+        ref={drag}
+        data-tip
+        data-for={"classData-" + props.section.id}
+        className="is-size-6 has-text-centered is-italic"
+      >
         {`class ${props.section.clazz} sec ${props.section.number}`}
       </span>
       <ReactTooltip

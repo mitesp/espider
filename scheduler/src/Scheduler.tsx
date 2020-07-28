@@ -5,6 +5,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import ClassList from "./ClassList";
 import ClassSlot from "./ClassSlot";
+import "./Scheduler.css";
 
 import axiosInstance from "./axiosAPI";
 import {
@@ -60,7 +61,7 @@ export default function Scheduler(props: Props) {
   }, [programURL]);
 
   const setupWebSocket = useCallback(() => {
-    ws.onopen = () => {
+    ws.onopen = e => {
       // on connecting, do nothing but log it to the console
       console.log("connected");
     };
@@ -77,21 +78,38 @@ export default function Scheduler(props: Props) {
       }
     };
 
+    ws.onerror = evt => {
+      console.log(evt);
+    };
+
     ws.onclose = () => {
       console.log("disconnected");
       // automatically try to reconnect on connection loss
     };
-  }, [resetSections, ws.onclose, ws.onmessage, ws.onopen]);
+  }, [resetSections, ws.onclose, ws.onerror, ws.onmessage, ws.onopen]);
 
   useEffect(setupWebSocket, [programURL]);
 
+  function waitForSocketConnection(callback: () => void) {
+    setTimeout(function () {
+      if (ws.readyState === 1) {
+        console.log("Connection is made");
+        if (callback != null) {
+          callback();
+        }
+      } else {
+        console.log("wait for connection...");
+        setTimeout(waitForSocketConnection, 500);
+      }
+    }, 500); // wait 5 milisecond for the connection...
+  }
+
   function sendMessage(message: string) {
-    try {
+    // Wait until the state of the socket is not ready and send the message when it is...
+    waitForSocketConnection(function () {
       console.log("sending message " + message);
       ws.send(JSON.stringify({ message: message, type: "update" })); //send data to the server
-    } catch (error) {
-      console.log(error); // catch error
-    }
+    });
   }
 
   useEffect(() => {
@@ -241,7 +259,7 @@ export default function Scheduler(props: Props) {
               Scheduler for {props.programName} {props.programEdition}
             </h1>
             <div className="table-container">
-              <table className="table is-fullwidth is-striped is-hoverable is-bordered">
+              <table className="table is-fullwidth is-striped is-hoverable is-bordered is-narrow is-scrollable">
                 <thead>
                   <tr>
                     <th></th>
@@ -250,11 +268,15 @@ export default function Scheduler(props: Props) {
                     })}
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="is-scrollable">
                   {classrooms.map((classroom, classroomIndex) => {
                     return (
                       <tr key={"classroom" + classroomIndex}>
-                        <th data-tip data-for={"classroomData-" + classroom}>
+                        <th
+                          className="is-classroom"
+                          data-tip
+                          data-for={"classroomData-" + classroom}
+                        >
                           {classroom}
                         </th>
                         {timeslots.map((timeslot, timeslotIndex) => {

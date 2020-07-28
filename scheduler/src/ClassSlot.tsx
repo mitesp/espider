@@ -3,6 +3,7 @@ import { useDrop, DropTargetMonitor } from "react-dnd";
 
 import { Section, ScheduleSlot, Timeslot } from "./types";
 import ScheduledClass from "./ScheduledClass";
+import "./Scheduler.css";
 
 type Props = {
   canSchedule: (sectionId: number, timeslot: Timeslot, classroom: string) => boolean;
@@ -59,19 +60,23 @@ export default function SectionSlot(props: Props) {
 
   let backgroundClassName = "";
   if (props.section) {
-    backgroundClassName = "has-background-grey-lighter";
+    // has a section scheduled
+    backgroundClassName = "has-background-grey-light";
   } else if (draggingItem && props.slot.isOver) {
+    // hovered over
     backgroundClassName = "has-background-success";
   } else if (markAsSchedulable) {
+    // can schedule the class here
     backgroundClassName = "has-background-info";
   } else if (draggingItem) {
-    backgroundClassName = "has-background-grey-light";
+    // can't schedule here
+    backgroundClassName = "has-background-grey-dark";
   }
   // TODO consider colorblindness in color selections
 
   return (
     <td
-      className={backgroundClassName}
+      className={backgroundClassName + " is-class-slot"}
       ref={drop}
       colSpan={props.section ? props.section.length : 1}
     >

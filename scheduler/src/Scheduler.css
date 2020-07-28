@@ -1,0 +1,27 @@
+th.is-classroom {
+  min-width: 70px;
+  max-width: 70px;
+}
+
+td.is-class-slot {
+  /*min-width: 200px;*/
+  /*max-width: 200px;*/
+}
+
+div.table-container {
+  width: 1000px;
+}
+/*TODO make this more mobile friendly*/
+
+table.is-scrollable {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+tbody.is-scrollable {
+
+  overflow: scroll;
+  /*width: auto;*/
+  /*position: absolute;*/
+}
