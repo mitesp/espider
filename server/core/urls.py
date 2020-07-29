@@ -14,6 +14,7 @@ urlpatterns = [
     path("api/", include(router.urls)),
     # Dashboard
     path("api/dashboard/student/", views.get_student_dashboard),
+    path("api/dashboard/admin/", views.get_admin_dashboard),
     # Profile
     path("api/profile/student/", views.Profile.as_view()),
     # program-specific

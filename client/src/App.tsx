@@ -8,6 +8,7 @@ import SignupPage from "./accounts/SignupPage";
 import { userDataEndpoint, programsEndpoint } from "./apiEndpoints";
 import axiosInstance from "./axiosAPI";
 import { AuthContext } from "./context/auth";
+import AdminDashboard from "./dashboard/AdminDashboard";
 import Dashboard from "./dashboard/Dashboard";
 import AboutUs from "./info/AboutUs";
 import Home from "./info/Home";
@@ -84,6 +85,8 @@ function App(props: {}) {
 
           {/* @ts-ignore TODO: reach-router path fix */}
           <Dashboard path="dashboard" />
+          {/* @ts-ignore TODO: reach-router path fix */}
+          <AdminDashboard path="dashboard/admin" />
           {/* @ts-ignore TODO: reach-router path fix */}
           <AboutUs path="aboutus" />
           {/* @ts-ignore TODO: reach-router path fix */}

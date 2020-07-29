@@ -11,6 +11,7 @@ const studentSignupEndpoint = "/account/student/";
 const studentProfileEndpoint = "/profile/student/";
 
 // Dashboards
+const adminDashboardEndpoint = "/dashboard/admin/";
 const studentDashboardEndpoint = "/dashboard/student/";
 const teacherDashboardEndpoint = "/dashboard/teacher/";
 
@@ -36,6 +37,7 @@ export {
   studentSignupEndpoint,
   studentDashboardEndpoint,
   teacherDashboardEndpoint,
+  adminDashboardEndpoint,
   classCatalogEndpoint,
   studentRegEndpoint,
   emergencyInfoEndpoint,
