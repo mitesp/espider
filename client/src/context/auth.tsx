@@ -6,6 +6,7 @@ export const AuthContext = createContext({
   username: "",
   isStudent: false,
   isTeacher: false,
+  isAdmin: false,
 });
 
 export function useAuth() {
