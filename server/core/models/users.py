@@ -16,6 +16,11 @@ class ESPUser(AbstractUser):
         return hasattr(self, "teacher_profile")
 
     @property
+    def is_admin(self):
+        # TODO define what it means to be an admin
+        return self.is_superuser and self.is_staff
+
+    @property
     def profile(self):
         if self.is_student:
             return self.student_profile

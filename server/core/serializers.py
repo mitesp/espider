@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ESPUser
-        fields = ("username", "is_student", "is_teacher")
+        fields = ("username", "is_student", "is_teacher", "is_admin")
 
 
 # TODO: The following two serializers are used for account creation and eventually should be fleshed

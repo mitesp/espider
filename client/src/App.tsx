@@ -37,6 +37,7 @@ function App(props: {}) {
     username: "",
     isStudent: false,
     isTeacher: false,
+    isAdmin: false,
   });
 
   const existingToken = localStorage.getItem("token") || "";
@@ -50,6 +51,7 @@ function App(props: {}) {
           username: result.data.username,
           isStudent: result.data.is_student,
           isTeacher: result.data.is_teacher,
+          isAdmin: result.data.is_admin,
         });
       });
     }
