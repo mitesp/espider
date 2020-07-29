@@ -31,6 +31,11 @@ class Program(models.Model):
         # TODO figure out what actually defines an "active" program
         return Program.objects.exclude(student_reg_status=RegStatusOptions.POST_PROGRAM)
 
+    @staticmethod
+    def get_inactive_programs():
+        # TODO figure out what actually defines an "active" program
+        return Program.objects.filter(student_reg_status=RegStatusOptions.POST_PROGRAM)
+
 
 class Timeslot(models.Model):
     """
