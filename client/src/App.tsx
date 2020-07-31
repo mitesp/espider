@@ -19,6 +19,7 @@ import Footer from "./layout/Footer";
 import Nav from "./layout/Nav";
 import { contentPage } from "./layout/Page";
 import PrivateRoute from "./PrivateRoute";
+import ProgramPage from "./program/ProgramPage";
 import RegDashboard from "./registration/RegDashboard";
 import { ProgramModel } from "./types";
 
@@ -108,6 +109,8 @@ function App(props: {}) {
             />
             // TODO do something about the half-second it takes to render the page (maybe just caching)
           ))}
+          {/* @ts-ignore TODO: reach-router path fix */}
+          <ProgramPage path="beta/:program/:edition/*" />
           {/* @ts-ignore TODO: reach-router path fix */}
           <NotFound default />
         </Router>
