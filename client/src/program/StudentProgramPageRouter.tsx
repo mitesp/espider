@@ -1,7 +1,7 @@
 import { Router } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
-import GeneralStudentPage from "./GeneralStudentPage";
+import StudentProgramInfoPage from "./StudentProgramInfoPage";
 // import { isStudentRegistered } from "./helpers";
 
 import { studentRegEndpoint } from "../apiEndpoints";
@@ -16,7 +16,7 @@ type Props = {
   edition: string;
 };
 
-function StudentProgramPage(props: Props) {
+function StudentProgramPageRouter(props: Props) {
   const loggedIn = useLoggedIn();
 
   const [regChecks, setRegChecks] = useState({
@@ -49,7 +49,7 @@ function StudentProgramPage(props: Props) {
   return (
     <React.Fragment>
       <Router primary={false}>
-        <GeneralStudentPage
+        <StudentProgramInfoPage
           /* @ts-ignore TODO: thanks reach router */
           path="/"
           checks={regChecks}
@@ -66,4 +66,4 @@ function StudentProgramPage(props: Props) {
   );
 }
 
-export default StudentProgramPage;
+export default StudentProgramPageRouter;

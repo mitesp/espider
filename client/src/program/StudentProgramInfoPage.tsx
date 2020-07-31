@@ -20,7 +20,7 @@ type Props = {
   regStatus: RegStatusOption;
 };
 
-function GeneralStudentPage(props: Props) {
+function StudentProgramInfoPage(props: Props) {
   const [schedule, setSchedule] = useState([] as ScheduleItem[]);
 
   function renderRegistrationLink() {
@@ -137,4 +137,4 @@ function GeneralStudentPage(props: Props) {
   );
 }
 
-export default GeneralStudentPage;
+export default StudentProgramInfoPage;

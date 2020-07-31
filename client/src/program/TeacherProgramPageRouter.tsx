@@ -5,8 +5,8 @@ type Props = {
   edition: string;
 };
 
-function TeacherProgramPage(props: Props) {
+function TeacherProgramPageRouter(props: Props) {
   return <div></div>;
 }
 
-export default TeacherProgramPage;
+export default TeacherProgramPageRouter;
